@@ -52,9 +52,4 @@ lib/
 ## Curriculum Scope
 - O-Level: Forms 1–4 (Key exam: Form 4)
 - A-Level: Forms 5–6 (Key exam: Form 6)
-
-## Business Model
-- Lesson rentals: 70% tutor / 30% platform
-- Private sessions: 15–20% platform booking fee
-- Featured profiles: K150–K300/month
-- Exam prep bundles: K200–K500 per package
+- 
