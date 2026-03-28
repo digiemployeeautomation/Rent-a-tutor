@@ -2,14 +2,14 @@ import Link from 'next/link'
 import Navbar from '@/components/layout/Navbar'
 
 const subjects = [
-  { name: 'Mathematics', count: 84, initials: 'Mx', bg: 'bg-sage-100', text: 'text-forest-600' },
-  { name: 'Science',     count: 61, initials: 'Sc', bg: 'bg-green-100', text: 'text-green-800' },
-  { name: 'English',     count: 55, initials: 'En', bg: 'bg-blue-100',  text: 'text-blue-800'  },
-  { name: 'Chemistry',   count: 48, initials: 'Ch', bg: 'bg-gold-100',  text: 'text-gold-600'  },
-  { name: 'Physics',     count: 44, initials: 'Ph', bg: 'bg-purple-100',text: 'text-purple-800'},
-  { name: 'Geography',   count: 39, initials: 'Ge', bg: 'bg-orange-100',text: 'text-orange-800'},
-  { name: 'History',     count: 32, initials: 'Hi', bg: 'bg-pink-100',  text: 'text-pink-800'  },
-  { name: 'ICT',         count: 27, initials: 'IC', bg: 'bg-gray-100',  text: 'text-gray-700'  },
+  { name: 'Mathematics', count: 84, initials: 'Math', bg: 'bg-sage-100', text: 'text-forest-600' },
+  { name: 'Science',     count: 61, initials: 'Sci', bg: 'bg-green-100', text: 'text-green-800' },
+  { name: 'English',     count: 55, initials: 'Eng', bg: 'bg-blue-100',  text: 'text-blue-800'  },
+  { name: 'Chemistry',   count: 48, initials: 'Chem', bg: 'bg-gold-100',  text: 'text-gold-600'  },
+  { name: 'Physics',     count: 44, initials: 'Phy', bg: 'bg-purple-100',text: 'text-purple-800'},
+  { name: 'Geography',   count: 39, initials: 'Geo', bg: 'bg-orange-100',text: 'text-orange-800'},
+  { name: 'History',     count: 32, initials: 'His', bg: 'bg-pink-100',  text: 'text-pink-800'  },
+  { name: 'ICT',         count: 27, initials: 'ICT', bg: 'bg-gray-100',  text: 'text-gray-700'  },
 ]
 
 const tutors = [
@@ -33,16 +33,24 @@ export default function HomePage() {
         <p className="text-sage-200 text-base mb-8 opacity-80">
           Zambia&apos;s tutoring platform — built for O-Level and A-Level students.
         </p>
-        <div className="flex max-w-lg mx-auto bg-white rounded-xl overflow-hidden border border-gray-200 mb-10">
-          <input
-            type="text"
-            placeholder="Search by subject, tutor name, or grade..."
-            className="flex-1 px-5 py-3 text-sm outline-none text-gray-700"
-          />
-          <button className="bg-gold-500 text-gold-100 px-6 text-sm font-medium hover:bg-gold-600">
-            Search
-          </button>
+
+        {/* CTA */}
+        <div className="flex flex-col items-center gap-3 mb-10">
+          <Link
+            href="/auth/register"
+            className="text-sm font-medium px-8 py-3 rounded-xl transition"
+            style={{ backgroundColor: '#e8c84a', color: '#1a2a00' }}
+          >
+            Create a free account →
+          </Link>
+          <p className="text-xs" style={{ color: '#a8c4a8', opacity: 0.7 }}>
+            Already a member?{' '}
+            <Link href="/auth/login" style={{ color: '#c9b87a', borderBottom: '1px solid rgba(201,184,122,0.4)' }}>
+              Sign in
+            </Link>
+          </p>
         </div>
+
         <div className="flex justify-center gap-12 text-sage-200 text-xs tracking-wide">
           <div><span className="block font-serif text-3xl text-sage-200 mb-1">240+</span>Tutors available</div>
           <div><span className="block font-serif text-3xl text-sage-200 mb-1">1,800+</span>Lessons uploaded</div>
@@ -119,9 +127,13 @@ export default function HomePage() {
                 <div className="text-xs tracking-widest text-gold-200 mb-1 uppercase">{e.level}</div>
                 <div className="font-serif text-xl text-sage-200 mb-2">{e.name}</div>
                 <div className="text-xs text-sage-200 opacity-75 mb-5 leading-relaxed">{e.desc}</div>
-                <button className="bg-gold-500 text-gold-100 text-xs px-4 py-2 rounded-lg hover:bg-gold-600">
+                <Link
+                  href="/auth/register"
+                  className="inline-block text-xs px-4 py-2 rounded-lg transition"
+                  style={{ backgroundColor: '#e8c84a', color: '#1a2a00' }}
+                >
                   View bundle — {e.price}
-                </button>
+                </Link>
               </div>
             ))}
           </div>
@@ -135,7 +147,7 @@ export default function HomePage() {
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
             {[
               { n: '1', title: 'Browse & choose', desc: 'Search by subject, grade, or tutor name' },
-              { n: '2', title: 'Rent or book', desc: 'Unlock recorded lessons or book a live session' },
+              { n: '2', title: 'Buy or book', desc: 'Unlock recorded lessons or book a live session' },
               { n: '3', title: 'Pay with mobile money', desc: 'Secure checkout via Airtel or MTN Money' },
               { n: '4', title: 'Learn & pass', desc: 'Study at your own pace and track progress' },
             ].map((s) => (
