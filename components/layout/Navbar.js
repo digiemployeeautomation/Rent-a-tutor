@@ -1,20 +1,40 @@
 'use client'
+import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { useTheme } from '@/context/ThemeContext'
 import { supabase } from '@/lib/supabase'
 import { useRouter } from 'next/navigation'
 
-export default function Navbar({ user }) {
+export default function Navbar() {
   const { role } = useTheme()
   const router = useRouter()
+  const [user, setUser] = useState(null)
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    // Get current session on mount
+    supabase.auth.getUser().then(({ data: { user } }) => {
+      setUser(user)
+      setLoading(false)
+    })
+
+    // Listen for login / logout events
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+      setUser(session?.user ?? null)
+    })
+
+    return () => subscription.unsubscribe()
+  }, [])
 
   async function handleLogout() {
     await supabase.auth.signOut()
     router.push('/')
+    router.refresh()
   }
 
-  const initials = user?.full_name
-    ? user.full_name.split(' ').map(w => w[0]).join('').slice(0, 2).toUpperCase()
+  const fullName = user?.user_metadata?.full_name ?? null
+  const initials = fullName
+    ? fullName.split(' ').map(w => w[0]).join('').slice(0, 2).toUpperCase()
     : role === 'tutor' ? 'TU' : 'ST'
 
   return (
@@ -40,11 +60,14 @@ export default function Navbar({ user }) {
       </div>
 
       <div className="flex items-center gap-3">
-        {user ? (
+        {/* Avoid flash of logged-out state while session loads */}
+        {loading ? (
+          <div className="w-20 h-8 rounded-lg animate-pulse" style={{ backgroundColor: 'rgba(255,255,255,0.1)' }} />
+        ) : user ? (
           <>
             <div className="text-right hidden sm:block">
               <div className="text-xs font-medium" style={{ color: 'var(--color-nav-text)' }}>
-                {user.full_name || 'My account'}
+                {fullName || 'My account'}
               </div>
               <div className="text-xs capitalize" style={{ color: 'var(--color-nav-text)', opacity: 0.6 }}>
                 {role}
