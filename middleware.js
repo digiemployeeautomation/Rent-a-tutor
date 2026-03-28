@@ -1,32 +1,56 @@
 import { createMiddlewareClient } from '@supabase/auth-helpers-nextjs'
 import { NextResponse } from 'next/server'
 
-// Routes that require a logged-in user
-const PROTECTED_ROUTES = ['/dashboard', '/messages', '/bookings']
-
-// Routes only admins can access
-const ADMIN_ROUTES = ['/admin']
+const PROTECTED_ROUTES  = ['/dashboard', '/messages', '/bookings']
+const ADMIN_ROUTES      = ['/admin']
+// Pages logged-in users should not see
+const AUTH_ROUTES       = ['/auth/login', '/auth/register']
 
 export async function middleware(request) {
   const response = NextResponse.next()
   const { pathname } = request.nextUrl
 
-  // Refresh the session cookie on every request
   const supabase = createMiddlewareClient({ req: request, res: response })
   const { data: { user } } = await supabase.auth.getUser()
 
-  const isProtected = PROTECTED_ROUTES.some((r) => pathname.startsWith(r))
-  const isAdmin     = ADMIN_ROUTES.some((r) => pathname.startsWith(r))
+  // ── Logged-in users hitting auth pages ─────────────────────────────────
+  if (user && AUTH_ROUTES.some((r) => pathname.startsWith(r))) {
+    const { data: profile } = await supabase
+      .from('profiles')
+      .select('role')
+      .eq('id', user.id)
+      .single()
 
-  // Not logged in → redirect to login
-  if ((isProtected || isAdmin) && !user) {
+    const role = profile?.role ?? 'student'
+
+    // Admins have no business on /auth/* — send straight to admin dashboard
+    if (role === 'admin') {
+      return NextResponse.redirect(new URL('/admin', request.url))
+    }
+    if (role === 'tutor') {
+      return NextResponse.redirect(new URL('/dashboard/tutor', request.url))
+    }
+    return NextResponse.redirect(new URL('/dashboard/student', request.url))
+  }
+
+  // ── Register page: remove 'admin' as a selectable role ─────────────────
+  // (actual enforcement is in the register page UI — see app/auth/register/page.js)
+
+  // ── Protected routes: must be logged in ────────────────────────────────
+  if (PROTECTED_ROUTES.some((r) => pathname.startsWith(r)) && !user) {
     const loginUrl = new URL('/auth/login', request.url)
     loginUrl.searchParams.set('redirectTo', pathname)
     return NextResponse.redirect(loginUrl)
   }
 
-  // Logged in but not admin → redirect home
-  if (isAdmin && user) {
+  // ── Admin routes: must be logged in AND have admin role ────────────────
+  if (ADMIN_ROUTES.some((r) => pathname.startsWith(r))) {
+    if (!user) {
+      const loginUrl = new URL('/auth/login', request.url)
+      loginUrl.searchParams.set('redirectTo', pathname)
+      return NextResponse.redirect(loginUrl)
+    }
+
     const { data: profile } = await supabase
       .from('profiles')
       .select('role')
