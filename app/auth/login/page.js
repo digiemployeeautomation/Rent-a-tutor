@@ -24,13 +24,18 @@ export default function LoginPage() {
       return
     }
 
-    // Redirect based on role stored in user metadata
-    const role = data.user?.user_metadata?.role
-    if (role === 'tutor') {
-      router.push('/dashboard/tutor')
-    } else {
-      router.push('/dashboard/student')
-    }
+    // Read role from profiles table — source of truth
+    const { data: profile } = await supabase
+      .from('profiles')
+      .select('role')
+      .eq('id', data.user.id)
+      .single()
+
+    const role = profile?.role ?? data.user.user_metadata?.role ?? 'student'
+
+    if (role === 'admin')   return router.push('/admin')
+    if (role === 'tutor')   return router.push('/dashboard/tutor')
+    return router.push('/dashboard/student')
   }
 
   return (
