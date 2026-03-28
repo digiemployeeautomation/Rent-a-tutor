@@ -4,6 +4,8 @@ import Link from 'next/link'
 import { supabase } from '@/lib/supabase'
 import { useRouter } from 'next/navigation'
 
+const ALLOWED_ROLES = ['student', 'tutor']
+
 export default function RegisterPage() {
   const router = useRouter()
   const [role, setRole] = useState('student')
@@ -17,6 +19,14 @@ export default function RegisterPage() {
     e.preventDefault()
     setLoading(true)
     setError('')
+
+    // Server-side guard is in middleware, but validate here too
+    // so the role can never be spoofed via the form
+    if (!ALLOWED_ROLES.includes(role)) {
+      setError('Invalid role selected.')
+      setLoading(false)
+      return
+    }
 
     const { error } = await supabase.auth.signUp({
       email,
@@ -49,9 +59,9 @@ export default function RegisterPage() {
           <h1 className="font-serif text-xl mb-1">Create your account</h1>
           <p className="text-sm text-gray-500 mb-6">Free to join — no subscription required.</p>
 
-          {/* Role toggle */}
+          {/* Role toggle — only student and tutor, admin is intentionally excluded */}
           <div className="flex bg-gray-100 rounded-lg p-1 mb-5">
-            {['student', 'tutor'].map(r => (
+            {ALLOWED_ROLES.map(r => (
               <button
                 key={r}
                 type="button"
