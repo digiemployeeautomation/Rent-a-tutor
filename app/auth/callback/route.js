@@ -8,22 +8,23 @@ export async function GET(request) {
 
   if (code) {
     const supabase = createRouteHandlerClient({ cookies })
-
-    // Exchange the code for a session
     const { data, error } = await supabase.auth.exchangeCodeForSession(code)
 
     if (!error && data?.user) {
-      const role = data.user.user_metadata?.role || 'student'
+      // Read role from profiles table — source of truth
+      const { data: profile } = await supabase
+        .from('profiles')
+        .select('role')
+        .eq('id', data.user.id)
+        .single()
 
-      // Redirect to the correct dashboard based on role
-      if (role === 'tutor') {
-        return NextResponse.redirect(new URL('/dashboard/tutor', requestUrl.origin))
-      } else {
-        return NextResponse.redirect(new URL('/dashboard/student', requestUrl.origin))
-      }
+      const role = profile?.role ?? data.user.user_metadata?.role ?? 'student'
+
+      if (role === 'admin')   return NextResponse.redirect(new URL('/admin', requestUrl.origin))
+      if (role === 'tutor')   return NextResponse.redirect(new URL('/dashboard/tutor', requestUrl.origin))
+      return NextResponse.redirect(new URL('/dashboard/student', requestUrl.origin))
     }
   }
 
-  // If something went wrong, send to login with an error message
   return NextResponse.redirect(new URL('/auth/login?error=confirmation_failed', requestUrl.origin))
 }
