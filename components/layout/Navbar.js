@@ -1,6 +1,7 @@
 'use client'
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
+import Image from 'next/image'
 import { useTheme } from '@/context/ThemeContext'
 import { supabase } from '@/lib/supabase'
 import { useRouter } from 'next/navigation'
@@ -9,18 +10,30 @@ export default function Navbar() {
   const { role } = useTheme()
   const router = useRouter()
   const [user, setUser] = useState(null)
+  const [profile, setProfile] = useState(null)
   const [loading, setLoading] = useState(true)
 
+  async function fetchProfile(userId) {
+    const { data } = await supabase
+      .from('profiles')
+      .select('full_name, avatar_url, role')
+      .eq('id', userId)
+      .single()
+    setProfile(data)
+  }
+
   useEffect(() => {
-    // Get current session on mount
     supabase.auth.getUser().then(({ data: { user } }) => {
       setUser(user)
+      if (user) fetchProfile(user.id)
       setLoading(false)
     })
 
-    // Listen for login / logout events
     const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
-      setUser(session?.user ?? null)
+      const u = session?.user ?? null
+      setUser(u)
+      if (u) fetchProfile(u.id)
+      else setProfile(null)
     })
 
     return () => subscription.unsubscribe()
@@ -32,10 +45,11 @@ export default function Navbar() {
     router.refresh()
   }
 
-  const fullName = user?.user_metadata?.full_name ?? null
+  const fullName = profile?.full_name ?? user?.user_metadata?.full_name ?? null
+  const avatarUrl = profile?.avatar_url ?? null
   const initials = fullName
     ? fullName.split(' ').map(w => w[0]).join('').slice(0, 2).toUpperCase()
-    : role === 'tutor' ? 'TU' : 'ST'
+    : '??'
 
   return (
     <nav style={{ backgroundColor: 'var(--color-nav-bg)' }} className="px-6 h-16 flex items-center justify-between">
@@ -50,6 +64,12 @@ export default function Navbar() {
             <Link href="/dashboard/tutor/upload" className="hover:opacity-100">Upload lesson</Link>
             <Link href="/dashboard/tutor/sessions" className="hover:opacity-100">Sessions</Link>
           </>
+        ) : role === 'admin' ? (
+          <>
+            <Link href="/admin" className="hover:opacity-100">Dashboard</Link>
+            <Link href="/admin/users" className="hover:opacity-100">Users</Link>
+            <Link href="/admin/payments" className="hover:opacity-100">Payments</Link>
+          </>
         ) : (
           <>
             <Link href="/browse" className="hover:opacity-100">Browse lessons</Link>
@@ -60,7 +80,6 @@ export default function Navbar() {
       </div>
 
       <div className="flex items-center gap-3">
-        {/* Avoid flash of logged-out state while session loads */}
         {loading ? (
           <div className="w-20 h-8 rounded-lg animate-pulse" style={{ backgroundColor: 'rgba(255,255,255,0.1)' }} />
         ) : user ? (
@@ -70,19 +89,34 @@ export default function Navbar() {
                 {fullName || 'My account'}
               </div>
               <div className="text-xs capitalize" style={{ color: 'var(--color-nav-text)', opacity: 0.6 }}>
-                {role}
+                {profile?.role ?? role}
               </div>
             </div>
-            <div
-              className="w-9 h-9 rounded-full flex items-center justify-center text-xs font-medium border-2"
-              style={{
-                backgroundColor: 'var(--color-primary-mid)',
-                color: 'var(--color-nav-text)',
-                borderColor: 'rgba(255,255,255,0.15)'
-              }}
-            >
-              {initials}
-            </div>
+
+            {/* Avatar — photo if available, initials fallback */}
+            {avatarUrl ? (
+              <div className="w-9 h-9 rounded-full overflow-hidden border-2" style={{ borderColor: 'rgba(255,255,255,0.2)' }}>
+                <Image
+                  src={avatarUrl}
+                  alt={fullName ?? 'Profile'}
+                  width={36}
+                  height={36}
+                  className="object-cover w-full h-full"
+                />
+              </div>
+            ) : (
+              <div
+                className="w-9 h-9 rounded-full flex items-center justify-center text-xs font-medium border-2"
+                style={{
+                  backgroundColor: 'var(--color-primary-mid)',
+                  color: 'var(--color-nav-text)',
+                  borderColor: 'rgba(255,255,255,0.15)',
+                }}
+              >
+                {initials}
+              </div>
+            )}
+
             <button
               onClick={handleLogout}
               className="text-xs px-3 py-1.5 rounded-lg border"
