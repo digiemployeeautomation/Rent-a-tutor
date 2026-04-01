@@ -5,19 +5,17 @@ import Navbar from '@/components/layout/Navbar'
 import { supabase } from '@/lib/supabase'
 
 const subjectMeta = {
-  'Mathematics':  { initials: 'Math', bg: 'bg-sage-100',   text: 'text-forest-600'  },
-  'Science':      { initials: 'Sci',  bg: 'bg-green-100',  text: 'text-green-800'   },
-  'English':      { initials: 'Eng',  bg: 'bg-blue-100',   text: 'text-blue-800'    },
-  'Chemistry':    { initials: 'Chem', bg: 'bg-yellow-100', text: 'text-yellow-800'  },
-  'Physics':      { initials: 'Phy',  bg: 'bg-purple-100', text: 'text-purple-800'  },
-  'Geography':    { initials: 'Geo',  bg: 'bg-orange-100', text: 'text-orange-800'  },
-  'History':      { initials: 'His',  bg: 'bg-pink-100',   text: 'text-pink-800'    },
-  'ICT':          { initials: 'ICT',  bg: 'bg-gray-100',   text: 'text-gray-700'    },
-  'English Language': { initials: 'Eng', bg: 'bg-blue-100', text: 'text-blue-800'  },
-  'Biology':      { initials: 'Bio',  bg: 'bg-green-100',  text: 'text-green-800'   },
-  'Commerce':     { initials: 'Com',  bg: 'bg-yellow-100', text: 'text-yellow-800'  },
-  'Accounting':   { initials: 'Acc',  bg: 'bg-pink-100',   text: 'text-pink-800'    },
-  'Economics':    { initials: 'Eco',  bg: 'bg-orange-100', text: 'text-orange-800'  },
+  'Mathematics':      { initials: 'Math', bg: 'bg-sage-100',   text: 'text-forest-600'  },
+  'English Language': { initials: 'Eng',  bg: 'bg-blue-100',   text: 'text-blue-800'    },
+  'Biology':          { initials: 'Bio',  bg: 'bg-green-100',  text: 'text-green-800'   },
+  'Chemistry':        { initials: 'Chem', bg: 'bg-yellow-100', text: 'text-yellow-800'  },
+  'Physics':          { initials: 'Phy',  bg: 'bg-purple-100', text: 'text-purple-800'  },
+  'Geography':        { initials: 'Geo',  bg: 'bg-orange-100', text: 'text-orange-800'  },
+  'History':          { initials: 'His',  bg: 'bg-pink-100',   text: 'text-pink-800'    },
+  'Computer Studies': { initials: 'ICT',  bg: 'bg-gray-100',   text: 'text-gray-700'    },
+  'Commerce':         { initials: 'Com',  bg: 'bg-yellow-100', text: 'text-yellow-800'  },
+  'Accounting':       { initials: 'Acc',  bg: 'bg-pink-100',   text: 'text-pink-800'    },
+  'Economics':        { initials: 'Eco',  bg: 'bg-orange-100', text: 'text-orange-800'  },
 }
 
 function getMeta(name) {
@@ -25,15 +23,16 @@ function getMeta(name) {
 }
 
 export default function HomePage() {
-  const [user, setUser] = useState(null)
-  const [role, setRole] = useState(null)
-  const [subjects, setSubjects] = useState([])
-  const [tutors, setTutors] = useState([])
-  const [lessonCounts, setLessonCounts] = useState({})
+  const [user, setUser]                     = useState(null)
+  const [role, setRole]                     = useState(null)
+  const [subjects, setSubjects]             = useState([])
+  const [tutors, setTutors]                 = useState([])
+  const [tutorsLoading, setTutorsLoading]   = useState(true)
+  const [lessonCounts, setLessonCounts]     = useState({})
   const [loadingSubjects, setLoadingSubjects] = useState(true)
+  const [stats, setStats]                   = useState({ tutors: null, lessons: null, rating: null })
 
   useEffect(() => {
-    // Auth state
     supabase.auth.getUser().then(async ({ data: { user } }) => {
       if (!user) return
       setUser(user)
@@ -50,7 +49,6 @@ export default function HomePage() {
       setRole(profile?.role ?? 'student')
     })
 
-    // Subjects from DB (unique subject names from lessons)
     async function loadSubjects() {
       const { data: subjectRows } = await supabase
         .from('subjects')
@@ -58,7 +56,6 @@ export default function HomePage() {
         .eq('curriculum', 'ecz')
         .order('name')
 
-      // Get lesson counts per subject name
       const { data: lessonRows } = await supabase
         .from('lessons')
         .select('subject, status')
@@ -70,7 +67,6 @@ export default function HomePage() {
       })
       setLessonCounts(counts)
 
-      // Deduplicate subject names
       const seen = new Set()
       const unique = (subjectRows ?? []).filter(s => {
         if (seen.has(s.name)) return false
@@ -81,8 +77,8 @@ export default function HomePage() {
       setLoadingSubjects(false)
     }
 
-    // Featured tutors — approved, featured first
     async function loadTutors() {
+      setTutorsLoading(true)
       const { data } = await supabase
         .from('tutors')
         .select('id, subjects, hourly_rate_kwacha, avg_rating, total_reviews, is_featured, verification_status, badge, profiles(full_name, avatar_url)')
@@ -91,10 +87,32 @@ export default function HomePage() {
         .order('avg_rating', { ascending: false })
         .limit(4)
       setTutors(data ?? [])
+      setTutorsLoading(false)
+    }
+
+    async function loadStats() {
+      const [{ count: tutorCount }, { count: lessonCount }, { data: ratingData }] = await Promise.all([
+        supabase.from('tutors').select('*', { count: 'exact', head: true }).eq('is_approved', true),
+        supabase.from('lessons').select('*', { count: 'exact', head: true }).eq('status', 'active'),
+        supabase.from('tutors').select('avg_rating').eq('is_approved', true).not('avg_rating', 'is', null),
+      ])
+
+      let avgRating = null
+      if (ratingData && ratingData.length > 0) {
+        const sum = ratingData.reduce((acc, t) => acc + (t.avg_rating ?? 0), 0)
+        avgRating = (sum / ratingData.length).toFixed(1)
+      }
+
+      setStats({
+        tutors:  tutorCount ?? 0,
+        lessons: lessonCount ?? 0,
+        rating:  avgRating,
+      })
     }
 
     loadSubjects()
     loadTutors()
+    loadStats()
 
     return () => subscription.unsubscribe()
   }, [])
@@ -139,10 +157,26 @@ export default function HomePage() {
           )}
         </div>
 
+        {/* Real stats */}
         <div className="flex justify-center gap-12 text-xs tracking-wide" style={{ color: 'var(--color-surface-mid)' }}>
-          <div><span className="block font-serif text-3xl mb-1">240+</span>Tutors available</div>
-          <div><span className="block font-serif text-3xl mb-1">1,800+</span>Lessons uploaded</div>
-          <div><span className="block font-serif text-3xl mb-1">4.8</span>Average rating</div>
+          <div>
+            <span className="block font-serif text-3xl mb-1">
+              {stats.tutors !== null ? `${stats.tutors}+` : '—'}
+            </span>
+            Tutors available
+          </div>
+          <div>
+            <span className="block font-serif text-3xl mb-1">
+              {stats.lessons !== null ? `${stats.lessons}+` : '—'}
+            </span>
+            Lessons uploaded
+          </div>
+          <div>
+            <span className="block font-serif text-3xl mb-1">
+              {stats.rating ?? '—'}
+            </span>
+            Average rating
+          </div>
         </div>
       </section>
 
@@ -159,7 +193,7 @@ export default function HomePage() {
                   <div key={i} className="bg-white border border-gray-200 rounded-xl p-3 animate-pulse h-24" />
                 ))
               : subjects.map((s) => {
-                  const meta = getMeta(s.name)
+                  const meta  = getMeta(s.name)
                   const count = lessonCounts[s.name] ?? 0
                   return (
                     <Link key={s.id} href={`/browse/${encodeURIComponent(s.name)}`}
@@ -187,10 +221,16 @@ export default function HomePage() {
             <Link href="/tutor" className="text-sm hover:underline" style={{ color: 'var(--color-primary-lit)' }}>See all →</Link>
           </div>
 
-          {tutors.length === 0 ? (
+          {tutorsLoading ? (
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+              {Array.from({ length: 4 }).map((_, i) => (
+                <div key={i} className="border border-gray-200 rounded-xl p-4 animate-pulse h-44" />
+              ))}
+            </div>
+          ) : tutors.length === 0 ? (
             <div className="text-center py-12 border border-dashed border-gray-200 rounded-2xl">
               <p className="text-sm text-gray-400 mb-3">No tutors available yet.</p>
-              <Link href="/auth/register?role=tutor"
+              <Link href="/auth/register"
                 className="text-xs px-4 py-2 rounded-lg"
                 style={{ backgroundColor: 'var(--color-btn-bg)', color: 'var(--color-btn-text)' }}>
                 Become the first tutor
@@ -261,7 +301,7 @@ export default function HomePage() {
         <span className="font-serif" style={{ color: 'var(--color-primary-lit)' }}>Rent a Tutor · Zambia</span>
         <div className="flex gap-6">
           <Link href="/about" className="hover:text-gray-600">About</Link>
-          <Link href="/auth/register?role=tutor" className="hover:text-gray-600">Become a tutor</Link>
+          <Link href="/auth/register" className="hover:text-gray-600">Become a tutor</Link>
           <Link href="/contact" className="hover:text-gray-600">Contact</Link>
         </div>
         <span>© 2026 Rent a Tutor</span>
