@@ -5,14 +5,107 @@ import Navbar from '@/components/layout/Navbar'
 import { supabase } from '@/lib/supabase'
 import { useRouter } from 'next/navigation'
 
+// ── Withdraw modal ────────────────────────────────────────────────────────────
+function WithdrawModal({ balance, onClose }) {
+  const [phone, setPhone]     = useState('')
+  const [amount, setAmount]   = useState('')
+  const [error, setError]     = useState('')
+  const [done, setDone]       = useState(false)
+
+  function handleSubmit(e) {
+    e.preventDefault()
+    setError('')
+    const cleaned = phone.replace(/\s+/g, '')
+    if (!/^(09|07)\d{8}$/.test(cleaned)) {
+      setError('Enter a valid Zambian mobile number.')
+      return
+    }
+    const num = parseInt(amount, 10)
+    if (isNaN(num) || num < 50) {
+      setError('Minimum withdrawal is K50.')
+      return
+    }
+    if (num > balance) {
+      setError(`You only have K${balance} available.`)
+      return
+    }
+    // In a real implementation this would call your withdrawal API
+    setDone(true)
+  }
+
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center px-4"
+      style={{ backgroundColor: 'rgba(0,0,0,0.55)' }}
+      onClick={e => { if (e.target === e.currentTarget && !done) onClose() }}>
+      <div className="bg-white rounded-2xl w-full max-w-sm shadow-xl overflow-hidden">
+        <div className="px-6 pt-6 pb-4 border-b border-gray-100">
+          <div className="flex justify-between items-center">
+            <h2 className="font-serif text-lg" style={{ color: 'var(--color-primary)' }}>
+              Withdraw earnings
+            </h2>
+            {!done && (
+              <button onClick={onClose} className="text-gray-400 hover:text-gray-600 text-lg leading-none">✕</button>
+            )}
+          </div>
+          <p className="text-xs text-gray-500 mt-0.5">Available balance: K{balance.toLocaleString()}</p>
+        </div>
+
+        {done ? (
+          <div className="px-6 py-10 text-center">
+            <div className="text-3xl mb-3">✅</div>
+            <p className="text-sm font-medium text-gray-800 mb-1">Withdrawal requested!</p>
+            <p className="text-xs text-gray-500 mb-5">
+              Your mobile money transfer will be processed within 1–2 business days.
+            </p>
+            <button onClick={onClose}
+              className="text-sm px-5 py-2 rounded-lg"
+              style={{ backgroundColor: 'var(--color-btn-bg)', color: 'var(--color-btn-text)' }}>
+              Done
+            </button>
+          </div>
+        ) : (
+          <form onSubmit={handleSubmit} className="px-6 py-5 space-y-4">
+            <div>
+              <label className="block text-sm text-gray-600 mb-1">Mobile money number</label>
+              <input type="tel" required value={phone} onChange={e => setPhone(e.target.value)}
+                placeholder="0971 234 567"
+                className="w-full border border-gray-300 rounded-lg px-4 py-2.5 text-sm outline-none focus:border-gray-400" />
+              <p className="text-xs text-gray-400 mt-1">Airtel Money, MTN MoMo, or Zamtel Kwacha</p>
+            </div>
+            <div>
+              <label className="block text-sm text-gray-600 mb-1">Amount (ZMW)</label>
+              <div className="relative">
+                <span className="absolute left-4 top-1/2 -translate-y-1/2 text-sm text-gray-400">K</span>
+                <input type="number" required min="50" max={balance} value={amount}
+                  onChange={e => setAmount(e.target.value)}
+                  placeholder="Minimum K50"
+                  className="w-full border border-gray-300 rounded-lg pl-8 pr-4 py-2.5 text-sm outline-none focus:border-gray-400" />
+              </div>
+            </div>
+            {error && (
+              <div className="bg-red-50 text-red-700 text-xs px-3 py-2 rounded-lg">{error}</div>
+            )}
+            <button type="submit"
+              className="w-full py-2.5 rounded-lg text-sm font-medium"
+              style={{ backgroundColor: 'var(--color-btn-bg)', color: 'var(--color-btn-text)' }}>
+              Request withdrawal →
+            </button>
+          </form>
+        )}
+      </div>
+    </div>
+  )
+}
+
+// ── Main dashboard ────────────────────────────────────────────────────────────
 export default function TutorDashboard() {
   const router = useRouter()
-  const [profile, setProfile] = useState(null)
+  const [profile, setProfile]         = useState(null)
   const [tutorProfile, setTutorProfile] = useState(null)
-  const [lessons, setLessons] = useState([])
-  const [bookings, setBookings] = useState([])
-  const [earnings, setEarnings] = useState([])
-  const [loading, setLoading] = useState(true)
+  const [lessons, setLessons]         = useState([])
+  const [bookings, setBookings]       = useState([])
+  const [loading, setLoading]         = useState(true)
+  const [showWithdraw, setShowWithdraw] = useState(false)
 
   useEffect(() => {
     async function load() {
@@ -38,16 +131,6 @@ export default function TutorDashboard() {
       setTutorProfile(tutor)
       setLessons(less ?? [])
       setBookings(books ?? [])
-
-      // Calculate earnings per month from completed bookings
-      const completed = (books ?? []).filter(b => b.status === 'completed')
-      const byMonth = {}
-      completed.forEach(b => {
-        const month = new Date(b.scheduled_at).toLocaleDateString('en-ZM', { month: 'short', year: '2-digit' })
-        byMonth[month] = (byMonth[month] ?? 0) + (b.amount ?? 0)
-      })
-      setEarnings(Object.entries(byMonth).slice(-3).map(([month, amount]) => ({ month, amount })))
-
       setLoading(false)
     }
     load()
@@ -55,13 +138,32 @@ export default function TutorDashboard() {
 
   const firstName = profile?.full_name?.split(' ')[0] ?? 'there'
   const pendingBookings = bookings.filter(b => b.status === 'pending')
-  const totalEarnings = bookings.filter(b => b.status === 'completed').reduce((sum, b) => sum + (b.amount ?? 0), 0)
-  const totalPurchases = lessons.reduce((sum, l) => sum + (l.purchase_count ?? 0), 0)
+
+  // Earnings from completed sessions (70% of lesson purchase revenue would need a separate query)
+  const sessionEarnings = bookings
+    .filter(b => b.status === 'completed')
+    .reduce((sum, b) => sum + (b.amount ?? 0), 0)
+
+  // Lesson rental revenue (70% of total purchases)
+  const rentalRevenue = lessons.reduce((sum, l) =>
+    sum + Math.round((l.purchase_count ?? 0) * (l.price ?? 0) * 0.7), 0)
+
+  const totalEarnings = sessionEarnings + rentalRevenue
+
+  // Earnings chart data by month from bookings
+  const byMonth = {}
+  bookings.filter(b => b.status === 'completed').forEach(b => {
+    const month = new Date(b.scheduled_at).toLocaleDateString('en-ZM', { month: 'short', year: '2-digit' })
+    byMonth[month] = (byMonth[month] ?? 0) + (b.amount ?? 0)
+  })
+  const earnings = Object.entries(byMonth).slice(-3).map(([month, amount]) => ({ month, amount }))
   const maxEarning = Math.max(...earnings.map(e => e.amount), 1)
 
+  const totalPurchases = lessons.reduce((sum, l) => sum + (l.purchase_count ?? 0), 0)
+
   const stats = [
-    { label: 'Lessons uploaded',   value: lessons.length,    type: 'a' },
-    { label: 'Total purchases',    value: totalPurchases,    type: 'a' },
+    { label: 'Lessons uploaded',   value: lessons.length,   type: 'a' },
+    { label: 'Total purchases',    value: totalPurchases,   type: 'a' },
     { label: 'Sessions completed', value: bookings.filter(b => b.status === 'completed').length, type: 'b' },
     { label: 'Total earned (ZMW)', value: `K${totalEarnings.toLocaleString()}`, type: 'b' },
   ]
@@ -102,7 +204,6 @@ export default function TutorDashboard() {
 
       <div className="max-w-5xl mx-auto px-6 py-8">
 
-        {/* Not approved warning */}
         {tutorProfile && !tutorProfile.is_approved && (
           <div className="mb-6 px-5 py-4 rounded-xl border text-sm"
             style={{ backgroundColor: 'var(--color-stat-b-bg)', borderColor: 'var(--color-accent-mid)', color: 'var(--color-stat-b-text)' }}>
@@ -178,7 +279,7 @@ export default function TutorDashboard() {
           <div className="rounded-2xl p-6" style={{ backgroundColor: 'var(--color-primary)' }}>
             <h2 className="font-serif text-lg mb-1" style={{ color: 'var(--color-nav-text)' }}>Earnings</h2>
             <p className="text-xs mb-5" style={{ color: 'var(--color-nav-text)', opacity: 0.6 }}>
-              From completed sessions
+              Sessions + lesson rentals (70%)
             </p>
             {earnings.length === 0 ? (
               <p className="text-xs" style={{ color: 'var(--color-nav-text)', opacity: 0.5 }}>
@@ -205,7 +306,9 @@ export default function TutorDashboard() {
               <div className="font-serif text-2xl mb-3" style={{ color: 'var(--color-accent-lit)' }}>
                 K{totalEarnings.toLocaleString()}
               </div>
-              <button className="w-full text-xs py-2 rounded-lg font-medium"
+              <button
+                onClick={() => setShowWithdraw(true)}
+                className="w-full text-xs py-2 rounded-lg font-medium"
                 style={{ backgroundColor: 'var(--color-accent-btn)', color: 'var(--color-accent-btn-text)' }}>
                 Withdraw via Mobile Money
               </button>
@@ -285,6 +388,13 @@ export default function TutorDashboard() {
         </div>
 
       </div>
+
+      {showWithdraw && (
+        <WithdrawModal
+          balance={totalEarnings}
+          onClose={() => setShowWithdraw(false)}
+        />
+      )}
     </div>
   )
 }
