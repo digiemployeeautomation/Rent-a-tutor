@@ -1,5 +1,6 @@
 'use client'
 import { useState, useEffect, useCallback } from 'react'
+import { useParams } from 'next/navigation'
 import Link from 'next/link'
 import Navbar from '@/components/layout/Navbar'
 import { supabase } from '@/lib/supabase'
@@ -25,17 +26,23 @@ function formatDuration(secs) {
   return m < 60 ? `${m}m` : `${Math.floor(m / 60)}h ${m % 60}m`
 }
 
-export default function BrowseIndexPage() {
-  const [lessons, setLessons]         = useState([])
-  const [total, setTotal]             = useState(0)
-  const [loading, setLoading]         = useState(true)
+export default function BrowsePage() {
+  const params = useParams()
+  const urlSubject = params?.subject ? decodeURIComponent(params.subject) : ''
+
+  const [lessons, setLessons]     = useState([])
+  const [total, setTotal]         = useState(0)
+  const [loading, setLoading]     = useState(true)
   const [searchInput, setSearchInput] = useState('')
-  const [search, setSearch]           = useState('')
-  const [subject, setSubject]         = useState('')
-  const [level, setLevel]             = useState('')
-  const [sort, setSort]               = useState('popular')
-  const [page, setPage]               = useState(0)
+  const [search, setSearch]       = useState('')
+  const [subject, setSubject]     = useState(urlSubject)
+  const [level, setLevel]         = useState('')
+  const [sort, setSort]           = useState('popular')
+  const [page, setPage]           = useState(0)
   const PAGE_SIZE = 12
+
+  // Keep subject in sync if user navigates between subject URLs
+  useEffect(() => { setSubject(urlSubject) }, [urlSubject])
 
   const load = useCallback(async () => {
     setLoading(true)
@@ -68,6 +75,7 @@ export default function BrowseIndexPage() {
 
   useEffect(() => { setPage(0) }, [search, subject, level, sort])
   useEffect(() => { load() }, [load])
+
   useEffect(() => {
     const t = setTimeout(() => setSearch(searchInput), 350)
     return () => clearTimeout(t)
@@ -86,7 +94,7 @@ export default function BrowseIndexPage() {
             ← Back to home
           </Link>
           <h1 className="font-serif text-4xl mb-2" style={{ color: 'var(--color-surface-mid)' }}>
-            Browse all lessons
+            {subject ? subject : 'Browse lessons'}
           </h1>
           <p className="text-sm opacity-70 mb-6" style={{ color: 'var(--color-surface-mid)' }}>
             {total} lesson{total !== 1 ? 's' : ''} available
@@ -115,7 +123,7 @@ export default function BrowseIndexPage() {
               <h3 className="text-xs font-medium text-gray-500 uppercase tracking-wide mb-3">Level</h3>
               <div className="space-y-1">
                 {[
-                  { value: '',        label: 'All levels'         },
+                  { value: '',        label: 'All levels' },
                   { value: 'o_level', label: 'O-Level (Forms 1–4)' },
                   { value: 'a_level', label: 'A-Level (Forms 5–6)' },
                 ].map(l => (
@@ -153,7 +161,8 @@ export default function BrowseIndexPage() {
             </div>
 
             {(subject || level || search) && (
-              <button onClick={() => { setSubject(''); setLevel(''); setSearchInput('') }}
+              <button
+                onClick={() => { setSubject(''); setLevel(''); setSearchInput('') }}
                 className="text-xs underline"
                 style={{ color: 'var(--color-primary-lit)' }}>
                 Clear all filters
@@ -185,7 +194,8 @@ export default function BrowseIndexPage() {
                 <p className="text-sm text-gray-400 mb-1">No lessons found.</p>
                 <p className="text-xs text-gray-300">Try adjusting your filters or search term.</p>
                 {(subject || level || search) && (
-                  <button onClick={() => { setSubject(''); setLevel(''); setSearchInput('') }}
+                  <button
+                    onClick={() => { setSubject(''); setLevel(''); setSearchInput('') }}
                     className="mt-4 text-xs px-4 py-2 rounded-lg"
                     style={{ backgroundColor: 'var(--color-btn-bg)', color: 'var(--color-btn-text)' }}>
                     Clear filters
@@ -209,13 +219,16 @@ export default function BrowseIndexPage() {
                           {duration && <span className="text-xs text-gray-400">{duration}</span>}
                         </div>
                         <span className="text-xs text-gray-400 mb-1">{l.subject}</span>
-                        <h3 className="text-sm font-medium text-gray-800 leading-snug mb-1 flex-1">{l.title}</h3>
+                        <h3 className="text-sm font-medium text-gray-800 leading-snug mb-1 flex-1">
+                          {l.title}
+                        </h3>
                         <p className="text-xs text-gray-400 mb-4">by {tutorName}</p>
                         <div className="flex items-center justify-between border-t border-gray-100 pt-3 mt-auto">
                           <span className="text-xs text-gray-400">
                             {l.purchase_count ?? 0} purchase{l.purchase_count !== 1 ? 's' : ''}
                           </span>
-                          <Link href={`/browse/${encodeURIComponent(l.subject)}/lesson/${l.id}`}
+                          <Link
+                            href={`/browse/${encodeURIComponent(l.subject)}/lesson/${l.id}`}
                             className="text-xs font-medium px-3 py-1.5 rounded-lg"
                             style={{ backgroundColor: '#e8c84a', color: '#1a2a00' }}>
                             Buy — K{l.price}
@@ -225,6 +238,7 @@ export default function BrowseIndexPage() {
                     )
                   })}
                 </div>
+
                 {totalPages > 1 && (
                   <div className="flex items-center justify-center gap-2 mt-10">
                     <button onClick={() => setPage(p => Math.max(0, p - 1))} disabled={page === 0}
