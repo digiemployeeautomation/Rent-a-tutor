@@ -1,4 +1,5 @@
 import './globals.css'
+import { cookies } from 'next/headers'
 import { ThemeProvider } from '@/context/ThemeContext'
 
 export const metadata = {
@@ -7,8 +8,15 @@ export const metadata = {
 }
 
 export default function RootLayout({ children }) {
+  // Read the role cookie set at login so the server renders the correct theme
+  // immediately — prevents the green→blue flash tutors would otherwise see.
+  // The ThemeContext will keep it in sync on the client after hydration.
+  const cookieStore = cookies()
+  const roleCookie  = cookieStore.get('rat-role')?.value
+  const theme       = roleCookie === 'tutor' ? 'tutor' : 'student'
+
   return (
-    <html lang="en" data-theme="student">
+    <html lang="en" data-theme={theme}>
       <body>
         <ThemeProvider>
           {children}
