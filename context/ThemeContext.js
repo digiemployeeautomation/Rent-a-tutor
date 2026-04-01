@@ -10,34 +10,29 @@ export function ThemeProvider({ children }) {
   function applyRole(r) {
     const validRole = ['student', 'tutor', 'admin'].includes(r) ? r : 'student'
     setRole(validRole)
-    // admin gets student theme on public pages — only student/tutor themes exist
-    document.documentElement.setAttribute('data-theme', validRole === 'tutor' ? 'tutor' : 'student')
+    const theme = validRole === 'tutor' ? 'tutor' : 'student'
+    document.documentElement.setAttribute('data-theme', theme)
+    // Write a cookie so the server layout can read it on next hard refresh,
+    // preventing the theme flash for tutors.
+    document.cookie = `rat-role=${validRole}; path=/; max-age=604800; SameSite=Lax`
   }
 
   useEffect(() => {
-    // getUser() is secure — verifies with Supabase server, unlike getSession()
     supabase.auth.getUser().then(async ({ data: { user } }) => {
       if (!user) return applyRole('student')
-
-      // Read from profiles table for accuracy
       const { data: profile } = await supabase
-        .from('profiles')
-        .select('role')
-        .eq('id', user.id)
-        .single()
-
+        .from('profiles').select('role').eq('id', user.id).single()
       applyRole(profile?.role ?? user.user_metadata?.role ?? 'student')
     })
 
     const { data: { subscription } } = supabase.auth.onAuthStateChange(async (_event, session) => {
-      if (!session?.user) return applyRole('student')
-
+      if (!session?.user) {
+        // Clear cookie on logout
+        document.cookie = 'rat-role=; path=/; max-age=0'
+        return applyRole('student')
+      }
       const { data: profile } = await supabase
-        .from('profiles')
-        .select('role')
-        .eq('id', session.user.id)
-        .single()
-
+        .from('profiles').select('role').eq('id', session.user.id).single()
       applyRole(profile?.role ?? session.user.user_metadata?.role ?? 'student')
     })
 
