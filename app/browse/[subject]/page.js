@@ -13,10 +13,10 @@ const SUBJECTS = [
 ]
 
 const SORT_OPTIONS = [
-  { value: 'popular',   label: 'Most popular'  },
-  { value: 'newest',    label: 'Newest first'  },
-  { value: 'price_asc', label: 'Price: low–high' },
-  { value: 'price_desc',label: 'Price: high–low' },
+  { value: 'popular',    label: 'Most popular'    },
+  { value: 'newest',     label: 'Newest first'    },
+  { value: 'price_asc',  label: 'Price: low–high' },
+  { value: 'price_desc', label: 'Price: high–low' },
 ]
 
 function formatDuration(secs) {
@@ -25,20 +25,20 @@ function formatDuration(secs) {
   return m < 60 ? `${m}m` : `${Math.floor(m / 60)}h ${m % 60}m`
 }
 
-export default function BrowsePage() {
+export default function BrowseIndexPage() {
   const [lessons, setLessons]         = useState([])
   const [total, setTotal]             = useState(0)
   const [loading, setLoading]         = useState(true)
+  const [searchInput, setSearchInput] = useState('')
   const [search, setSearch]           = useState('')
   const [subject, setSubject]         = useState('')
-  const [level, setLevel]             = useState('') // '' | 'o_level' | 'a_level'
+  const [level, setLevel]             = useState('')
   const [sort, setSort]               = useState('popular')
   const [page, setPage]               = useState(0)
   const PAGE_SIZE = 12
 
   const load = useCallback(async () => {
     setLoading(true)
-
     let query = supabase
       .from('lessons')
       .select(`
@@ -48,8 +48,8 @@ export default function BrowsePage() {
       `, { count: 'exact' })
       .eq('status', 'active')
 
-    if (search.trim())  query = query.ilike('title', `%${search.trim()}%`)
-    if (subject)        query = query.eq('subject', subject)
+    if (search.trim()) query = query.ilike('title', `%${search.trim()}%`)
+    if (subject)       query = query.eq('subject', subject)
     if (level === 'o_level') query = query.or('form_level.ilike.%O-Level%,form_level.ilike.%Form 1%,form_level.ilike.%Form 2%,form_level.ilike.%Form 3%,form_level.ilike.%Form 4%')
     if (level === 'a_level') query = query.or('form_level.ilike.%A-Level%,form_level.ilike.%Form 5%,form_level.ilike.%Form 6%')
 
@@ -66,12 +66,8 @@ export default function BrowsePage() {
     setLoading(false)
   }, [search, subject, level, sort, page])
 
-  // Reset page when filters change
   useEffect(() => { setPage(0) }, [search, subject, level, sort])
   useEffect(() => { load() }, [load])
-
-  // Debounce search
-  const [searchInput, setSearchInput] = useState('')
   useEffect(() => {
     const t = setTimeout(() => setSearch(searchInput), 350)
     return () => clearTimeout(t)
@@ -83,7 +79,6 @@ export default function BrowsePage() {
     <div className="min-h-screen" style={{ backgroundColor: 'var(--color-page-bg)' }}>
       <Navbar />
 
-      {/* Header */}
       <div className="px-6 py-10" style={{ backgroundColor: 'var(--color-primary)' }}>
         <div className="max-w-5xl mx-auto">
           <Link href="/" className="text-xs mb-4 inline-block opacity-60 hover:opacity-100"
@@ -91,13 +86,11 @@ export default function BrowsePage() {
             ← Back to home
           </Link>
           <h1 className="font-serif text-4xl mb-2" style={{ color: 'var(--color-surface-mid)' }}>
-            Browse lessons
+            Browse all lessons
           </h1>
           <p className="text-sm opacity-70 mb-6" style={{ color: 'var(--color-surface-mid)' }}>
             {total} lesson{total !== 1 ? 's' : ''} available
           </p>
-
-          {/* Search */}
           <div className="flex max-w-xl bg-white rounded-xl overflow-hidden">
             <input
               type="text"
@@ -108,9 +101,7 @@ export default function BrowsePage() {
             />
             {searchInput && (
               <button onClick={() => setSearchInput('')}
-                className="px-4 text-gray-400 hover:text-gray-600 text-sm">
-                ✕
-              </button>
+                className="px-4 text-gray-400 hover:text-gray-600 text-sm">✕</button>
             )}
           </div>
         </div>
@@ -119,15 +110,12 @@ export default function BrowsePage() {
       <div className="max-w-5xl mx-auto px-6 py-8">
         <div className="flex flex-col lg:flex-row gap-8">
 
-          {/* Sidebar filters */}
           <aside className="lg:w-52 flex-shrink-0">
-
-            {/* Level */}
             <div className="mb-6">
               <h3 className="text-xs font-medium text-gray-500 uppercase tracking-wide mb-3">Level</h3>
               <div className="space-y-1">
                 {[
-                  { value: '',        label: 'All levels' },
+                  { value: '',        label: 'All levels'         },
                   { value: 'o_level', label: 'O-Level (Forms 1–4)' },
                   { value: 'a_level', label: 'A-Level (Forms 5–6)' },
                 ].map(l => (
@@ -142,7 +130,6 @@ export default function BrowsePage() {
               </div>
             </div>
 
-            {/* Subject */}
             <div className="mb-6">
               <h3 className="text-xs font-medium text-gray-500 uppercase tracking-wide mb-3">Subject</h3>
               <div className="space-y-1 max-h-72 overflow-y-auto pr-1">
@@ -165,10 +152,8 @@ export default function BrowsePage() {
               </div>
             </div>
 
-            {/* Clear filters */}
             {(subject || level || search) && (
-              <button
-                onClick={() => { setSubject(''); setLevel(''); setSearchInput(''); }}
+              <button onClick={() => { setSubject(''); setLevel(''); setSearchInput('') }}
                 className="text-xs underline"
                 style={{ color: 'var(--color-primary-lit)' }}>
                 Clear all filters
@@ -176,17 +161,12 @@ export default function BrowsePage() {
             )}
           </aside>
 
-          {/* Main content */}
           <div className="flex-1 min-w-0">
-
-            {/* Sort + count bar */}
             <div className="flex items-center justify-between mb-5">
               <p className="text-sm text-gray-500">
                 {loading ? 'Loading...' : `${total} result${total !== 1 ? 's' : ''}`}
               </p>
-              <select
-                value={sort}
-                onChange={e => setSort(e.target.value)}
+              <select value={sort} onChange={e => setSort(e.target.value)}
                 className="text-sm border border-gray-200 rounded-lg px-3 py-1.5 outline-none bg-white text-gray-700">
                 {SORT_OPTIONS.map(o => (
                   <option key={o.value} value={o.value}>{o.label}</option>
@@ -194,7 +174,6 @@ export default function BrowsePage() {
               </select>
             </div>
 
-            {/* Lesson grid */}
             {loading ? (
               <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4">
                 {Array.from({ length: PAGE_SIZE }).map((_, i) => (
@@ -206,8 +185,7 @@ export default function BrowsePage() {
                 <p className="text-sm text-gray-400 mb-1">No lessons found.</p>
                 <p className="text-xs text-gray-300">Try adjusting your filters or search term.</p>
                 {(subject || level || search) && (
-                  <button
-                    onClick={() => { setSubject(''); setLevel(''); setSearchInput('') }}
+                  <button onClick={() => { setSubject(''); setLevel(''); setSearchInput('') }}
                     className="mt-4 text-xs px-4 py-2 rounded-lg"
                     style={{ backgroundColor: 'var(--color-btn-bg)', color: 'var(--color-btn-text)' }}>
                     Clear filters
@@ -223,8 +201,6 @@ export default function BrowsePage() {
                     return (
                       <div key={l.id}
                         className="bg-white border border-gray-200 rounded-xl p-4 hover:border-gray-300 transition flex flex-col">
-
-                        {/* Top row */}
                         <div className="flex items-start justify-between mb-3">
                           <span className="text-xs px-2 py-0.5 rounded-full"
                             style={{ backgroundColor: 'var(--color-surface)', color: 'var(--color-primary-mid)' }}>
@@ -232,25 +208,14 @@ export default function BrowsePage() {
                           </span>
                           {duration && <span className="text-xs text-gray-400">{duration}</span>}
                         </div>
-
-                        {/* Subject pill */}
                         <span className="text-xs text-gray-400 mb-1">{l.subject}</span>
-
-                        {/* Title */}
-                        <h3 className="text-sm font-medium text-gray-800 leading-snug mb-1 flex-1">
-                          {l.title}
-                        </h3>
-
-                        {/* Tutor */}
+                        <h3 className="text-sm font-medium text-gray-800 leading-snug mb-1 flex-1">{l.title}</h3>
                         <p className="text-xs text-gray-400 mb-4">by {tutorName}</p>
-
-                        {/* Footer */}
                         <div className="flex items-center justify-between border-t border-gray-100 pt-3 mt-auto">
                           <span className="text-xs text-gray-400">
                             {l.purchase_count ?? 0} purchase{l.purchase_count !== 1 ? 's' : ''}
                           </span>
-                          <Link
-                            href={`/browse/${encodeURIComponent(l.subject)}/lesson/${l.id}`}
+                          <Link href={`/browse/${encodeURIComponent(l.subject)}/lesson/${l.id}`}
                             className="text-xs font-medium px-3 py-1.5 rounded-lg"
                             style={{ backgroundColor: '#e8c84a', color: '#1a2a00' }}>
                             Buy — K{l.price}
@@ -260,22 +225,14 @@ export default function BrowsePage() {
                     )
                   })}
                 </div>
-
-                {/* Pagination */}
                 {totalPages > 1 && (
                   <div className="flex items-center justify-center gap-2 mt-10">
-                    <button
-                      onClick={() => setPage(p => Math.max(0, p - 1))}
-                      disabled={page === 0}
+                    <button onClick={() => setPage(p => Math.max(0, p - 1))} disabled={page === 0}
                       className="text-xs px-4 py-2 rounded-lg border border-gray-200 disabled:opacity-40 hover:bg-gray-50">
                       ← Prev
                     </button>
-                    <span className="text-xs text-gray-500 px-2">
-                      Page {page + 1} of {totalPages}
-                    </span>
-                    <button
-                      onClick={() => setPage(p => Math.min(totalPages - 1, p + 1))}
-                      disabled={page >= totalPages - 1}
+                    <span className="text-xs text-gray-500 px-2">Page {page + 1} of {totalPages}</span>
+                    <button onClick={() => setPage(p => Math.min(totalPages - 1, p + 1))} disabled={page >= totalPages - 1}
                       className="text-xs px-4 py-2 rounded-lg border border-gray-200 disabled:opacity-40 hover:bg-gray-50">
                       Next →
                     </button>
