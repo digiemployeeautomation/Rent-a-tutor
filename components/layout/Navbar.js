@@ -6,10 +6,12 @@ import { useTheme } from '@/context/ThemeContext'
 import { supabase } from '@/lib/supabase'
 import { useRouter } from 'next/navigation'
 
+const ADMIN_URL = 'https://admin.rentatutor.co.zm'
+
 export default function Navbar() {
   const { role } = useTheme()
   const router = useRouter()
-  const [user, setUser] = useState(null)
+  const [user, setUser]       = useState(null)
   const [profile, setProfile] = useState(null)
   const [loading, setLoading] = useState(true)
 
@@ -45,9 +47,9 @@ export default function Navbar() {
     router.refresh()
   }
 
-  const fullName = profile?.full_name ?? user?.user_metadata?.full_name ?? null
+  const fullName  = profile?.full_name ?? user?.user_metadata?.full_name ?? null
   const avatarUrl = profile?.avatar_url ?? null
-  const initials = fullName
+  const initials  = fullName
     ? fullName.split(' ').map(w => w[0]).join('').slice(0, 2).toUpperCase()
     : '??'
 
@@ -60,20 +62,21 @@ export default function Navbar() {
       <div className="hidden md:flex items-center gap-6 text-sm" style={{ color: 'var(--color-nav-text)', opacity: 0.8 }}>
         {role === 'tutor' ? (
           <>
-            <Link href="/dashboard/tutor" className="hover:opacity-100">Dashboard</Link>
-            <Link href="/dashboard/tutor/upload" className="hover:opacity-100">Upload lesson</Link>
+            <Link href="/dashboard/tutor"          className="hover:opacity-100">Dashboard</Link>
+            <Link href="/dashboard/tutor/upload"   className="hover:opacity-100">Upload lesson</Link>
             <Link href="/dashboard/tutor/sessions" className="hover:opacity-100">Sessions</Link>
           </>
         ) : role === 'admin' ? (
           <>
-            <Link href="/admin" className="hover:opacity-100">Dashboard</Link>
-            <Link href="/admin/users" className="hover:opacity-100">Users</Link>
-            <Link href="/admin/payments" className="hover:opacity-100">Payments</Link>
+            {/* Admin links go to the separate admin console */}
+            <a href={ADMIN_URL}                    className="hover:opacity-100">Dashboard</a>
+            <a href={`${ADMIN_URL}/users`}         className="hover:opacity-100">Users</a>
+            <a href={`${ADMIN_URL}/payments`}      className="hover:opacity-100">Payments</a>
           </>
         ) : (
           <>
-            <Link href="/browse" className="hover:opacity-100">Browse lessons</Link>
-            <Link href="/tutor" className="hover:opacity-100">Find a tutor</Link>
+            <Link href="/browse"    className="hover:opacity-100">Browse lessons</Link>
+            <Link href="/tutor"     className="hover:opacity-100">Find a tutor</Link>
             <Link href="/exam-prep" className="hover:opacity-100">Exam prep</Link>
           </>
         )}
@@ -93,7 +96,6 @@ export default function Navbar() {
               </div>
             </div>
 
-            {/* Avatar — photo if available, initials fallback */}
             {avatarUrl ? (
               <div className="w-9 h-9 rounded-full overflow-hidden border-2" style={{ borderColor: 'rgba(255,255,255,0.2)' }}>
                 <Image
