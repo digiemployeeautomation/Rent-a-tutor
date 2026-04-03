@@ -10,18 +10,31 @@ const AUTH_ROUTES       = ['/auth/login', '/auth/register']
 export async function middleware(request) {
   const response = NextResponse.next()
   const { pathname } = request.nextUrl
-
   const supabase = createMiddlewareClient({ req: request, res: response })
   const { data: { user } } = await supabase.auth.getUser()
 
+  // ── Lazy profile fetcher — at most one DB read per request ──────────────────
+  let _profile
+  const getRole = async () => {
+    if (_profile === undefined) {
+      const { data, error } = await supabase
+        .from('profiles').select('role').eq('id', user.id).single()
+      // A missing profile row is treated as a broken account, not a student.
+      if (error || !data) return null
+      _profile = data
+    }
+    return _profile?.role ?? null
+  }
+
   // ── Logged-in users hitting auth pages ─────────────────────────────────────
-  if (user && AUTH_ROUTES.some(r => pathname.startsWith(r))) {
-    const { data: profile } = await supabase
-      .from('profiles').select('role').eq('id', user.id).single()
-    const role = profile?.role ?? 'student'
-    if (role === 'admin') return NextResponse.redirect(new URL('/admin', request.url))
-    if (role === 'tutor') return NextResponse.redirect(new URL('/dashboard/tutor', request.url))
-    return NextResponse.redirect(new URL('/dashboard/student', request.url))
+  if (user && AUTH_ROUTES.some(r => pathname === r)) {
+    const role = await getRole()
+    if (role === null)  return NextResponse.redirect(new URL('/auth/incomplete-profile', request.url))
+    if (role === 'admin')   return NextResponse.redirect(new URL('/admin', request.url))
+    if (role === 'tutor')   return NextResponse.redirect(new URL('/dashboard/tutor', request.url))
+    if (role === 'student') return NextResponse.redirect(new URL('/dashboard/student', request.url))
+    // Unknown role — send to a safe fallback
+    return NextResponse.redirect(new URL('/', request.url))
   }
 
   // ── Unauthenticated: gate all protected routes ──────────────────────────────
@@ -34,29 +47,33 @@ export async function middleware(request) {
 
   if (!user) return response
 
-  // ── Role-level route protection (requires DB read — only on mismatch paths) ─
+  // ── Role-level route protection ─────────────────────────────────────────────
   const needsRole =
     PROTECTED_STUDENT.some(r => pathname.startsWith(r)) ||
     PROTECTED_TUTOR.some(r => pathname.startsWith(r))   ||
     ADMIN_ROUTES.some(r => pathname.startsWith(r))
 
   if (needsRole) {
-    const { data: profile } = await supabase
-      .from('profiles').select('role').eq('id', user.id).single()
-    const role = profile?.role ?? 'student'
+    const role = await getRole()
 
-    // Admin routes
+    // Broken/missing profile — redirect to onboarding/error rather than
+    // silently granting student access.
+    if (role === null) {
+      return NextResponse.redirect(new URL('/auth/incomplete-profile', request.url))
+    }
+
+    // Admin routes — only admins allowed
     if (ADMIN_ROUTES.some(r => pathname.startsWith(r)) && role !== 'admin') {
       return NextResponse.redirect(new URL('/', request.url))
     }
 
-    // Tutor-only routes
-    if (PROTECTED_TUTOR.some(r => pathname.startsWith(r)) && role !== 'tutor') {
+    // Tutor-only routes — tutors and admins allowed
+    if (PROTECTED_TUTOR.some(r => pathname.startsWith(r)) && role !== 'tutor' && role !== 'admin') {
       return NextResponse.redirect(new URL('/dashboard/student', request.url))
     }
 
-    // Student-only routes
-    if (PROTECTED_STUDENT.some(r => pathname.startsWith(r)) && role !== 'student') {
+    // Student-only routes — students and admins allowed
+    if (PROTECTED_STUDENT.some(r => pathname.startsWith(r)) && role !== 'student' && role !== 'admin') {
       return NextResponse.redirect(new URL('/dashboard/tutor', request.url))
     }
   }
