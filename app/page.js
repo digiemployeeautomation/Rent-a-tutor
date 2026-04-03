@@ -30,7 +30,6 @@ export default function HomePage() {
   const [tutorsLoading, setTutorsLoading]   = useState(true)
   const [lessonCounts, setLessonCounts]     = useState({})
   const [loadingSubjects, setLoadingSubjects] = useState(true)
-  const [stats, setStats]                   = useState({ tutors: null, lessons: null, rating: null })
 
   useEffect(() => {
     supabase.auth.getUser().then(async ({ data: { user } }) => {
@@ -90,29 +89,8 @@ export default function HomePage() {
       setTutorsLoading(false)
     }
 
-    async function loadStats() {
-      const [{ count: tutorCount }, { count: lessonCount }, { data: ratingData }] = await Promise.all([
-        supabase.from('tutors').select('*', { count: 'exact', head: true }).eq('is_approved', true),
-        supabase.from('lessons').select('*', { count: 'exact', head: true }).eq('status', 'active'),
-        supabase.from('tutors').select('avg_rating').eq('is_approved', true).not('avg_rating', 'is', null),
-      ])
-
-      let avgRating = null
-      if (ratingData && ratingData.length > 0) {
-        const sum = ratingData.reduce((acc, t) => acc + (t.avg_rating ?? 0), 0)
-        avgRating = (sum / ratingData.length).toFixed(1)
-      }
-
-      setStats({
-        tutors:  tutorCount ?? 0,
-        lessons: lessonCount ?? 0,
-        rating:  avgRating,
-      })
-    }
-
     loadSubjects()
     loadTutors()
-    loadStats()
 
     return () => subscription.unsubscribe()
   }, [])
@@ -133,7 +111,7 @@ export default function HomePage() {
           Zambia&apos;s tutoring platform — built for O-Level and A-Level students.
         </p>
 
-        <div className="flex flex-col items-center gap-3 mb-10">
+        <div className="flex flex-col items-center gap-3">
           {user ? (
             <Link href={dashboardHref}
               className="text-sm font-medium px-8 py-3 rounded-xl transition"
@@ -155,28 +133,6 @@ export default function HomePage() {
               </p>
             </>
           )}
-        </div>
-
-        {/* Real stats */}
-        <div className="flex justify-center gap-12 text-xs tracking-wide" style={{ color: 'var(--color-surface-mid)' }}>
-          <div>
-            <span className="block font-serif text-3xl mb-1">
-              {stats.tutors !== null ? `${stats.tutors}+` : '—'}
-            </span>
-            Tutors available
-          </div>
-          <div>
-            <span className="block font-serif text-3xl mb-1">
-              {stats.lessons !== null ? `${stats.lessons}+` : '—'}
-            </span>
-            Lessons uploaded
-          </div>
-          <div>
-            <span className="block font-serif text-3xl mb-1">
-              {stats.rating ?? '—'}
-            </span>
-            Average rating
-          </div>
         </div>
       </section>
 
