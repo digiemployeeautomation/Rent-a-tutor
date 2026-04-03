@@ -11,14 +11,14 @@ function formatDate(iso) {
   })
 }
 
-// ── Booking modal ────────────────────────────────────────────────────────────
+// ── Booking modal ─────────────────────────────────────────────
 function BookingModal({ tutor, tutorName, user, onClose, onSuccess }) {
-  const [subject, setSubject]     = useState(tutor.subjects?.[0] ?? '')
-  const [date, setDate]           = useState('')
-  const [time, setTime]           = useState('')
-  const [notes, setNotes]         = useState('')
-  const [loading, setLoading]     = useState(false)
-  const [error, setError]         = useState('')
+  const [subject, setSubject] = useState(tutor.subjects?.[0] ?? '')
+  const [date, setDate]       = useState('')
+  const [time, setTime]       = useState('')
+  const [notes, setNotes]     = useState('')
+  const [loading, setLoading] = useState(false)
+  const [error, setError]     = useState('')
 
   const minDate = new Date()
   minDate.setDate(minDate.getDate() + 1)
@@ -35,7 +35,9 @@ function BookingModal({ tutor, tutorName, user, onClose, onSuccess }) {
       .from('bookings')
       .insert({
         student_id:   user.id,
-        tutor_id:     tutor.id,
+        // FIX: use tutor.user_id (auth user id) not tutor.id (tutors table PK)
+        // so it matches how the tutor dashboard queries bookings
+        tutor_id:     tutor.user_id,
         subject,
         scheduled_at: scheduledAt,
         amount:       tutor.hourly_rate_kwacha,
@@ -151,10 +153,10 @@ function BookingModal({ tutor, tutorName, user, onClose, onSuccess }) {
   )
 }
 
-// ── Main page ────────────────────────────────────────────────────────────────
+// ── Main page ─────────────────────────────────────────────────
 export default function TutorProfilePage() {
-  const params = useParams()
-  const router = useRouter()
+  const params  = useParams()
+  const router  = useRouter()
   const tutorId = params?.id
 
   const [tutor, setTutor]         = useState(null)
@@ -170,21 +172,29 @@ export default function TutorProfilePage() {
       const { data: { user: u } } = await supabase.auth.getUser()
       setUser(u)
 
-      const [{ data: tutorData }, { data: lessonData }, { data: reviewData }] = await Promise.all([
-        supabase
-          .from('tutors')
-          .select(`
-            id, user_id, subjects, hourly_rate_kwacha, avg_rating, total_reviews,
-            is_featured, verification_status, badge, bio,
-            profiles ( full_name, avatar_url )
-          `)
-          .eq('id', tutorId)
-          .eq('is_approved', true)
-          .single(),
+      const { data: tutorData } = await supabase
+        .from('tutors')
+        .select(`
+          id, user_id, subjects, hourly_rate_kwacha, avg_rating, total_reviews,
+          is_featured, verification_status, badge, bio,
+          profiles ( full_name, avatar_url )
+        `)
+        .eq('id', tutorId)
+        .eq('is_approved', true)
+        .single()
+
+      if (!tutorData) {
+        router.replace('/tutor')
+        return
+      }
+
+      // FIX: lessons.tutor_id is the auth user id, not tutors.id
+      // so we must query by tutorData.user_id, not tutorId
+      const [{ data: lessonData }, { data: reviewData }] = await Promise.all([
         supabase
           .from('lessons')
           .select('id, title, subject, form_level, price, duration_seconds, purchase_count')
-          .eq('tutor_id', tutorId)
+          .eq('tutor_id', tutorData.user_id)
           .eq('status', 'active')
           .order('purchase_count', { ascending: false })
           .limit(6),
@@ -195,11 +205,6 @@ export default function TutorProfilePage() {
           .order('created_at', { ascending: false })
           .limit(5),
       ])
-
-      if (!tutorData) {
-        router.replace('/tutor')
-        return
-      }
 
       setTutor(tutorData)
       setLessons(lessonData ?? [])
@@ -251,7 +256,7 @@ export default function TutorProfilePage() {
 
       <div className="max-w-4xl mx-auto px-6 py-8 grid grid-cols-1 lg:grid-cols-3 gap-8">
 
-        {/* ── Left column ─────────────────────────────────────────────── */}
+        {/* ── Left column ────────────────────────────────────── */}
         <div className="lg:col-span-2 space-y-6">
 
           {/* Profile header */}
@@ -364,7 +369,7 @@ export default function TutorProfilePage() {
           )}
         </div>
 
-        {/* ── Sidebar ──────────────────────────────────────────────────── */}
+        {/* ── Sidebar ───────────────────────────────────────── */}
         <div className="lg:col-span-1">
           <div className="sticky top-6 bg-white border border-gray-200 rounded-2xl overflow-hidden">
             <div className="px-6 py-5 border-b border-gray-100"
