@@ -93,42 +93,44 @@ export default function RegisterPage() {
 
             {/* Tutor: two separate name fields */}
             {role === 'tutor' ? (
-              <div className="grid grid-cols-2 gap-3">
-                <div>
-                  <label className="block text-sm text-gray-600 mb-1">First name</label>
-                  <input
-                    type="text"
-                    required
-                    value={firstName}
-                    onChange={e => setFirstName(e.target.value)}
-                    className="w-full border border-gray-300 rounded-lg px-4 py-2.5 text-sm outline-none focus:border-gray-400"
-                    placeholder="Jane"
-                  />
+              <>
+                <div className="grid grid-cols-2 gap-3">
+                  <div>
+                    <label className="block text-sm text-gray-600 mb-1">First name</label>
+                    <input
+                      type="text"
+                      required
+                      value={firstName}
+                      onChange={e => setFirstName(e.target.value)}
+                      className="w-full border border-gray-300 rounded-lg px-4 py-2.5 text-sm outline-none focus:border-gray-400"
+                      placeholder="Jane"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm text-gray-600 mb-1">Last name</label>
+                    <input
+                      type="text"
+                      required
+                      value={lastName}
+                      onChange={e => setLastName(e.target.value)}
+                      className="w-full border border-gray-300 rounded-lg px-4 py-2.5 text-sm outline-none focus:border-gray-400"
+                      placeholder="Banda"
+                    />
+                  </div>
                 </div>
                 <div>
-                  <label className="block text-sm text-gray-600 mb-1">Last name</label>
+                  <label className="block text-sm text-gray-600 mb-1">
+                    Other names <span className="text-gray-400">(optional)</span>
+                  </label>
                   <input
                     type="text"
-                    required
-                    value={lastName}
-                    onChange={e => setLastName(e.target.value)}
+                    value={otherNames}
+                    onChange={e => setOtherNames(e.target.value)}
                     className="w-full border border-gray-300 rounded-lg px-4 py-2.5 text-sm outline-none focus:border-gray-400"
-                    placeholder="Banda"
+                    placeholder="Middle name or initials"
                   />
                 </div>
-              </div>
-              <div>
-                <label className="block text-sm text-gray-600 mb-1">
-                  Other names <span className="text-gray-400">(optional)</span>
-                </label>
-                <input
-                  type="text"
-                  value={otherNames}
-                  onChange={e => setOtherNames(e.target.value)}
-                  className="w-full border border-gray-300 rounded-lg px-4 py-2.5 text-sm outline-none focus:border-gray-400"
-                  placeholder="Middle name or initials"
-                />
-              </div>
+              </>
             ) : (
               /* Student: single full name field */
               <div>
