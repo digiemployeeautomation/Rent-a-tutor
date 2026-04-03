@@ -11,7 +11,6 @@ export async function GET(request) {
     const { data, error } = await supabase.auth.exchangeCodeForSession(code)
 
     if (!error && data?.user) {
-      // Read role from profiles table — source of truth
       const { data: profile } = await supabase
         .from('profiles')
         .select('role')
@@ -20,8 +19,12 @@ export async function GET(request) {
 
       const role = profile?.role ?? data.user.user_metadata?.role ?? 'student'
 
-      if (role === 'admin')   return NextResponse.redirect(new URL('/admin', requestUrl.origin))
-      if (role === 'tutor')   return NextResponse.redirect(new URL('/dashboard/tutor', requestUrl.origin))
+      if (role === 'admin') {
+        return NextResponse.redirect('https://admin.rentatutor.co.zm')
+      }
+      if (role === 'tutor') {
+        return NextResponse.redirect(new URL('/dashboard/tutor', requestUrl.origin))
+      }
       return NextResponse.redirect(new URL('/dashboard/student', requestUrl.origin))
     }
   }
