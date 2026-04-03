@@ -9,10 +9,10 @@ function LoginForm() {
   const searchParams = useSearchParams()
   const redirectTo = searchParams.get('redirectTo')
 
-  const [email, setEmail]     = useState('')
+  const [email, setEmail]       = useState('')
   const [password, setPassword] = useState('')
-  const [loading, setLoading] = useState(false)
-  const [error, setError]     = useState('')
+  const [loading, setLoading]   = useState(false)
+  const [error, setError]       = useState('')
 
   async function handleLogin(e) {
     e.preventDefault()
@@ -35,8 +35,13 @@ function LoginForm() {
 
     const role = profile?.role ?? data.user.user_metadata?.role ?? 'student'
 
+    // Admins go to the separate admin console
+    if (role === 'admin') {
+      window.location.href = 'https://admin.rentatutor.co.zm'
+      return
+    }
+
     if (redirectTo) return router.push(redirectTo)
-    if (role === 'admin') return router.push('/admin')
     if (role === 'tutor') return router.push('/dashboard/tutor')
     return router.push('/dashboard/student')
   }
