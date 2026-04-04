@@ -68,10 +68,9 @@ export default function Navbar() {
           </>
         ) : role === 'admin' ? (
           <>
-            {/* Admin links go to the separate admin console */}
-            <a href={ADMIN_URL}                    className="hover:opacity-100">Dashboard</a>
-            <a href={`${ADMIN_URL}/users`}         className="hover:opacity-100">Users</a>
-            <a href={`${ADMIN_URL}/payments`}      className="hover:opacity-100">Payments</a>
+            <a href={ADMIN_URL}               className="hover:opacity-100">Dashboard</a>
+            <a href={`${ADMIN_URL}/users`}    className="hover:opacity-100">Users</a>
+            <a href={`${ADMIN_URL}/payments`} className="hover:opacity-100">Payments</a>
           </>
         ) : (
           <>
@@ -88,10 +87,11 @@ export default function Navbar() {
         ) : user ? (
           <>
             <div className="text-right hidden sm:block">
-              <div className="text-xs font-medium" style={{ color: 'var(--color-nav-text)' }}>
+              {/* Full white, full opacity — no more faded name */}
+              <div className="text-xs font-semibold" style={{ color: '#ffffff' }}>
                 {fullName || 'My account'}
               </div>
-              <div className="text-xs capitalize" style={{ color: 'var(--color-nav-text)', opacity: 0.6 }}>
+              <div className="text-xs capitalize" style={{ color: 'rgba(255,255,255,0.6)' }}>
                 {profile?.role ?? role}
               </div>
             </div>
@@ -111,7 +111,7 @@ export default function Navbar() {
                 className="w-9 h-9 rounded-full flex items-center justify-center text-xs font-medium border-2"
                 style={{
                   backgroundColor: 'var(--color-primary-mid)',
-                  color: 'var(--color-nav-text)',
+                  color: '#ffffff',
                   borderColor: 'rgba(255,255,255,0.15)',
                 }}
               >
@@ -122,7 +122,7 @@ export default function Navbar() {
             <button
               onClick={handleLogout}
               className="text-xs px-3 py-1.5 rounded-lg border"
-              style={{ color: 'var(--color-nav-text)', borderColor: 'rgba(255,255,255,0.2)' }}
+              style={{ color: '#ffffff', borderColor: 'rgba(255,255,255,0.2)' }}
             >
               Log out
             </button>
