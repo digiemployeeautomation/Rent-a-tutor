@@ -39,16 +39,16 @@ function FileUploadBox({ label, hint, id, accept, file, onChange }) {
 
 export default function TutorVerifyPage() {
   const router  = useRouter()
-  const [user, setUser]     = useState(null)
-  const [loading, setLoading] = useState(true)
-  const [saving, setSaving]   = useState(false)
-  const [error, setError]     = useState('')
+  const [user, setUser]         = useState(null)
+  const [loading, setLoading]   = useState(true)
+  const [saving, setSaving]     = useState(false)
+  const [error, setError]       = useState('')
   const [progress, setProgress] = useState('')
 
-  const [selfie, setSelfie]   = useState(null)
+  const [selfie, setSelfie]     = useState(null)
   const [idNumber, setIdNumber] = useState('')
-  const [idFront, setIdFront] = useState(null)
-  const [idBack, setIdBack]   = useState(null)
+  const [idFront, setIdFront]   = useState(null)
+  const [idBack, setIdBack]     = useState(null)
 
   useEffect(() => {
     async function check() {
@@ -62,8 +62,14 @@ export default function TutorVerifyPage() {
         .eq('user_id', u.id)
         .single()
 
-      if (tutor?.is_approved)              return router.replace('/dashboard/tutor')
-      if (tutor?.verification_submitted)   return router.replace('/auth/pending')
+      // Guard: tutors row missing — profile trigger may have failed during register
+      if (!tutor) {
+        router.replace('/auth/incomplete-profile')
+        return
+      }
+
+      if (tutor.is_approved)            return router.replace('/dashboard/tutor')
+      if (tutor.verification_submitted) return router.replace('/auth/pending')
 
       setLoading(false)
     }
@@ -84,10 +90,10 @@ export default function TutorVerifyPage() {
     e.preventDefault()
     setError('')
 
-    if (!selfie)         return setError('Please upload a selfie or passport photo.')
+    if (!selfie)          return setError('Please upload a selfie or passport photo.')
     if (!idNumber.trim()) return setError('Please enter your National ID number.')
-    if (!idFront)        return setError('Please upload the front of your National ID.')
-    if (!idBack)         return setError('Please upload the back of your National ID.')
+    if (!idFront)         return setError('Please upload the front of your National ID.')
+    if (!idBack)          return setError('Please upload the back of your National ID.')
 
     setSaving(true)
     try {
@@ -164,7 +170,6 @@ export default function TutorVerifyPage() {
 
         <form onSubmit={handleSubmit} className="bg-white border border-gray-200 rounded-2xl p-8 space-y-8">
 
-          {/* Selfie */}
           <FileUploadBox
             label="Selfie or passport photo"
             hint="A clear photo of your face. Must match your National ID."
@@ -174,7 +179,6 @@ export default function TutorVerifyPage() {
             onChange={setSelfie}
           />
 
-          {/* ID number */}
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1.5">
               National ID number <span className="text-red-400">*</span>
@@ -190,7 +194,6 @@ export default function TutorVerifyPage() {
             />
           </div>
 
-          {/* NID front */}
           <FileUploadBox
             label="National ID — front"
             hint="Clear scan or photo of the front of your National ID card."
@@ -200,7 +203,6 @@ export default function TutorVerifyPage() {
             onChange={setIdFront}
           />
 
-          {/* NID back */}
           <FileUploadBox
             label="National ID — back"
             hint="Clear scan or photo of the back of your National ID card."
