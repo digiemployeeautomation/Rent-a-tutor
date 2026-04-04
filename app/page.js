@@ -24,7 +24,8 @@ function getMeta(name) {
 
 export default function HomePage() {
   const [user, setUser]                     = useState(null)
-  const [role, setRole]                     = useState(null)
+  const [role, setRole]                     = useState(null)       // null = not yet known
+  const [roleLoading, setRoleLoading]       = useState(true)       // true until role resolved
   const [subjects, setSubjects]             = useState([])
   const [tutors, setTutors]                 = useState([])
   const [tutorsLoading, setTutorsLoading]   = useState(true)
@@ -33,19 +34,29 @@ export default function HomePage() {
 
   useEffect(() => {
     supabase.auth.getUser().then(async ({ data: { user } }) => {
-      if (!user) return
+      if (!user) {
+        setRoleLoading(false)
+        return
+      }
       setUser(user)
       const { data: profile } = await supabase
         .from('profiles').select('role').eq('id', user.id).single()
       setRole(profile?.role ?? 'student')
+      setRoleLoading(false)
     })
 
     const { data: { subscription } } = supabase.auth.onAuthStateChange(async (_event, session) => {
-      if (!session?.user) { setUser(null); setRole(null); return }
+      if (!session?.user) {
+        setUser(null)
+        setRole(null)
+        setRoleLoading(false)
+        return
+      }
       setUser(session.user)
       const { data: profile } = await supabase
         .from('profiles').select('role').eq('id', session.user.id).single()
       setRole(profile?.role ?? 'student')
+      setRoleLoading(false)
     })
 
     async function loadSubjects() {
@@ -95,7 +106,12 @@ export default function HomePage() {
     return () => subscription.unsubscribe()
   }, [])
 
-  const dashboardHref = role === 'tutor' ? '/dashboard/tutor' : role === 'admin' ? '/admin' : '/dashboard/student'
+  // Only computed once role is confirmed — prevents wrong-dashboard flicker
+  const dashboardHref = role === 'tutor'
+    ? '/dashboard/tutor'
+    : role === 'admin'
+    ? '/admin'
+    : '/dashboard/student'
 
   return (
     <div className="min-h-screen">
@@ -113,11 +129,16 @@ export default function HomePage() {
 
         <div className="flex flex-col items-center gap-3">
           {user ? (
-            <Link href={dashboardHref}
-              className="text-sm font-medium px-8 py-3 rounded-xl transition"
-              style={{ backgroundColor: '#e8c84a', color: '#1a2a00' }}>
-              Go to your dashboard →
-            </Link>
+            // Only render dashboard link once role is confirmed — avoids wrong-route flicker
+            roleLoading ? (
+              <div className="h-10 w-48 rounded-xl animate-pulse" style={{ backgroundColor: 'rgba(255,255,255,0.15)' }} />
+            ) : (
+              <Link href={dashboardHref}
+                className="text-sm font-medium px-8 py-3 rounded-xl transition"
+                style={{ backgroundColor: '#e8c84a', color: '#1a2a00' }}>
+                Go to your dashboard →
+              </Link>
+            )
           ) : (
             <>
               <Link href="/auth/register"
