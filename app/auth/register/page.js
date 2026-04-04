@@ -33,22 +33,27 @@ export default function RegisterPage() {
       ? [firstName.trim(), otherNames.trim(), lastName.trim()].filter(Boolean).join(' ')
       : fullName.trim()
 
-    const { error } = await supabase.auth.signUp({
+    const { data, error: signUpError } = await supabase.auth.signUp({
       email,
       password,
       options: {
         data: { full_name: name, role },
-        emailRedirectTo: `${window.location.origin}/auth/callback`,
-      }
+      },
     })
 
-    if (error) {
-      setError(error.message)
+    if (signUpError) {
+      setError(signUpError.message)
       setLoading(false)
       return
     }
 
-    router.push('/auth/verify')
+    // Email confirmation is disabled — user is logged in immediately.
+    // Redirect based on role.
+    if (role === 'tutor') {
+      router.push('/dashboard/tutor/verify')
+    } else {
+      router.push('/dashboard/student')
+    }
   }
 
   return (
