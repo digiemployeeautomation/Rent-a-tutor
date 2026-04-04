@@ -19,10 +19,10 @@ export async function POST(request) {
       return NextResponse.json({ error: 'Unauthorised' }, { status: 401 })
     }
 
-    // 2. Parse request body
-    const { phone, amount, lessonId } = await request.json()
+    // 2. Parse request body — note: amount is intentionally NOT accepted from client
+    const { phone, lessonId } = await request.json()
 
-    if (!phone || !amount || !lessonId) {
+    if (!phone || !lessonId) {
       return NextResponse.json({ error: 'Missing required fields.' }, { status: 400 })
     }
 
@@ -32,7 +32,21 @@ export async function POST(request) {
       return NextResponse.json({ error: 'Enter a valid Zambian mobile number.' }, { status: 400 })
     }
 
-    // 4. Guard against duplicate purchases (race condition safety)
+    // 4. Fetch the authoritative price from the database — never trust the client
+    const { data: lesson, error: lessonError } = await supabase
+      .from('lessons')
+      .select('id, price, status')
+      .eq('id', lessonId)
+      .eq('status', 'active')
+      .single()
+
+    if (lessonError || !lesson) {
+      return NextResponse.json({ error: 'Lesson not found.' }, { status: 404 })
+    }
+
+    const amount = lesson.price
+
+    // 5. Guard against duplicate purchases (race condition safety)
     const { data: existing } = await supabase
       .from('lesson_purchases')
       .select('id')
@@ -44,7 +58,7 @@ export async function POST(request) {
       return NextResponse.json({ error: 'You already own this lesson.' }, { status: 409 })
     }
 
-    // 5. Hit MoneyUnify
+    // 6. Hit MoneyUnify
     const body = new URLSearchParams({
       from_payer: cleaned,
       amount:     String(amount),
@@ -69,10 +83,11 @@ export async function POST(request) {
       )
     }
 
-    // 6. Return transaction_id to client for polling
+    // 7. Return transaction_id and the server-authoritative amount to client for polling
     return NextResponse.json({
       transactionId: muData.data.transaction_id,
       status:        muData.data.status,    // usually "initiated"
+      amount,                               // echo back so client can display correct amount
     })
 
   } catch (err) {
