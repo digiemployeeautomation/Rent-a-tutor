@@ -18,14 +18,28 @@ export async function POST(request) {
       return NextResponse.json({ error: 'Unauthorised' }, { status: 401 })
     }
 
-    // 2. Parse
-    const { transactionId, lessonId, amount } = await request.json()
+    // 2. Parse — note: amount is intentionally NOT accepted from the client
+    const { transactionId, lessonId } = await request.json()
 
-    if (!transactionId || !lessonId || !amount) {
+    if (!transactionId || !lessonId) {
       return NextResponse.json({ error: 'Missing fields.' }, { status: 400 })
     }
 
-    // 3. Verify with MoneyUnify
+    // 3. Fetch the authoritative price from the database — never trust the client
+    const { data: lesson, error: lessonError } = await supabase
+      .from('lessons')
+      .select('id, price, status')
+      .eq('id', lessonId)
+      .eq('status', 'active')
+      .single()
+
+    if (lessonError || !lesson) {
+      return NextResponse.json({ error: 'Lesson not found.' }, { status: 404 })
+    }
+
+    const amount = lesson.price
+
+    // 4. Verify with MoneyUnify
     const body = new URLSearchParams({
       transaction_id: transactionId,
       auth_id:        process.env.MONEYUNIFY_AUTH_ID,
@@ -43,25 +57,25 @@ export async function POST(request) {
     const muData = await muRes.json()
     const status = muData.data?.status // 'successful' | 'initiated' | 'otp-pending' | 'failed'
 
-    // 4. If still pending, tell the client to keep polling
+    // 5. If still pending, tell the client to keep polling
     if (status === 'initiated' || status === 'otp-pending') {
       return NextResponse.json({ status })
     }
 
-    // 5. If failed / error
+    // 6. If failed / error
     if (muData.isError || status !== 'successful') {
       return NextResponse.json({ status: 'failed', error: muData.message ?? 'Payment failed.' })
     }
 
-    // 6. Payment confirmed — write purchase record (idempotent via ON CONFLICT DO NOTHING)
+    // 7. Payment confirmed — write purchase record (idempotent via ON CONFLICT DO NOTHING)
     const { error: insertError } = await supabase
       .from('lesson_purchases')
       .upsert(
         {
-          student_id:  user.id,
-          lesson_id:   lessonId,
-          amount_paid: amount,
-          purchased_at: new Date().toISOString(),
+          student_id:     user.id,
+          lesson_id:      lessonId,
+          amount_paid:    amount,           // server-authoritative price, never from client
+          purchased_at:   new Date().toISOString(),
           transaction_id: transactionId,
         },
         { onConflict: 'student_id,lesson_id', ignoreDuplicates: true }
@@ -72,7 +86,7 @@ export async function POST(request) {
       // Don't block the user — payment was confirmed, purchase record issue is recoverable
     }
 
-    // 7. Increment purchase_count on the lesson
+    // 8. Increment purchase_count on the lesson
     await supabase.rpc('increment_purchase_count', { lesson_id_input: lessonId })
     // ^ Create this Postgres function in Supabase SQL editor:
     //   CREATE OR REPLACE FUNCTION increment_purchase_count(lesson_id_input UUID)
