@@ -19,6 +19,18 @@ function formatDate(iso) {
   })
 }
 
+// ─── video helpers ────────────────────────────────────────────────────────────
+
+// YouTube IDs are exactly 11 chars (alphanumeric + - _)
+// Cloudflare Stream IDs are 32-char hex strings
+function isYouTubeId(id) {
+  return id && /^[a-zA-Z0-9_-]{11}$/.test(id)
+}
+
+function getYouTubeEmbedUrl(id) {
+  return `https://www.youtube.com/embed/${id}?rel=0&modestbranding=1`
+}
+
 // Network config — Airtel: 097/096, MTN: 076/077, Zamtel: 075
 const NETWORKS = [
   {
@@ -417,6 +429,60 @@ export default function LessonPage() {
   const duration  = formatDuration(lesson.duration_seconds)
   const rating    = tutor?.avg_rating?.toFixed(1) ?? null
 
+  // ── video player renderer ─────────────────────────────────────────────────
+  function VideoPlayer() {
+    if (!hasPurchased || !lesson.cloudflare_video_id) {
+      return (
+        <div className="w-full h-full flex flex-col items-center justify-center relative select-none">
+          <div
+            className="absolute inset-0 opacity-20"
+            style={{
+              background: 'radial-gradient(ellipse at 30% 50%, var(--color-accent-lit) 0%, transparent 60%), radial-gradient(ellipse at 70% 50%, var(--color-surface-mid) 0%, transparent 60%)',
+            }}
+          />
+          <div
+            className="w-16 h-16 rounded-full flex items-center justify-center text-2xl mb-4 relative z-10"
+            style={{ backgroundColor: 'rgba(255,255,255,0.1)' }}
+          >
+            🔒
+          </div>
+          <p className="text-sm font-medium relative z-10 mb-1" style={{ color: 'var(--color-surface-mid)' }}>
+            {hasPurchased ? 'Video coming soon' : 'Purchase to unlock this lesson'}
+          </p>
+          {!hasPurchased && (
+            <p className="text-xs relative z-10 opacity-60" style={{ color: 'var(--color-surface-mid)' }}>
+              K{lesson.price} · one-time payment via mobile money
+            </p>
+          )}
+        </div>
+      )
+    }
+
+    // YouTube embed — ID is exactly 11 chars
+    if (isYouTubeId(lesson.cloudflare_video_id)) {
+      return (
+        <iframe
+          src={getYouTubeEmbedUrl(lesson.cloudflare_video_id)}
+          className="w-full h-full"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+          allowFullScreen
+          title={lesson.title}
+        />
+      )
+    }
+
+    // Cloudflare Stream embed — 32-char hex ID
+    return (
+      <iframe
+        src={`https://iframe.cloudflarestream.com/${lesson.cloudflare_video_id}`}
+        className="w-full h-full"
+        allow="accelerometer; gyroscope; autoplay; encrypted-media; picture-in-picture"
+        allowFullScreen
+        title={lesson.title}
+      />
+    )
+  }
+
   return (
     <div style={{ minHeight: '100vh', backgroundColor: 'var(--color-page-bg)' }}>
       <Navbar />
@@ -473,43 +539,12 @@ export default function LessonPage() {
             </div>
           </div>
 
-          {/* Video player / locked state */}
+          {/* Video player */}
           <div
             className="rounded-2xl overflow-hidden border border-gray-200"
             style={{ aspectRatio: '16/9', backgroundColor: 'var(--color-primary)' }}
           >
-            {hasPurchased && lesson.cloudflare_video_id ? (
-              <iframe
-                src={`https://iframe.cloudflarestream.com/${lesson.cloudflare_video_id}`}
-                className="w-full h-full"
-                allow="accelerometer; gyroscope; autoplay; encrypted-media; picture-in-picture"
-                allowFullScreen
-                title={lesson.title}
-              />
-            ) : (
-              <div className="w-full h-full flex flex-col items-center justify-center relative select-none">
-                <div
-                  className="absolute inset-0 opacity-20"
-                  style={{
-                    background: 'radial-gradient(ellipse at 30% 50%, var(--color-accent-lit) 0%, transparent 60%), radial-gradient(ellipse at 70% 50%, var(--color-surface-mid) 0%, transparent 60%)',
-                  }}
-                />
-                <div
-                  className="w-16 h-16 rounded-full flex items-center justify-center text-2xl mb-4 relative z-10"
-                  style={{ backgroundColor: 'rgba(255,255,255,0.1)' }}
-                >
-                  🔒
-                </div>
-                <p className="text-sm font-medium relative z-10 mb-1" style={{ color: 'var(--color-surface-mid)' }}>
-                  {hasPurchased ? 'Video coming soon' : 'Purchase to unlock this lesson'}
-                </p>
-                {!hasPurchased && (
-                  <p className="text-xs relative z-10 opacity-60" style={{ color: 'var(--color-surface-mid)' }}>
-                    K{lesson.price} · one-time payment via mobile money
-                  </p>
-                )}
-              </div>
-            )}
+            <VideoPlayer />
           </div>
 
           {/* Description */}
