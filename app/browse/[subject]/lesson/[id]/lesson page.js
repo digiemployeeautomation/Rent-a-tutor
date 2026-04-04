@@ -48,13 +48,14 @@ const NETWORKS = [
 
 function PaymentModal({ lesson, onClose, onSuccess }) {
   // steps: 'select' → 'phone' → 'waiting' → 'success' | 'failed'
-  const [step, setStep]         = useState('select')
-  const [network, setNetwork]   = useState(null)
-  const [phone, setPhone]       = useState('')
-  const [error, setError]       = useState('')
-  const [txId, setTxId]         = useState(null)
-  const [pollCount, setPollCount] = useState(0)
-  const pollRef                 = useRef(null)
+  const [step, setStep]           = useState('select')
+  const [network, setNetwork]     = useState(null)
+  const [phone, setPhone]         = useState('')
+  const [error, setError]         = useState('')
+  const [txId, setTxId]           = useState(null)
+  // confirmedAmount is set from the server response so the display is authoritative
+  const [confirmedAmount, setConfirmedAmount] = useState(lesson.price)
+  const pollRef                   = useRef(null)
 
   // Stop polling on unmount
   useEffect(() => () => clearTimeout(pollRef.current), [])
@@ -76,15 +77,14 @@ function PaymentModal({ lesson, onClose, onSuccess }) {
     }
 
     setStep('waiting')
-    setPollCount(0)
 
     // 1. Request payment via our API route
+    // NOTE: amount is NOT sent — the server fetches it from the database
     const res = await fetch('/api/payment/request', {
       method:  'POST',
       headers: { 'Content-Type': 'application/json' },
       body:    JSON.stringify({
         phone:    cleaned,
-        amount:   lesson.price,
         lessonId: lesson.id,
       }),
     })
@@ -96,6 +96,9 @@ function PaymentModal({ lesson, onClose, onSuccess }) {
       setStep('phone')
       return
     }
+
+    // Use the server-authoritative amount for all subsequent display
+    if (data.amount) setConfirmedAmount(data.amount)
 
     setTxId(data.transactionId)
     // Start polling
@@ -111,18 +114,17 @@ function PaymentModal({ lesson, onClose, onSuccess }) {
     }
 
     pollRef.current = setTimeout(async () => {
+      // NOTE: amount is NOT sent — the server re-fetches it from the database
       const res = await fetch('/api/payment/verify', {
         method:  'POST',
         headers: { 'Content-Type': 'application/json' },
         body:    JSON.stringify({
           transactionId,
           lessonId: lesson.id,
-          amount:   lesson.price,
         }),
       })
 
       const data = await res.json()
-      setPollCount(count + 1)
 
       if (data.status === 'successful') {
         setStep('success')
@@ -170,7 +172,7 @@ function PaymentModal({ lesson, onClose, onSuccess }) {
           <div className="mt-3 flex items-center justify-between">
             <span className="text-xs text-gray-500">Amount due</span>
             <span className="font-serif text-2xl" style={{ color: 'var(--color-primary)' }}>
-              K{lesson.price}
+              K{confirmedAmount}
             </span>
           </div>
         </div>
@@ -232,7 +234,7 @@ function PaymentModal({ lesson, onClose, onSuccess }) {
               autoFocus
             />
             <p className="text-xs text-gray-400 mb-4">
-              You will receive a USSD prompt on your phone to confirm K{lesson.price}.
+              You will receive a USSD prompt on your phone to confirm K{confirmedAmount}.
             </p>
 
             {error && (
@@ -246,7 +248,7 @@ function PaymentModal({ lesson, onClose, onSuccess }) {
               className="w-full py-2.5 rounded-lg text-sm font-medium"
               style={{ backgroundColor: 'var(--color-btn-bg)', color: 'var(--color-btn-text)' }}
             >
-              Pay K{lesson.price} →
+              Pay K{confirmedAmount} →
             </button>
           </form>
         )}
@@ -339,12 +341,6 @@ export default function LessonPage() {
       const { data: { user: u } } = await supabase.auth.getUser()
       setUser(u)
 
-      // NOTE: Ensure these two columns exist in your `lessons` table:
-      //   description          TEXT
-      //   cloudflare_video_id  TEXT
-      // Run in Supabase SQL editor:
-      //   ALTER TABLE lessons ADD COLUMN IF NOT EXISTS description TEXT;
-      //   ALTER TABLE lessons ADD COLUMN IF NOT EXISTS cloudflare_video_id TEXT;
       const { data: lessonData, error } = await supabase
         .from('lessons')
         .select(`
