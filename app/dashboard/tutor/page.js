@@ -7,10 +7,10 @@ import { useRouter } from 'next/navigation'
 
 // ── Withdraw modal ────────────────────────────────────────────────────────────
 function WithdrawModal({ balance, onClose }) {
-  const [phone, setPhone]     = useState('')
-  const [amount, setAmount]   = useState('')
-  const [error, setError]     = useState('')
-  const [done, setDone]       = useState(false)
+  const [phone, setPhone]   = useState('')
+  const [amount, setAmount] = useState('')
+  const [error, setError]   = useState('')
+  const [done, setDone]     = useState(false)
 
   function handleSubmit(e) {
     e.preventDefault()
@@ -29,7 +29,6 @@ function WithdrawModal({ balance, onClose }) {
       setError(`You only have K${balance} available.`)
       return
     }
-    // In a real implementation this would call your withdrawal API
     setDone(true)
   }
 
@@ -100,11 +99,12 @@ function WithdrawModal({ balance, onClose }) {
 // ── Main dashboard ────────────────────────────────────────────────────────────
 export default function TutorDashboard() {
   const router = useRouter()
-  const [profile, setProfile]         = useState(null)
+  const [profile, setProfile]           = useState(null)
   const [tutorProfile, setTutorProfile] = useState(null)
-  const [lessons, setLessons]         = useState([])
-  const [bookings, setBookings]       = useState([])
-  const [loading, setLoading]         = useState(true)
+  const [recentLessons, setRecentLessons] = useState([])
+  const [recentBookings, setRecentBookings] = useState([])
+  const [stats, setStats]               = useState({ lessons: 0, purchases: 0, completed: 0, earnings: 0 })
+  const [loading, setLoading]           = useState(true)
   const [showWithdraw, setShowWithdraw] = useState(false)
 
   useEffect(() => {
@@ -112,60 +112,103 @@ export default function TutorDashboard() {
       const { data: { user } } = await supabase.auth.getUser()
       if (!user) return router.push('/auth/login')
 
-      const [{ data: prof }, { data: tutor }, { data: less }, { data: books }] = await Promise.all([
-        supabase.from('profiles').select('full_name, avatar_url').eq('id', user.id).single(),
-        supabase.from('tutors').select('*').eq('user_id', user.id).single(),
-        supabase.from('lessons')
+      const [
+        { data: prof },
+        { data: tutor },
+        { count: lessonCount },
+        { data: recentLess },
+        { count: completedCount },
+        { data: recentBooks },
+      ] = await Promise.all([
+        supabase
+          .from('profiles')
+          .select('full_name, avatar_url')
+          .eq('id', user.id)
+          .single(),
+
+        supabase
+          .from('tutors')
+          .select('*')
+          .eq('user_id', user.id)
+          .single(),
+
+        // Exact lesson count for stat card
+        supabase
+          .from('lessons')
+          .select('*', { count: 'exact', head: true })
+          .eq('tutor_id', user.id),
+
+        // Recent lessons for display (with purchase_count for earnings estimate)
+        supabase
+          .from('lessons')
           .select('id, title, subject, form_level, status, purchase_count, price, created_at')
           .eq('tutor_id', user.id)
           .order('created_at', { ascending: false })
           .limit(10),
-        supabase.from('bookings')
+
+        // Exact completed session count for stat card
+        supabase
+          .from('bookings')
+          .select('*', { count: 'exact', head: true })
+          .eq('tutor_id', user.id)
+          .eq('status', 'completed'),
+
+        // Recent bookings for display + earnings bar chart
+        supabase
+          .from('bookings')
           .select('id, subject, scheduled_at, status, amount, student_id, profiles(full_name)')
           .eq('tutor_id', user.id)
           .order('scheduled_at', { ascending: false })
           .limit(10),
       ])
 
+      const lessRows  = recentLess  ?? []
+      const bookRows  = recentBooks ?? []
+
+      // Total purchases across all lessons (sum of purchase_count column)
+      const totalPurchases = lessRows.reduce((sum, l) => sum + (l.purchase_count ?? 0), 0)
+
+      // Rental revenue: purchase_count × price per lesson
+      const rentalRevenue = lessRows.reduce((sum, l) =>
+        sum + ((l.purchase_count ?? 0) * (l.price ?? 0)), 0)
+
+      // Session earnings from completed bookings in this page
+      const sessionEarnings = bookRows
+        .filter(b => b.status === 'completed')
+        .reduce((sum, b) => sum + (b.amount ?? 0), 0)
+
       setProfile(prof)
       setTutorProfile(tutor)
-      setLessons(less ?? [])
-      setBookings(books ?? [])
+      setRecentLessons(lessRows)
+      setRecentBookings(bookRows)
+      setStats({
+        lessons:   lessonCount    ?? 0,
+        purchases: totalPurchases,
+        completed: completedCount ?? 0,
+        earnings:  sessionEarnings + rentalRevenue,
+      })
       setLoading(false)
     }
     load()
   }, [router])
 
-  const firstName = profile?.full_name?.split(' ')[0] ?? 'there'
-  const pendingBookings = bookings.filter(b => b.status === 'pending')
+  const firstName       = profile?.full_name?.split(' ')[0] ?? 'there'
+  const pendingBookings = recentBookings.filter(b => b.status === 'pending')
 
-  // Earnings from completed sessions (70% of lesson purchase revenue would need a separate query)
-  const sessionEarnings = bookings
-    .filter(b => b.status === 'completed')
-    .reduce((sum, b) => sum + (b.amount ?? 0), 0)
-
-  // Lesson rental revenue (70% of total purchases)
-  const rentalRevenue = lessons.reduce((sum, l) =>
-    sum + Math.round((l.purchase_count ?? 0) * (l.price ?? 0) * 0.7), 0)
-
-  const totalEarnings = sessionEarnings + rentalRevenue
-
-  // Earnings chart data by month from bookings
+  // Earnings chart — last 3 months from visible bookings
   const byMonth = {}
-  bookings.filter(b => b.status === 'completed').forEach(b => {
+  recentBookings.filter(b => b.status === 'completed').forEach(b => {
     const month = new Date(b.scheduled_at).toLocaleDateString('en-ZM', { month: 'short', year: '2-digit' })
     byMonth[month] = (byMonth[month] ?? 0) + (b.amount ?? 0)
   })
-  const earnings = Object.entries(byMonth).slice(-3).map(([month, amount]) => ({ month, amount }))
-  const maxEarning = Math.max(...earnings.map(e => e.amount), 1)
+  const earnings    = Object.entries(byMonth).slice(-3).map(([month, amount]) => ({ month, amount }))
+  const maxEarning  = Math.max(...earnings.map(e => e.amount), 1)
 
-  const totalPurchases = lessons.reduce((sum, l) => sum + (l.purchase_count ?? 0), 0)
-
-  const stats = [
-    { label: 'Lessons uploaded',   value: lessons.length,   type: 'a' },
-    { label: 'Total purchases',    value: totalPurchases,   type: 'a' },
-    { label: 'Sessions completed', value: bookings.filter(b => b.status === 'completed').length, type: 'b' },
-    { label: 'Total earned (ZMW)', value: `K${totalEarnings.toLocaleString()}`, type: 'b' },
+  const statCards = [
+    { label: 'Lessons uploaded',   value: stats.lessons,             type: 'a' },
+    { label: 'Total purchases',    value: stats.purchases,           type: 'a' },
+    { label: 'Sessions completed', value: stats.completed,           type: 'b' },
+    { label: 'Total earned (ZMW)', value: `K${stats.earnings.toLocaleString()}`, type: 'b' },
   ]
 
   if (loading) return (
@@ -213,7 +256,7 @@ export default function TutorDashboard() {
 
         {/* Stats */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
-          {stats.map(s => (
+          {statCards.map(s => (
             <div key={s.label} className="rounded-2xl p-4"
               style={{ backgroundColor: s.type === 'a' ? 'var(--color-stat-a-bg)' : 'var(--color-stat-b-bg)' }}>
               <div className="text-xs font-medium mb-1"
@@ -239,7 +282,7 @@ export default function TutorDashboard() {
                 + Upload new
               </Link>
             </div>
-            {lessons.length === 0 ? (
+            {recentLessons.length === 0 ? (
               <div className="text-center py-8">
                 <p className="text-sm text-gray-400 mb-3">No lessons uploaded yet.</p>
                 <Link href="/dashboard/tutor/upload"
@@ -250,7 +293,7 @@ export default function TutorDashboard() {
               </div>
             ) : (
               <div className="space-y-3">
-                {lessons.map(l => (
+                {recentLessons.map(l => (
                   <div key={l.id} className="flex items-center justify-between p-3 rounded-xl hover:bg-gray-50 transition">
                     <div className="flex items-center gap-3">
                       <div className="w-9 h-9 rounded-lg flex items-center justify-center text-xs font-medium"
@@ -271,6 +314,11 @@ export default function TutorDashboard() {
                     </span>
                   </div>
                 ))}
+                {stats.lessons > 10 && (
+                  <p className="text-xs text-gray-400 text-center pt-2">
+                    +{stats.lessons - 10} more lessons uploaded
+                  </p>
+                )}
               </div>
             )}
           </div>
@@ -279,7 +327,7 @@ export default function TutorDashboard() {
           <div className="rounded-2xl p-6" style={{ backgroundColor: 'var(--color-primary)' }}>
             <h2 className="font-serif text-lg mb-1" style={{ color: 'var(--color-nav-text)' }}>Earnings</h2>
             <p className="text-xs mb-5" style={{ color: 'var(--color-nav-text)', opacity: 0.6 }}>
-              Sessions + lesson rentals (70%)
+              Sessions + lesson rentals
             </p>
             {earnings.length === 0 ? (
               <p className="text-xs" style={{ color: 'var(--color-nav-text)', opacity: 0.5 }}>
@@ -304,7 +352,7 @@ export default function TutorDashboard() {
             <div className="mt-5 pt-4 border-t" style={{ borderColor: 'var(--color-primary-mid)' }}>
               <div className="text-xs mb-1" style={{ color: 'var(--color-nav-text)', opacity: 0.6 }}>Total earned</div>
               <div className="font-serif text-2xl mb-3" style={{ color: 'var(--color-accent-lit)' }}>
-                K{totalEarnings.toLocaleString()}
+                K{stats.earnings.toLocaleString()}
               </div>
               <button
                 onClick={() => setShowWithdraw(true)}
@@ -327,11 +375,11 @@ export default function TutorDashboard() {
               </span>
             )}
           </div>
-          {bookings.length === 0 ? (
+          {recentBookings.length === 0 ? (
             <p className="text-sm text-gray-400 text-center py-6">No session requests yet.</p>
           ) : (
             <div className="space-y-3">
-              {bookings.map(b => {
+              {recentBookings.map(b => {
                 const studentName = b.profiles?.full_name ?? 'Student'
                 const initials = studentName.split(' ').map(w => w[0]).join('').slice(0, 2).toUpperCase()
                 const date = new Date(b.scheduled_at).toLocaleDateString('en-ZM', {
@@ -355,7 +403,7 @@ export default function TutorDashboard() {
                           <button
                             onClick={async () => {
                               await supabase.from('bookings').update({ status: 'confirmed' }).eq('id', b.id)
-                              setBookings(prev => prev.map(x => x.id === b.id ? { ...x, status: 'confirmed' } : x))
+                              setRecentBookings(prev => prev.map(x => x.id === b.id ? { ...x, status: 'confirmed' } : x))
                             }}
                             className="text-xs px-4 py-1.5 rounded-lg font-medium"
                             style={{ backgroundColor: 'var(--color-btn-bg)', color: 'var(--color-btn-text)' }}>
@@ -364,7 +412,7 @@ export default function TutorDashboard() {
                           <button
                             onClick={async () => {
                               await supabase.from('bookings').update({ status: 'cancelled' }).eq('id', b.id)
-                              setBookings(prev => prev.map(x => x.id === b.id ? { ...x, status: 'cancelled' } : x))
+                              setRecentBookings(prev => prev.map(x => x.id === b.id ? { ...x, status: 'cancelled' } : x))
                             }}
                             className="text-xs border border-gray-200 text-gray-500 px-4 py-1.5 rounded-lg hover:bg-gray-50">
                             Decline
@@ -391,7 +439,7 @@ export default function TutorDashboard() {
 
       {showWithdraw && (
         <WithdrawModal
-          balance={totalEarnings}
+          balance={stats.earnings}
           onClose={() => setShowWithdraw(false)}
         />
       )}
