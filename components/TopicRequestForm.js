@@ -1,29 +1,3 @@
-// ============================================================
-//  components/TopicRequestForm.js  —  STANDALONE (Main Site)
-//
-//  WHERE TO ADD THIS
-//  ─────────────────────────────────────────────────────────
-//  Option A — Student Dashboard (recommended):
-//    In app/dashboard/student/page.js, import and add a
-//    "Request a topic" button that opens this as a modal,
-//    or render it inline in a new section:
-//
-//      import TopicRequestForm from '@/components/TopicRequestForm'
-//      // Inside your JSX:
-//      <TopicRequestForm onSubmitted={() => { /* refresh list etc */ }} />
-//
-//  Option B — Dedicated page:
-//    Create app/request-topic/page.js and render this component
-//    as the full page content. Add a link to it in the Navbar
-//    for logged-in students.
-//
-//  REQUIREMENTS
-//  ─────────────────────────────────────────────────────────
-//  - Run supabase_topic_requests.sql first
-//  - User must be logged in (student)
-//  - The form POSTs to /api/topic-requests (see api_topic_requests_route.js)
-// ============================================================
-
 'use client'
 import { useState } from 'react'
 import Link from 'next/link'
@@ -42,9 +16,8 @@ const FORM_LEVELS = [
 ]
 
 const URGENCY_OPTIONS = [
-  { value: 'normal',    label: 'Normal',     desc: 'No rush — any time works',      icon: '🟢' },
-  { value: 'urgent',    label: 'Urgent',     desc: 'I need this within a few days',  icon: '🟡' },
-  { value: 'exam_prep', label: 'Exam prep',  desc: 'Upcoming exam — time sensitive', icon: '🔴' },
+  { value: 'normal', label: 'Normal', desc: 'No rush — any time works',      icon: '🟢' },
+  { value: 'urgent', label: 'Urgent', desc: 'I need this within a few days',  icon: '🟡' },
 ]
 
 export default function TopicRequestForm({ onSubmitted, className = '' }) {
@@ -190,7 +163,7 @@ export default function TopicRequestForm({ onSubmitted, className = '' }) {
         {/* Urgency */}
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-2">How urgent is this?</label>
-          <div className="grid grid-cols-3 gap-2">
+          <div className="grid grid-cols-2 gap-2">
             {URGENCY_OPTIONS.map(u => (
               <button key={u.value} type="button" onClick={() => setUrgency(u.value)}
                 className="flex flex-col items-center gap-1 px-3 py-3 rounded-xl border text-center transition"
