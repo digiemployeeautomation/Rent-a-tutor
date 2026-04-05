@@ -1,46 +1,28 @@
-// ============================================================
-//  components/TopicRequestFeed.js  —  STANDALONE (Main Site)
-//
-//  WHERE TO ADD THIS
-//  ─────────────────────────────────────────────────────────
-//  In app/dashboard/tutor/page.js, import and render below
-//  the sessions section:
-//
-//    import TopicRequestFeed from '@/components/TopicRequestFeed'
-//    // Inside your JSX:
-//    <TopicRequestFeed tutorId={user.id} tutorSubjects={tutorProfile.subjects} />
-//
-//  REQUIREMENTS
-//  ─────────────────────────────────────────────────────────
-//  - Run supabase_topic_requests.sql first
-//  - User must be logged in as an approved tutor
-//  - Props:
-//      tutorId       — auth.users id of the current tutor
-//      tutorSubjects — string[] of subjects the tutor teaches
-// ============================================================
-
 'use client'
 import { useState, useEffect, useCallback } from 'react'
-import Link from 'next/link'
 import { supabase } from '@/lib/supabase'
 
+// Used in app/dashboard/tutor/(shell)/topic-requests/page.js:
+//   <TopicRequestFeed tutorId={userId} tutorSubjects={tutorSubjects} />
+// Also rendered at the bottom of app/dashboard/tutor/(shell)/page.js
+
 const URGENCY_BADGE = {
-  normal:    { label: 'Normal',    bg: '#f3f4f6',                     color: '#6b7280'                       },
-  urgent:    { label: 'Urgent',    bg: 'var(--color-stat-b-bg)',       color: 'var(--color-stat-b-sub)'       },
-  exam_prep: { label: 'Exam prep', bg: '#fef2f2',                     color: '#dc2626'                       },
+  normal:    { label: 'Normal',    bg: '#f3f4f6',               color: '#6b7280'                 },
+  urgent:    { label: 'Urgent',    bg: 'var(--color-stat-b-bg)', color: 'var(--color-stat-b-sub)' },
+  exam_prep: { label: 'Exam prep', bg: '#fef2f2',               color: '#dc2626'                 },
 }
 
 const STATUS_BADGE = {
-  open:        { label: 'Open',        bg: 'var(--color-stat-a-bg)', color: 'var(--color-badge-text)'  },
-  in_progress: { label: 'In progress', bg: '#eff6ff',                color: '#1d4ed8'                  },
-  covered:     { label: 'Covered',     bg: '#f3f4f6',                color: '#9ca3af'                   },
+  open:        { label: 'Open',        bg: 'var(--color-stat-a-bg)', color: 'var(--color-badge-text)' },
+  in_progress: { label: 'In progress', bg: '#eff6ff',                color: '#1d4ed8'                 },
+  covered:     { label: 'Covered',     bg: '#f3f4f6',                color: '#9ca3af'                 },
 }
 
 function ResponseModal({ request, tutorId, onClose, onResponded }) {
-  const [message, setMessage]   = useState('')
-  const [rate, setRate]         = useState('')
-  const [loading, setLoading]   = useState(false)
-  const [error, setError]       = useState('')
+  const [message, setMessage] = useState('')
+  const [rate, setRate]       = useState('')
+  const [loading, setLoading] = useState(false)
+  const [error, setError]     = useState('')
 
   async function handleSubmit(e) {
     e.preventDefault()
@@ -51,9 +33,9 @@ function ResponseModal({ request, tutorId, onClose, onResponded }) {
     const { error: dbErr } = await supabase
       .from('topic_request_responses')
       .insert({
-        request_id:   request.id,
-        tutor_id:     tutorId,
-        message:      message.trim(),
+        request_id:    request.id,
+        tutor_id:      tutorId,
+        message:       message.trim(),
         proposed_rate: rate ? parseFloat(rate) : null,
       })
 
@@ -79,9 +61,7 @@ function ResponseModal({ request, tutorId, onClose, onResponded }) {
               <h2 className="font-serif text-lg" style={{ color: 'var(--color-primary)' }}>
                 Respond to request
               </h2>
-              <p className="text-xs text-gray-500 mt-0.5">
-                {request.subject} — {request.topic}
-              </p>
+              <p className="text-xs text-gray-500 mt-0.5">{request.subject} — {request.topic}</p>
             </div>
             <button onClick={onClose} className="text-gray-400 hover:text-gray-600 text-xl">✕</button>
           </div>
@@ -95,7 +75,7 @@ function ResponseModal({ request, tutorId, onClose, onResponded }) {
             <textarea
               required value={message} onChange={e => setMessage(e.target.value)}
               rows={4} autoFocus
-              placeholder="Tell the student how you can help. For example: what you'll cover, your approach, when you're available…"
+              placeholder="Tell the student how you can help — what you'll cover, your approach, when you're available…"
               className="w-full border border-gray-300 rounded-lg px-4 py-2.5 text-sm outline-none focus:border-gray-400 resize-none"
             />
           </div>
@@ -106,17 +86,13 @@ function ResponseModal({ request, tutorId, onClose, onResponded }) {
             </label>
             <div className="relative max-w-xs">
               <span className="absolute left-4 top-1/2 -translate-y-1/2 text-sm text-gray-400">K</span>
-              <input
-                type="number" min="50" max="5000" value={rate} onChange={e => setRate(e.target.value)}
+              <input type="number" min="50" max="5000" value={rate} onChange={e => setRate(e.target.value)}
                 placeholder="Leave blank to use your standard rate"
-                className="w-full border border-gray-300 rounded-lg pl-8 pr-4 py-2.5 text-sm outline-none focus:border-gray-400"
-              />
+                className="w-full border border-gray-300 rounded-lg pl-8 pr-4 py-2.5 text-sm outline-none focus:border-gray-400" />
             </div>
           </div>
 
-          {error && (
-            <div className="bg-red-50 text-red-700 text-xs px-3 py-2 rounded-lg">{error}</div>
-          )}
+          {error && <div className="bg-red-50 text-red-700 text-xs px-3 py-2 rounded-lg">{error}</div>}
 
           <div className="flex items-center justify-between pt-1">
             <button type="button" onClick={onClose} className="text-sm text-gray-500 hover:text-gray-700">
@@ -135,9 +111,9 @@ function ResponseModal({ request, tutorId, onClose, onResponded }) {
 }
 
 export default function TopicRequestFeed({ tutorId, tutorSubjects = [] }) {
-  const [requests, setRequests]   = useState([])
-  const [loading, setLoading]     = useState(true)
-  const [filter, setFilter]       = useState('my_subjects') // my_subjects | all
+  const [requests, setRequests]     = useState([])
+  const [loading, setLoading]       = useState(true)
+  const [filter, setFilter]         = useState('my_subjects')
   const [responding, setResponding] = useState(null)
   const [responded, setResponded]   = useState(new Set())
 
@@ -145,13 +121,9 @@ export default function TopicRequestFeed({ tutorId, tutorSubjects = [] }) {
     setLoading(true)
     let query = supabase
       .from('topic_requests')
-      .select(`
-        id, subject, topic, description, form_level,
-        urgency, status, response_count, created_at,
-        profiles ( full_name )
-      `)
+      .select('id, subject, topic, description, form_level, urgency, status, response_count, created_at, profiles(full_name)')
       .in('status', ['open', 'in_progress'])
-      .order('urgency', { ascending: false })   // exam_prep first
+      .order('urgency', { ascending: false })
       .order('created_at', { ascending: false })
       .limit(30)
 
@@ -160,16 +132,14 @@ export default function TopicRequestFeed({ tutorId, tutorSubjects = [] }) {
     }
 
     const { data } = await query
-
-    // Check which ones this tutor has already responded to
     const ids = (data ?? []).map(r => r.id)
+
     if (ids.length > 0) {
       const { data: myResponses } = await supabase
         .from('topic_request_responses')
         .select('request_id')
         .eq('tutor_id', tutorId)
         .in('request_id', ids)
-
       setResponded(new Set((myResponses ?? []).map(r => r.request_id)))
     }
 
@@ -182,9 +152,7 @@ export default function TopicRequestFeed({ tutorId, tutorSubjects = [] }) {
   function handleResponded(requestId) {
     setResponded(prev => new Set([...prev, requestId]))
     setRequests(prev => prev.map(r =>
-      r.id === requestId
-        ? { ...r, response_count: r.response_count + 1, status: 'in_progress' }
-        : r
+      r.id === requestId ? { ...r, response_count: r.response_count + 1, status: 'in_progress' } : r
     ))
   }
 
@@ -192,7 +160,6 @@ export default function TopicRequestFeed({ tutorId, tutorSubjects = [] }) {
 
   return (
     <div className="bg-white border border-gray-200 rounded-2xl p-6">
-      {/* Header */}
       <div className="flex items-center justify-between mb-5">
         <div className="flex items-center gap-3">
           <h2 className="font-serif text-lg" style={{ color: 'var(--color-primary)' }}>
@@ -205,8 +172,6 @@ export default function TopicRequestFeed({ tutorId, tutorSubjects = [] }) {
             </span>
           )}
         </div>
-
-        {/* Filter toggle */}
         <div className="flex bg-gray-100 rounded-lg p-1 gap-1">
           {[
             { key: 'my_subjects', label: 'My subjects' },
@@ -223,10 +188,9 @@ export default function TopicRequestFeed({ tutorId, tutorSubjects = [] }) {
         </div>
       </div>
 
-      {/* List */}
       {loading ? (
         <div className="space-y-3">
-          {[1,2,3].map(i => (
+          {[1, 2, 3].map(i => (
             <div key={i} className="h-20 rounded-xl animate-pulse" style={{ backgroundColor: '#f9fafb' }} />
           ))}
         </div>
@@ -247,11 +211,10 @@ export default function TopicRequestFeed({ tutorId, tutorSubjects = [] }) {
       ) : (
         <div className="space-y-3">
           {requests.map(r => {
-            const urgCfg   = URGENCY_BADGE[r.urgency]  ?? URGENCY_BADGE.normal
-            const statCfg  = STATUS_BADGE[r.status]    ?? STATUS_BADGE.open
+            const urgCfg     = URGENCY_BADGE[r.urgency] ?? URGENCY_BADGE.normal
             const hasReplied = responded.has(r.id)
-            const ageHours = Math.round((Date.now() - new Date(r.created_at)) / 3600000)
-            const ageStr   = ageHours < 1 ? 'Just now'
+            const ageHours   = Math.round((Date.now() - new Date(r.created_at)) / 3600000)
+            const ageStr     = ageHours < 1 ? 'Just now'
               : ageHours < 24 ? `${ageHours}h ago`
               : `${Math.round(ageHours / 24)}d ago`
 
@@ -259,9 +222,9 @@ export default function TopicRequestFeed({ tutorId, tutorSubjects = [] }) {
               <div key={r.id}
                 className="rounded-xl p-4 border transition"
                 style={{
-                  borderColor: hasReplied ? '#e5e7eb' : r.urgency === 'exam_prep' ? '#fca5a5' : '#e5e7eb',
+                  borderColor:     hasReplied ? '#e5e7eb' : r.urgency === 'exam_prep' ? '#fca5a5' : '#e5e7eb',
                   backgroundColor: hasReplied ? '#fafafa' : 'white',
-                  opacity: hasReplied ? 0.75 : 1,
+                  opacity:         hasReplied ? 0.75 : 1,
                 }}>
                 <div className="flex items-start justify-between gap-3 mb-2">
                   <div className="flex-1 min-w-0">
@@ -270,9 +233,7 @@ export default function TopicRequestFeed({ tutorId, tutorSubjects = [] }) {
                         style={{ backgroundColor: 'var(--color-surface)', color: 'var(--color-primary-mid)' }}>
                         {r.subject}
                       </span>
-                      {r.form_level && (
-                        <span className="text-xs text-gray-400">{r.form_level}</span>
-                      )}
+                      {r.form_level && <span className="text-xs text-gray-400">{r.form_level}</span>}
                       <span className="text-xs px-2 py-0.5 rounded-full"
                         style={{ backgroundColor: urgCfg.bg, color: urgCfg.color }}>
                         {urgCfg.label}
@@ -283,8 +244,6 @@ export default function TopicRequestFeed({ tutorId, tutorSubjects = [] }) {
                       <p className="text-xs text-gray-500 mt-0.5 line-clamp-2">{r.description}</p>
                     )}
                   </div>
-
-                  {/* Action */}
                   <div className="flex-shrink-0">
                     {hasReplied ? (
                       <span className="text-xs px-3 py-1.5 rounded-lg"
@@ -300,8 +259,6 @@ export default function TopicRequestFeed({ tutorId, tutorSubjects = [] }) {
                     )}
                   </div>
                 </div>
-
-                {/* Footer */}
                 <div className="flex items-center justify-between text-xs" style={{ color: '#9ca3af' }}>
                   <span>
                     {r.response_count > 0
@@ -316,7 +273,6 @@ export default function TopicRequestFeed({ tutorId, tutorSubjects = [] }) {
         </div>
       )}
 
-      {/* Response modal */}
       {responding && (
         <ResponseModal
           request={responding}
