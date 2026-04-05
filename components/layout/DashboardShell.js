@@ -17,7 +17,6 @@ const STUDENT_NAV = [
   { href: '/dashboard/student/purchases',      label: 'My Purchases',    icon: '🎓' },
   { href: '/browse',                           label: 'Browse Lessons',  icon: '📚', external: true },
   { href: '/tutor',                            label: 'Find a Tutor',    icon: '👤', external: true },
-  { href: '/exam-prep',                        label: 'Exam Prep',       icon: '📝', external: true },
   { href: '/dashboard/student/topic-requests', label: 'Request a Topic', icon: '💬' },
 ]
 
