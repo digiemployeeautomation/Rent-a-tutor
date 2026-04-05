@@ -1,26 +1,3 @@
-// ============================================================
-//  app/api/topic-requests/route.js  —  Main Site
-//
-//  WHERE TO ADD THIS
-//  ─────────────────────────────────────────────────────────
-//  Drop into: app/api/topic-requests/route.js
-//
-//  This is called by TopicRequestForm.js when a student submits.
-//  It:
-//    1. Validates the session (student must be logged in)
-//    2. Saves the request to topic_requests table
-//    3. Fires an email alert to admin via Resend
-//    4. Returns the created request
-//
-//  REQUIREMENTS
-//  ─────────────────────────────────────────────────────────
-//  .env.local additions (same as admin site):
-//    RESEND_API_KEY=re_your_key
-//    ALERT_EMAIL_TO=admin@rentatutor.co.zm
-//    ALERT_EMAIL_FROM=noreply@rentatutor.co.zm
-//    NEXT_PUBLIC_SITE_URL=https://rentatutor.co.zm
-// ============================================================
-
 import { NextResponse } from 'next/server'
 import { createRouteHandlerClient } from '@supabase/auth-helpers-nextjs'
 import { cookies } from 'next/headers'
@@ -33,13 +10,13 @@ const SUBJECTS = [
   'Business Studies', 'Computer Science', 'Accounting',
 ]
 
-const VALID_URGENCY  = ['normal', 'urgent', 'exam_prep']
+const VALID_URGENCY  = ['normal', 'urgent']
 const VALID_LEVELS   = ['Form 1','Form 2','Form 3','Form 4 (O-Level)','Form 5','Form 6 (A-Level)','Not sure','']
 
 async function sendAdminAlert({ studentName, subject, topic, formLevel, urgency, description, requestId }) {
-  if (!process.env.RESEND_API_KEY) return   // skip silently if not configured
+  if (!process.env.RESEND_API_KEY) return
 
-  const urgencyLabel = urgency === 'exam_prep' ? '🔴 EXAM PREP' : urgency === 'urgent' ? '🟡 Urgent' : '🟢 Normal'
+  const urgencyLabel = urgency === 'urgent' ? '🟡 Urgent' : '🟢 Normal'
   const adminUrl     = `${process.env.NEXT_PUBLIC_SITE_URL?.replace('rentatutor', 'admin.rentatutor') ?? 'https://admin.rentatutor.co.zm'}/topic-requests`
 
   await fetch('https://api.resend.com/emails', {
@@ -90,7 +67,6 @@ export async function POST(request) {
       return NextResponse.json({ error: 'You must be logged in to submit a request.' }, { status: 401 })
     }
 
-    // Confirm user is a student
     const { data: profile } = await supabase
       .from('profiles').select('full_name, role').eq('id', user.id).single()
 
@@ -100,7 +76,6 @@ export async function POST(request) {
 
     const { subject, topic, formLevel, description, urgency } = await request.json()
 
-    // Validate
     if (!subject || !SUBJECTS.includes(subject)) {
       return NextResponse.json({ error: 'Please select a valid subject.' }, { status: 400 })
     }
@@ -130,7 +105,6 @@ export async function POST(request) {
       }, { status: 429 })
     }
 
-    // Insert
     const { data: newRequest, error: insertErr } = await supabase
       .from('topic_requests')
       .insert({
@@ -149,7 +123,6 @@ export async function POST(request) {
       return NextResponse.json({ error: 'Failed to save request. Please try again.' }, { status: 500 })
     }
 
-    // Alert admin (non-blocking)
     sendAdminAlert({
       studentName: profile?.full_name ?? 'A student',
       subject,
