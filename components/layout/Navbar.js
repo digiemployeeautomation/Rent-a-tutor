@@ -6,8 +6,6 @@ import { useTheme } from '@/context/ThemeContext'
 import { supabase } from '@/lib/supabase'
 import { useRouter } from 'next/navigation'
 
-const ADMIN_URL = 'https://admin.rentatutor.co.zm'
-
 export default function Navbar() {
   const { role } = useTheme()
   const router = useRouter()
@@ -59,35 +57,12 @@ export default function Navbar() {
         Rent a <span style={{ color: 'var(--color-nav-accent)' }} className="italic">Tutor</span>
       </Link>
 
-      <div className="hidden md:flex items-center gap-6 text-sm" style={{ color: 'var(--color-nav-text)', opacity: 0.8 }}>
-        {role === 'tutor' ? (
-          <>
-            <Link href="/dashboard/tutor"          className="hover:opacity-100">Dashboard</Link>
-            <Link href="/dashboard/tutor/upload"   className="hover:opacity-100">Upload lesson</Link>
-            <Link href="/dashboard/tutor/sessions" className="hover:opacity-100">Sessions</Link>
-          </>
-        ) : role === 'admin' ? (
-          <>
-            <a href={ADMIN_URL}               className="hover:opacity-100">Dashboard</a>
-            <a href={`${ADMIN_URL}/users`}    className="hover:opacity-100">Users</a>
-            <a href={`${ADMIN_URL}/payments`} className="hover:opacity-100">Payments</a>
-          </>
-        ) : (
-          <>
-            <Link href="/browse"    className="hover:opacity-100">Browse lessons</Link>
-            <Link href="/tutor"     className="hover:opacity-100">Find a tutor</Link>
-            <Link href="/exam-prep" className="hover:opacity-100">Exam prep</Link>
-          </>
-        )}
-      </div>
-
       <div className="flex items-center gap-3">
         {loading ? (
           <div className="w-20 h-8 rounded-lg animate-pulse" style={{ backgroundColor: 'rgba(255,255,255,0.1)' }} />
         ) : user ? (
           <>
             <div className="text-right hidden sm:block">
-              {/* Full white, full opacity — no more faded name */}
               <div className="text-xs font-semibold" style={{ color: '#ffffff' }}>
                 {fullName || 'My account'}
               </div>
