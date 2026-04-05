@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { supabase } from '@/lib/supabase'
 import { useRouter } from 'next/navigation'
+import TopicRequestFeed from '@/components/TopicRequestFeed'
 
 // ── Withdraw modal ────────────────────────────────────────────────────────────
 function WithdrawModal({ balance, onClose }) {
@@ -20,14 +21,8 @@ function WithdrawModal({ balance, onClose }) {
       return
     }
     const num = parseInt(amount, 10)
-    if (isNaN(num) || num < 50) {
-      setError('Minimum withdrawal is K50.')
-      return
-    }
-    if (num > balance) {
-      setError(`You only have K${balance} available.`)
-      return
-    }
+    if (isNaN(num) || num < 50) { setError('Minimum withdrawal is K50.'); return }
+    if (num > balance)          { setError(`You only have K${balance} available.`); return }
     setDone(true)
   }
 
@@ -38,12 +33,8 @@ function WithdrawModal({ balance, onClose }) {
       <div className="bg-white rounded-2xl w-full max-w-sm shadow-xl overflow-hidden">
         <div className="px-6 pt-6 pb-4 border-b border-gray-100">
           <div className="flex justify-between items-center">
-            <h2 className="font-serif text-lg" style={{ color: 'var(--color-primary)' }}>
-              Withdraw earnings
-            </h2>
-            {!done && (
-              <button onClick={onClose} className="text-gray-400 hover:text-gray-600 text-lg leading-none">✕</button>
-            )}
+            <h2 className="font-serif text-lg" style={{ color: 'var(--color-primary)' }}>Withdraw earnings</h2>
+            {!done && <button onClick={onClose} className="text-gray-400 hover:text-gray-600 text-lg leading-none">✕</button>}
           </div>
           <p className="text-xs text-gray-500 mt-0.5">Available balance: K{balance.toLocaleString()}</p>
         </div>
@@ -52,14 +43,9 @@ function WithdrawModal({ balance, onClose }) {
           <div className="px-6 py-10 text-center">
             <div className="text-3xl mb-3">✅</div>
             <p className="text-sm font-medium text-gray-800 mb-1">Withdrawal requested!</p>
-            <p className="text-xs text-gray-500 mb-5">
-              Your mobile money transfer will be processed within 1–2 business days.
-            </p>
-            <button onClick={onClose}
-              className="text-sm px-5 py-2 rounded-lg"
-              style={{ backgroundColor: 'var(--color-btn-bg)', color: 'var(--color-btn-text)' }}>
-              Done
-            </button>
+            <p className="text-xs text-gray-500 mb-5">Your transfer will be processed within 1–2 business days.</p>
+            <button onClick={onClose} className="text-sm px-5 py-2 rounded-lg"
+              style={{ backgroundColor: 'var(--color-btn-bg)', color: 'var(--color-btn-text)' }}>Done</button>
           </div>
         ) : (
           <form onSubmit={handleSubmit} className="px-6 py-5 space-y-4">
@@ -75,16 +61,12 @@ function WithdrawModal({ balance, onClose }) {
               <div className="relative">
                 <span className="absolute left-4 top-1/2 -translate-y-1/2 text-sm text-gray-400">K</span>
                 <input type="number" required min="50" max={balance} value={amount}
-                  onChange={e => setAmount(e.target.value)}
-                  placeholder="Minimum K50"
+                  onChange={e => setAmount(e.target.value)} placeholder="Minimum K50"
                   className="w-full border border-gray-300 rounded-lg pl-8 pr-4 py-2.5 text-sm outline-none focus:border-gray-400" />
               </div>
             </div>
-            {error && (
-              <div className="bg-red-50 text-red-700 text-xs px-3 py-2 rounded-lg">{error}</div>
-            )}
-            <button type="submit"
-              className="w-full py-2.5 rounded-lg text-sm font-medium"
+            {error && <div className="bg-red-50 text-red-700 text-xs px-3 py-2 rounded-lg">{error}</div>}
+            <button type="submit" className="w-full py-2.5 rounded-lg text-sm font-medium"
               style={{ backgroundColor: 'var(--color-btn-bg)', color: 'var(--color-btn-text)' }}>
               Request withdrawal →
             </button>
@@ -105,11 +87,13 @@ export default function TutorDashboard() {
   const [stats, setStats]                   = useState({ lessons: 0, purchases: 0, completed: 0, earnings: 0 })
   const [loading, setLoading]               = useState(true)
   const [showWithdraw, setShowWithdraw]     = useState(false)
+  const [userId, setUserId]                 = useState(null)
 
   useEffect(() => {
     async function load() {
       const { data: { user } } = await supabase.auth.getUser()
       if (!user) return router.push('/auth/login')
+      setUserId(user.id)
 
       const [
         { data: prof },
@@ -118,6 +102,8 @@ export default function TutorDashboard() {
         { data: recentLess },
         { count: completedCount },
         { data: recentBooks },
+        // FIX: separate query for ALL lessons (no limit) so earnings are accurate
+        { data: allLessons },
       ] = await Promise.all([
         supabase.from('profiles').select('full_name, avatar_url').eq('id', user.id).single(),
         supabase.from('tutors').select('*').eq('user_id', user.id).single(),
@@ -127,20 +113,31 @@ export default function TutorDashboard() {
           .eq('tutor_id', user.id)
           .order('created_at', { ascending: false })
           .limit(10),
-        supabase.from('bookings').select('*', { count: 'exact', head: true }).eq('tutor_id', user.id).eq('status', 'completed'),
+        supabase.from('bookings').select('*', { count: 'exact', head: true })
+          .eq('tutor_id', user.id).eq('status', 'completed'),
         supabase.from('bookings')
           .select('id, subject, scheduled_at, status, amount, student_id, profiles(full_name)')
           .eq('tutor_id', user.id)
           .order('scheduled_at', { ascending: false })
           .limit(10),
+        // All lessons without limit — used only for earnings calculation
+        supabase.from('lessons')
+          .select('purchase_count, price')
+          .eq('tutor_id', user.id),
       ])
 
       const lessRows = recentLess  ?? []
       const bookRows = recentBooks ?? []
 
       const totalPurchases  = lessRows.reduce((sum, l) => sum + (l.purchase_count ?? 0), 0)
-      const rentalRevenue   = lessRows.reduce((sum, l) => sum + ((l.purchase_count ?? 0) * (l.price ?? 0)), 0)
-      const sessionEarnings = bookRows.filter(b => b.status === 'completed').reduce((sum, b) => sum + (b.amount ?? 0), 0)
+
+      // FIX: use allLessons (complete list) not recentLess (capped at 10)
+      const rentalRevenue   = (allLessons ?? []).reduce(
+        (sum, l) => sum + ((l.purchase_count ?? 0) * (l.price ?? 0)), 0
+      )
+      const sessionEarnings = bookRows
+        .filter(b => b.status === 'completed')
+        .reduce((sum, b) => sum + (b.amount ?? 0), 0)
 
       setProfile(prof)
       setTutorProfile(tutor)
@@ -236,9 +233,9 @@ export default function TutorDashboard() {
           <div className="lg:col-span-2 bg-white border border-gray-200 rounded-2xl p-6">
             <div className="flex justify-between items-center mb-5">
               <h2 className="font-serif text-lg" style={{ color: 'var(--color-primary)' }}>My lessons</h2>
-              <Link href="/dashboard/tutor/upload" className="text-xs hover:underline"
+              <Link href="/dashboard/tutor/lessons" className="text-xs hover:underline"
                 style={{ color: 'var(--color-primary-lit)' }}>
-                + Upload new
+                View all →
               </Link>
             </div>
             {recentLessons.length === 0 ? (
@@ -275,7 +272,10 @@ export default function TutorDashboard() {
                 ))}
                 {stats.lessons > 10 && (
                   <p className="text-xs text-gray-400 text-center pt-2">
-                    +{stats.lessons - 10} more lessons uploaded
+                    +{stats.lessons - 10} more —{' '}
+                    <Link href="/dashboard/tutor/lessons" className="underline" style={{ color: 'var(--color-primary-lit)' }}>
+                      view all
+                    </Link>
                   </p>
                 )}
               </div>
@@ -313,8 +313,7 @@ export default function TutorDashboard() {
               <div className="font-serif text-2xl mb-3" style={{ color: 'var(--color-accent-lit)' }}>
                 K{stats.earnings.toLocaleString()}
               </div>
-              <button
-                onClick={() => setShowWithdraw(true)}
+              <button onClick={() => setShowWithdraw(true)}
                 className="w-full text-xs py-2 rounded-lg font-medium"
                 style={{ backgroundColor: 'var(--color-accent-btn)', color: 'var(--color-accent-btn-text)' }}>
                 Withdraw via Mobile Money
@@ -324,7 +323,7 @@ export default function TutorDashboard() {
         </div>
 
         {/* Session requests */}
-        <div className="bg-white border border-gray-200 rounded-2xl p-6">
+        <div className="bg-white border border-gray-200 rounded-2xl p-6 mb-6">
           <div className="flex justify-between items-center mb-5">
             <h2 className="font-serif text-lg" style={{ color: 'var(--color-primary)' }}>Session requests</h2>
             {pendingBookings.length > 0 && (
@@ -340,8 +339,8 @@ export default function TutorDashboard() {
             <div className="space-y-3">
               {recentBookings.map(b => {
                 const studentName = b.profiles?.full_name ?? 'Student'
-                const initials = studentName.split(' ').map(w => w[0]).join('').slice(0, 2).toUpperCase()
-                const date = new Date(b.scheduled_at).toLocaleDateString('en-ZM', {
+                const initials    = studentName.split(' ').map(w => w[0]).join('').slice(0, 2).toUpperCase()
+                const date        = new Date(b.scheduled_at).toLocaleDateString('en-ZM', {
                   weekday: 'short', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit'
                 })
                 return (
@@ -394,13 +393,18 @@ export default function TutorDashboard() {
           )}
         </div>
 
+        {/* Topic requests feed — wired in */}
+        {userId && (
+          <TopicRequestFeed
+            tutorId={userId}
+            tutorSubjects={tutorProfile?.subjects ?? []}
+          />
+        )}
+
       </div>
 
       {showWithdraw && (
-        <WithdrawModal
-          balance={stats.earnings}
-          onClose={() => setShowWithdraw(false)}
-        />
+        <WithdrawModal balance={stats.earnings} onClose={() => setShowWithdraw(false)} />
       )}
     </>
   )
