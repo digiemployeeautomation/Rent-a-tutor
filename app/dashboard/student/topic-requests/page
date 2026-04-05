@@ -1,10 +1,9 @@
 'use client'
-import DashboardShell from '@/components/layout/DashboardShell'
 import TopicRequestForm from '@/components/TopicRequestForm'
 
 export default function StudentTopicRequestsPage() {
   return (
-    <DashboardShell role="student">
+    <>
       <div style={{ backgroundColor: 'var(--color-primary-mid)' }} className="px-6 py-5">
         <div className="max-w-2xl mx-auto">
           <h1 className="font-serif text-2xl" style={{ color: 'var(--color-nav-text)' }}>Request a Topic</h1>
@@ -17,6 +16,6 @@ export default function StudentTopicRequestsPage() {
       <div className="max-w-2xl mx-auto px-6 py-8">
         <TopicRequestForm />
       </div>
-    </DashboardShell>
+    </>
   )
 }
