@@ -41,9 +41,11 @@ export default function StudentDashboard() {
           .order('purchased_at', { ascending: false })
           .limit(5),
 
+        // FIX: join profiles via tutor_id (which is the auth UID stored at booking time),
+        // not via a tutors→profiles chain which would require the tutors table PK.
         supabase
           .from('bookings')
-          .select('id, subject, scheduled_at, status, amount, tutor_id, tutors(id, profiles(full_name))')
+          .select('id, subject, scheduled_at, status, amount, tutor_id, profiles!tutor_id(full_name)')
           .eq('student_id', user.id)
           .order('scheduled_at', { ascending: true })
           .limit(10),
@@ -200,7 +202,8 @@ export default function StudentDashboard() {
             ) : (
               <div className="space-y-3">
                 {upcomingBookings.map(b => {
-                  const tutorName = b.tutors?.profiles?.full_name ?? 'Tutor'
+                  // FIX: profiles is now joined directly via tutor_id
+                  const tutorName = b.profiles?.full_name ?? 'Tutor'
                   const initials = tutorName.split(' ').map(w => w[0]).join('').slice(0, 2).toUpperCase()
                   const date = new Date(b.scheduled_at).toLocaleDateString('en-ZM', {
                     weekday: 'short', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit'
@@ -233,7 +236,8 @@ export default function StudentDashboard() {
             <h2 className="font-serif text-lg mb-5" style={{ color: 'var(--color-primary)' }}>Session history</h2>
             <div className="space-y-3">
               {bookings.map(b => {
-                const tutorName = b.tutors?.profiles?.full_name ?? 'Tutor'
+                // FIX: profiles is now joined directly via tutor_id
+                const tutorName = b.profiles?.full_name ?? 'Tutor'
                 const date = new Date(b.scheduled_at).toLocaleDateString('en-ZM', {
                   weekday: 'short', month: 'short', day: 'numeric'
                 })
