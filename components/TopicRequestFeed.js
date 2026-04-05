@@ -7,9 +7,8 @@ import { supabase } from '@/lib/supabase'
 // Also rendered at the bottom of app/dashboard/tutor/(shell)/page.js
 
 const URGENCY_BADGE = {
-  normal:    { label: 'Normal',    bg: '#f3f4f6',               color: '#6b7280'                 },
-  urgent:    { label: 'Urgent',    bg: 'var(--color-stat-b-bg)', color: 'var(--color-stat-b-sub)' },
-  exam_prep: { label: 'Exam prep', bg: '#fef2f2',               color: '#dc2626'                 },
+  normal: { label: 'Normal', bg: '#f3f4f6',               color: '#6b7280'                 },
+  urgent: { label: 'Urgent', bg: 'var(--color-stat-b-bg)', color: 'var(--color-stat-b-sub)' },
 }
 
 const STATUS_BADGE = {
@@ -222,7 +221,7 @@ export default function TopicRequestFeed({ tutorId, tutorSubjects = [] }) {
               <div key={r.id}
                 className="rounded-xl p-4 border transition"
                 style={{
-                  borderColor:     hasReplied ? '#e5e7eb' : r.urgency === 'exam_prep' ? '#fca5a5' : '#e5e7eb',
+                  borderColor:     hasReplied ? '#e5e7eb' : '#e5e7eb',
                   backgroundColor: hasReplied ? '#fafafa' : 'white',
                   opacity:         hasReplied ? 0.75 : 1,
                 }}>
