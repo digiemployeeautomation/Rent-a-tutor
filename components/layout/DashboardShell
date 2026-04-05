@@ -1,0 +1,91 @@
+'use client'
+import Link from 'next/link'
+import { usePathname } from 'next/navigation'
+import Navbar from './Navbar'
+
+const TUTOR_NAV = [
+  { href: '/dashboard/tutor',                  label: 'Dashboard',       icon: '⬡', exact: true },
+  { href: '/dashboard/tutor/lessons',          label: 'My Lessons',      icon: '📹' },
+  { href: '/dashboard/tutor/upload',           label: 'Upload Lesson',   icon: '＋' },
+  { href: '/dashboard/tutor/sessions',         label: 'Sessions',        icon: '📅' },
+  { href: '/dashboard/tutor/topic-requests',   label: 'Topic Requests',  icon: '💬' },
+  { href: '/dashboard/tutor/profile',          label: 'My Profile',      icon: '👤' },
+]
+
+const STUDENT_NAV = [
+  { href: '/dashboard/student',                label: 'Dashboard',       icon: '⬡', exact: true },
+  { href: '/dashboard/student/purchases',      label: 'My Purchases',    icon: '🎓' },
+  { href: '/browse',                           label: 'Browse Lessons',  icon: '📚', external: true },
+  { href: '/tutor',                            label: 'Find a Tutor',    icon: '👤', external: true },
+  { href: '/exam-prep',                        label: 'Exam Prep',       icon: '📝', external: true },
+  { href: '/dashboard/student/topic-requests', label: 'Request a Topic', icon: '💬' },
+]
+
+export default function DashboardShell({ children, role }) {
+  const pathname = usePathname()
+  const nav      = role === 'tutor' ? TUTOR_NAV : STUDENT_NAV
+
+  function isActive(item) {
+    if (item.exact) return pathname === item.href
+    return pathname.startsWith(item.href)
+  }
+
+  return (
+    <div style={{ minHeight: '100vh', backgroundColor: 'var(--color-page-bg)' }}>
+      <Navbar />
+      <div style={{ display: 'flex', minHeight: 'calc(100vh - 64px)' }}>
+
+        {/* Sidebar */}
+        <aside style={{
+          width: 200,
+          flexShrink: 0,
+          backgroundColor: 'var(--color-page-bg)',
+          borderRight: '1px solid rgba(0,0,0,0.06)',
+          padding: '16px 8px',
+          display: 'flex',
+          flexDirection: 'column',
+          gap: 2,
+          position: 'sticky',
+          top: 64,
+          height: 'calc(100vh - 64px)',
+          overflowY: 'auto',
+        }}>
+          {nav.map(item => {
+            const active = isActive(item)
+            return (
+              <Link key={item.href} href={item.href}
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: 10,
+                  padding: '8px 10px',
+                  borderRadius: 10,
+                  fontSize: 13,
+                  fontWeight: active ? 500 : 400,
+                  textDecoration: 'none',
+                  color: active ? 'var(--color-primary)' : '#6b7280',
+                  backgroundColor: active ? 'var(--color-surface)' : 'transparent',
+                  borderLeft: active ? '3px solid var(--color-primary-mid)' : '3px solid transparent',
+                  transition: 'background 0.1s, color 0.1s',
+                }}>
+                <span style={{ fontSize: 14, width: 18, textAlign: 'center', flexShrink: 0 }}>
+                  {item.icon}
+                </span>
+                <span style={{ flex: 1 }}>{item.label}</span>
+                {item.external && (
+                  <span style={{ fontSize: 10, color: '#d1d5db' }}>↗</span>
+                )}
+              </Link>
+            )
+          })}
+        </aside>
+
+        {/* Main content */}
+        <main style={{ flex: 1, minWidth: 0 }}>
+          {children}
+        </main>
+
+      </div>
+    </div>
+  )
+}
