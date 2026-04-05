@@ -1,17 +1,16 @@
 'use client'
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
-import Navbar from '@/components/layout/Navbar'
 import { supabase } from '@/lib/supabase'
 import { useRouter } from 'next/navigation'
 
 export default function StudentDashboard() {
   const router = useRouter()
-  const [profile, setProfile]         = useState(null)
+  const [profile, setProfile]             = useState(null)
   const [recentLessons, setRecentLessons] = useState([])
-  const [bookings, setBookings]       = useState([])
-  const [stats, setStats]             = useState({ purchases: 0, sessions: 0, upcoming: 0, subjects: 0 })
-  const [loading, setLoading]         = useState(true)
+  const [bookings, setBookings]           = useState([])
+  const [stats, setStats]                 = useState({ purchases: 0, sessions: 0, upcoming: 0, subjects: 0 })
+  const [loading, setLoading]             = useState(true)
 
   useEffect(() => {
     async function load() {
@@ -30,13 +29,11 @@ export default function StudentDashboard() {
           .eq('id', user.id)
           .single(),
 
-        // Exact total count for the stat card
         supabase
           .from('lesson_purchases')
           .select('*', { count: 'exact', head: true })
           .eq('student_id', user.id),
 
-        // Only the 5 most recent for display
         supabase
           .from('lesson_purchases')
           .select('id, purchased_at, amount_paid, lessons(id, title, subject, form_level)')
@@ -52,7 +49,7 @@ export default function StudentDashboard() {
           .limit(10),
       ])
 
-      const bookingRows = books ?? []
+      const bookingRows  = books ?? []
       const purchaseRows = recentPurch ?? []
 
       const upcomingCount = bookingRows.filter(b =>
@@ -60,8 +57,6 @@ export default function StudentDashboard() {
         new Date(b.scheduled_at) >= new Date()
       ).length
 
-      // Distinct subjects from recent purchases — for a more accurate count
-      // we'd need a separate query, but this is reasonable for display
       const subjectSet = new Set(purchaseRows.map(p => p.lessons?.subject).filter(Boolean))
 
       setProfile(prof)
@@ -93,18 +88,13 @@ export default function StudentDashboard() {
   ]
 
   if (loading) return (
-    <div style={{ minHeight: '100vh', backgroundColor: 'var(--color-page-bg)' }}>
-      <Navbar />
-      <div className="flex items-center justify-center h-64">
-        <div className="text-sm text-gray-400">Loading your dashboard...</div>
-      </div>
+    <div className="flex items-center justify-center h-64">
+      <div className="text-sm text-gray-400">Loading your dashboard...</div>
     </div>
   )
 
   return (
-    <div style={{ minHeight: '100vh', backgroundColor: 'var(--color-page-bg)' }}>
-      <Navbar />
-
+    <>
       {/* Banner */}
       <div style={{ backgroundColor: 'var(--color-primary-mid)' }} className="px-6 py-5">
         <div className="max-w-5xl mx-auto flex justify-between items-center">
@@ -271,6 +261,6 @@ export default function StudentDashboard() {
         )}
 
       </div>
-    </div>
+    </>
   )
 }
