@@ -42,7 +42,6 @@ app/
     tutor/page.js          — Tutor dashboard
   browse/                  — Browse lessons
   tutor/                   — Find a tutor
-  exam-prep/               — Exam preparation bundles
 components/
   layout/Navbar.js         — Top navigation bar
 lib/
@@ -54,7 +53,7 @@ lib/
 - A-Level: Forms 5–6 (Key exam: Form 6)
 
 ## Business Model
-- Lesson rentals: 70% tutor / 30% platform
-- Private sessions: 15–20% platform booking fee
-- Featured profiles: K150–K300/month
-- Exam prep bundles: K200–K500 per package
+- Lesson rentals
+- Private session bookings
+- Featured tutor profiles
+- Exam prep bundles

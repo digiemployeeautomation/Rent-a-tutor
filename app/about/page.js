@@ -51,7 +51,7 @@ export default function AboutPage() {
               {
                 title: 'For tutors',
                 items: [
-                  'Upload recorded lessons and earn 70% of every sale',
+                  'Upload recorded lessons and earn from every sale',
                   'Accept private session bookings from students',
                   'Get a public profile and build your reputation',
                   'Receive payouts directly to your mobile money',
@@ -115,7 +115,7 @@ export default function AboutPage() {
         </section>
       </div>
 
-      {/* Footer — stacks on mobile */}
+      {/* Footer */}
       <footer className="bg-white border-t border-gray-200 px-6 py-5 text-sm text-gray-400">
         <div className="flex flex-col sm:flex-row justify-between items-center gap-3 text-center sm:text-left">
           <span className="font-serif" style={{ color: 'var(--color-primary-lit)' }}>Rent a Tutor · Zambia</span>

@@ -1,3 +1,4 @@
+// app/dashboard/tutor/(shell)/upload/page.js
 'use client'
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
@@ -195,7 +196,6 @@ export default function UploadLessonPage() {
                   onChange={e => setPrice(e.target.value)} placeholder="50"
                   className="w-full border border-gray-300 rounded-lg pl-8 pr-4 py-2.5 text-sm outline-none focus:border-gray-400" />
               </div>
-              <p className="text-xs text-gray-400 mt-1">You keep 70% · Platform fee 30%</p>
             </div>
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1.5">
