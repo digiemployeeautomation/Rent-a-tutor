@@ -18,21 +18,25 @@ export default function ContactPage() {
     setLoading(true)
     setError('')
 
-    const res = await fetch('/api/contact', {
-      method:  'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body:    JSON.stringify(form),
-    })
+    try {
+      const res = await fetch('/api/contact', {
+        method:  'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body:    JSON.stringify(form),
+      })
 
-    const data = await res.json()
+      const data = await res.json()
 
-    if (!res.ok) {
-      setError(data.error ?? 'Something went wrong. Please try again.')
-      setLoading(false)
-      return
+      if (!res.ok) {
+        setError(data.error ?? 'Something went wrong. Please try again.')
+        setLoading(false)
+        return
+      }
+
+      setSent(true)
+    } catch {
+      setError('Network error. Please check your connection and try again.')
     }
-
-    setSent(true)
     setLoading(false)
   }
 

@@ -36,23 +36,28 @@ export default function TopicRequestForm({ onSubmitted, className = '' }) {
     setLoading(true)
     setError('')
 
-    const res = await fetch('/api/topic-requests', {
-      method:  'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body:    JSON.stringify({ subject, topic: topic.trim(), formLevel, description: description.trim(), urgency }),
-    })
+    try {
+      const res = await fetch('/api/topic-requests', {
+        method:  'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body:    JSON.stringify({ subject, topic: topic.trim(), formLevel, description: description.trim(), urgency }),
+      })
 
-    const data = await res.json()
+      const data = await res.json()
 
-    if (!res.ok) {
-      setError(data.error ?? 'Something went wrong. Please try again.')
+      if (!res.ok) {
+        setError(data.error ?? 'Something went wrong. Please try again.')
+        setLoading(false)
+        return
+      }
+
+      setSubmitted(true)
       setLoading(false)
-      return
+      if (onSubmitted) onSubmitted(data.request)
+    } catch {
+      setError('Network error. Please check your connection and try again.')
+      setLoading(false)
     }
-
-    setSubmitted(true)
-    setLoading(false)
-    if (onSubmitted) onSubmitted(data.request)
   }
 
   if (submitted) {

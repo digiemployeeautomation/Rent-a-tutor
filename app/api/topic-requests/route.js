@@ -172,6 +172,10 @@ export async function GET(request) {
     const { searchParams } = new URL(request.url)
     const mine = searchParams.get('mine') === 'true'
 
+    // Check the user's role to scope data appropriately
+    const { data: profile } = await supabase
+      .from('profiles').select('role').eq('id', user.id).single()
+
     let query = supabase
       .from('topic_requests')
       .select(`
@@ -183,7 +187,11 @@ export async function GET(request) {
       `)
       .order('created_at', { ascending: false })
 
-    if (mine) query = query.eq('student_id', user.id)
+    if (mine || profile?.role === 'student') {
+      // Students can only see their own requests
+      query = query.eq('student_id', user.id)
+    }
+    // Tutors and admins can see all open requests
 
     const { data, error } = await query
     if (error) return NextResponse.json({ error: error.message }, { status: 500 })

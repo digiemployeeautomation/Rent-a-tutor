@@ -20,12 +20,13 @@ export default function TutorLessonsPage() {
       const { data: { user } } = await supabase.auth.getUser()
       if (!user) return router.push('/auth/login')
 
-      const { data } = await supabase
+      const { data, error } = await supabase
         .from('lessons')
         .select('id, title, subject, form_level, price, status, purchase_count, duration_seconds, created_at')
         .eq('tutor_id', user.id)
         .order('created_at', { ascending: false })
 
+      if (error) console.error('[lessons] load error:', error)
       setLessons(data ?? [])
       setLoading(false)
     }

@@ -16,6 +16,7 @@ export async function middleware(request) {
   // ── Lazy profile fetcher — at most one DB read per request ──────────────────
   let _profile
   const getRole = async () => {
+    if (!user) return null
     if (_profile === undefined) {
       const { data, error } = await supabase
         .from('profiles').select('role').eq('id', user.id).single()
@@ -26,7 +27,7 @@ export async function middleware(request) {
   }
 
   // ── Logged-in users hitting auth pages ─────────────────────────────────────
-  if (user && AUTH_ROUTES.some(r => pathname === r)) {
+  if (user && AUTH_ROUTES.some(r => pathname === r || pathname.startsWith(r + '/'))) {
     const role = await getRole()
     if (role === null)      return NextResponse.redirect(new URL('/auth/register', request.url))
     if (role === 'admin')   return NextResponse.redirect(new URL('/admin', request.url))

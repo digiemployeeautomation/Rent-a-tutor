@@ -18,37 +18,43 @@ export default function StudentDashboard() {
       const { data: { user } } = await supabase.auth.getUser()
       if (!user) return router.push('/auth/login')
 
-      const [
-        { data: prof },
-        { count: purchaseCount },
-        { data: recentPurch },
-        { data: books },
-      ] = await Promise.all([
-        supabase
-          .from('profiles')
-          .select('full_name, avatar_url')
-          .eq('id', user.id)
-          .single(),
+      let prof, purchaseCount, recentPurch, books
+      try {
+        ([
+          { data: prof },
+          { count: purchaseCount },
+          { data: recentPurch },
+          { data: books },
+        ] = await Promise.all([
+          supabase
+            .from('profiles')
+            .select('full_name, avatar_url')
+            .eq('id', user.id)
+            .single(),
 
-        supabase
-          .from('lesson_purchases')
-          .select('*', { count: 'exact', head: true })
-          .eq('student_id', user.id),
+          supabase
+            .from('lesson_purchases')
+            .select('*', { count: 'exact', head: true })
+            .eq('student_id', user.id),
 
-        supabase
-          .from('lesson_purchases')
-          .select('id, purchased_at, amount_paid, lessons(id, title, subject, form_level)')
-          .eq('student_id', user.id)
-          .order('purchased_at', { ascending: false })
-          .limit(5),
+          supabase
+            .from('lesson_purchases')
+            .select('id, purchased_at, amount_paid, lessons(id, title, subject, form_level)')
+            .eq('student_id', user.id)
+            .order('purchased_at', { ascending: false })
+            .limit(5),
 
-        supabase
-          .from('bookings')
-          .select('id, subject, scheduled_at, status, amount, tutor_id, profiles!tutor_id(full_name)')
-          .eq('student_id', user.id)
-          .order('scheduled_at', { ascending: true })
-          .limit(10),
-      ])
+          supabase
+            .from('bookings')
+            .select('id, subject, scheduled_at, status, amount, tutor_id, profiles!tutor_id(full_name)')
+            .eq('student_id', user.id)
+            .order('scheduled_at', { ascending: true }),
+        ]))
+      } catch (err) {
+        console.error('[StudentDashboard] failed to load data:', err)
+        setLoading(false)
+        return
+      }
 
       const bookingRows  = books ?? []
       const purchaseRows = recentPurch ?? []
@@ -202,7 +208,7 @@ export default function StudentDashboard() {
               <div className="space-y-3">
                 {upcomingBookings.map(b => {
                   const tutorName = b.profiles?.full_name ?? 'Tutor'
-                  const initials = tutorName.split(' ').map(w => w[0]).join('').slice(0, 2).toUpperCase()
+                  const initials = tutorName.split(' ').filter(Boolean).map(w => w[0]).join('').slice(0, 2).toUpperCase() || '?'
                   const date = new Date(b.scheduled_at).toLocaleDateString('en-ZM', {
                     weekday: 'short', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit'
                   })

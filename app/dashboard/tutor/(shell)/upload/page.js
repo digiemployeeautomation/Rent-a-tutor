@@ -76,7 +76,7 @@ export default function UploadLessonPage() {
     const { error: insertError } = await supabase
       .from('lessons')
       .insert({
-        tutor_id:            user.id,
+        tutor_id:            tutor.id,
         title:               title.trim(),
         subject,
         form_level:          formLevel,
@@ -139,7 +139,7 @@ export default function UploadLessonPage() {
           </p>
           <div className="flex gap-3 justify-center">
             <button
-              onClick={() => { setSaved(false); setTitle(''); setDescription(''); setVideoId(''); setDuration(''); setPrice('') }}
+              onClick={() => { setSaved(false); setTitle(''); setDescription(''); setVideoId(''); setDuration(''); setPrice(''); setSubject(SUBJECTS[0]); setFormLevel(FORM_LEVELS[0]) }}
               className="text-sm px-5 py-2.5 rounded-lg border border-gray-200 text-gray-600 hover:bg-gray-50">
               Upload another
             </button>

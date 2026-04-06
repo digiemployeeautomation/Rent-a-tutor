@@ -8,9 +8,14 @@ import { useRouter, useSearchParams } from 'next/navigation'
 // Prevents a student from being sent to /dashboard/tutor via a crafted URL.
 function getSafeRedirect(redirectTo, role) {
   if (!redirectTo) return null
+  // Allow role-specific dashboard redirects
   if (role === 'tutor'   && redirectTo.startsWith('/dashboard/tutor'))   return redirectTo
   if (role === 'student' && redirectTo.startsWith('/dashboard/student')) return redirectTo
   if (role === 'admin'   && redirectTo.startsWith('/admin'))             return redirectTo
+  // Allow redirects to public pages (browse, tutor profiles, etc.)
+  if (redirectTo.startsWith('/browse/') || redirectTo.startsWith('/tutor/') || redirectTo.startsWith('/about')) {
+    return redirectTo
+  }
   return null
 }
 

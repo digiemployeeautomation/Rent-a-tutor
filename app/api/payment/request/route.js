@@ -52,6 +52,11 @@ export async function POST(request) {
       return NextResponse.json({ error: 'You already own this lesson.' }, { status: 409 })
     }
 
+    if (!process.env.MONEYUNIFY_AUTH_ID) {
+      console.error('[payment/request] MONEYUNIFY_AUTH_ID is not configured')
+      return NextResponse.json({ error: 'Payment service unavailable.' }, { status: 503 })
+    }
+
     const body = new URLSearchParams({
       from_payer: cleaned,
       amount:     String(amount),
@@ -73,6 +78,23 @@ export async function POST(request) {
       return NextResponse.json(
         { error: muData.message ?? 'Payment request failed. Please try again.' },
         { status: 502 }
+      )
+    }
+
+    // Store the pending transaction so verify can validate ownership + amount
+    const { error: txErr } = await supabase.from('pending_transactions').insert({
+      transaction_id: muData.data.transaction_id,
+      student_id:     user.id,
+      lesson_id:      lessonId,
+      amount,
+      created_at:     new Date().toISOString(),
+    })
+
+    if (txErr) {
+      console.error('[payment/request] failed to store pending transaction:', txErr)
+      return NextResponse.json(
+        { error: 'Failed to initiate payment. Please try again.' },
+        { status: 500 }
       )
     }
 

@@ -68,6 +68,16 @@ export default function TutorProfilePage() {
       return
     }
 
+    if (!tutorId) {
+      setError('Tutor profile not found. Please complete verification first.')
+      return
+    }
+
+    if (bio.trim().length > 500) {
+      setError('Bio must be under 500 characters.')
+      return
+    }
+
     setSaving(true)
     const { error: dbErr } = await supabase
       .from('tutors')
@@ -120,6 +130,7 @@ export default function TutorProfilePage() {
               value={bio}
               onChange={e => setBio(e.target.value)}
               rows={5}
+              maxLength={500}
               placeholder="Tell students about your qualifications, teaching style, and experience..."
               className="w-full border border-gray-300 rounded-lg px-4 py-2.5 text-sm outline-none focus:border-gray-400 resize-none"
             />

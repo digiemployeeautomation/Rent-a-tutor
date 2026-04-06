@@ -1,5 +1,5 @@
 'use client'
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useEffect, useCallback, useMemo } from 'react'
 import { supabase } from '@/lib/supabase'
 
 // Used in app/dashboard/tutor/(shell)/topic-requests/page.js:
@@ -116,6 +116,9 @@ export default function TopicRequestFeed({ tutorId, tutorSubjects = [] }) {
   const [responding, setResponding] = useState(null)
   const [responded, setResponded]   = useState(new Set())
 
+  // Stabilize the array reference to prevent infinite re-render loops
+  const stableSubjects = useMemo(() => tutorSubjects, [JSON.stringify(tutorSubjects)])
+
   const load = useCallback(async () => {
     setLoading(true)
     let query = supabase
@@ -126,11 +129,18 @@ export default function TopicRequestFeed({ tutorId, tutorSubjects = [] }) {
       .order('created_at', { ascending: false })
       .limit(30)
 
-    if (filter === 'my_subjects' && tutorSubjects.length > 0) {
-      query = query.in('subject', tutorSubjects)
+    if (filter === 'my_subjects') {
+      if (stableSubjects.length === 0) {
+        // No subjects set — show empty state instead of all requests
+        setRequests([])
+        setLoading(false)
+        return
+      }
+      query = query.in('subject', stableSubjects)
     }
 
-    const { data } = await query
+    const { data, error } = await query
+    if (error) console.error('[TopicRequestFeed] load error:', error)
     const ids = (data ?? []).map(r => r.id)
 
     if (ids.length > 0) {
@@ -144,7 +154,7 @@ export default function TopicRequestFeed({ tutorId, tutorSubjects = [] }) {
 
     setRequests(data ?? [])
     setLoading(false)
-  }, [filter, tutorId, tutorSubjects])
+  }, [filter, tutorId, stableSubjects])
 
   useEffect(() => { load() }, [load])
 

@@ -23,6 +23,23 @@ export async function POST(request) {
       return NextResponse.json({ error: 'Missing fields.' }, { status: 400 })
     }
 
+    // Verify the transaction belongs to this user and lesson
+    const { data: pendingTx } = await supabase
+      .from('pending_transactions')
+      .select('student_id, lesson_id, amount')
+      .eq('transaction_id', transactionId)
+      .single()
+
+    if (!pendingTx) {
+      return NextResponse.json({ error: 'Unknown transaction.' }, { status: 400 })
+    }
+    if (pendingTx.student_id !== user.id) {
+      return NextResponse.json({ error: 'Transaction does not belong to you.' }, { status: 403 })
+    }
+    if (pendingTx.lesson_id !== lessonId) {
+      return NextResponse.json({ error: 'Transaction/lesson mismatch.' }, { status: 400 })
+    }
+
     const { data: lesson, error: lessonError } = await supabase
       .from('lessons')
       .select('id, price, status')
@@ -58,7 +75,20 @@ export async function POST(request) {
     }
 
     if (muData.isError || status !== 'successful') {
-      return NextResponse.json({ status: 'failed', error: muData.message ?? 'Payment failed.' })
+      return NextResponse.json(
+        { status: 'failed', error: muData.message ?? 'Payment failed.' },
+        { status: 402 }
+      )
+    }
+
+    // Verify the gateway amount matches the lesson price
+    const gatewayAmount = Number(muData.data?.amount)
+    if (!isNaN(gatewayAmount) && gatewayAmount < amount) {
+      console.error(`[payment/verify] amount mismatch: gateway=${gatewayAmount}, lesson=${amount}`)
+      return NextResponse.json(
+        { error: 'Payment amount does not match lesson price.' },
+        { status: 400 }
+      )
     }
 
     const { error: insertError } = await supabase
@@ -76,10 +106,17 @@ export async function POST(request) {
 
     if (insertError) {
       console.error('[payment/verify] insert error:', insertError)
+      return NextResponse.json({ error: 'Failed to record purchase.' }, { status: 500 })
     }
 
     // increment_purchase_count is now secured in Postgres — see secure-rpc.sql
-    await supabase.rpc('increment_purchase_count', { lesson_id_input: lessonId })
+    const { error: rpcError } = await supabase.rpc('increment_purchase_count', { lesson_id_input: lessonId })
+    if (rpcError) {
+      console.error('[payment/verify] increment_purchase_count error:', rpcError)
+    }
+
+    // Clean up the pending transaction
+    await supabase.from('pending_transactions').delete().eq('transaction_id', transactionId)
 
     return NextResponse.json({ status: 'successful' })
 

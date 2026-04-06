@@ -40,8 +40,9 @@ function PaymentModal({ lesson, onClose, onSuccess }) {
   const [txId, setTxId]                     = useState(null)
   const [confirmedAmount, setConfirmedAmount] = useState(lesson.price)
   const pollRef                             = useRef(null)
+  const mountedRef                          = useRef(true)
 
-  useEffect(() => () => clearTimeout(pollRef.current), [])
+  useEffect(() => () => { mountedRef.current = false; clearTimeout(pollRef.current) }, [])
 
   function handleNetworkSelect(n) {
     setNetwork(n)
@@ -61,23 +62,28 @@ function PaymentModal({ lesson, onClose, onSuccess }) {
 
     setStep('waiting')
 
-    const res = await fetch('/api/payment/request', {
-      method:  'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body:    JSON.stringify({ phone: cleaned, lessonId: lesson.id }),
-    })
+    try {
+      const res = await fetch('/api/payment/request', {
+        method:  'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body:    JSON.stringify({ phone: cleaned, lessonId: lesson.id }),
+      })
 
-    const data = await res.json()
+      const data = await res.json()
 
-    if (!res.ok || !data.transactionId) {
-      setError(data.error ?? 'Could not initiate payment. Please try again.')
+      if (!res.ok || !data.transactionId) {
+        setError(data.error ?? 'Could not initiate payment. Please try again.')
+        setStep('phone')
+        return
+      }
+
+      if (data.amount) setConfirmedAmount(data.amount)
+      setTxId(data.transactionId)
+      scheduleVerify(data.transactionId, 0)
+    } catch {
+      setError('Network error. Please check your connection and try again.')
       setStep('phone')
-      return
     }
-
-    if (data.amount) setConfirmedAmount(data.amount)
-    setTxId(data.transactionId)
-    scheduleVerify(data.transactionId, 0)
   }
 
   function scheduleVerify(transactionId, count) {
@@ -88,27 +94,34 @@ function PaymentModal({ lesson, onClose, onSuccess }) {
     }
 
     pollRef.current = setTimeout(async () => {
-      const res = await fetch('/api/payment/verify', {
-        method:  'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body:    JSON.stringify({ transactionId, lessonId: lesson.id }),
-      })
+      if (!mountedRef.current) return
+      try {
+        const res = await fetch('/api/payment/verify', {
+          method:  'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body:    JSON.stringify({ transactionId, lessonId: lesson.id }),
+        })
 
-      const data = await res.json()
+        if (!mountedRef.current) return
+        const data = await res.json()
 
-      if (data.status === 'successful') {
-        setStep('success')
-        setTimeout(() => onSuccess(), 1000)
-        return
+        if (data.status === 'successful') {
+          setStep('success')
+          setTimeout(() => onSuccess(), 1000)
+          return
+        }
+
+        if (data.status === 'failed') {
+          setStep('failed')
+          setError(data.error ?? 'Payment was declined. Please try again.')
+          return
+        }
+
+        scheduleVerify(transactionId, count + 1)
+      } catch {
+        if (!mountedRef.current) return
+        scheduleVerify(transactionId, count + 1)
       }
-
-      if (data.status === 'failed') {
-        setStep('failed')
-        setError(data.error ?? 'Payment was declined. Please try again.')
-        return
-      }
-
-      scheduleVerify(transactionId, count + 1)
     }, 4000)
   }
 
@@ -362,7 +375,7 @@ export default function LessonPage() {
 
   const tutor     = lesson.tutors
   const tutorName = tutor?.profiles?.full_name ?? 'Tutor'
-  const tutorInit = tutorName.split(' ').map(w => w[0]).join('').slice(0, 2).toUpperCase()
+  const tutorInit = tutorName.split(' ').filter(Boolean).map(w => w[0]).join('').slice(0, 2).toUpperCase() || '?'
   const avatarUrl = tutor?.profiles?.avatar_url ?? null
   const duration  = formatDuration(lesson.duration_seconds)
   const rating    = tutor?.avg_rating?.toFixed(1) ?? null
@@ -397,8 +410,18 @@ export default function LessonPage() {
       )
     }
 
+    // Validate Cloudflare Stream ID format (hex string, typically 32 chars)
+    const cfId = lesson.cloudflare_video_id
+    if (!/^[a-fA-F0-9]{32}$/.test(cfId)) {
+      return (
+        <div className="w-full h-full flex items-center justify-center">
+          <p className="text-sm text-gray-400">Video unavailable</p>
+        </div>
+      )
+    }
+
     return (
-      <iframe src={`https://iframe.cloudflarestream.com/${lesson.cloudflare_video_id}`} className="w-full h-full"
+      <iframe src={`https://iframe.cloudflarestream.com/${cfId}`} className="w-full h-full"
         allow="accelerometer; gyroscope; autoplay; encrypted-media; picture-in-picture"
         allowFullScreen title={lesson.title} />
     )

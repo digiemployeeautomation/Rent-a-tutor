@@ -41,8 +41,8 @@ export async function POST(request) {
     }
 
     if (!process.env.RESEND_API_KEY) {
-      console.warn('[contact] RESEND_API_KEY not set — email not sent')
-      return NextResponse.json({ ok: true })
+      console.error('[contact] RESEND_API_KEY not set — email not sent')
+      return NextResponse.json({ error: 'Email service is not configured. Please try again later.' }, { status: 503 })
     }
 
     // Escape all user-supplied values before injecting into HTML
@@ -60,7 +60,7 @@ export async function POST(request) {
       body: JSON.stringify({
         from:     process.env.ALERT_EMAIL_FROM ?? 'noreply@rentatutor.co.zm',
         to:       [process.env.ALERT_EMAIL_TO  ?? 'admin@rentatutor.co.zm'],
-        reply_to: safeEmail,
+        reply_to: email,
         subject:  `Contact form: ${safeSubject} — ${safeName}`,
         html: `
           <div style="font-family:system-ui,sans-serif;max-width:520px;margin:0 auto;padding:24px;">

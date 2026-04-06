@@ -1,11 +1,14 @@
 'use client'
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useMemo } from 'react'
 import { useRouter } from 'next/navigation'
 import Navbar from '@/components/layout/Navbar'
 import { supabase } from '@/lib/supabase'
 
+const MAX_FILE_SIZE = 10 * 1024 * 1024 // 10 MB
+
 function FileUploadBox({ label, hint, id, accept, file, onChange }) {
-  const preview = file ? URL.createObjectURL(file) : null
+  const preview = useMemo(() => file ? URL.createObjectURL(file) : null, [file])
+  useEffect(() => { return () => { if (preview) URL.revokeObjectURL(preview) } }, [preview])
 
   return (
     <div>
@@ -25,7 +28,11 @@ function FileUploadBox({ label, hint, id, accept, file, onChange }) {
         )}
       </label>
       <input id={id} type="file" accept={accept} className="hidden"
-        onChange={e => onChange(e.target.files[0] ?? null)} />
+        onChange={e => {
+          const f = e.target.files[0] ?? null
+          if (f && f.size > MAX_FILE_SIZE) { alert('File is too large. Maximum size is 10 MB.'); return }
+          onChange(f)
+        }} />
       {file && (
         <div className="flex items-center justify-between mt-1">
           <span className="text-xs text-gray-500 truncate">{file.name}</span>

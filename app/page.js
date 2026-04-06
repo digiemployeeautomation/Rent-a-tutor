@@ -20,7 +20,7 @@ const subjectMeta = {
 }
 
 function getMeta(name) {
-  return subjectMeta[name] ?? { initials: name.slice(0, 3), bg: 'bg-gray-100', text: 'text-gray-700' }
+  return subjectMeta[name] ?? { initials: (name ?? '???').slice(0, 3), bg: 'bg-gray-100', text: 'text-gray-700' }
 }
 
 export default function HomePage() {
@@ -201,7 +201,7 @@ export default function HomePage() {
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
               {tutors.map((t) => {
                 const name = t.profiles?.full_name ?? 'Tutor'
-                const initials = name.split(' ').map(w => w[0]).join('').slice(0, 2).toUpperCase()
+                const initials = name.split(' ').filter(Boolean).map(w => w[0]).join('').slice(0, 2).toUpperCase() || '?'
                 return (
                   <Link key={t.id} href={`/tutor/${t.id}`}
                     className="border border-gray-200 rounded-xl p-4 hover:border-gray-300 transition block">

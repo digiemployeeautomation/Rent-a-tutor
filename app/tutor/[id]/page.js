@@ -22,7 +22,8 @@ function BookingModal({ tutor, tutorName, user, onClose, onSuccess }) {
 
   const minDate = new Date()
   minDate.setDate(minDate.getDate() + 1)
-  const minDateStr = minDate.toISOString().split('T')[0]
+  // Use local date format for the min attribute (not UTC, which can be off by a day)
+  const minDateStr = `${minDate.getFullYear()}-${String(minDate.getMonth() + 1).padStart(2, '0')}-${String(minDate.getDate()).padStart(2, '0')}`
 
   async function handleBook(e) {
     e.preventDefault()
@@ -90,6 +91,9 @@ function BookingModal({ tutor, tutorName, user, onClose, onSuccess }) {
               onChange={e => setSubject(e.target.value)}
               className="w-full border border-gray-300 rounded-lg px-4 py-2.5 text-sm outline-none focus:border-gray-400 bg-white"
             >
+              {(tutor.subjects ?? []).length === 0 && (
+                <option value="">No subjects available</option>
+              )}
               {(tutor.subjects ?? []).map(s => (
                 <option key={s} value={s}>{s}</option>
               ))}
@@ -201,7 +205,7 @@ export default function TutorProfilePage() {
         supabase
           .from('reviews')
           .select('id, rating, comment, created_at, profiles(full_name)')
-          .eq('tutor_id', tutorId)
+          .eq('tutor_id', tutorData.user_id)
           .order('created_at', { ascending: false })
           .limit(5),
       ])
@@ -227,7 +231,7 @@ export default function TutorProfilePage() {
   if (!tutor) return null
 
   const name     = tutor.profiles?.full_name ?? 'Tutor'
-  const initials = name.split(' ').map(w => w[0]).join('').slice(0, 2).toUpperCase()
+  const initials = name.split(' ').filter(Boolean).map(w => w[0]).join('').slice(0, 2).toUpperCase() || '?'
   const avatar   = tutor.profiles?.avatar_url
   const rating   = tutor.avg_rating?.toFixed(1) ?? null
 

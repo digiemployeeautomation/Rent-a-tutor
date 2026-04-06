@@ -57,7 +57,8 @@ export default function FindTutorPage() {
     }
 
     setTutors(rows)
-    setTotal(count ?? 0)
+    // When client-side name filter is active, use filtered count for accurate pagination
+    setTotal(search.trim() ? rows.length : (count ?? 0))
     setLoading(false)
   }, [search, subject, sort, page])
 
@@ -184,7 +185,7 @@ export default function FindTutorPage() {
                 <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4">
                   {tutors.map(t => {
                     const name     = t.profiles?.full_name ?? 'Tutor'
-                    const initials = name.split(' ').map(w => w[0]).join('').slice(0, 2).toUpperCase()
+                    const initials = name.split(' ').filter(Boolean).map(w => w[0]).join('').slice(0, 2).toUpperCase() || '?'
                     const avatar   = t.profiles?.avatar_url
                     return (
                       <Link key={t.id} href={`/tutor/${t.id}`}

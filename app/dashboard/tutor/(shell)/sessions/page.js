@@ -23,18 +23,21 @@ export default function TutorSessionsPage() {
   const [bookings, setBookings] = useState([])
   const [loading, setLoading]  = useState(true)
   const [tab, setTab]          = useState('upcoming')
+  const [userId, setUserId]    = useState(null)
 
   useEffect(() => {
     async function load() {
       const { data: { user } } = await supabase.auth.getUser()
       if (!user) return router.push('/auth/login')
+      setUserId(user.id)
 
-      const { data } = await supabase
+      const { data, error } = await supabase
         .from('bookings')
-        .select('id, subject, scheduled_at, status, amount, notes, profiles(full_name, avatar_url)')
+        .select('id, subject, scheduled_at, status, amount, notes, profiles!student_id(full_name, avatar_url)')
         .eq('tutor_id', user.id)
         .order('scheduled_at', { ascending: false })
 
+      if (error) console.error('[sessions] load error:', error)
       setBookings(data ?? [])
       setLoading(false)
     }
@@ -42,7 +45,8 @@ export default function TutorSessionsPage() {
   }, [router])
 
   async function updateStatus(id, status) {
-    await supabase.from('bookings').update({ status }).eq('id', id)
+    const { error } = await supabase.from('bookings').update({ status }).eq('id', id).eq('tutor_id', userId)
+    if (error) { console.error('[sessions] update error:', error); return }
     setBookings(prev => prev.map(b => b.id === id ? { ...b, status } : b))
   }
 
@@ -52,7 +56,7 @@ export default function TutorSessionsPage() {
   )
   const past = bookings.filter(b =>
     b.status === 'completed' || b.status === 'cancelled' ||
-    (b.status === 'confirmed' && new Date(b.scheduled_at) < now)
+    (['confirmed', 'pending'].includes(b.status) && new Date(b.scheduled_at) < now)
   )
   const shown = tab === 'upcoming' ? upcoming : past
 
@@ -103,7 +107,7 @@ export default function TutorSessionsPage() {
           <div className="space-y-4">
             {shown.map(b => {
               const studentName = b.profiles?.full_name ?? 'Student'
-              const initials    = studentName.split(' ').map(w => w[0]).join('').slice(0, 2).toUpperCase()
+              const initials    = studentName.split(' ').filter(Boolean).map(w => w[0]).join('').slice(0, 2).toUpperCase() || '?'
               const styles      = STATUS_STYLES[b.status] ?? STATUS_STYLES.pending
               const isPast      = new Date(b.scheduled_at) < now
 
@@ -152,7 +156,7 @@ export default function TutorSessionsPage() {
                     </div>
                   )}
 
-                  {b.status === 'confirmed' && !isPast && (
+                  {b.status === 'confirmed' && (
                     <div className="mt-4 pt-4 border-t border-gray-100 flex gap-2">
                       <button onClick={() => updateStatus(b.id, 'completed')}
                         className="text-xs px-4 py-1.5 rounded-lg font-medium"

@@ -50,7 +50,10 @@ export default function BrowseIndexPage() {
       `, { count: 'exact' })
       .eq('status', 'active')
 
-    if (search.trim()) query = query.ilike('title', `%${search.trim()}%`)
+    if (search.trim()) {
+      const escaped = search.trim().replace(/[%_\\]/g, c => `\\${c}`)
+      query = query.ilike('title', `%${escaped}%`)
+    }
     if (subject)       query = query.eq('subject', subject)
     if (level === 'o_level') query = query.or('form_level.ilike.%O-Level%,form_level.ilike.%Form 1%,form_level.ilike.%Form 2%,form_level.ilike.%Form 3%,form_level.ilike.%Form 4%')
     if (level === 'a_level') query = query.or('form_level.ilike.%A-Level%,form_level.ilike.%Form 5%,form_level.ilike.%Form 6%')
