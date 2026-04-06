@@ -1,6 +1,8 @@
+// app/api/topic-requests/route.js
 import { NextResponse } from 'next/server'
 import { createRouteHandlerClient } from '@supabase/auth-helpers-nextjs'
 import { cookies } from 'next/headers'
+import { verifyCsrf } from '@/lib/csrf'
 
 const SUBJECTS = [
   'Mathematics', 'English Language', 'Biology', 'Chemistry', 'Physics',
@@ -10,14 +12,30 @@ const SUBJECTS = [
   'Business Studies', 'Computer Science', 'Accounting',
 ]
 
-const VALID_URGENCY  = ['normal', 'urgent']
-const VALID_LEVELS   = ['Form 1','Form 2','Form 3','Form 4 (O-Level)','Form 5','Form 6 (A-Level)','Not sure','']
+const VALID_URGENCY = ['normal', 'urgent']
+const VALID_LEVELS  = ['Form 1','Form 2','Form 3','Form 4 (O-Level)','Form 5','Form 6 (A-Level)','Not sure','']
+
+function escapeHtml(str) {
+  return String(str ?? '')
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;')
+}
 
 async function sendAdminAlert({ studentName, subject, topic, formLevel, urgency, description, requestId }) {
   if (!process.env.RESEND_API_KEY) return
 
   const urgencyLabel = urgency === 'urgent' ? '🟡 Urgent' : '🟢 Normal'
   const adminUrl     = `${process.env.NEXT_PUBLIC_SITE_URL?.replace('rentatutor', 'admin.rentatutor') ?? 'https://admin.rentatutor.co.zm'}/topic-requests`
+
+  // Escape all user-supplied values
+  const safeName        = escapeHtml(studentName)
+  const safeSubject     = escapeHtml(subject)
+  const safeTopic       = escapeHtml(topic)
+  const safeFormLevel   = escapeHtml(formLevel)
+  const safeDescription = escapeHtml(description)
 
   await fetch('https://api.resend.com/emails', {
     method:  'POST',
@@ -28,19 +46,19 @@ async function sendAdminAlert({ studentName, subject, topic, formLevel, urgency,
     body: JSON.stringify({
       from:    process.env.ALERT_EMAIL_FROM ?? 'noreply@rentatutor.co.zm',
       to:      [process.env.ALERT_EMAIL_TO  ?? 'admin@rentatutor.co.zm'],
-      subject: `📚 New topic request — ${subject}: ${topic}`,
+      subject: `📚 New topic request — ${safeSubject}: ${safeTopic}`,
       html: `
         <div style="font-family:system-ui,sans-serif;max-width:520px;margin:0 auto;padding:24px;">
           <h2 style="color:#173404;font-family:Georgia,serif;margin-bottom:4px;">New Topic Request</h2>
           <p style="color:#6b7280;margin-top:0;">A student needs help with a specific topic.</p>
 
           <table style="width:100%;border-collapse:collapse;margin:20px 0;background:#f6faf2;border-radius:12px;overflow:hidden;">
-            <tr><td style="padding:10px 16px;color:#9ca3af;font-size:13px;width:120px;">Student</td><td style="padding:10px 16px;font-weight:600;">${studentName}</td></tr>
-            <tr style="background:#eaf3de;"><td style="padding:10px 16px;color:#9ca3af;font-size:13px;">Subject</td><td style="padding:10px 16px;font-weight:600;">${subject}</td></tr>
-            <tr><td style="padding:10px 16px;color:#9ca3af;font-size:13px;">Topic</td><td style="padding:10px 16px;font-weight:600;">${topic}</td></tr>
-            <tr style="background:#eaf3de;"><td style="padding:10px 16px;color:#9ca3af;font-size:13px;">Form level</td><td style="padding:10px 16px;">${formLevel || '—'}</td></tr>
+            <tr><td style="padding:10px 16px;color:#9ca3af;font-size:13px;width:120px;">Student</td><td style="padding:10px 16px;font-weight:600;">${safeName}</td></tr>
+            <tr style="background:#eaf3de;"><td style="padding:10px 16px;color:#9ca3af;font-size:13px;">Subject</td><td style="padding:10px 16px;font-weight:600;">${safeSubject}</td></tr>
+            <tr><td style="padding:10px 16px;color:#9ca3af;font-size:13px;">Topic</td><td style="padding:10px 16px;font-weight:600;">${safeTopic}</td></tr>
+            <tr style="background:#eaf3de;"><td style="padding:10px 16px;color:#9ca3af;font-size:13px;">Form level</td><td style="padding:10px 16px;">${safeFormLevel || '—'}</td></tr>
             <tr><td style="padding:10px 16px;color:#9ca3af;font-size:13px;">Urgency</td><td style="padding:10px 16px;">${urgencyLabel}</td></tr>
-            ${description ? `<tr style="background:#eaf3de;"><td style="padding:10px 16px;color:#9ca3af;font-size:13px;vertical-align:top;">Description</td><td style="padding:10px 16px;">${description}</td></tr>` : ''}
+            ${safeDescription ? `<tr style="background:#eaf3de;"><td style="padding:10px 16px;color:#9ca3af;font-size:13px;vertical-align:top;">Description</td><td style="padding:10px 16px;">${safeDescription}</td></tr>` : ''}
           </table>
 
           <a href="${adminUrl}"
@@ -50,7 +68,6 @@ async function sendAdminAlert({ studentName, subject, topic, formLevel, urgency,
 
           <p style="color:#9ca3af;font-size:12px;margin-top:24px;">
             Tutors on the platform have been notified and can respond directly.
-            You can close or flag this request from the admin console.
           </p>
         </div>
       `,
@@ -59,6 +76,12 @@ async function sendAdminAlert({ studentName, subject, topic, formLevel, urgency,
 }
 
 export async function POST(request) {
+  // CSRF guard
+  const csrf = verifyCsrf(request)
+  if (!csrf.ok) {
+    return NextResponse.json({ error: csrf.error }, { status: 403 })
+  }
+
   try {
     const supabase = createRouteHandlerClient({ cookies })
     const { data: { user } } = await supabase.auth.getUser()
@@ -92,7 +115,6 @@ export async function POST(request) {
       return NextResponse.json({ error: 'Invalid urgency.' }, { status: 400 })
     }
 
-    // Rate limit: max 3 open requests per student at a time
     const { count: openCount } = await supabase
       .from('topic_requests')
       .select('*', { count: 'exact', head: true })

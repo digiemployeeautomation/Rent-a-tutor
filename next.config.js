@@ -1,7 +1,6 @@
+// next.config.js
 /** @type {import('next').NextConfig} */
 
-// Replace YOUR_PROJECT_ID with your actual Supabase project reference
-// (the subdomain part of your project URL, e.g. "abcdefghijklmnop")
 const SUPABASE_PROJECT_ID = process.env.NEXT_PUBLIC_SUPABASE_URL
   ?.replace('https://', '')
   .split('.')[0] ?? ''
@@ -9,18 +8,42 @@ const SUPABASE_PROJECT_ID = process.env.NEXT_PUBLIC_SUPABASE_URL
 const nextConfig = {
   images: {
     remotePatterns: [
-      // Scoped to your specific Supabase project — not all *.supabase.co
       ...(SUPABASE_PROJECT_ID ? [{
         protocol: 'https',
         hostname: `${SUPABASE_PROJECT_ID}.supabase.co`,
         pathname: '/storage/v1/object/public/**',
       }] : []),
-      // Fallback during local dev when env var isn't set
       {
         protocol: 'https',
         hostname: '*.supabase.co',
       },
     ],
+  },
+
+  async headers() {
+    return [
+      {
+        source: '/(.*)',
+        headers: [
+          // Prevent clickjacking
+          { key: 'X-Frame-Options', value: 'DENY' },
+          // Prevent MIME-type sniffing
+          { key: 'X-Content-Type-Options', value: 'nosniff' },
+          // Limit referrer info sent to third parties
+          { key: 'Referrer-Policy', value: 'strict-origin-when-cross-origin' },
+          // Disable unnecessary browser features
+          {
+            key: 'Permissions-Policy',
+            value: 'camera=(), microphone=(), geolocation=(), payment=(self)',
+          },
+          // Force HTTPS for 1 year (only applies in production)
+          ...(process.env.NODE_ENV === 'production' ? [{
+            key: 'Strict-Transport-Security',
+            value: 'max-age=31536000; includeSubDomains',
+          }] : []),
+        ],
+      },
+    ]
   },
 }
 

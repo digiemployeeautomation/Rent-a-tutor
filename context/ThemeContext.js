@@ -1,3 +1,4 @@
+// context/ThemeContext.js
 'use client'
 import { createContext, useContext, useEffect, useState } from 'react'
 import { supabase } from '@/lib/supabase'
@@ -12,9 +13,11 @@ export function ThemeProvider({ children }) {
     setRole(validRole)
     const theme = validRole === 'tutor' ? 'tutor' : 'student'
     document.documentElement.setAttribute('data-theme', theme)
-    // Write a cookie so the server layout can read it on next hard refresh,
-    // preventing the theme flash for tutors.
-    document.cookie = `rat-role=${validRole}; path=/; max-age=604800; SameSite=Lax`
+
+    // Add Secure flag when served over HTTPS (i.e. in production).
+    // Localhost skips it so local dev still works.
+    const secureFlag = window.location.protocol === 'https:' ? '; Secure' : ''
+    document.cookie = `rat-role=${validRole}; path=/; max-age=604800; SameSite=Lax${secureFlag}`
   }
 
   useEffect(() => {
@@ -27,8 +30,8 @@ export function ThemeProvider({ children }) {
 
     const { data: { subscription } } = supabase.auth.onAuthStateChange(async (_event, session) => {
       if (!session?.user) {
-        // Clear cookie on logout
-        document.cookie = 'rat-role=; path=/; max-age=0'
+        const secureFlag = window.location.protocol === 'https:' ? '; Secure' : ''
+        document.cookie = `rat-role=; path=/; max-age=0; SameSite=Lax${secureFlag}`
         return applyRole('student')
       }
       const { data: profile } = await supabase

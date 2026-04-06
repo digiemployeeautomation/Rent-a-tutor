@@ -99,6 +99,7 @@ export default function TutorDashboard() {
         { count: completedCount },
         { data: recentBooks },
         { data: allLessons },
+        { data: allCompletedBookings },
       ] = await Promise.all([
         supabase.from('profiles').select('full_name, avatar_url').eq('id', user.id).single(),
         supabase.from('tutors').select('*').eq('user_id', user.id).single(),
@@ -116,6 +117,11 @@ export default function TutorDashboard() {
           .order('scheduled_at', { ascending: false })
           .limit(10),
         supabase.from('lessons').select('purchase_count, price').eq('tutor_id', user.id),
+        // Separate unlimited query for earnings calculation — avoids the .limit(10) cap on recentBooks
+        supabase.from('bookings')
+          .select('amount')
+          .eq('tutor_id', user.id)
+          .eq('status', 'completed'),
       ])
 
       const lessRows = recentLess  ?? []
@@ -125,8 +131,8 @@ export default function TutorDashboard() {
       const rentalRevenue  = (allLessons ?? []).reduce(
         (sum, l) => sum + ((l.purchase_count ?? 0) * (l.price ?? 0)), 0
       )
-      const sessionEarnings = bookRows
-        .filter(b => b.status === 'completed')
+      // Use the unlimited completed bookings query, not the display-capped bookRows
+      const sessionEarnings = (allCompletedBookings ?? [])
         .reduce((sum, b) => sum + (b.amount ?? 0), 0)
 
       setProfile(prof)

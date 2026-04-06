@@ -307,6 +307,31 @@ export default function LessonPage() {
     if (lessonId) load()
   }, [lessonId, subject, router])
 
+  // Realtime cross-tab sync — if the user pays in another tab, this tab unlocks too
+  useEffect(() => {
+    if (!user || hasPurchased || !lessonId) return
+
+    const channel = supabase
+      .channel(`purchase-sync-${lessonId}`)
+      .on(
+        'postgres_changes',
+        {
+          event:  'INSERT',
+          schema: 'public',
+          table:  'lesson_purchases',
+          filter: `lesson_id=eq.${lessonId}`,
+        },
+        (payload) => {
+          if (payload.new?.student_id === user.id) {
+            setHasPurchased(true)
+          }
+        }
+      )
+      .subscribe()
+
+    return () => { supabase.removeChannel(channel) }
+  }, [user, hasPurchased, lessonId])
+
   function handlePaymentSuccess() {
     setShowModal(false)
     setHasPurchased(true)
