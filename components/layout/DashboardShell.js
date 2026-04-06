@@ -4,21 +4,35 @@ import { usePathname } from 'next/navigation'
 import Navbar from './Navbar'
 
 const TUTOR_NAV = [
-  { href: '/dashboard/tutor',                  label: 'Dashboard',       icon: '⬡', exact: true },
-  { href: '/dashboard/tutor/lessons',          label: 'My Lessons',      icon: '📹' },
-  { href: '/dashboard/tutor/upload',           label: 'Upload Lesson',   icon: '＋' },
-  { href: '/dashboard/tutor/sessions',         label: 'Sessions',        icon: '📅' },
-  { href: '/dashboard/tutor/topic-requests',   label: 'Topic Requests',  icon: '💬' },
-  { href: '/dashboard/tutor/profile',          label: 'My Profile',      icon: '👤' },
+  { href: '/dashboard/tutor',                  label: 'Dashboard',      icon: '⬡', exact: true },
+  { href: '/dashboard/tutor/lessons',          label: 'My Lessons',     icon: '📹' },
+  { href: '/dashboard/tutor/upload',           label: 'Upload Lesson',  icon: '＋' },
+  { href: '/dashboard/tutor/sessions',         label: 'Sessions',       icon: '📅' },
+  { href: '/dashboard/tutor/topic-requests',   label: 'Topic Requests', icon: '💬' },
+  { href: '/dashboard/tutor/profile',          label: 'My Profile',     icon: '👤' },
 ]
 
 const STUDENT_NAV = [
-  { href: '/dashboard/student',                label: 'Dashboard',       icon: '⬡', exact: true },
-  { href: '/dashboard/student/purchases',      label: 'My Purchases',    icon: '🎓' },
-  { href: '/browse',                           label: 'Browse Lessons',  icon: '📚', external: true },
-  { href: '/tutor',                            label: 'Find a Tutor',    icon: '👤', external: true },
+  { href: '/dashboard/student',                label: 'Dashboard',      icon: '⬡', exact: true },
+  { href: '/dashboard/student/purchases',      label: 'My Purchases',   icon: '🎓' },
+  { href: '/browse',                           label: 'Browse Lessons', icon: '📚', external: true },
+  { href: '/tutor',                            label: 'Find a Tutor',   icon: '👤', external: true },
   { href: '/dashboard/student/topic-requests', label: 'Request a Topic', icon: '💬' },
 ]
+
+// Short labels for the mobile bottom nav where space is tight
+const SHORT_LABELS = {
+  'Dashboard':      'Home',
+  'My Lessons':     'Lessons',
+  'Upload Lesson':  'Upload',
+  'Sessions':       'Sessions',
+  'Topic Requests': 'Topics',
+  'My Profile':     'Profile',
+  'My Purchases':   'Purchases',
+  'Browse Lessons': 'Browse',
+  'Find a Tutor':   'Tutors',
+  'Request a Topic': 'Requests',
+}
 
 export default function DashboardShell({ children, role }) {
   const pathname = usePathname()
@@ -32,23 +46,23 @@ export default function DashboardShell({ children, role }) {
   return (
     <div style={{ minHeight: '100vh', backgroundColor: 'var(--color-page-bg)' }}>
       <Navbar />
-      <div style={{ display: 'flex', minHeight: 'calc(100vh - 64px)' }}>
 
-        {/* Sidebar */}
-        <aside style={{
-          width: 200,
-          flexShrink: 0,
-          backgroundColor: 'var(--color-page-bg)',
-          borderRight: '1px solid rgba(0,0,0,0.06)',
-          padding: '16px 8px',
-          display: 'flex',
-          flexDirection: 'column',
-          gap: 2,
-          position: 'sticky',
-          top: 64,
-          height: 'calc(100vh - 64px)',
-          overflowY: 'auto',
-        }}>
+      <div className="flex" style={{ minHeight: 'calc(100vh - 64px)' }}>
+
+        {/* ── Desktop sidebar — hidden on mobile ─────────────────── */}
+        <aside className="hidden lg:flex lg:flex-col"
+          style={{
+            width: 200,
+            flexShrink: 0,
+            backgroundColor: 'var(--color-page-bg)',
+            borderRight: '1px solid rgba(0,0,0,0.06)',
+            padding: '16px 8px',
+            gap: 2,
+            position: 'sticky',
+            top: 64,
+            height: 'calc(100vh - 64px)',
+            overflowY: 'auto',
+          }}>
           {nav.map(item => {
             const active = isActive(item)
             return (
@@ -79,12 +93,74 @@ export default function DashboardShell({ children, role }) {
           })}
         </aside>
 
-        {/* Main content */}
-        <main style={{ flex: 1, minWidth: 0 }}>
+        {/* ── Main content ──────────────────────────────────────────
+            pb-20 on mobile leaves room for the bottom nav bar.
+            lg:pb-0 removes it on desktop where the nav is a sidebar. */}
+        <main className="flex-1 min-w-0 pb-20 lg:pb-0">
           {children}
         </main>
-
       </div>
+
+      {/* ── Mobile bottom nav — hidden on desktop ──────────────────
+          Uses safe-area-inset-bottom so content clears the iPhone
+          home indicator on notched devices. */}
+      <nav className="lg:hidden"
+        style={{
+          position: 'fixed',
+          bottom: 0,
+          left: 0,
+          right: 0,
+          zIndex: 40,
+          backgroundColor: 'var(--color-page-bg)',
+          borderTop: '1px solid rgba(0,0,0,0.08)',
+          paddingBottom: 'env(safe-area-inset-bottom)',
+        }}>
+        <div style={{ display: 'flex' }}>
+          {nav.map(item => {
+            const active = isActive(item)
+            return (
+              <Link key={item.href} href={item.href}
+                style={{
+                  flex: 1,
+                  display: 'flex',
+                  flexDirection: 'column',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  gap: 2,
+                  padding: '8px 4px',
+                  minHeight: 56,
+                  textDecoration: 'none',
+                  color: active ? 'var(--color-primary)' : '#9ca3af',
+                  position: 'relative',
+                }}>
+                {/* Active indicator bar at top of tab */}
+                {active && (
+                  <span style={{
+                    position: 'absolute',
+                    top: 0,
+                    left: '50%',
+                    transform: 'translateX(-50%)',
+                    width: 20,
+                    height: 2,
+                    borderRadius: 1,
+                    backgroundColor: 'var(--color-primary)',
+                  }} />
+                )}
+                <span style={{ fontSize: 18, lineHeight: 1 }}>{item.icon}</span>
+                <span style={{
+                  fontSize: 9,
+                  fontWeight: active ? 500 : 400,
+                  letterSpacing: '0.01em',
+                  textAlign: 'center',
+                  lineHeight: 1.2,
+                }}>
+                  {SHORT_LABELS[item.label] ?? item.label.split(' ')[0]}
+                </span>
+              </Link>
+            )
+          })}
+        </div>
+      </nav>
     </div>
   )
 }
