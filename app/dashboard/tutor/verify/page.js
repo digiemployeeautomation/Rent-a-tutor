@@ -62,9 +62,10 @@ export default function TutorVerifyPage() {
         .eq('user_id', u.id)
         .single()
 
-      // Guard: tutors row missing — profile trigger may have failed during register
+      // Missing tutors row — profile trigger failed during registration,
+      // send the user back to register so they can start fresh.
       if (!tutor) {
-        router.replace('/auth/incomplete-profile')
+        router.replace('/auth/register')
         return
       }
 
