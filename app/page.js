@@ -1,3 +1,4 @@
+// app/page.js
 'use client'
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
@@ -24,8 +25,8 @@ function getMeta(name) {
 
 export default function HomePage() {
   const [user, setUser]                     = useState(null)
-  const [role, setRole]                     = useState(null)       // null = not yet known
-  const [roleLoading, setRoleLoading]       = useState(true)       // true until role resolved
+  const [role, setRole]                     = useState(null)
+  const [roleLoading, setRoleLoading]       = useState(true)
   const [subjects, setSubjects]             = useState([])
   const [tutors, setTutors]                 = useState([])
   const [tutorsLoading, setTutorsLoading]   = useState(true)
@@ -34,10 +35,7 @@ export default function HomePage() {
 
   useEffect(() => {
     supabase.auth.getUser().then(async ({ data: { user } }) => {
-      if (!user) {
-        setRoleLoading(false)
-        return
-      }
+      if (!user) { setRoleLoading(false); return }
       setUser(user)
       const { data: profile } = await supabase
         .from('profiles').select('role').eq('id', user.id).single()
@@ -47,10 +45,7 @@ export default function HomePage() {
 
     const { data: { subscription } } = supabase.auth.onAuthStateChange(async (_event, session) => {
       if (!session?.user) {
-        setUser(null)
-        setRole(null)
-        setRoleLoading(false)
-        return
+        setUser(null); setRole(null); setRoleLoading(false); return
       }
       setUser(session.user)
       const { data: profile } = await supabase
@@ -61,20 +56,13 @@ export default function HomePage() {
 
     async function loadSubjects() {
       const { data: subjectRows } = await supabase
-        .from('subjects')
-        .select('id, name, level')
-        .eq('curriculum', 'ecz')
-        .order('name')
+        .from('subjects').select('id, name, level').eq('curriculum', 'ecz').order('name')
 
       const { data: lessonRows } = await supabase
-        .from('lessons')
-        .select('subject, status')
-        .eq('status', 'active')
+        .from('lessons').select('subject, status').eq('status', 'active')
 
       const counts = {}
-      lessonRows?.forEach(l => {
-        counts[l.subject] = (counts[l.subject] ?? 0) + 1
-      })
+      lessonRows?.forEach(l => { counts[l.subject] = (counts[l.subject] ?? 0) + 1 })
       setLessonCounts(counts)
 
       const seen = new Set()
@@ -106,11 +94,8 @@ export default function HomePage() {
     return () => subscription.unsubscribe()
   }, [])
 
-  // Only computed once role is confirmed — prevents wrong-dashboard flicker
-  const dashboardHref = role === 'tutor'
-    ? '/dashboard/tutor'
-    : role === 'admin'
-    ? '/admin'
+  const dashboardHref = role === 'tutor' ? '/dashboard/tutor'
+    : role === 'admin' ? '/admin'
     : '/dashboard/student'
 
   return (
@@ -129,7 +114,6 @@ export default function HomePage() {
 
         <div className="flex flex-col items-center gap-3">
           {user ? (
-            // Only render dashboard link once role is confirmed — avoids wrong-route flicker
             roleLoading ? (
               <div className="h-10 w-48 rounded-xl animate-pulse" style={{ backgroundColor: 'rgba(255,255,255,0.15)' }} />
             ) : (
@@ -273,15 +257,17 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Footer */}
-      <footer className="bg-white border-t border-gray-200 px-6 py-5 flex justify-between items-center text-sm text-gray-400">
-        <span className="font-serif" style={{ color: 'var(--color-primary-lit)' }}>Rent a Tutor · Zambia</span>
-        <div className="flex gap-6">
-          <Link href="/about" className="hover:text-gray-600">About</Link>
-          <Link href="/auth/register" className="hover:text-gray-600">Become a tutor</Link>
-          <Link href="/contact" className="hover:text-gray-600">Contact</Link>
+      {/* Footer — stacks on mobile */}
+      <footer className="bg-white border-t border-gray-200 px-6 py-5 text-sm text-gray-400">
+        <div className="flex flex-col sm:flex-row justify-between items-center gap-3 text-center sm:text-left">
+          <span className="font-serif" style={{ color: 'var(--color-primary-lit)' }}>Rent a Tutor · Zambia</span>
+          <div className="flex gap-6 flex-wrap justify-center">
+            <Link href="/about" className="hover:text-gray-600">About</Link>
+            <Link href="/auth/register" className="hover:text-gray-600">Become a tutor</Link>
+            <Link href="/contact" className="hover:text-gray-600">Contact</Link>
+          </div>
+          <span>© 2026 Rent a Tutor</span>
         </div>
-        <span>© 2026 Rent a Tutor</span>
       </footer>
     </div>
   )

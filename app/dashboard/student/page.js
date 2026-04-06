@@ -1,3 +1,4 @@
+// app/dashboard/student/page.js
 'use client'
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
@@ -41,8 +42,6 @@ export default function StudentDashboard() {
           .order('purchased_at', { ascending: false })
           .limit(5),
 
-        // FIX: join profiles via tutor_id (which is the auth UID stored at booking time),
-        // not via a tutors→profiles chain which would require the tutors table PK.
         supabase
           .from('bookings')
           .select('id, subject, scheduled_at, status, amount, tutor_id, profiles!tutor_id(full_name)')
@@ -97,9 +96,9 @@ export default function StudentDashboard() {
 
   return (
     <>
-      {/* Banner */}
-      <div style={{ backgroundColor: 'var(--color-primary-mid)' }} className="px-6 py-5">
-        <div className="max-w-5xl mx-auto flex justify-between items-center">
+      {/* Banner — wraps on mobile so button doesn't crowd the heading */}
+      <div style={{ backgroundColor: 'var(--color-primary-mid)' }} className="px-4 sm:px-6 py-5">
+        <div className="max-w-5xl mx-auto flex flex-wrap justify-between items-start gap-3">
           <div>
             <h1 className="font-serif text-2xl" style={{ color: 'var(--color-nav-text)' }}>
               Welcome back, {firstName} 👋
@@ -112,7 +111,7 @@ export default function StudentDashboard() {
           </div>
           <Link
             href="/tutor"
-            className="text-sm px-5 py-2.5 rounded-lg font-medium"
+            className="text-sm px-5 py-2.5 rounded-lg font-medium self-start flex-shrink-0"
             style={{ backgroundColor: 'var(--color-accent-btn)', color: 'var(--color-accent-btn-text)' }}
           >
             Book a session
@@ -120,7 +119,7 @@ export default function StudentDashboard() {
         </div>
       </div>
 
-      <div className="max-w-5xl mx-auto px-6 py-8">
+      <div className="max-w-5xl mx-auto px-4 sm:px-6 py-8">
 
         {/* Stats */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
@@ -202,7 +201,6 @@ export default function StudentDashboard() {
             ) : (
               <div className="space-y-3">
                 {upcomingBookings.map(b => {
-                  // FIX: profiles is now joined directly via tutor_id
                   const tutorName = b.profiles?.full_name ?? 'Tutor'
                   const initials = tutorName.split(' ').map(w => w[0]).join('').slice(0, 2).toUpperCase()
                   const date = new Date(b.scheduled_at).toLocaleDateString('en-ZM', {
@@ -214,8 +212,8 @@ export default function StudentDashboard() {
                         style={{ backgroundColor: 'var(--color-surface)', color: 'var(--color-primary-mid)' }}>
                         {initials}
                       </div>
-                      <div className="flex-1">
-                        <div className="text-sm font-medium text-gray-800">{tutorName}</div>
+                      <div className="flex-1 min-w-0">
+                        <div className="text-sm font-medium text-gray-800 truncate">{tutorName}</div>
                         <div className="text-xs text-gray-400">{b.subject} · {date}</div>
                       </div>
                       <span className="text-xs px-3 py-1 rounded-full font-medium capitalize flex-shrink-0"
@@ -236,18 +234,17 @@ export default function StudentDashboard() {
             <h2 className="font-serif text-lg mb-5" style={{ color: 'var(--color-primary)' }}>Session history</h2>
             <div className="space-y-3">
               {bookings.map(b => {
-                // FIX: profiles is now joined directly via tutor_id
                 const tutorName = b.profiles?.full_name ?? 'Tutor'
                 const date = new Date(b.scheduled_at).toLocaleDateString('en-ZM', {
                   weekday: 'short', month: 'short', day: 'numeric'
                 })
                 return (
                   <div key={b.id} className="flex items-center justify-between py-2 border-b border-gray-50 last:border-0">
-                    <div>
-                      <div className="text-sm font-medium text-gray-800">{tutorName}</div>
+                    <div className="min-w-0 flex-1">
+                      <div className="text-sm font-medium text-gray-800 truncate">{tutorName}</div>
                       <div className="text-xs text-gray-400">{b.subject} · {date}</div>
                     </div>
-                    <div className="flex items-center gap-3">
+                    <div className="flex items-center gap-3 flex-shrink-0 ml-3">
                       <span className="text-xs text-gray-500">K{b.amount}</span>
                       <span className="text-xs px-2 py-0.5 rounded-full capitalize"
                         style={{

@@ -1,3 +1,4 @@
+// app/about/page.js
 import Link from 'next/link'
 import Navbar from '@/components/layout/Navbar'
 
@@ -114,14 +115,17 @@ export default function AboutPage() {
         </section>
       </div>
 
-      <footer className="bg-white border-t border-gray-200 px-6 py-5 flex justify-between items-center text-sm text-gray-400">
-        <span className="font-serif" style={{ color: 'var(--color-primary-lit)' }}>Rent a Tutor · Zambia</span>
-        <div className="flex gap-6">
-          <Link href="/browse" className="hover:text-gray-600">Browse lessons</Link>
-          <Link href="/tutor" className="hover:text-gray-600">Find a tutor</Link>
-          <Link href="/contact" className="hover:text-gray-600">Contact</Link>
+      {/* Footer — stacks on mobile */}
+      <footer className="bg-white border-t border-gray-200 px-6 py-5 text-sm text-gray-400">
+        <div className="flex flex-col sm:flex-row justify-between items-center gap-3 text-center sm:text-left">
+          <span className="font-serif" style={{ color: 'var(--color-primary-lit)' }}>Rent a Tutor · Zambia</span>
+          <div className="flex gap-6 flex-wrap justify-center">
+            <Link href="/browse" className="hover:text-gray-600">Browse lessons</Link>
+            <Link href="/tutor" className="hover:text-gray-600">Find a tutor</Link>
+            <Link href="/contact" className="hover:text-gray-600">Contact</Link>
+          </div>
+          <span>© 2026 Rent a Tutor</span>
         </div>
-        <span>© 2026 Rent a Tutor</span>
       </footer>
     </div>
   )

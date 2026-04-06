@@ -1,3 +1,4 @@
+// app/browse/page.js
 'use client'
 import { useState, useEffect, useCallback } from 'react'
 import Link from 'next/link'
@@ -35,6 +36,7 @@ export default function BrowseIndexPage() {
   const [level, setLevel]             = useState('')
   const [sort, setSort]               = useState('popular')
   const [page, setPage]               = useState(0)
+  const [filtersOpen, setFiltersOpen] = useState(false)
   const PAGE_SIZE = 12
 
   const load = useCallback(async () => {
@@ -74,12 +76,19 @@ export default function BrowseIndexPage() {
   }, [searchInput])
 
   const totalPages = Math.ceil(total / PAGE_SIZE)
+  const hasActiveFilters = subject || level || search
+
+  function clearFilters() {
+    setSubject('')
+    setLevel('')
+    setSearchInput('')
+  }
 
   return (
     <div className="min-h-screen" style={{ backgroundColor: 'var(--color-page-bg)' }}>
       <Navbar />
 
-      <div className="px-6 py-10" style={{ backgroundColor: 'var(--color-primary)' }}>
+      <div className="px-4 sm:px-6 py-10" style={{ backgroundColor: 'var(--color-primary)' }}>
         <div className="max-w-5xl mx-auto">
           <Link href="/" className="text-xs mb-4 inline-block opacity-60 hover:opacity-100"
             style={{ color: 'var(--color-surface-mid)' }}>
@@ -107,58 +116,78 @@ export default function BrowseIndexPage() {
         </div>
       </div>
 
-      <div className="max-w-5xl mx-auto px-6 py-8">
+      <div className="max-w-5xl mx-auto px-4 sm:px-6 py-8">
         <div className="flex flex-col lg:flex-row gap-8">
 
           <aside className="lg:w-52 flex-shrink-0">
-            <div className="mb-6">
-              <h3 className="text-xs font-medium text-gray-500 uppercase tracking-wide mb-3">Level</h3>
-              <div className="space-y-1">
-                {[
-                  { value: '',        label: 'All levels'         },
-                  { value: 'o_level', label: 'O-Level (Forms 1–4)' },
-                  { value: 'a_level', label: 'A-Level (Forms 5–6)' },
-                ].map(l => (
-                  <button key={l.value} onClick={() => setLevel(l.value)}
+            {/* Mobile filter toggle button */}
+            <button
+              onClick={() => setFiltersOpen(o => !o)}
+              className="lg:hidden w-full flex items-center justify-between px-4 py-2.5 mb-4 rounded-xl border border-gray-200 text-sm bg-white"
+              style={{ color: '#374151' }}>
+              <span>
+                Filters
+                {hasActiveFilters && (
+                  <span className="ml-2 text-xs px-2 py-0.5 rounded-full"
+                    style={{ backgroundColor: 'var(--color-surface)', color: 'var(--color-primary-mid)' }}>
+                    active
+                  </span>
+                )}
+              </span>
+              <span className="text-gray-400">{filtersOpen ? '▲' : '▼'}</span>
+            </button>
+
+            {/* Filter content — always visible on desktop, toggle on mobile */}
+            <div className={`${filtersOpen ? 'block' : 'hidden'} lg:block`}>
+              <div className="mb-6">
+                <h3 className="text-xs font-medium text-gray-500 uppercase tracking-wide mb-3">Level</h3>
+                <div className="space-y-1">
+                  {[
+                    { value: '',        label: 'All levels'          },
+                    { value: 'o_level', label: 'O-Level (Forms 1–4)' },
+                    { value: 'a_level', label: 'A-Level (Forms 5–6)' },
+                  ].map(l => (
+                    <button key={l.value} onClick={() => setLevel(l.value)}
+                      className="w-full text-left text-sm px-3 py-2 rounded-lg transition"
+                      style={level === l.value
+                        ? { backgroundColor: 'var(--color-surface)', color: 'var(--color-primary)', fontWeight: 500 }
+                        : { color: '#6b7280' }}>
+                      {l.label}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              <div className="mb-6">
+                <h3 className="text-xs font-medium text-gray-500 uppercase tracking-wide mb-3">Subject</h3>
+                <div className="space-y-1 max-h-72 overflow-y-auto pr-1">
+                  <button onClick={() => setSubject('')}
                     className="w-full text-left text-sm px-3 py-2 rounded-lg transition"
-                    style={level === l.value
+                    style={subject === ''
                       ? { backgroundColor: 'var(--color-surface)', color: 'var(--color-primary)', fontWeight: 500 }
                       : { color: '#6b7280' }}>
-                    {l.label}
+                    All subjects
                   </button>
-                ))}
+                  {SUBJECTS.map(s => (
+                    <button key={s} onClick={() => setSubject(s)}
+                      className="w-full text-left text-sm px-3 py-2 rounded-lg transition"
+                      style={subject === s
+                        ? { backgroundColor: 'var(--color-surface)', color: 'var(--color-primary)', fontWeight: 500 }
+                        : { color: '#6b7280' }}>
+                      {s}
+                    </button>
+                  ))}
+                </div>
               </div>
-            </div>
 
-            <div className="mb-6">
-              <h3 className="text-xs font-medium text-gray-500 uppercase tracking-wide mb-3">Subject</h3>
-              <div className="space-y-1 max-h-72 overflow-y-auto pr-1">
-                <button onClick={() => setSubject('')}
-                  className="w-full text-left text-sm px-3 py-2 rounded-lg transition"
-                  style={subject === ''
-                    ? { backgroundColor: 'var(--color-surface)', color: 'var(--color-primary)', fontWeight: 500 }
-                    : { color: '#6b7280' }}>
-                  All subjects
+              {hasActiveFilters && (
+                <button onClick={clearFilters}
+                  className="text-xs underline"
+                  style={{ color: 'var(--color-primary-lit)' }}>
+                  Clear all filters
                 </button>
-                {SUBJECTS.map(s => (
-                  <button key={s} onClick={() => setSubject(s)}
-                    className="w-full text-left text-sm px-3 py-2 rounded-lg transition"
-                    style={subject === s
-                      ? { backgroundColor: 'var(--color-surface)', color: 'var(--color-primary)', fontWeight: 500 }
-                      : { color: '#6b7280' }}>
-                    {s}
-                  </button>
-                ))}
-              </div>
+              )}
             </div>
-
-            {(subject || level || search) && (
-              <button onClick={() => { setSubject(''); setLevel(''); setSearchInput('') }}
-                className="text-xs underline"
-                style={{ color: 'var(--color-primary-lit)' }}>
-                Clear all filters
-              </button>
-            )}
           </aside>
 
           <div className="flex-1 min-w-0">
@@ -184,8 +213,8 @@ export default function BrowseIndexPage() {
               <div className="text-center py-20 border border-dashed border-gray-200 rounded-2xl">
                 <p className="text-sm text-gray-400 mb-1">No lessons found.</p>
                 <p className="text-xs text-gray-300">Try adjusting your filters or search term.</p>
-                {(subject || level || search) && (
-                  <button onClick={() => { setSubject(''); setLevel(''); setSearchInput('') }}
+                {hasActiveFilters && (
+                  <button onClick={clearFilters}
                     className="mt-4 text-xs px-4 py-2 rounded-lg"
                     style={{ backgroundColor: 'var(--color-btn-bg)', color: 'var(--color-btn-text)' }}>
                     Clear filters
