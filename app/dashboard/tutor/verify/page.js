@@ -56,17 +56,26 @@ export default function TutorVerifyPage() {
       if (!u) { router.replace('/auth/login'); return }
       setUser(u)
 
-      const { data: tutor } = await supabase
+      let { data: tutor } = await supabase
         .from('tutors')
         .select('is_approved, verification_submitted')
         .eq('user_id', u.id)
         .single()
 
-      // Missing tutors row — profile trigger failed during registration,
-      // send the user back to register so they can start fresh.
+      // tutors row missing — signup trigger didn't create it.
+      // Insert it now so the user can proceed to verification.
       if (!tutor) {
-        router.replace('/auth/register')
-        return
+        const { error: insertErr } = await supabase
+          .from('tutors')
+          .insert({ user_id: u.id, is_approved: false, verification_submitted: false })
+
+        if (insertErr) {
+          console.error('[verify] could not create tutors row:', insertErr)
+          router.replace('/auth/login')
+          return
+        }
+
+        tutor = { is_approved: false, verification_submitted: false }
       }
 
       if (tutor.is_approved)            return router.replace('/dashboard/tutor')
