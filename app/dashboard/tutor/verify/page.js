@@ -67,7 +67,7 @@ export default function TutorVerifyPage() {
       if (!tutor) {
         const { error: insertErr } = await supabase
           .from('tutors')
-          .insert({ user_id: u.id, is_approved: false, verification_submitted: false })
+          .insert({ id: u.id, user_id: u.id, is_approved: false, verification_submitted: false })
 
         if (insertErr) {
           console.error('[verify] could not create tutors row:', insertErr)
