@@ -19,7 +19,6 @@ export async function middleware(request) {
     if (_profile === undefined) {
       const { data, error } = await supabase
         .from('profiles').select('role').eq('id', user.id).single()
-      // A missing profile row is treated as a broken account, not a student.
       if (error || !data) return null
       _profile = data
     }
@@ -29,11 +28,10 @@ export async function middleware(request) {
   // ── Logged-in users hitting auth pages ─────────────────────────────────────
   if (user && AUTH_ROUTES.some(r => pathname === r)) {
     const role = await getRole()
-    if (role === null)  return NextResponse.redirect(new URL('/auth/incomplete-profile', request.url))
+    if (role === null)      return NextResponse.redirect(new URL('/auth/register', request.url))
     if (role === 'admin')   return NextResponse.redirect(new URL('/admin', request.url))
     if (role === 'tutor')   return NextResponse.redirect(new URL('/dashboard/tutor', request.url))
     if (role === 'student') return NextResponse.redirect(new URL('/dashboard/student', request.url))
-    // Unknown role — send to a safe fallback
     return NextResponse.redirect(new URL('/', request.url))
   }
 
@@ -56,10 +54,9 @@ export async function middleware(request) {
   if (needsRole) {
     const role = await getRole()
 
-    // Broken/missing profile — redirect to onboarding/error rather than
-    // silently granting student access.
+    // Missing profile row — send back to register so the user can start fresh
     if (role === null) {
-      return NextResponse.redirect(new URL('/auth/incomplete-profile', request.url))
+      return NextResponse.redirect(new URL('/auth/register', request.url))
     }
 
     // Admin routes — only admins allowed
@@ -83,7 +80,6 @@ export async function middleware(request) {
 
 export const config = {
   matcher: [
-    // Exclude: static files, images, and ALL /api/* routes (they handle their own auth)
     '/((?!_next/static|_next/image|api/|favicon\\.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)',
   ],
 }
