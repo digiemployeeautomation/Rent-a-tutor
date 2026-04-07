@@ -18,8 +18,22 @@ function formatDate(iso) {
   })
 }
 
-function isYouTubeId(id) {
-  return id && /^[a-zA-Z0-9_-]{11}$/.test(id)
+function extractYouTubeId(input) {
+  if (!input) return null
+  // Already a bare 11-char ID
+  if (/^[a-zA-Z0-9_-]{11}$/.test(input)) return input
+  // Full URL: youtube.com/watch?v=ID, youtu.be/ID, youtube.com/embed/ID
+  try {
+    const url = new URL(input)
+    if (url.hostname.includes('youtu.be')) return url.pathname.slice(1).split('/')[0] || null
+    if (url.hostname.includes('youtube.com')) {
+      const v = url.searchParams.get('v')
+      if (v) return v
+      const parts = url.pathname.split('/')
+      if (parts[1] === 'embed' && parts[2]) return parts[2]
+    }
+  } catch {}
+  return null
 }
 
 function getYouTubeEmbedUrl(id) {
@@ -403,9 +417,10 @@ export default function LessonPage() {
       )
     }
 
-    if (isYouTubeId(lesson.cloudflare_video_id)) {
+    const ytId = extractYouTubeId(lesson.cloudflare_video_id)
+    if (ytId) {
       return (
-        <iframe src={getYouTubeEmbedUrl(lesson.cloudflare_video_id)} className="w-full h-full"
+        <iframe src={getYouTubeEmbedUrl(ytId)} className="w-full h-full"
           allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
           allowFullScreen title={lesson.title} />
       )
