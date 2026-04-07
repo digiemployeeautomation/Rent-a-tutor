@@ -320,13 +320,18 @@ export default function LessonPage() {
       setLesson(lessonData)
 
       if (u) {
-        const { data: purchase } = await supabase
-          .from('lesson_purchases')
-          .select('id')
-          .eq('student_id', u.id)
-          .eq('lesson_id', lessonId)
-          .maybeSingle()
-        setHasPurchased(!!purchase)
+        // Tutor who owns this lesson can always preview it
+        if (lessonData.tutor_id === u.id) {
+          setHasPurchased(true)
+        } else {
+          const { data: purchase } = await supabase
+            .from('lesson_purchases')
+            .select('id')
+            .eq('student_id', u.id)
+            .eq('lesson_id', lessonId)
+            .maybeSingle()
+          setHasPurchased(!!purchase)
+        }
       }
 
       setLoading(false)
