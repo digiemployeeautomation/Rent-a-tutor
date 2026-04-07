@@ -4,14 +4,7 @@ import { useState, useEffect, useCallback } from 'react'
 import Link from 'next/link'
 import Navbar from '@/components/layout/Navbar'
 import { supabase } from '@/lib/supabase'
-
-const SUBJECTS = [
-  'Mathematics', 'English Language', 'Biology', 'Chemistry', 'Physics',
-  'Geography', 'History', 'Civic Education', 'Computer Studies',
-  'Additional Mathematics', 'Commerce', 'Principles of Accounts',
-  'French', 'Further Mathematics', 'Economics', 'Literature in English',
-  'Business Studies', 'Computer Science', 'Accounting',
-]
+import { SUBJECTS } from '@/lib/constants'
 
 const SORT_OPTIONS = [
   { value: 'popular',    label: 'Most popular'    },
@@ -49,6 +42,7 @@ export default function BrowseIndexPage() {
         tutors ( id, profiles ( full_name ) )
       `, { count: 'exact' })
       .eq('status', 'active')
+      .neq('flagged', true)
 
     if (search.trim()) {
       const escaped = search.trim().replace(/[%_\\]/g, c => `\\${c}`)

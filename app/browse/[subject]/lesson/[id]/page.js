@@ -295,6 +295,7 @@ export default function LessonPage() {
         `)
         .eq('id', lessonId)
         .eq('status', 'active')
+        .neq('flagged', true)
         .single()
 
       if (error || !lessonData) {

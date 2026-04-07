@@ -200,12 +200,14 @@ export default function TutorProfilePage() {
           .select('id, title, subject, form_level, price, duration_seconds, purchase_count')
           .eq('tutor_id', tutorData.user_id)
           .eq('status', 'active')
+          .neq('flagged', true)
           .order('purchase_count', { ascending: false })
           .limit(6),
         supabase
           .from('reviews')
           .select('id, rating, comment, created_at, profiles(full_name)')
           .eq('tutor_id', tutorData.user_id)
+          .neq('flagged', true)
           .order('created_at', { ascending: false })
           .limit(5),
       ])

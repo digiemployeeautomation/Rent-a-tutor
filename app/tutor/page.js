@@ -3,14 +3,7 @@ import { useState, useEffect, useCallback } from 'react'
 import Link from 'next/link'
 import Navbar from '@/components/layout/Navbar'
 import { supabase } from '@/lib/supabase'
-
-const SUBJECTS = [
-  'Mathematics', 'English Language', 'Biology', 'Chemistry', 'Physics',
-  'Geography', 'History', 'Civic Education', 'Computer Studies',
-  'Additional Mathematics', 'Commerce', 'Principles of Accounts',
-  'French', 'Further Mathematics', 'Economics', 'Literature in English',
-  'Business Studies', 'Computer Science', 'Accounting',
-]
+import { SUBJECTS } from '@/lib/constants'
 
 export default function FindTutorPage() {
   const [tutors, setTutors]         = useState([])

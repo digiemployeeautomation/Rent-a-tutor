@@ -59,7 +59,7 @@ export default function HomePage() {
         .from('subjects').select('id, name, level').eq('curriculum', 'ecz').order('name')
 
       const { data: lessonRows } = await supabase
-        .from('lessons').select('subject, status').eq('status', 'active')
+        .from('lessons').select('subject, status').eq('status', 'active').neq('flagged', true)
 
       const counts = {}
       lessonRows?.forEach(l => { counts[l.subject] = (counts[l.subject] ?? 0) + 1 })

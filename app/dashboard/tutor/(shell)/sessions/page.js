@@ -24,6 +24,7 @@ export default function TutorSessionsPage() {
   const [loading, setLoading]  = useState(true)
   const [tab, setTab]          = useState('upcoming')
   const [userId, setUserId]    = useState(null)
+  const [actionError, setActionError] = useState('')
 
   useEffect(() => {
     async function load() {
@@ -45,8 +46,13 @@ export default function TutorSessionsPage() {
   }, [router])
 
   async function updateStatus(id, status) {
+    setActionError('')
     const { error } = await supabase.from('bookings').update({ status }).eq('id', id).eq('tutor_id', userId)
-    if (error) { console.error('[sessions] update error:', error); return }
+    if (error) {
+      console.error('[sessions] update error:', error)
+      setActionError(`Failed to ${status === 'confirmed' ? 'accept' : status === 'cancelled' ? 'decline' : 'update'} session. Please try again.`)
+      return
+    }
     setBookings(prev => prev.map(b => b.id === id ? { ...b, status } : b))
   }
 
@@ -96,6 +102,10 @@ export default function TutorSessionsPage() {
             </button>
           ))}
         </div>
+
+        {actionError && (
+          <div className="bg-red-50 text-red-700 text-sm px-4 py-3 rounded-xl mb-4">{actionError}</div>
+        )}
 
         {shown.length === 0 ? (
           <div className="text-center py-20 border border-dashed border-gray-200 rounded-2xl">

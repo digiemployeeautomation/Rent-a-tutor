@@ -4,19 +4,7 @@ import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { supabase } from '@/lib/supabase'
-
-const SUBJECTS = [
-  'Mathematics', 'English Language', 'Biology', 'Chemistry', 'Physics',
-  'Geography', 'History', 'Civic Education', 'Computer Studies',
-  'Additional Mathematics', 'Commerce', 'Principles of Accounts',
-  'French', 'Further Mathematics', 'Economics', 'Literature in English',
-  'Business Studies', 'Computer Science', 'Accounting',
-]
-
-const FORM_LEVELS = [
-  'Form 1', 'Form 2', 'Form 3', 'Form 4 (O-Level)',
-  'Form 5', 'Form 6 (A-Level)',
-]
+import { SUBJECTS, FORM_LEVELS } from '@/lib/constants'
 
 export default function UploadLessonPage() {
   const router = useRouter()
@@ -76,7 +64,7 @@ export default function UploadLessonPage() {
     const { error: insertError } = await supabase
       .from('lessons')
       .insert({
-        tutor_id:            tutor.id,
+        tutor_id:            user.id,
         title:               title.trim(),
         subject,
         form_level:          formLevel,

@@ -3,14 +3,7 @@ import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { supabase } from '@/lib/supabase'
-
-const ALL_SUBJECTS = [
-  'Mathematics', 'English Language', 'Biology', 'Chemistry', 'Physics',
-  'Geography', 'History', 'Civic Education', 'Computer Studies',
-  'Additional Mathematics', 'Commerce', 'Principles of Accounts',
-  'French', 'Further Mathematics', 'Economics', 'Literature in English',
-  'Business Studies', 'Computer Science', 'Accounting',
-]
+import { SUBJECTS as ALL_SUBJECTS } from '@/lib/constants'
 
 export default function TutorProfilePage() {
   const router = useRouter()

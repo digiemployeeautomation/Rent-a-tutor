@@ -1,19 +1,9 @@
 'use client'
 import { useState } from 'react'
 import Link from 'next/link'
+import { SUBJECTS, FORM_LEVELS_WITH_UNSURE } from '@/lib/constants'
 
-const SUBJECTS = [
-  'Mathematics', 'English Language', 'Biology', 'Chemistry', 'Physics',
-  'Geography', 'History', 'Civic Education', 'Computer Studies',
-  'Additional Mathematics', 'Commerce', 'Principles of Accounts',
-  'French', 'Further Mathematics', 'Economics', 'Literature in English',
-  'Business Studies', 'Computer Science', 'Accounting',
-]
-
-const FORM_LEVELS = [
-  'Form 1', 'Form 2', 'Form 3', 'Form 4 (O-Level)',
-  'Form 5', 'Form 6 (A-Level)', 'Not sure',
-]
+const FORM_LEVELS = FORM_LEVELS_WITH_UNSURE
 
 const URGENCY_OPTIONS = [
   { value: 'normal', label: 'Normal', desc: 'No rush — any time works',      icon: '🟢' },
