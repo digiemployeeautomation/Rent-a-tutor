@@ -27,6 +27,9 @@ export default function Navbar() {
       setUser(user)
       if (user) fetchProfile(user.id)
       setLoading(false)
+    }).catch(err => {
+      console.error('[Navbar] auth error:', err)
+      setLoading(false)
     })
 
     const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {

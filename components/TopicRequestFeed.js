@@ -39,7 +39,8 @@ function ResponseModal({ request, tutorId, onClose, onResponded }) {
       })
 
     if (dbErr) {
-      setError(dbErr.code === '23505' ? 'You have already responded to this request.' : dbErr.message)
+      console.error('[ResponseModal]', dbErr)
+      setError(dbErr.code === '23505' ? 'You have already responded to this request.' : 'Failed to send response. Please try again.')
       setLoading(false)
       return
     }
@@ -117,7 +118,8 @@ export default function TopicRequestFeed({ tutorId, tutorSubjects = [] }) {
   const [responded, setResponded]   = useState(new Set())
 
   // Stabilize the array reference to prevent infinite re-render loops
-  const stableSubjects = useMemo(() => tutorSubjects, [JSON.stringify(tutorSubjects)])
+  const subjectsKey = tutorSubjects.join(',')
+  const stableSubjects = useMemo(() => tutorSubjects, [subjectsKey])
 
   const load = useCallback(async () => {
     setLoading(true)

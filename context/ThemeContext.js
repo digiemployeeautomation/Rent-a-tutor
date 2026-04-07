@@ -26,6 +26,9 @@ export function ThemeProvider({ children }) {
       const { data: profile } = await supabase
         .from('profiles').select('role').eq('id', user.id).single()
       applyRole(profile?.role ?? user.user_metadata?.role ?? 'student')
+    }).catch(err => {
+      console.error('[ThemeContext] auth error:', err)
+      applyRole('student')
     })
 
     const { data: { subscription } } = supabase.auth.onAuthStateChange(async (_event, session) => {

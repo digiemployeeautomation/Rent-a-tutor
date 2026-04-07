@@ -3,14 +3,8 @@ import { NextResponse } from 'next/server'
 import { createRouteHandlerClient } from '@supabase/auth-helpers-nextjs'
 import { cookies } from 'next/headers'
 import { verifyCsrf } from '@/lib/csrf'
-
-const SUBJECTS = [
-  'Mathematics', 'English Language', 'Biology', 'Chemistry', 'Physics',
-  'Geography', 'History', 'Civic Education', 'Computer Studies',
-  'Additional Mathematics', 'Commerce', 'Principles of Accounts',
-  'French', 'Further Mathematics', 'Economics', 'Literature in English',
-  'Business Studies', 'Computer Science', 'Accounting',
-]
+import { SUBJECTS } from '@/lib/constants'
+import { rateLimit } from '@/lib/rate-limit'
 
 const VALID_URGENCY = ['normal', 'urgent']
 const VALID_LEVELS  = ['Form 1','Form 2','Form 3','Form 4 (O-Level)','Form 5','Form 6 (A-Level)','Not sure','']
@@ -89,6 +83,10 @@ export async function POST(request) {
     if (!user) {
       return NextResponse.json({ error: 'You must be logged in to submit a request.' }, { status: 401 })
     }
+
+    // Rate limit: 5 requests per minute per user
+    const { limited } = rateLimit(`topic-req:${user.id}`, 5)
+    if (limited) return NextResponse.json({ error: 'Too many requests. Please wait a moment.' }, { status: 429 })
 
     const { data: profile } = await supabase
       .from('profiles').select('full_name, role').eq('id', user.id).single()
@@ -194,7 +192,10 @@ export async function GET(request) {
     // Tutors and admins can see all open requests
 
     const { data, error } = await query
-    if (error) return NextResponse.json({ error: error.message }, { status: 500 })
+    if (error) {
+      console.error('[topic-requests GET]', error)
+      return NextResponse.json({ error: 'Failed to load requests.' }, { status: 500 })
+    }
 
     return NextResponse.json({ requests: data ?? [] })
 
