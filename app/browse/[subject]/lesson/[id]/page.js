@@ -411,12 +411,12 @@ export default function LessonPage() {
       )
     }
 
-    // Validate Cloudflare Stream ID format (hex string, typically 32 chars)
-    const cfId = lesson.cloudflare_video_id
-    if (!/^[a-fA-F0-9]{32}$/.test(cfId)) {
+    // Validate Cloudflare Stream ID format (hex string, 32 chars, or UUID with dashes)
+    const cfId = lesson.cloudflare_video_id.replace(/-/g, '')
+    if (!/^[a-fA-F0-9]{32,}$/.test(cfId)) {
       return (
         <div className="w-full h-full flex items-center justify-center">
-          <p className="text-sm text-gray-400">Video unavailable</p>
+          <p className="text-sm text-gray-400">No video ID or valid format found</p>
         </div>
       )
     }
