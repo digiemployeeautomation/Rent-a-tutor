@@ -21,7 +21,7 @@ export async function POST(request) {
     }
 
     // Rate limit: 20 verify attempts per minute per user (polling)
-    const { limited } = rateLimit(`pay-verify:${user.id}`, 20)
+    const { limited } = await rateLimit(`pay-verify:${user.id}`, 20)
     if (limited) return NextResponse.json({ error: 'Too many requests. Please wait.' }, { status: 429 })
 
     const { transactionId, lessonId } = await request.json()
@@ -125,7 +125,14 @@ export async function POST(request) {
 
     // Verify the gateway amount matches the lesson price
     const gatewayAmount = Number(muData.data?.amount)
-    if (!isNaN(gatewayAmount) && gatewayAmount !== amount) {
+    if (isNaN(gatewayAmount)) {
+      console.error(`[payment/verify] gateway returned non-numeric amount: ${muData.data?.amount}`)
+      return NextResponse.json(
+        { error: 'Payment service returned an invalid amount. Please contact support.' },
+        { status: 502 }
+      )
+    }
+    if (gatewayAmount !== amount) {
       console.error(`[payment/verify] amount mismatch: gateway=${gatewayAmount}, lesson=${amount}`)
       return NextResponse.json(
         { error: 'Payment amount does not match lesson price.' },

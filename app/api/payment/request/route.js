@@ -21,7 +21,7 @@ export async function POST(request) {
     }
 
     // Rate limit: 10 payment requests per minute per user
-    const { limited } = rateLimit(`pay-req:${user.id}`, 10)
+    const { limited } = await rateLimit(`pay-req:${user.id}`, 10)
     if (limited) return NextResponse.json({ error: 'Too many requests. Please wait.' }, { status: 429 })
 
     const { phone, lessonId } = await request.json()
