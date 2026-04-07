@@ -286,6 +286,7 @@ export default function LessonPage() {
   const [hasPurchased, setHasPurchased] = useState(false)
   const [loading, setLoading]           = useState(true)
   const [showModal, setShowModal]       = useState(false)
+  const [isTheater, setIsTheater]       = useState(false)
 
   const lessonId = params?.id
   const subject  = params?.subject ? decodeURIComponent(params.subject) : ''
@@ -371,6 +372,18 @@ export default function LessonPage() {
     setLesson(l => ({ ...l, purchase_count: (l.purchase_count ?? 0) + 1 }))
   }
 
+  // Keyboard shortcuts: T = theater, F = fullscreen, Esc = exit theater
+  useEffect(() => {
+    if (!hasPurchased) return
+    function onKey(e) {
+      if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return
+      if (e.key === 't' || e.key === 'T') setIsTheater(t => !t)
+      if (e.key === 'Escape' && isTheater) setIsTheater(false)
+    }
+    window.addEventListener('keydown', onKey)
+    return () => window.removeEventListener('keydown', onKey)
+  }, [hasPurchased, isTheater])
+
   function handleBuyClick() {
     if (!user) {
       router.push(`/auth/login?redirectTo=/browse/${encodeURIComponent(subject)}/lesson/${lessonId}`)
@@ -401,6 +414,40 @@ export default function LessonPage() {
   const rating    = tutor?.avg_rating?.toFixed(1) ?? null
 
   function VideoPlayer() {
+    const [isFullscreen, setIsFullscreen] = useState(false)
+    const [playbackRate, setPlaybackRate] = useState(1)
+    const [showRateMenu, setShowRateMenu] = useState(false)
+    const containerRef = useRef(null)
+    const iframeRef    = useRef(null)
+
+    // Fullscreen toggle
+    function toggleFullscreen() {
+      if (!containerRef.current) return
+      if (!document.fullscreenElement) {
+        containerRef.current.requestFullscreen().catch(() => {})
+      } else {
+        document.exitFullscreen().catch(() => {})
+      }
+    }
+
+    useEffect(() => {
+      function onFsChange() { setIsFullscreen(!!document.fullscreenElement) }
+      document.addEventListener('fullscreenchange', onFsChange)
+      return () => document.removeEventListener('fullscreenchange', onFsChange)
+    }, [])
+
+    // Playback rate (YouTube only — posts message to iframe)
+    function changeRate(rate) {
+      setPlaybackRate(rate)
+      setShowRateMenu(false)
+      if (iframeRef.current?.contentWindow) {
+        iframeRef.current.contentWindow.postMessage(JSON.stringify({
+          event: 'command', func: 'setPlaybackRate', args: [rate]
+        }), '*')
+      }
+    }
+
+    // Locked state
     if (!hasPurchased || !lesson.cloudflare_video_id) {
       return (
         <div className="w-full h-full flex flex-col items-center justify-center relative select-none">
@@ -423,17 +470,10 @@ export default function LessonPage() {
     }
 
     const ytId = extractYouTubeId(lesson.cloudflare_video_id)
-    if (ytId) {
-      return (
-        <iframe src={getYouTubeEmbedUrl(ytId)} className="w-full h-full"
-          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-          allowFullScreen title={lesson.title} />
-      )
-    }
+    const cfId = !ytId ? lesson.cloudflare_video_id.replace(/-/g, '') : null
+    const isCf = cfId && /^[a-fA-F0-9]{32,}$/.test(cfId)
 
-    // Validate Cloudflare Stream ID format (hex string, 32 chars, or UUID with dashes)
-    const cfId = lesson.cloudflare_video_id.replace(/-/g, '')
-    if (!/^[a-fA-F0-9]{32,}$/.test(cfId)) {
+    if (!ytId && !isCf) {
       return (
         <div className="w-full h-full flex items-center justify-center">
           <p className="text-sm text-gray-400">No video ID or valid format found</p>
@@ -441,10 +481,61 @@ export default function LessonPage() {
       )
     }
 
+    const iframeSrc = ytId
+      ? `https://www.youtube.com/embed/${ytId}?rel=0&modestbranding=1&enablejsapi=1`
+      : `https://iframe.cloudflarestream.com/${cfId}`
+
+    const RATES = [0.5, 0.75, 1, 1.25, 1.5, 1.75, 2]
+
     return (
-      <iframe src={`https://iframe.cloudflarestream.com/${cfId}`} className="w-full h-full"
-        allow="accelerometer; gyroscope; autoplay; encrypted-media; picture-in-picture"
-        allowFullScreen title={lesson.title} />
+      <div ref={containerRef} className="relative group w-full h-full bg-black">
+        <iframe ref={iframeRef} src={iframeSrc} className="w-full h-full"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; fullscreen"
+          allowFullScreen title={lesson.title} />
+
+        {/* Control bar — slides up on hover */}
+        <div className="absolute bottom-0 left-0 right-0 flex items-center justify-between px-3 py-2
+          opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none group-hover:pointer-events-auto"
+          style={{ background: 'linear-gradient(transparent, rgba(0,0,0,0.7))' }}>
+          <div className="flex items-center gap-2">
+            {/* Playback speed (YouTube) */}
+            {ytId && (
+              <div className="relative">
+                <button onClick={() => setShowRateMenu(o => !o)}
+                  className="text-white text-xs px-2 py-1 rounded hover:bg-white/20 transition font-medium">
+                  {playbackRate}x
+                </button>
+                {showRateMenu && (
+                  <div className="absolute bottom-full left-0 mb-1 bg-gray-900/95 rounded-lg py-1 shadow-lg backdrop-blur-sm">
+                    {RATES.map(r => (
+                      <button key={r} onClick={() => changeRate(r)}
+                        className="block w-full text-left text-xs px-4 py-1.5 hover:bg-white/10 transition"
+                        style={{ color: r === playbackRate ? '#e8c84a' : '#fff' }}>
+                        {r}x
+                      </button>
+                    ))}
+                  </div>
+                )}
+              </div>
+            )}
+          </div>
+
+          <div className="flex items-center gap-1">
+            {/* Theater mode */}
+            <button onClick={() => setIsTheater(t => !t)}
+              className="text-white text-xs px-2 py-1 rounded hover:bg-white/20 transition"
+              title={isTheater ? 'Exit theater mode' : 'Theater mode'}>
+              {isTheater ? '⊟' : '⊞'}
+            </button>
+            {/* Fullscreen */}
+            <button onClick={toggleFullscreen}
+              className="text-white text-xs px-2 py-1 rounded hover:bg-white/20 transition"
+              title={isFullscreen ? 'Exit fullscreen' : 'Fullscreen'}>
+              {isFullscreen ? '⊠' : '⛶'}
+            </button>
+          </div>
+        </div>
+      </div>
     )
   }
 
@@ -468,7 +559,14 @@ export default function LessonPage() {
         </nav>
       </div>
 
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 py-8 grid grid-cols-1 lg:grid-cols-3 gap-8">
+      {/* Theater mode: full-width video above, then normal layout below */}
+      {isTheater && hasPurchased && lesson.cloudflare_video_id && (
+        <div className="w-full bg-black" style={{ aspectRatio: '21/9', maxHeight: '75vh' }}>
+          <VideoPlayer />
+        </div>
+      )}
+
+      <div className={`${isTheater ? 'max-w-5xl' : 'max-w-4xl'} mx-auto px-4 sm:px-6 py-8 grid grid-cols-1 lg:grid-cols-3 gap-8 transition-all`}>
 
         {/* Left column */}
         <div className="lg:col-span-2 space-y-6">
@@ -494,10 +592,12 @@ export default function LessonPage() {
             </div>
           </div>
 
-          <div className="rounded-2xl overflow-hidden border border-gray-200"
-            style={{ aspectRatio: '16/9', backgroundColor: 'var(--color-primary)' }}>
-            <VideoPlayer />
-          </div>
+          {!isTheater && (
+            <div className="rounded-2xl overflow-hidden border border-gray-200"
+              style={{ aspectRatio: '16/9', backgroundColor: 'var(--color-primary)' }}>
+              <VideoPlayer />
+            </div>
+          )}
 
           {lesson.description && (
             <div className="bg-white border border-gray-200 rounded-2xl p-6">
