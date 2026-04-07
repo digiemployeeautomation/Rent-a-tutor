@@ -42,7 +42,7 @@ export default function BrowseIndexPage() {
         tutors ( id, profiles ( full_name ) )
       `, { count: 'exact' })
       .eq('status', 'active')
-      .neq('flagged', true)
+      .or('flagged.is.null,flagged.eq.false')
 
     if (search.trim()) {
       const escaped = search.trim().replace(/[%_\\]/g, c => `\\${c}`)

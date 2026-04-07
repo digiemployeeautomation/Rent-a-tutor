@@ -73,6 +73,7 @@ export default function UploadLessonPage() {
         cloudflare_video_id: videoId.trim() || null,
         duration_seconds:    durationSecs,
         status:              tutor.is_approved ? 'active' : 'draft',
+        flagged:             false,
         purchase_count:      0,
       })
 

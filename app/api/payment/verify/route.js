@@ -52,7 +52,7 @@ export async function POST(request) {
       .select('id, price, status')
       .eq('id', lessonId)
       .eq('status', 'active')
-      .neq('flagged', true)
+      .or('flagged.is.null,flagged.eq.false')
       .single()
 
     if (lessonError || !lesson) {
