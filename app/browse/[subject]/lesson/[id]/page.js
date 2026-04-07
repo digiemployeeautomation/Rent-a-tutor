@@ -36,10 +36,6 @@ function extractYouTubeId(input) {
   return null
 }
 
-function getYouTubeEmbedUrl(id) {
-  return `https://www.youtube.com/embed/${id}?rel=0&modestbranding=1`
-}
-
 const NETWORKS = [
   { id: 'airtel', label: 'Airtel Money',   hint: 'Numbers starting 097 or 096', bg: '#d00000', color: '#fff'    },
   { id: 'mtn',    label: 'MTN MoMo',       hint: 'Numbers starting 076 or 077', bg: '#ffc107', color: '#1a1a1a' },
@@ -372,11 +368,11 @@ export default function LessonPage() {
     setLesson(l => ({ ...l, purchase_count: (l.purchase_count ?? 0) + 1 }))
   }
 
-  // Keyboard shortcuts: T = theater, F = fullscreen, Esc = exit theater
+  // Keyboard shortcuts: T = theater, Esc = exit theater
   useEffect(() => {
     if (!hasPurchased) return
     function onKey(e) {
-      if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return
+      if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA' || e.target.tagName === 'SELECT') return
       if (e.key === 't' || e.key === 'T') setIsTheater(t => !t)
       if (e.key === 'Escape' && isTheater) setIsTheater(false)
     }
@@ -417,17 +413,122 @@ export default function LessonPage() {
     const [isFullscreen, setIsFullscreen] = useState(false)
     const [playbackRate, setPlaybackRate] = useState(1)
     const [showRateMenu, setShowRateMenu] = useState(false)
-    const containerRef = useRef(null)
-    const iframeRef    = useRef(null)
+    const [playing, setPlaying]           = useState(false)
+    const [ended, setEnded]               = useState(false)
+    const [currentTime, setCurrentTime]   = useState(0)
+    const [videoDuration, setVideoDuration] = useState(0)
+    const [showControls, setShowControls] = useState(true)
+    const [seeking, setSeeking]           = useState(false)
 
-    // Fullscreen toggle
+    const containerRef = useRef(null)
+    const ytPlayerRef  = useRef(null)
+    const streamRef    = useRef(null)
+    const ytDivRef     = useRef(null)
+    const hideTimer    = useRef(null)
+    const pollTimer    = useRef(null)
+
+    const ytId = extractYouTubeId(lesson.cloudflare_video_id)
+    const cfId = !ytId ? lesson.cloudflare_video_id.replace(/-/g, '') : null
+    const isCf = cfId && /^[a-fA-F0-9]{32,}$/.test(cfId)
+
+    // Format seconds as m:ss or h:mm:ss
+    function fmtTime(s) {
+      if (!s || isNaN(s)) return '0:00'
+      const secs = Math.floor(s)
+      const h = Math.floor(secs / 3600)
+      const m = Math.floor((secs % 3600) / 60)
+      const sec = secs % 60
+      if (h > 0) return `${h}:${String(m).padStart(2, '0')}:${String(sec).padStart(2, '0')}`
+      return `${m}:${String(sec).padStart(2, '0')}`
+    }
+
+    // ── YouTube IFrame Player API ───────────────────────────────
+    useEffect(() => {
+      if (!ytId) return
+      let player = null
+
+      function onReady(e) {
+        ytPlayerRef.current = e.target
+        setVideoDuration(e.target.getDuration())
+      }
+
+      function onStateChange(e) {
+        // YT states: -1 unstarted, 0 ended, 1 playing, 2 paused, 3 buffering
+        setPlaying(e.data === 1 || e.data === 3)
+        setEnded(e.data === 0)
+        if (e.data === 1) {
+          setVideoDuration(ytPlayerRef.current?.getDuration() || 0)
+        }
+      }
+
+      function createPlayer() {
+        if (!window.YT?.Player || !ytDivRef.current) return
+        player = new window.YT.Player(ytDivRef.current, {
+          videoId: ytId,
+          playerVars: { rel: 0, modestbranding: 1, playsinline: 1 },
+          events: { onReady, onStateChange },
+        })
+      }
+
+      if (window.YT?.Player) {
+        createPlayer()
+      } else {
+        window.onYouTubeIframeAPIReady = createPlayer
+        if (!document.querySelector('script[src*="youtube.com/iframe_api"]')) {
+          const tag = document.createElement('script')
+          tag.src = 'https://www.youtube.com/iframe_api'
+          document.head.appendChild(tag)
+        }
+      }
+
+      return () => { if (player?.destroy) player.destroy(); ytPlayerRef.current = null }
+    }, [ytId])
+
+    // ── Cloudflare Stream element ───────────────────────────────
+    useEffect(() => {
+      if (!isCf) return
+      // Load Cloudflare Stream SDK
+      if (!document.querySelector('script[src*="cloudflarestream.com/embed/sdk"]')) {
+        const tag = document.createElement('script')
+        tag.src = 'https://embed.cloudflarestream.com/embed/sdk.latest.js'
+        tag.defer = true
+        document.head.appendChild(tag)
+      }
+
+      function bindStream() {
+        const el = streamRef.current
+        if (!el) return
+        el.addEventListener('play', () => { setPlaying(true); setEnded(false) })
+        el.addEventListener('pause', () => setPlaying(false))
+        el.addEventListener('ended', () => { setPlaying(false); setEnded(true) })
+        el.addEventListener('loadedmetadata', () => setVideoDuration(el.duration || 0))
+        el.addEventListener('timeupdate', () => { if (!seeking) setCurrentTime(el.currentTime || 0) })
+      }
+
+      // Wait for element to be ready
+      const check = setInterval(() => {
+        if (streamRef.current) { bindStream(); clearInterval(check) }
+      }, 200)
+      return () => clearInterval(check)
+    }, [isCf, seeking])
+
+    // ── Poll YouTube time (no timeupdate event on iframe) ───────
+    useEffect(() => {
+      if (!ytId) return
+      pollTimer.current = setInterval(() => {
+        const p = ytPlayerRef.current
+        if (p?.getCurrentTime && !seeking) {
+          setCurrentTime(p.getCurrentTime())
+        }
+      }, 250)
+      return () => clearInterval(pollTimer.current)
+    }, [ytId, seeking])
+
+    // ── Fullscreen ──────────────────────────────────────────────
     function toggleFullscreen() {
       if (!containerRef.current) return
-      if (!document.fullscreenElement) {
-        containerRef.current.requestFullscreen().catch(() => {})
-      } else {
-        document.exitFullscreen().catch(() => {})
-      }
+      if (!document.fullscreenElement) containerRef.current.requestFullscreen().catch(() => {})
+      else document.exitFullscreen().catch(() => {})
     }
 
     useEffect(() => {
@@ -436,18 +537,65 @@ export default function LessonPage() {
       return () => document.removeEventListener('fullscreenchange', onFsChange)
     }, [])
 
-    // Playback rate (YouTube only — posts message to iframe)
-    function changeRate(rate) {
-      setPlaybackRate(rate)
-      setShowRateMenu(false)
-      if (iframeRef.current?.contentWindow) {
-        iframeRef.current.contentWindow.postMessage(JSON.stringify({
-          event: 'command', func: 'setPlaybackRate', args: [rate]
-        }), '*')
+    // ── Auto-hide controls ──────────────────────────────────────
+    function onMouseMove() {
+      setShowControls(true)
+      clearTimeout(hideTimer.current)
+      if (playing) {
+        hideTimer.current = setTimeout(() => setShowControls(false), 3000)
       }
     }
 
-    // Locked state
+    useEffect(() => {
+      if (!playing) setShowControls(true)
+    }, [playing])
+
+    // ── Player actions ──────────────────────────────────────────
+    function togglePlay() {
+      if (ended) { replay(); return }
+      if (ytId) {
+        const p = ytPlayerRef.current
+        if (!p) return
+        playing ? p.pauseVideo() : p.playVideo()
+      } else {
+        const el = streamRef.current
+        if (!el) return
+        playing ? el.pause() : el.play()
+      }
+    }
+
+    function seekTo(time) {
+      const t = Math.max(0, Math.min(time, videoDuration))
+      setCurrentTime(t)
+      if (ytId) ytPlayerRef.current?.seekTo(t, true)
+      else if (streamRef.current) streamRef.current.currentTime = t
+    }
+
+    function skip(delta) {
+      seekTo(currentTime + delta)
+    }
+
+    function changeRate(rate) {
+      setPlaybackRate(rate)
+      setShowRateMenu(false)
+      if (ytId) ytPlayerRef.current?.setPlaybackRate(rate)
+      else if (streamRef.current) streamRef.current.playbackRate = rate
+    }
+
+    function replay() {
+      setEnded(false)
+      seekTo(0)
+      if (ytId) ytPlayerRef.current?.playVideo()
+      else streamRef.current?.play()
+    }
+
+    function onBarClick(e) {
+      const rect = e.currentTarget.getBoundingClientRect()
+      const pct = Math.max(0, Math.min(1, (e.clientX - rect.left) / rect.width))
+      seekTo(pct * videoDuration)
+    }
+
+    // ── Locked state ────────────────────────────────────────────
     if (!hasPurchased || !lesson.cloudflare_video_id) {
       return (
         <div className="w-full h-full flex flex-col items-center justify-center relative select-none">
@@ -469,10 +617,6 @@ export default function LessonPage() {
       )
     }
 
-    const ytId = extractYouTubeId(lesson.cloudflare_video_id)
-    const cfId = !ytId ? lesson.cloudflare_video_id.replace(/-/g, '') : null
-    const isCf = cfId && /^[a-fA-F0-9]{32,}$/.test(cfId)
-
     if (!ytId && !isCf) {
       return (
         <div className="w-full h-full flex items-center justify-center">
@@ -481,35 +625,109 @@ export default function LessonPage() {
       )
     }
 
-    const iframeSrc = ytId
-      ? `https://www.youtube.com/embed/${ytId}?rel=0&modestbranding=1&enablejsapi=1`
-      : `https://iframe.cloudflarestream.com/${cfId}`
-
+    const progress = videoDuration > 0 ? (currentTime / videoDuration) * 100 : 0
     const RATES = [0.5, 0.75, 1, 1.25, 1.5, 1.75, 2]
 
     return (
-      <div ref={containerRef} className="relative group w-full h-full bg-black">
-        <iframe ref={iframeRef} src={iframeSrc} className="w-full h-full"
-          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; fullscreen"
-          allowFullScreen title={lesson.title} />
+      <div ref={containerRef} className="relative w-full h-full bg-black select-none"
+        onMouseMove={onMouseMove} onMouseLeave={() => { if (playing) setShowControls(false) }}>
 
-        {/* Control bar — slides up on hover */}
-        <div className="absolute bottom-0 left-0 right-0 flex items-center justify-between px-3 py-2
-          opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none group-hover:pointer-events-auto"
-          style={{ background: 'linear-gradient(transparent, rgba(0,0,0,0.7))' }}>
-          <div className="flex items-center gap-2">
-            {/* Playback speed (YouTube) */}
-            {ytId && (
+        {/* Video element */}
+        {ytId ? (
+          <div ref={ytDivRef} className="w-full h-full" />
+        ) : (
+          <stream ref={streamRef} src={cfId}
+            className="w-full h-full" style={{ display: 'block', width: '100%', height: '100%' }}
+            preload="auto" />
+        )}
+
+        {/* Center play/pause overlay — click to toggle */}
+        <div className="absolute inset-0 z-10" onClick={togglePlay} />
+
+        {/* Replay overlay */}
+        {ended && (
+          <div className="absolute inset-0 z-20 flex flex-col items-center justify-center bg-black/60">
+            <button onClick={replay}
+              className="w-20 h-20 rounded-full flex items-center justify-center text-3xl mb-3 hover:scale-110 transition-transform"
+              style={{ backgroundColor: 'rgba(255,255,255,0.15)', backdropFilter: 'blur(4px)' }}>
+              <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M1 4v6h6" /><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10" />
+              </svg>
+            </button>
+            <p className="text-white text-sm font-medium">Replay</p>
+          </div>
+        )}
+
+        {/* Controls overlay */}
+        <div className={`absolute bottom-0 left-0 right-0 z-30 transition-opacity duration-300 ${showControls || !playing ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}
+          style={{ background: 'linear-gradient(transparent, rgba(0,0,0,0.8))' }}>
+
+          {/* Progress bar */}
+          <div className="px-3 pt-3 group/bar">
+            <div className="relative h-1 group-hover/bar:h-1.5 transition-all rounded-full cursor-pointer"
+              style={{ backgroundColor: 'rgba(255,255,255,0.2)' }}
+              onClick={onBarClick}
+              onMouseDown={(e) => {
+                setSeeking(true)
+                onBarClick(e)
+                function onMove(ev) { onBarClick({ currentTarget: e.currentTarget, clientX: ev.clientX }) }
+                function onUp() { setSeeking(false); document.removeEventListener('mousemove', onMove); document.removeEventListener('mouseup', onUp) }
+                document.addEventListener('mousemove', onMove)
+                document.addEventListener('mouseup', onUp)
+              }}>
+              <div className="absolute top-0 left-0 h-full rounded-full transition-all"
+                style={{ width: `${progress}%`, backgroundColor: '#e8c84a' }} />
+              <div className="absolute top-1/2 -translate-y-1/2 w-3 h-3 rounded-full opacity-0 group-hover/bar:opacity-100 transition-opacity"
+                style={{ left: `${progress}%`, transform: `translateX(-50%) translateY(-50%)`, backgroundColor: '#e8c84a' }} />
+            </div>
+          </div>
+
+          {/* Button row */}
+          <div className="flex items-center justify-between px-3 py-2">
+            <div className="flex items-center gap-1">
+              {/* Play / Pause */}
+              <button onClick={togglePlay} className="text-white p-1.5 rounded hover:bg-white/20 transition" title={playing ? 'Pause' : 'Play'}>
+                {playing ? (
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="white"><rect x="6" y="4" width="4" height="16" rx="1" /><rect x="14" y="4" width="4" height="16" rx="1" /></svg>
+                ) : (
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="white"><polygon points="5,3 19,12 5,21" /></svg>
+                )}
+              </button>
+
+              {/* Skip back 10s */}
+              <button onClick={() => skip(-10)} className="text-white p-1.5 rounded hover:bg-white/20 transition" title="Back 10s">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M1 4v6h6" /><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10" />
+                  <text x="12" y="16" fill="white" stroke="none" fontSize="7" fontWeight="bold" textAnchor="middle">10</text>
+                </svg>
+              </button>
+
+              {/* Skip forward 10s */}
+              <button onClick={() => skip(10)} className="text-white p-1.5 rounded hover:bg-white/20 transition" title="Forward 10s">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M23 4v6h-6" /><path d="M20.49 15a9 9 0 1 1-2.13-9.36L23 10" />
+                  <text x="12" y="16" fill="white" stroke="none" fontSize="7" fontWeight="bold" textAnchor="middle">10</text>
+                </svg>
+              </button>
+
+              {/* Time display */}
+              <span className="text-white text-xs ml-2 tabular-nums">
+                {fmtTime(currentTime)} / {fmtTime(videoDuration)}
+              </span>
+            </div>
+
+            <div className="flex items-center gap-1">
+              {/* Playback speed */}
               <div className="relative">
                 <button onClick={() => setShowRateMenu(o => !o)}
                   className="text-white text-xs px-2 py-1 rounded hover:bg-white/20 transition font-medium">
                   {playbackRate}x
                 </button>
                 {showRateMenu && (
-                  <div className="absolute bottom-full left-0 mb-1 bg-gray-900/95 rounded-lg py-1 shadow-lg backdrop-blur-sm">
+                  <div className="absolute bottom-full right-0 mb-1 bg-gray-900/95 rounded-lg py-1 shadow-lg backdrop-blur-sm">
                     {RATES.map(r => (
                       <button key={r} onClick={() => changeRate(r)}
-                        className="block w-full text-left text-xs px-4 py-1.5 hover:bg-white/10 transition"
+                        className="block w-full text-left text-xs px-4 py-1.5 hover:bg-white/10 transition whitespace-nowrap"
                         style={{ color: r === playbackRate ? '#e8c84a' : '#fff' }}>
                         {r}x
                       </button>
@@ -517,22 +735,31 @@ export default function LessonPage() {
                   </div>
                 )}
               </div>
-            )}
-          </div>
 
-          <div className="flex items-center gap-1">
-            {/* Theater mode */}
-            <button onClick={() => setIsTheater(t => !t)}
-              className="text-white text-xs px-2 py-1 rounded hover:bg-white/20 transition"
-              title={isTheater ? 'Exit theater mode' : 'Theater mode'}>
-              {isTheater ? '⊟' : '⊞'}
-            </button>
-            {/* Fullscreen */}
-            <button onClick={toggleFullscreen}
-              className="text-white text-xs px-2 py-1 rounded hover:bg-white/20 transition"
-              title={isFullscreen ? 'Exit fullscreen' : 'Fullscreen'}>
-              {isFullscreen ? '⊠' : '⛶'}
-            </button>
+              {/* Theater mode */}
+              <button onClick={() => setIsTheater(t => !t)}
+                className="text-white text-xs px-2 py-1 rounded hover:bg-white/20 transition"
+                title={isTheater ? 'Exit theater mode' : 'Theater mode'}>
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  {isTheater
+                    ? <><rect x="5" y="5" width="14" height="14" rx="2" /></>
+                    : <><rect x="2" y="4" width="20" height="16" rx="2" /></>}
+                </svg>
+              </button>
+
+              {/* Fullscreen */}
+              <button onClick={toggleFullscreen}
+                className="text-white text-xs px-2 py-1 rounded hover:bg-white/20 transition"
+                title={isFullscreen ? 'Exit fullscreen' : 'Fullscreen'}>
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  {isFullscreen ? (
+                    <><polyline points="4 14 10 14 10 20" /><polyline points="20 10 14 10 14 4" /><line x1="14" y1="10" x2="21" y2="3" /><line x1="3" y1="21" x2="10" y2="14" /></>
+                  ) : (
+                    <><polyline points="15 3 21 3 21 9" /><polyline points="9 21 3 21 3 15" /><line x1="21" y1="3" x2="14" y2="10" /><line x1="3" y1="21" x2="10" y2="14" /></>
+                  )}
+                </svg>
+              </button>
+            </div>
           </div>
         </div>
       </div>
