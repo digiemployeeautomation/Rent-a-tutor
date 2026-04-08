@@ -2,7 +2,9 @@
 import { useState, useEffect, useRef } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
+import { Sun, Moon } from 'lucide-react'
 import { useTheme } from '@/context/ThemeContext'
+import { Toggle } from '@/components/ui/toggle'
 
 /* ── Icons (inline SVG — no extra deps) ─────────────────── */
 const Icon = ({ d, size = 15 }) => (
@@ -247,40 +249,23 @@ export default function ProfileDropdown({ user, profile, onLogout }) {
             ))}
 
             {/* Dark mode toggle */}
-            <button className="pd-item" role="menuitem" onClick={toggleDark} style={{ width: '100%' }}>
+            <div className="pd-item" role="menuitem" style={{ width: '100%' }}>
               <span className="pd-icon">
-                <Icon d={darkMode ? ICONS.sun : ICONS.moon} />
+                {darkMode ? <Sun size={15} /> : <Moon size={15} />}
               </span>
               <span style={{ flex: 1 }}>{darkMode ? 'Light mode' : 'Dark mode'}</span>
-              {/* Toggle pill */}
-              <span
-                role="switch"
-                aria-checked={darkMode}
+              <Toggle
+                pressed={darkMode}
+                onPressedChange={toggleDark}
                 aria-label="Toggle dark mode"
-                style={{
-                  display: 'inline-flex',
-                  alignItems: 'center',
-                  width: 34,
-                  height: 19,
-                  borderRadius: 99,
-                  backgroundColor: darkMode ? 'var(--color-primary-mid, #27500a)' : '#d1d5db',
-                  padding: '0 2px',
-                  transition: 'background-color 250ms ease',
-                  flexShrink: 0,
-                }}
+                size="sm"
+                className="dark-toggle"
               >
-                <span style={{
-                  width: 15,
-                  height: 15,
-                  borderRadius: '50%',
-                  backgroundColor: '#fff',
-                  boxShadow: '0 1px 3px rgba(0,0,0,0.20)',
-                  transform: darkMode ? 'translateX(15px)' : 'translateX(0)',
-                  transition: 'transform 250ms cubic-bezier(0.34,1.56,0.64,1)',
-                  display: 'block',
-                }} />
-              </span>
-            </button>
+                <span className="dark-toggle-track" data-pressed={darkMode || undefined}>
+                  <span className="dark-toggle-thumb" data-pressed={darkMode || undefined} />
+                </span>
+              </Toggle>
+            </div>
           </div>
 
           <div className="pd-divider" />
