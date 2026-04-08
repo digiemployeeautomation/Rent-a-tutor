@@ -5,6 +5,8 @@ import Navbar from '@/components/layout/Navbar'
 import { supabase } from '@/lib/supabase'
 import { Spinner } from '@/components/ui/spinner'
 import { SUBJECTS, BADGE_LABELS } from '@/lib/constants'
+import { StarRating } from '@/components/ui/star-rating'
+import { FadeIn } from '@/components/ui/fade-in'
 
 export default function FindTutorPage() {
   const [tutors, setTutors]         = useState([])
@@ -183,7 +185,7 @@ export default function FindTutorPage() {
                     const avatar   = t.profiles?.avatar_url
                     return (
                       <Link key={t.id} href={`/tutor/${t.id}`}
-                        className="bg-white border border-gray-200 rounded-xl p-5 hover:border-gray-300 hover:shadow-sm transition flex flex-col">
+                        className="bg-white border border-gray-200 rounded-xl p-5 card-hover flex flex-col">
 
                         {/* Avatar + featured badge */}
                         <div className="flex items-start justify-between mb-3">
@@ -218,8 +220,9 @@ export default function FindTutorPage() {
                         </p>
 
                         <div className="flex items-center justify-between border-t border-gray-100 pt-3 mt-auto">
-                          <span className="text-xs text-gray-500">
-                            ★ {t.avg_rating?.toFixed(1) ?? '—'} · {t.total_reviews ?? 0} review{t.total_reviews !== 1 ? 's' : ''}
+                          <span className="flex items-center gap-1.5 text-xs text-gray-500">
+                            <StarRating rating={t.avg_rating ?? 0} size={11} className="text-amber-400" />
+                            {t.total_reviews ?? 0} review{t.total_reviews !== 1 ? 's' : ''}
                           </span>
                           <span className="text-sm font-medium" style={{ color: 'var(--color-primary-lit)' }}>
                             K{t.hourly_rate_kwacha}/hr

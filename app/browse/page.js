@@ -4,8 +4,10 @@ import { useState, useEffect, useCallback } from 'react'
 import Link from 'next/link'
 import Navbar from '@/components/layout/Navbar'
 import { supabase } from '@/lib/supabase'
-import { SUBJECTS } from '@/lib/constants'
+import { SUBJECTS, SUBJECT_GRADIENTS, SUBJECT_ICONS } from '@/lib/constants'
 import { Spinner } from '@/components/ui/spinner'
+import { FadeIn } from '@/components/ui/fade-in'
+import { EmptyState } from '@/components/ui/empty-state'
 
 const SORT_OPTIONS = [
   { value: 'popular',    label: 'Most popular'    },
@@ -208,47 +210,52 @@ export default function BrowseIndexPage() {
                 ))}
               </div>
             ) : lessons.length === 0 ? (
-              <div className="text-center py-20 border border-dashed border-gray-200 rounded-2xl">
-                <p className="text-sm text-gray-400 mb-1">No lessons found.</p>
-                <p className="text-xs text-gray-300">Try adjusting your filters or search term.</p>
-                {hasActiveFilters && (
-                  <button onClick={clearFilters}
-                    className="mt-4 text-xs px-4 py-2 rounded-lg"
-                    style={{ backgroundColor: 'var(--color-btn-bg)', color: 'var(--color-btn-text)' }}>
-                    Clear filters
-                  </button>
-                )}
-              </div>
+              <EmptyState
+                type="search"
+                title="No lessons found."
+                description="Try adjusting your filters or search term."
+                actionLabel={hasActiveFilters ? 'Clear filters' : undefined}
+                actionHref={hasActiveFilters ? '/browse' : undefined}
+              />
             ) : (
               <>
                 <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4">
-                  {lessons.map(l => {
+                  {lessons.map((l, i) => {
                     const tutorName = l.tutors?.profiles?.full_name ?? 'Tutor'
                     const duration  = formatDuration(l.duration_seconds)
+                    const gradient  = SUBJECT_GRADIENTS[l.subject] ?? 'subject-gradient-default'
+                    const icon      = SUBJECT_ICONS[l.subject] ?? l.subject?.slice(0, 2)
                     return (
-                      <div key={l.id}
-                        className="bg-white border border-gray-200 rounded-xl p-4 hover:border-gray-300 transition flex flex-col">
-                        <div className="flex items-start justify-between mb-3">
-                          <span className="text-xs px-2 py-0.5 rounded-full"
+                      <FadeIn key={l.id} delay={i * 40}>
+                      <div
+                        className="bg-white border border-gray-200 rounded-xl overflow-hidden card-hover flex flex-col">
+                        <div className={`${gradient} px-4 pt-4 pb-3 flex items-center justify-between`}>
+                          <div className="flex items-center gap-2">
+                            <span className="text-lg opacity-60">{icon}</span>
+                            <span className="text-xs font-medium text-gray-600">{l.subject}</span>
+                          </div>
+                          {duration && <span className="text-xs text-gray-400">{duration}</span>}
+                        </div>
+                        <div className="p-4 flex flex-col flex-1">
+                          <span className="text-xs px-2 py-0.5 rounded-full w-fit mb-2"
                             style={{ backgroundColor: 'var(--color-surface)', color: 'var(--color-primary-mid)' }}>
                             {l.form_level ?? 'All levels'}
                           </span>
-                          {duration && <span className="text-xs text-gray-400">{duration}</span>}
-                        </div>
-                        <span className="text-xs text-gray-400 mb-1">{l.subject}</span>
-                        <h3 className="text-sm font-medium text-gray-800 leading-snug mb-1 flex-1">{l.title}</h3>
-                        <p className="text-xs text-gray-400 mb-4">by {tutorName}</p>
-                        <div className="flex items-center justify-between border-t border-gray-100 pt-3 mt-auto">
-                          <span className="text-xs text-gray-400">
-                            {l.purchase_count ?? 0} purchase{l.purchase_count !== 1 ? 's' : ''}
-                          </span>
-                          <Link href={`/browse/${encodeURIComponent(l.subject)}/lesson/${l.id}`}
-                            className="text-xs font-medium px-3 py-1.5 rounded-lg"
-                            style={{ backgroundColor: '#e8c84a', color: '#1a2a00' }}>
-                            Buy — K{l.price}
-                          </Link>
+                          <h3 className="text-sm font-medium text-gray-800 leading-snug mb-1 flex-1">{l.title}</h3>
+                          <p className="text-xs text-gray-400 mb-4">by {tutorName}</p>
+                          <div className="flex items-center justify-between border-t border-gray-100 pt-3 mt-auto">
+                            <span className="text-xs text-gray-400">
+                              {l.purchase_count ?? 0} purchase{l.purchase_count !== 1 ? 's' : ''}
+                            </span>
+                            <Link href={`/browse/${encodeURIComponent(l.subject)}/lesson/${l.id}`}
+                              className="text-xs font-medium px-3 py-1.5 rounded-lg hover:scale-105 transition"
+                              style={{ backgroundColor: '#e8c84a', color: '#1a2a00' }}>
+                              Buy — K{l.price}
+                            </Link>
+                          </div>
                         </div>
                       </div>
+                      </FadeIn>
                     )
                   })}
                 </div>

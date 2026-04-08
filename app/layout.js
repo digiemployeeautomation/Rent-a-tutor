@@ -1,6 +1,7 @@
 import './globals.css'
 import { cookies } from 'next/headers'
 import { ThemeProvider } from '@/context/ThemeContext'
+import { ToastProvider } from '@/components/ui/toast'
 
 export const metadata = {
   title: 'Rent a Tutor',
@@ -16,10 +17,12 @@ export default async function RootLayout({ children }) {
   const theme       = roleCookie === 'tutor' ? 'tutor' : 'student'
 
   return (
-    <html lang="en" data-theme={theme}>
+    <html lang="en" data-theme={theme} data-dark="auto">
       <body>
         <ThemeProvider>
-          {children}
+          <ToastProvider>
+            {children}
+          </ToastProvider>
         </ThemeProvider>
       </body>
     </html>

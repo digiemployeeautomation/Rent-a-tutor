@@ -2,9 +2,13 @@
 'use client'
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
+import Image from 'next/image'
 import Navbar from '@/components/layout/Navbar'
 import { supabase } from '@/lib/supabase'
-import { BADGE_LABELS } from '@/lib/constants'
+import { BADGE_LABELS, SUBJECT_ICONS } from '@/lib/constants'
+import { StarRating } from '@/components/ui/star-rating'
+import { FadeIn } from '@/components/ui/fade-in'
+import { EmptyState } from '@/components/ui/empty-state'
 
 const subjectMeta = {
   'Mathematics':      { initials: 'Math', bg: 'bg-sage-100',   text: 'text-forest-600'  },
@@ -104,70 +108,77 @@ export default function HomePage() {
       <Navbar />
 
       {/* Hero */}
-      <section className="px-6 py-20 text-center" style={{ backgroundColor: 'var(--color-primary)' }}>
-        <h1 className="font-serif text-5xl mb-3 leading-tight" style={{ color: 'var(--color-surface-mid)' }}>
-          Learn better.<br />
-          <span style={{ color: 'var(--color-accent-lit)' }} className="italic">Pass your exams.</span>
-        </h1>
-        <p className="text-base mb-8 opacity-80" style={{ color: 'var(--color-surface-mid)' }}>
-          Zambia&apos;s tutoring platform — built for O-Level and A-Level students.
-        </p>
+      <section className="px-6 py-24 text-center hero-pattern relative overflow-hidden" style={{ backgroundColor: 'var(--color-primary)' }}>
+        <FadeIn>
+          <h1 className="font-serif text-5xl sm:text-6xl mb-4 leading-tight" style={{ color: 'var(--color-surface-mid)' }}>
+            Learn better.<br />
+            <span style={{ color: 'var(--color-accent-lit)' }} className="italic">Pass your exams.</span>
+          </h1>
+          <p className="text-base mb-10 opacity-80 max-w-md mx-auto" style={{ color: 'var(--color-surface-mid)' }}>
+            Zambia&apos;s tutoring platform — built for O-Level and A-Level students.
+          </p>
 
-        <div className="flex flex-col items-center gap-3">
-          {user ? (
-            roleLoading ? (
-              <div className="h-10 w-48 rounded-xl animate-pulse" style={{ backgroundColor: 'rgba(255,255,255,0.15)' }} />
-            ) : (
-              <Link href={dashboardHref}
-                className="text-sm font-medium px-8 py-3 rounded-xl transition"
-                style={{ backgroundColor: '#e8c84a', color: '#1a2a00' }}>
-                Go to your dashboard →
-              </Link>
-            )
-          ) : (
-            <>
-              <Link href="/auth/register"
-                className="text-sm font-medium px-8 py-3 rounded-xl transition"
-                style={{ backgroundColor: '#e8c84a', color: '#1a2a00' }}>
-                Create a free account →
-              </Link>
-              <p className="text-xs" style={{ color: 'var(--color-surface)', opacity: 0.7 }}>
-                Already a member?{' '}
-                <Link href="/auth/login" style={{ color: 'var(--color-accent-lit)', borderBottom: '1px solid rgba(201,184,122,0.4)' }}>
-                  Sign in
+          <div className="flex flex-col items-center gap-3">
+            {user ? (
+              roleLoading ? (
+                <div className="h-12 w-52 rounded-xl animate-pulse" style={{ backgroundColor: 'rgba(255,255,255,0.15)' }} />
+              ) : (
+                <Link href={dashboardHref}
+                  className="text-sm font-medium px-10 py-3.5 rounded-xl transition hover:scale-105"
+                  style={{ backgroundColor: '#e8c84a', color: '#1a2a00' }}>
+                  Go to your dashboard →
                 </Link>
-              </p>
-            </>
-          )}
-        </div>
+              )
+            ) : (
+              <>
+                <Link href="/auth/register"
+                  className="text-sm font-medium px-10 py-3.5 rounded-xl transition hover:scale-105"
+                  style={{ backgroundColor: '#e8c84a', color: '#1a2a00' }}>
+                  Create a free account →
+                </Link>
+                <p className="text-xs" style={{ color: 'var(--color-surface)', opacity: 0.7 }}>
+                  Already a member?{' '}
+                  <Link href="/auth/login" style={{ color: 'var(--color-accent-lit)', borderBottom: '1px solid rgba(201,184,122,0.4)' }}>
+                    Sign in
+                  </Link>
+                </p>
+              </>
+            )}
+          </div>
+        </FadeIn>
       </section>
 
       {/* Subjects */}
-      <section className="px-6 py-12 bg-gray-50">
+      <section className="px-6 py-14 bg-gray-50">
         <div className="max-w-5xl mx-auto">
-          <div className="flex justify-between items-baseline mb-6">
-            <h2 className="font-serif text-2xl">Browse by subject</h2>
-            <Link href="/browse" className="text-sm hover:underline" style={{ color: 'var(--color-primary-lit)' }}>View all →</Link>
-          </div>
+          <FadeIn>
+            <div className="flex justify-between items-baseline mb-8">
+              <h2 className="font-serif text-2xl">Browse by subject</h2>
+              <Link href="/browse" className="text-sm hover:underline" style={{ color: 'var(--color-primary-lit)' }}>View all →</Link>
+            </div>
+          </FadeIn>
           <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-8 gap-3">
             {loadingSubjects
               ? Array.from({ length: 8 }).map((_, i) => (
                   <div key={i} className="bg-white border border-gray-200 rounded-xl p-3 animate-pulse h-24" />
                 ))
-              : subjects.map((s) => {
+              : subjects.map((s, i) => {
                   const meta  = getMeta(s.name)
                   const count = lessonCounts[s.name] ?? 0
+                  const icon  = SUBJECT_ICONS[s.name] ?? meta.initials
                   return (
-                    <Link key={s.id} href={`/browse/${encodeURIComponent(s.name)}`}
-                      className="bg-white border border-gray-200 rounded-xl p-3 text-center hover:border-gray-300 hover:shadow-sm transition">
-                      <div className={`w-9 h-9 ${meta.bg} ${meta.text} rounded-lg flex items-center justify-center text-xs font-medium mx-auto mb-2`}>
-                        {meta.initials}
-                      </div>
-                      <div className="text-xs font-medium text-gray-800">{s.name}</div>
-                      <div className="text-xs text-gray-400 mt-0.5">
-                        {count > 0 ? `${count} lesson${count !== 1 ? 's' : ''}` : 'Coming soon'}
-                      </div>
-                    </Link>
+                    <FadeIn key={s.id} delay={i * 50}>
+                      <Link href={`/browse/${encodeURIComponent(s.name)}`}
+                        className="bg-white border border-gray-200 rounded-xl p-3 text-center card-hover block">
+                        <div className={`w-10 h-10 ${meta.bg} ${meta.text} rounded-xl flex items-center justify-center text-sm font-medium mx-auto mb-2`}>
+                          {icon}
+                        </div>
+                        <div className="text-xs font-medium text-gray-800">{s.name}</div>
+                        <div className="text-xs text-gray-400 mt-0.5">
+                          {count > 0 ? `${count} lesson${count !== 1 ? 's' : ''}` : 'Coming soon'}
+                        </div>
+                      </Link>
+                    </FadeIn>
                   )
                 })
             }
@@ -176,12 +187,14 @@ export default function HomePage() {
       </section>
 
       {/* Browse Tutors */}
-      <section className="px-6 py-12 bg-white">
+      <section className="px-6 py-14 bg-white">
         <div className="max-w-5xl mx-auto">
-          <div className="flex justify-between items-baseline mb-6">
-            <h2 className="font-serif text-2xl">Browse tutors</h2>
-            <Link href="/tutor" className="text-sm hover:underline" style={{ color: 'var(--color-primary-lit)' }}>See all →</Link>
-          </div>
+          <FadeIn>
+            <div className="flex justify-between items-baseline mb-8">
+              <h2 className="font-serif text-2xl">Browse tutors</h2>
+              <Link href="/tutor" className="text-sm hover:underline" style={{ color: 'var(--color-primary-lit)' }}>See all →</Link>
+            </div>
+          </FadeIn>
 
           {tutorsLoading ? (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
@@ -190,43 +203,54 @@ export default function HomePage() {
               ))}
             </div>
           ) : tutors.length === 0 ? (
-            <div className="text-center py-12 border border-dashed border-gray-200 rounded-2xl">
-              <p className="text-sm text-gray-400 mb-3">No tutors available yet.</p>
-              <Link href="/auth/register"
-                className="text-xs px-4 py-2 rounded-lg"
-                style={{ backgroundColor: 'var(--color-btn-bg)', color: 'var(--color-btn-text)' }}>
-                Become the first tutor
-              </Link>
-            </div>
+            <EmptyState
+              type="tutors"
+              title="No tutors available yet."
+              actionLabel="Become the first tutor"
+              actionHref="/auth/register"
+            />
           ) : (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-              {tutors.map((t) => {
+              {tutors.map((t, i) => {
                 const name = t.profiles?.full_name ?? 'Tutor'
+                const avatar = t.profiles?.avatar_url
                 const initials = name.split(' ').filter(Boolean).map(w => w[0]).join('').slice(0, 2).toUpperCase() || '?'
                 return (
-                  <Link key={t.id} href={`/tutor/${t.id}`}
-                    className="border border-gray-200 rounded-xl p-4 hover:border-gray-300 transition block">
-                    <div className="w-12 h-12 rounded-full flex items-center justify-center text-sm font-medium mb-3"
-                      style={{ backgroundColor: 'var(--color-surface)', color: 'var(--color-primary-mid)' }}>
-                      {initials}
-                    </div>
-                    <div className="text-sm font-medium mb-1">{name}</div>
-                    <div className="text-xs text-gray-500 mb-2">{(t.subjects ?? []).slice(0, 2).join(' · ')}</div>
-                    {t.badge && t.badge !== 'none' && (
-                      <span className="inline-block text-xs px-2 py-0.5 rounded-full mb-2"
-                        style={{ backgroundColor: 'var(--color-surface)', color: 'var(--color-primary-mid)' }}>
-                        ✓ {BADGE_LABELS[t.badge] ?? t.badge}
-                      </span>
-                    )}
-                    <div className="flex justify-between items-center border-t border-gray-100 pt-3 mt-2">
-                      <span className="text-xs text-gray-500">
-                        ★ {t.avg_rating?.toFixed(1) ?? '—'} · {t.total_reviews ?? 0} reviews
-                      </span>
-                      <span className="text-sm font-medium" style={{ color: 'var(--color-primary-lit)' }}>
-                        K{t.hourly_rate_kwacha}/session
-                      </span>
-                    </div>
-                  </Link>
+                  <FadeIn key={t.id} delay={i * 80}>
+                    <Link href={`/tutor/${t.id}`}
+                      className="border border-gray-200 rounded-xl p-5 card-hover block bg-white">
+                      <div className="flex items-center gap-3 mb-3">
+                        {avatar ? (
+                          <Image src={avatar} alt={name} width={48} height={48}
+                            className="w-12 h-12 rounded-full object-cover" />
+                        ) : (
+                          <div className="w-12 h-12 rounded-full flex items-center justify-center text-sm font-medium"
+                            style={{ backgroundColor: 'var(--color-surface)', color: 'var(--color-primary-mid)' }}>
+                            {initials}
+                          </div>
+                        )}
+                        <div className="min-w-0">
+                          <div className="text-sm font-medium truncate">{name}</div>
+                          <div className="text-xs text-gray-500 truncate">{(t.subjects ?? []).slice(0, 2).join(' · ')}</div>
+                        </div>
+                      </div>
+                      {t.badge && t.badge !== 'none' && (
+                        <span className="inline-block text-xs px-2 py-0.5 rounded-full mb-3"
+                          style={{ backgroundColor: 'var(--color-surface)', color: 'var(--color-primary-mid)' }}>
+                          ✓ {BADGE_LABELS[t.badge] ?? t.badge}
+                        </span>
+                      )}
+                      <div className="flex justify-between items-center border-t border-gray-100 pt-3">
+                        <div className="flex items-center gap-1.5">
+                          <StarRating rating={t.avg_rating ?? 0} size={12} className="text-amber-400" />
+                          <span className="text-xs text-gray-400">{t.total_reviews ?? 0}</span>
+                        </div>
+                        <span className="text-sm font-medium" style={{ color: 'var(--color-primary-lit)' }}>
+                          K{t.hourly_rate_kwacha}
+                        </span>
+                      </div>
+                    </Link>
+                  </FadeIn>
                 )
               })}
             </div>
@@ -235,31 +259,33 @@ export default function HomePage() {
       </section>
 
       {/* How it works */}
-      <section className="bg-gray-50 px-6 py-14 text-center">
+      <section className="bg-gray-50 px-6 py-16 text-center">
         <div className="max-w-4xl mx-auto">
-          <h2 className="font-serif text-2xl mb-10">How it works</h2>
+          <FadeIn>
+            <h2 className="font-serif text-2xl mb-12">How it works</h2>
+          </FadeIn>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
             {[
               { n: '1', title: 'Browse & choose',       desc: 'Search by subject, grade, or tutor name' },
               { n: '2', title: 'Buy or book',            desc: 'Unlock recorded lessons or book a live session' },
               { n: '3', title: 'Pay with mobile money',  desc: 'Secure checkout via Airtel or MTN Money' },
               { n: '4', title: 'Learn & pass',           desc: 'Study at your own pace and track progress' },
-            ].map((s) => (
-              <div key={s.n}>
-                <div className="w-10 h-10 rounded-full flex items-center justify-center font-serif text-lg mx-auto mb-3"
+            ].map((s, i) => (
+              <FadeIn key={s.n} delay={i * 100}>
+                <div className="w-12 h-12 rounded-2xl flex items-center justify-center font-serif text-lg mx-auto mb-4"
                   style={{ backgroundColor: 'var(--color-surface)', color: 'var(--color-primary-mid)' }}>
                   {s.n}
                 </div>
                 <div className="text-sm font-medium mb-1">{s.title}</div>
                 <div className="text-xs text-gray-500 leading-relaxed">{s.desc}</div>
-              </div>
+              </FadeIn>
             ))}
           </div>
         </div>
       </section>
 
-      {/* Footer — stacks on mobile */}
-      <footer className="bg-white border-t border-gray-200 px-6 py-5 text-sm text-gray-400">
+      {/* Footer */}
+      <footer className="bg-white border-t border-gray-200 px-6 py-6 text-sm text-gray-400">
         <div className="flex flex-col sm:flex-row justify-between items-center gap-3 text-center sm:text-left">
           <span className="font-serif" style={{ color: 'var(--color-primary-lit)' }}>Rent a Tutor · Zambia</span>
           <div className="flex gap-6 flex-wrap justify-center">

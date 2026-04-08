@@ -5,6 +5,8 @@ import Link from 'next/link'
 import { supabase } from '@/lib/supabase'
 import { useRouter } from 'next/navigation'
 import { Spinner } from '@/components/ui/spinner'
+import { EmptyState } from '@/components/ui/empty-state'
+import { FadeIn } from '@/components/ui/fade-in'
 
 export default function StudentDashboard() {
   const router = useRouter()
@@ -156,14 +158,12 @@ export default function StudentDashboard() {
               </Link>
             </div>
             {recentLessons.length === 0 ? (
-              <div className="text-center py-8">
-                <p className="text-sm text-gray-400 mb-3">No lessons purchased yet.</p>
-                <Link href="/browse"
-                  className="text-xs px-4 py-2 rounded-lg"
-                  style={{ backgroundColor: 'var(--color-btn-bg)', color: 'var(--color-btn-text)' }}>
-                  Browse lessons
-                </Link>
-              </div>
+              <EmptyState
+                type="lessons"
+                title="No lessons purchased yet."
+                actionLabel="Browse lessons"
+                actionHref="/browse"
+              />
             ) : (
               <div className="space-y-4">
                 {recentLessons.map(p => (
@@ -198,14 +198,12 @@ export default function StudentDashboard() {
               </Link>
             </div>
             {upcomingBookings.length === 0 ? (
-              <div className="text-center py-8">
-                <p className="text-sm text-gray-400 mb-3">No upcoming sessions.</p>
-                <Link href="/tutor"
-                  className="text-xs px-4 py-2 rounded-lg"
-                  style={{ backgroundColor: 'var(--color-btn-bg)', color: 'var(--color-btn-text)' }}>
-                  Find a tutor
-                </Link>
-              </div>
+              <EmptyState
+                type="sessions"
+                title="No upcoming sessions."
+                actionLabel="Find a tutor"
+                actionHref="/tutor"
+              />
             ) : (
               <div className="space-y-3">
                 {upcomingBookings.map(b => {

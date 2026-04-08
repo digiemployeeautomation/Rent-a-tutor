@@ -1,33 +1,39 @@
 'use client'
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
+import Image from 'next/image'
 import { useRouter } from 'next/navigation'
 import { supabase } from '@/lib/supabase'
 import { SUBJECTS as ALL_SUBJECTS } from '@/lib/constants'
 import { Spinner } from '@/components/ui/spinner'
+import { useToast } from '@/components/ui/toast'
 
 export default function TutorProfilePage() {
   const router = useRouter()
+  const toast  = useToast()
   const [loading, setLoading]   = useState(true)
   const [saving, setSaving]     = useState(false)
   const [saved, setSaved]       = useState(false)
   const [error, setError]       = useState('')
   const [tutorId, setTutorId]   = useState(null)
+  const [userId, setUserId]     = useState(null)
 
   const [bio, setBio]                 = useState('')
   const [subjects, setSubjects]       = useState([])
   const [hourlyRate, setHourlyRate]   = useState('')
+  const [avatarUrl, setAvatarUrl]     = useState(null)
+  const [uploading, setUploading]     = useState(false)
 
   useEffect(() => {
     async function load() {
       const { data: { user } } = await supabase.auth.getUser()
       if (!user) return router.push('/auth/login')
+      setUserId(user.id)
 
-      const { data: tutor } = await supabase
-        .from('tutors')
-        .select('id, bio, subjects, hourly_rate_kwacha')
-        .eq('user_id', user.id)
-        .single()
+      const [{ data: tutor }, { data: profile }] = await Promise.all([
+        supabase.from('tutors').select('id, bio, subjects, hourly_rate_kwacha').eq('user_id', user.id).single(),
+        supabase.from('profiles').select('avatar_url').eq('id', user.id).single(),
+      ])
 
       if (tutor) {
         setTutorId(tutor.id)
@@ -35,10 +41,39 @@ export default function TutorProfilePage() {
         setSubjects(tutor.subjects ?? [])
         setHourlyRate(String(tutor.hourly_rate_kwacha ?? ''))
       }
+      setAvatarUrl(profile?.avatar_url ?? null)
       setLoading(false)
     }
     load()
   }, [router])
+
+  async function handleAvatarUpload(e) {
+    const file = e.target.files?.[0]
+    if (!file || !userId) return
+    if (file.size > 2 * 1024 * 1024) { toast.error('Image must be under 2 MB.'); return }
+
+    setUploading(true)
+    const ext  = file.name.split('.').pop()
+    const path = `${userId}/avatar.${ext}`
+
+    const { error: uploadErr } = await supabase.storage
+      .from('avatars')
+      .upload(path, file, { upsert: true })
+
+    if (uploadErr) {
+      toast.error('Failed to upload avatar.')
+      setUploading(false)
+      return
+    }
+
+    const { data: { publicUrl } } = supabase.storage.from('avatars').getPublicUrl(path)
+    const url = `${publicUrl}?t=${Date.now()}`
+
+    await supabase.from('profiles').update({ avatar_url: url }).eq('id', userId)
+    setAvatarUrl(url)
+    setUploading(false)
+    toast.success('Profile photo updated!')
+  }
 
   function toggleSubject(s) {
     setSubjects(prev =>
@@ -84,8 +119,10 @@ export default function TutorProfilePage() {
 
     if (dbErr) {
       setError(dbErr.message)
+      toast.error('Failed to save profile.')
     } else {
       setSaved(true)
+      toast.success('Profile saved!')
     }
     setSaving(false)
   }
@@ -113,6 +150,31 @@ export default function TutorProfilePage() {
 
       <div className="max-w-2xl mx-auto px-6 py-8">
         <form onSubmit={handleSave} className="space-y-6">
+
+          {/* Avatar */}
+          <div className="bg-white border border-gray-200 rounded-2xl p-6">
+            <h2 className="font-serif text-lg mb-4" style={{ color: 'var(--color-primary)' }}>Profile photo</h2>
+            <div className="flex items-center gap-5">
+              {avatarUrl ? (
+                <Image src={avatarUrl} alt="Profile" width={80} height={80}
+                  className="w-20 h-20 rounded-full object-cover border-2"
+                  style={{ borderColor: 'var(--color-surface-mid)' }} />
+              ) : (
+                <div className="w-20 h-20 rounded-full flex items-center justify-center text-2xl font-medium"
+                  style={{ backgroundColor: 'var(--color-surface)', color: 'var(--color-primary-mid)' }}>
+                  ?
+                </div>
+              )}
+              <div>
+                <label className="inline-block text-xs px-4 py-2 rounded-lg font-medium cursor-pointer"
+                  style={{ backgroundColor: 'var(--color-btn-bg)', color: 'var(--color-btn-text)' }}>
+                  {uploading ? 'Uploading...' : avatarUrl ? 'Change photo' : 'Upload photo'}
+                  <input type="file" accept="image/*" className="hidden" onChange={handleAvatarUpload} disabled={uploading} />
+                </label>
+                <p className="text-xs text-gray-400 mt-1.5">JPG or PNG, max 2 MB</p>
+              </div>
+            </div>
+          </div>
 
           {/* Bio */}
           <div className="bg-white border border-gray-200 rounded-2xl p-6">
