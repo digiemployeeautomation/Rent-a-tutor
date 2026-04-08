@@ -4,6 +4,7 @@ import { useRouter } from 'next/navigation'
 import Navbar from '@/components/layout/Navbar'
 import { supabase } from '@/lib/supabase'
 import { NRCInput } from '@/components/ui/nrc-input'
+import { Spinner } from '@/components/ui/spinner'
 
 const MAX_FILE_SIZE = 10 * 1024 * 1024 // 10 MB
 
@@ -150,7 +151,7 @@ export default function TutorVerifyPage() {
     <div style={{ minHeight: '100vh', backgroundColor: 'var(--color-page-bg)' }}>
       <Navbar />
       <div className="flex items-center justify-center h-64">
-        <div className="text-sm text-gray-400">Loading…</div>
+        <Spinner className="text-gray-400" />
       </div>
     </div>
   )

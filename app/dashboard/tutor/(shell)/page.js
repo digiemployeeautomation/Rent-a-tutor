@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { supabase } from '@/lib/supabase'
 import { useRouter } from 'next/navigation'
+import { Spinner } from '@/components/ui/spinner'
 import TopicRequestFeed from '@/components/TopicRequestFeed'
 
 function WithdrawModal({ balance, onClose }) {
@@ -220,7 +221,7 @@ export default function TutorDashboard() {
 
   if (loading) return (
     <div className="flex items-center justify-center h-64">
-      <div className="text-sm text-gray-400">Loading your dashboard...</div>
+      <Spinner className="text-gray-400" />
     </div>
   )
 

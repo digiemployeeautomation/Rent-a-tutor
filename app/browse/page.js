@@ -5,6 +5,7 @@ import Link from 'next/link'
 import Navbar from '@/components/layout/Navbar'
 import { supabase } from '@/lib/supabase'
 import { SUBJECTS } from '@/lib/constants'
+import { Spinner } from '@/components/ui/spinner'
 
 const SORT_OPTIONS = [
   { value: 'popular',    label: 'Most popular'    },
@@ -190,7 +191,7 @@ export default function BrowseIndexPage() {
           <div className="flex-1 min-w-0">
             <div className="flex items-center justify-between mb-5">
               <p className="text-sm text-gray-500">
-                {loading ? 'Loading...' : `${total} result${total !== 1 ? 's' : ''}`}
+                {loading ? <Spinner size={14} className="text-gray-400" /> : `${total} result${total !== 1 ? 's' : ''}`}
               </p>
               <select value={sort} onChange={e => setSort(e.target.value)}
                 className="text-sm border border-gray-200 rounded-lg px-3 py-1.5 outline-none bg-white text-gray-700">

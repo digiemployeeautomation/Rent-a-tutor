@@ -4,6 +4,7 @@ import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { supabase } from '@/lib/supabase'
 import { SUBJECTS as ALL_SUBJECTS } from '@/lib/constants'
+import { Spinner } from '@/components/ui/spinner'
 
 export default function TutorProfilePage() {
   const router = useRouter()
@@ -91,7 +92,7 @@ export default function TutorProfilePage() {
 
   if (loading) return (
     <div className="flex items-center justify-center h-64">
-      <div className="text-sm text-gray-400">Loading...</div>
+      <Spinner className="text-gray-400" />
     </div>
   )
 

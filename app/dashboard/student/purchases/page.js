@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { supabase } from '@/lib/supabase'
+import { Spinner } from '@/components/ui/spinner'
 
 function formatDate(iso) {
   return new Date(iso).toLocaleDateString('en-ZM', { day: 'numeric', month: 'short', year: 'numeric' })
@@ -32,7 +33,7 @@ export default function StudentPurchasesPage() {
 
   if (loading) return (
     <div className="flex items-center justify-center h-64">
-      <div className="text-sm text-gray-400">Loading your purchases...</div>
+      <Spinner className="text-gray-400" />
     </div>
   )
 

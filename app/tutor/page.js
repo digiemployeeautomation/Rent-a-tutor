@@ -3,6 +3,7 @@ import { useState, useEffect, useCallback } from 'react'
 import Link from 'next/link'
 import Navbar from '@/components/layout/Navbar'
 import { supabase } from '@/lib/supabase'
+import { Spinner } from '@/components/ui/spinner'
 import { SUBJECTS } from '@/lib/constants'
 
 export default function FindTutorPage() {
@@ -158,7 +159,7 @@ export default function FindTutorPage() {
           <div className="flex-1 min-w-0">
             <div className="flex items-center justify-between mb-5">
               <p className="text-sm text-gray-500">
-                {loading ? 'Loading...' : `${tutors.length} tutor${tutors.length !== 1 ? 's' : ''}`}
+                {loading ? <Spinner size={14} className="text-gray-400" /> : `${tutors.length} tutor${tutors.length !== 1 ? 's' : ''}`}
               </p>
             </div>
 
