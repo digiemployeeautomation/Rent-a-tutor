@@ -185,18 +185,17 @@ export default function TutorLessonsPage() {
       const { data: { user } } = await supabase.auth.getUser()
       if (!user) return router.push('/auth/login')
 
-      const [{ data }, { data: tutorData }] = await Promise.all([
-        supabase
-          .from('lessons')
-          .select('id, title, subject, form_level, price, status, purchase_count, duration_seconds, description, cloudflare_video_id, created_at')
-          .eq('tutor_id', user.id)
-          .order('created_at', { ascending: false }),
-        supabase
-          .from('tutors')
-          .select('is_approved')
-          .eq('user_id', user.id)
-          .single(),
-      ])
+      const { data: tutorData } = await supabase
+        .from('tutors')
+        .select('id, is_approved')
+        .eq('user_id', user.id)
+        .single()
+
+      const { data } = await supabase
+        .from('lessons')
+        .select('id, title, subject, form_level, price, status, purchase_count, duration_seconds, description, cloudflare_video_id, created_at')
+        .eq('tutor_id', tutorData.id)
+        .order('created_at', { ascending: false })
 
       setLessons(data ?? [])
       setIsApproved(tutorData?.is_approved ?? false)

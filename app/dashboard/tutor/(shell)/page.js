@@ -134,9 +134,14 @@ export default function TutorDashboard() {
 
       let prof, tutor, lessonCount, recentLess, completedCount, recentBooks, allLessons, allCompletedBookings
       try {
-        ([
-          { data: prof },
-          { data: tutor },
+        ([{ data: prof }, { data: tutor }] = await Promise.all([
+          supabase.from('profiles').select('full_name, avatar_url').eq('id', user.id).single(),
+          supabase.from('tutors').select('*').eq('user_id', user.id).single(),
+        ]))
+
+        if (!tutor) { setLoading(false); return }
+
+        ;([
           { count: lessonCount },
           { data: recentLess },
           { count: completedCount },
@@ -144,12 +149,10 @@ export default function TutorDashboard() {
           { data: allLessons },
           { data: allCompletedBookings },
         ] = await Promise.all([
-          supabase.from('profiles').select('full_name, avatar_url').eq('id', user.id).single(),
-          supabase.from('tutors').select('*').eq('user_id', user.id).single(),
-          supabase.from('lessons').select('*', { count: 'exact', head: true }).eq('tutor_id', user.id),
+          supabase.from('lessons').select('*', { count: 'exact', head: true }).eq('tutor_id', tutor.id),
           supabase.from('lessons')
             .select('id, title, subject, form_level, status, purchase_count, price, created_at')
-            .eq('tutor_id', user.id)
+            .eq('tutor_id', tutor.id)
             .order('created_at', { ascending: false })
             .limit(10),
           supabase.from('bookings').select('*', { count: 'exact', head: true })
@@ -159,7 +162,7 @@ export default function TutorDashboard() {
             .eq('tutor_id', user.id)
             .order('scheduled_at', { ascending: false })
             .limit(10),
-          supabase.from('lessons').select('purchase_count, price').eq('tutor_id', user.id),
+          supabase.from('lessons').select('purchase_count, price').eq('tutor_id', tutor.id),
           supabase.from('bookings')
             .select('amount')
             .eq('tutor_id', user.id)

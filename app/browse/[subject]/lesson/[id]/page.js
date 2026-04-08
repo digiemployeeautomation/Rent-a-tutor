@@ -301,7 +301,7 @@ export default function LessonPage() {
           tutor_id,
           tutors (
             id, avg_rating, total_reviews, subjects,
-            profiles ( full_name, avatar_url )
+            profiles!user_id ( full_name, avatar_url )
           )
         `)
         .eq('id', lessonId)
@@ -318,7 +318,9 @@ export default function LessonPage() {
 
       if (u) {
         // Tutor who owns this lesson can always preview it
-        if (lessonData.tutor_id === u.id) {
+        const { data: ownerTutor } = await supabase
+          .from('tutors').select('id').eq('user_id', u.id).maybeSingle()
+        if (ownerTutor && lessonData.tutor_id === ownerTutor.id) {
           setHasPurchased(true)
         } else {
           const { data: purchase } = await supabase

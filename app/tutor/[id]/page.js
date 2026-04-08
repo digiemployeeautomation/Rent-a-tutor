@@ -181,7 +181,7 @@ export default function TutorProfilePage() {
         .select(`
           id, user_id, subjects, hourly_rate_kwacha, avg_rating, total_reviews,
           is_featured, verification_status, badge, bio,
-          profiles ( full_name, avatar_url )
+          profiles!user_id ( full_name, avatar_url )
         `)
         .eq('id', tutorId)
         .eq('is_approved', true)
@@ -192,13 +192,11 @@ export default function TutorProfilePage() {
         return
       }
 
-      // FIX: lessons.tutor_id is the auth user id, not tutors.id
-      // so we must query by tutorData.user_id, not tutorId
       const [{ data: lessonData }, { data: reviewData }] = await Promise.all([
         supabase
           .from('lessons')
           .select('id, title, subject, form_level, price, duration_seconds, purchase_count')
-          .eq('tutor_id', tutorData.user_id)
+          .eq('tutor_id', tutorData.id)
           .eq('status', 'active')
           .or('flagged.is.null,flagged.eq.false')
           .order('purchase_count', { ascending: false })
@@ -206,7 +204,7 @@ export default function TutorProfilePage() {
         supabase
           .from('reviews')
           .select('id, rating, comment, created_at, profiles(full_name)')
-          .eq('tutor_id', tutorData.user_id)
+          .eq('tutor_id', tutorData.id)
           .or('flagged.is.null,flagged.eq.false')
           .order('created_at', { ascending: false })
           .limit(5),

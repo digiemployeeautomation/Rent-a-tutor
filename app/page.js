@@ -79,7 +79,7 @@ export default function HomePage() {
       setTutorsLoading(true)
       const { data } = await supabase
         .from('tutors')
-        .select('id, subjects, hourly_rate_kwacha, avg_rating, total_reviews, is_featured, verification_status, badge, profiles(full_name, avatar_url)')
+        .select('id, subjects, hourly_rate_kwacha, avg_rating, total_reviews, is_featured, verification_status, badge, profiles!user_id(full_name, avatar_url)')
         .eq('is_approved', true)
         .order('is_featured', { ascending: false })
         .order('avg_rating', { ascending: false })

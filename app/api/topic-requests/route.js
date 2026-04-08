@@ -180,7 +180,7 @@ export async function GET(request) {
         id, subject, topic, form_level, urgency, status, response_count, created_at,
         topic_request_responses (
           id, message, proposed_rate, status, created_at,
-          tutors ( id, profiles ( full_name, avatar_url ) )
+          tutors ( id, profiles!user_id ( full_name, avatar_url ) )
         )
       `)
       .order('created_at', { ascending: false })

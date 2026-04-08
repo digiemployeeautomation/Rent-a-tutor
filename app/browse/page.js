@@ -39,7 +39,7 @@ export default function BrowseIndexPage() {
       .select(`
         id, title, subject, form_level, price,
         duration_seconds, purchase_count, created_at,
-        tutors ( id, profiles ( full_name ) )
+        tutors ( id, profiles!user_id ( full_name ) )
       `, { count: 'exact' })
       .eq('status', 'active')
       .or('flagged.is.null,flagged.eq.false')

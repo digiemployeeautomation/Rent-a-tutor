@@ -64,7 +64,7 @@ export default function UploadLessonPage() {
     const { error: insertError } = await supabase
       .from('lessons')
       .insert({
-        tutor_id:            user.id,
+        tutor_id:            tutor.id,
         title:               title.trim(),
         subject,
         form_level:          formLevel,

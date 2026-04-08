@@ -24,7 +24,7 @@ export default function FindTutorPage() {
       .select(`
         id, subjects, hourly_rate_kwacha, avg_rating, total_reviews,
         is_featured, verification_status, badge,
-        profiles ( full_name, avatar_url )
+        profiles!user_id ( full_name, avatar_url )
       `, { count: 'exact' })
       .eq('is_approved', true)
 
