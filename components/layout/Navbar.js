@@ -9,28 +9,38 @@ import { useRouter } from 'next/navigation'
 export default function Navbar() {
   const { role } = useTheme()
   const router = useRouter()
-  const [user, setUser]       = useState(null)
-  const [profile, setProfile] = useState(null)
-  const [loading, setLoading] = useState(true)
+  const [user, setUser]         = useState(null)
+  const [profile, setProfile]   = useState(null)
+  const [loading, setLoading]   = useState(true)
+  const [scrolled, setScrolled] = useState(false)
 
   async function fetchProfile(userId) {
-    const { data } = await supabase
-      .from('profiles')
-      .select('full_name, avatar_url, role')
-      .eq('id', userId)
-      .single()
-    setProfile(data)
+    try {
+      const { data, error } = await supabase
+        .from('profiles')
+        .select('full_name, avatar_url, role')
+        .eq('id', userId)
+        .single()
+      if (error) console.error('[Navbar] profile fetch error:', error.message)
+      else setProfile(data)
+    } catch (err) {
+      console.error('[Navbar] profile fetch failed:', err)
+    }
   }
 
   useEffect(() => {
-    supabase.auth.getUser().then(({ data: { user } }) => {
-      setUser(user)
-      if (user) fetchProfile(user.id)
-      setLoading(false)
-    }).catch(err => {
-      console.error('[Navbar] auth error:', err)
-      setLoading(false)
-    })
+    async function init() {
+      try {
+        const { data: { user } } = await supabase.auth.getUser()
+        setUser(user)
+        if (user) await fetchProfile(user.id)
+      } catch (err) {
+        console.error('[Navbar] auth error:', err)
+      } finally {
+        setLoading(false)
+      }
+    }
+    init()
 
     const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
       const u = session?.user ?? null
@@ -39,7 +49,13 @@ export default function Navbar() {
       else setProfile(null)
     })
 
-    return () => subscription.unsubscribe()
+    const handleScroll = () => setScrolled(window.scrollY > 4)
+    window.addEventListener('scroll', handleScroll, { passive: true })
+
+    return () => {
+      subscription.unsubscribe()
+      window.removeEventListener('scroll', handleScroll)
+    }
   }, [])
 
   async function handleLogout() {
@@ -51,31 +67,62 @@ export default function Navbar() {
   const fullName  = profile?.full_name ?? user?.user_metadata?.full_name ?? null
   const avatarUrl = profile?.avatar_url ?? null
   const initials  = fullName
-    ? fullName.split(' ').map(w => w[0]).join('').slice(0, 2).toUpperCase()
+    ? fullName.split(' ').filter(Boolean).map(w => w[0]).join('').slice(0, 2).toUpperCase()
     : '??'
 
   return (
-    <nav style={{ backgroundColor: 'var(--color-nav-bg)' }} className="px-6 h-16 flex items-center justify-between">
-      <Link href="/" className="font-serif text-xl" style={{ color: 'var(--color-nav-text)' }}>
-        Rent a <span style={{ color: 'var(--color-nav-accent)' }} className="italic">Tutor</span>
+    <nav
+      aria-label="Main navigation"
+      style={{
+        backgroundColor: 'var(--color-nav-bg)',
+        boxShadow: scrolled
+          ? '0 2px 12px rgba(0,0,0,0.18)'
+          : '0 1px 0 rgba(255,255,255,0.06)',
+        transition: 'box-shadow 250ms ease',
+        position: 'sticky',
+        top: 0,
+        zIndex: 50,
+      }}
+      className="px-6 h-16 flex items-center justify-between"
+    >
+      <Link
+        href="/"
+        className="nav-brand font-serif text-xl"
+        style={{ color: 'var(--color-nav-text)' }}
+      >
+        Rent a{' '}
+        <span style={{ color: 'var(--color-nav-accent)' }} className="italic">
+          Tutor
+        </span>
       </Link>
 
       <div className="flex items-center gap-3">
         {loading ? (
-          <div className="w-20 h-8 rounded-lg animate-pulse" style={{ backgroundColor: 'rgba(255,255,255,0.1)' }} />
+          <div
+            className="animate-pulse rounded-lg"
+            style={{ width: 80, height: 32, backgroundColor: 'rgba(255,255,255,0.1)' }}
+          />
         ) : user ? (
           <>
             <div className="text-right hidden sm:block">
               <div className="text-xs font-semibold" style={{ color: '#ffffff' }}>
                 {fullName || 'My account'}
               </div>
-              <div className="text-xs capitalize" style={{ color: 'rgba(255,255,255,0.6)' }}>
+              <div className="text-xs capitalize" style={{ color: 'rgba(255,255,255,0.55)' }}>
                 {profile?.role ?? role}
               </div>
             </div>
 
             {avatarUrl ? (
-              <div className="w-9 h-9 rounded-full overflow-hidden border-2" style={{ borderColor: 'rgba(255,255,255,0.2)' }}>
+              <div
+                className="rounded-full overflow-hidden flex-shrink-0"
+                style={{
+                  width: 36,
+                  height: 36,
+                  border: '2px solid rgba(255,255,255,0.20)',
+                  transition: 'border-color 200ms ease, box-shadow 200ms ease',
+                }}
+              >
                 <Image
                   src={avatarUrl}
                   alt={fullName ?? 'Profile'}
@@ -86,11 +133,15 @@ export default function Navbar() {
               </div>
             ) : (
               <div
-                className="w-9 h-9 rounded-full flex items-center justify-center text-xs font-medium border-2"
+                className="rounded-full flex items-center justify-center text-xs font-medium flex-shrink-0"
                 style={{
+                  width: 36,
+                  height: 36,
                   backgroundColor: 'var(--color-primary-mid)',
                   color: '#ffffff',
-                  borderColor: 'rgba(255,255,255,0.15)',
+                  border: '2px solid rgba(255,255,255,0.15)',
+                  transition: 'box-shadow 200ms ease',
+                  letterSpacing: '0.05em',
                 }}
               >
                 {initials}
@@ -99,8 +150,8 @@ export default function Navbar() {
 
             <button
               onClick={handleLogout}
-              className="text-xs px-3 py-1.5 rounded-lg border"
-              style={{ color: '#ffffff', borderColor: 'rgba(255,255,255,0.2)' }}
+              aria-label="Log out"
+              className="nav-logout text-xs px-3 py-1.5 rounded-lg"
             >
               Log out
             </button>
@@ -109,15 +160,13 @@ export default function Navbar() {
           <>
             <Link
               href="/auth/login"
-              className="text-sm px-4 py-2 rounded-lg border"
-              style={{ color: 'var(--color-nav-text)', borderColor: 'rgba(255,255,255,0.2)' }}
+              className="nav-login text-sm px-4 py-2 rounded-lg"
             >
               Log in
             </Link>
             <Link
               href="/auth/register"
-              className="text-sm px-4 py-2 rounded-lg"
-              style={{ backgroundColor: 'var(--color-accent-btn)', color: 'var(--color-accent-btn-text)' }}
+              className="nav-cta text-sm px-4 py-2 rounded-lg font-medium"
             >
               Get started
             </Link>

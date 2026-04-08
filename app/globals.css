@@ -32,6 +32,19 @@
   --color-stat-b-bg:        #faeeda;
   --color-stat-b-text:      #412402;
   --color-stat-b-sub:       #854f0b;
+
+  /* Shadow tokens */
+  --shadow-xs:  0 1px 2px rgba(23,52,4,0.06);
+  --shadow-sm:  0 2px 6px rgba(23,52,4,0.08);
+  --shadow-md:  0 4px 16px rgba(23,52,4,0.10);
+  --shadow-lg:  0 8px 32px rgba(23,52,4,0.14);
+  --shadow-xl:  0 16px 48px rgba(23,52,4,0.18);
+
+  /* Shimmer gradient for skeletons */
+  --shimmer-from: #e8f0de;
+  --shimmer-via:  #f4f8ee;
+  --shimmer-to:   #e8f0de;
+  --color-body-text: #111827;
 }
 
 /* ── Tutor theme — Deep Blue & Amber ── */
@@ -63,6 +76,17 @@
   --color-stat-b-bg:        #faeeda;
   --color-stat-b-text:      #412402;
   --color-stat-b-sub:       #854f0b;
+
+  --shadow-xs:  0 1px 2px rgba(4,44,83,0.06);
+  --shadow-sm:  0 2px 6px rgba(4,44,83,0.08);
+  --shadow-md:  0 4px 16px rgba(4,44,83,0.10);
+  --shadow-lg:  0 8px 32px rgba(4,44,83,0.14);
+  --shadow-xl:  0 16px 48px rgba(4,44,83,0.18);
+
+  --shimmer-from: #ddeaf8;
+  --shimmer-via:  #eef4fc;
+  --shimmer-to:   #ddeaf8;
+  --color-body-text: #111827;
 }
 
 /* ── Dark mode ─────────────────────────────────── */
@@ -96,6 +120,17 @@
     --color-stat-b-bg:        #2a2010;
     --color-stat-b-text:      #fac775;
     --color-stat-b-sub:       #ef9f27;
+
+    --shadow-xs:  0 1px 2px rgba(0,0,0,0.25);
+    --shadow-sm:  0 2px 6px rgba(0,0,0,0.30);
+    --shadow-md:  0 4px 16px rgba(0,0,0,0.35);
+    --shadow-lg:  0 8px 32px rgba(0,0,0,0.40);
+    --shadow-xl:  0 16px 48px rgba(0,0,0,0.50);
+
+    --shimmer-from: #1a2810;
+    --shimmer-via:  #253818;
+    --shimmer-to:   #1a2810;
+    --color-body-text: #e5e7eb;
   }
 
   [data-theme="tutor"][data-dark="auto"],
@@ -127,22 +162,143 @@
     --color-stat-b-bg:        #2a2010;
     --color-stat-b-text:      #fac775;
     --color-stat-b-sub:       #ef9f27;
+
+    --shadow-xs:  0 1px 2px rgba(0,0,0,0.30);
+    --shadow-sm:  0 2px 6px rgba(0,0,0,0.35);
+    --shadow-md:  0 4px 16px rgba(0,0,0,0.40);
+    --shadow-lg:  0 8px 32px rgba(0,0,0,0.50);
+    --shadow-xl:  0 16px 48px rgba(0,0,0,0.60);
+
+    --shimmer-from: #0a1828;
+    --shimmer-via:  #112238;
+    --shimmer-to:   #0a1828;
+    --color-body-text: #e5e7eb;
   }
 }
 
-* { box-sizing: border-box; }
-
-body {
-  font-family: system-ui, sans-serif;
-  background-color: var(--color-page-bg);
-  color: #111827;
-  transition: background-color 0.3s ease;
+/* ─────────────────────────────────────────────────
+   BASE RESET & GLOBAL STYLES
+───────────────────────────────────────────────── */
+*, *::before, *::after {
+  box-sizing: border-box;
 }
 
+html {
+  scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
+body {
+  font-family: system-ui, -apple-system, 'Segoe UI', sans-serif;
+  background-color: var(--color-page-bg);
+  color: var(--color-body-text, #111827);
+  transition: background-color 0.3s ease, color 0.3s ease;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+h1, h2, h3, h4 { font-family: Georgia, serif; }
+
+/* Smooth colour transitions on theme-aware elements —
+   scoped to interactive/themed elements only (not *) to avoid perf overhead */
+a, button, input, select, textarea,
+[class*="card"], [class*="badge"], [class*="btn"],
+[class*="stat-"], [class*="nav-"], [class*="sidebar-"],
+[class*="row-hover"], [class*="table-row"] {
+  transition-property: background-color, border-color, box-shadow;
+  transition-duration: 150ms;
+  transition-timing-function: ease;
+}
+
+/* But don't transition on layout/transform — only on colour */
+a, button, input, select, textarea,
+[class*="animate-"],
+[class*="transition"] {
+  transition-property:
+    color, background-color, border-color, box-shadow,
+    opacity, transform, filter;
+  transition-duration: 200ms;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* ─────────────────────────────────────────────────
+   FOCUS STYLES — accessible & beautiful
+───────────────────────────────────────────────── */
+:focus-visible {
+  outline: 2px solid var(--color-primary-lit);
+  outline-offset: 3px;
+  border-radius: 6px;
+}
+
+input:focus-visible,
+textarea:focus-visible,
+select:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-primary-lit) 25%, transparent);
+}
+
+/* ─────────────────────────────────────────────────
+   SCROLLBAR — subtle, on-theme
+───────────────────────────────────────────────── */
+::-webkit-scrollbar              { width: 6px; height: 6px; }
+::-webkit-scrollbar-track        { background: transparent; }
+::-webkit-scrollbar-thumb        {
+  background: color-mix(in srgb, var(--color-primary) 20%, transparent);
+  border-radius: 99px;
+}
+::-webkit-scrollbar-thumb:hover  {
+  background: color-mix(in srgb, var(--color-primary) 35%, transparent);
+}
+
+/* ─────────────────────────────────────────────────
+   BUTTONS — base polish
+───────────────────────────────────────────────── */
+button, [role="button"] {
+  cursor: pointer;
+}
+
+button:not(:disabled):active {
+  transform: scale(0.97);
+}
+
+button:disabled {
+  cursor: not-allowed;
+  opacity: 0.55;
+}
+
+/* ─────────────────────────────────────────────────
+   INPUTS — refined feel
+───────────────────────────────────────────────── */
+input, textarea, select {
+  transition:
+    border-color 200ms ease,
+    box-shadow 200ms ease,
+    background-color 200ms ease;
+}
+
+input::placeholder,
+textarea::placeholder {
+  color: #9ca3af;
+  opacity: 1;
+}
+
+/* ─────────────────────────────────────────────────
+   LINKS
+───────────────────────────────────────────────── */
+a {
+  text-decoration: none;
+  transition: color 150ms ease, opacity 150ms ease;
+}
+
+/* ─────────────────────────────────────────────────
+   DARK MODE OVERRIDES
+───────────────────────────────────────────────── */
 @media (prefers-color-scheme: dark) {
   [data-dark="auto"] body,
   [data-dark="true"] body {
-    color: #e5e7eb;
+    color: var(--color-body-text, #e5e7eb);
   }
   [data-dark="auto"] .bg-white,
   [data-dark="true"] .bg-white {
@@ -161,51 +317,483 @@ body {
     border-color: rgba(255,255,255,0.05) !important;
   }
   [data-dark="auto"] .text-gray-800,
-  [data-dark="true"] .text-gray-800 {
-    color: #e5e7eb !important;
-  }
+  [data-dark="true"] .text-gray-800 { color: #e5e7eb !important; }
   [data-dark="auto"] .text-gray-700,
-  [data-dark="true"] .text-gray-700 {
-    color: #d1d5db !important;
-  }
+  [data-dark="true"] .text-gray-700 { color: #d1d5db !important; }
   [data-dark="auto"] .text-gray-500,
-  [data-dark="true"] .text-gray-500 {
-    color: #9ca3af !important;
-  }
+  [data-dark="true"] .text-gray-500 { color: #9ca3af !important; }
   [data-dark="auto"] .text-gray-400,
-  [data-dark="true"] .text-gray-400 {
-    color: #6b7280 !important;
-  }
+  [data-dark="true"] .text-gray-400 { color: #6b7280 !important; }
   [data-dark="auto"] .hover\:bg-gray-50:hover,
   [data-dark="true"] .hover\:bg-gray-50:hover {
     background-color: rgba(255,255,255,0.05) !important;
   }
 }
 
-h1, h2, h3 { font-family: Georgia, serif; }
+/* ─────────────────────────────────────────────────
+   ANIMATIONS
+───────────────────────────────────────────────── */
 
-/* ── Subject gradient cards ────────────────────── */
-.subject-gradient-math     { background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%); }
-.subject-gradient-english  { background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%); }
-.subject-gradient-science  { background: linear-gradient(135deg, #fefce8 0%, #fef3c7 100%); }
-.subject-gradient-social   { background: linear-gradient(135deg, #fdf2f8 0%, #fce7f3 100%); }
-.subject-gradient-tech     { background: linear-gradient(135deg, #f5f3ff 0%, #ede9fe 100%); }
-.subject-gradient-commerce { background: linear-gradient(135deg, #fff7ed 0%, #ffedd5 100%); }
-.subject-gradient-default  { background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%); }
+/* Shimmer — replaces the plain "pulse" skeleton */
+@keyframes shimmer {
+  0%   { background-position: -400px 0; }
+  100% { background-position:  400px 0; }
+}
 
-/* ── Hero pattern ──────────────────────────────── */
+/* Gentle float for decorative elements */
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50%       { transform: translateY(-6px); }
+}
+
+/* Smooth pop-in for modals / toasts */
+@keyframes popIn {
+  0%   { opacity: 0; transform: scale(0.94) translateY(6px); }
+  60%  { transform: scale(1.02) translateY(-1px); }
+  100% { opacity: 1; transform: scale(1) translateY(0); }
+}
+
+/* Slide-up for page sections */
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(18px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* Slide-down for dropdowns */
+@keyframes slideDown {
+  from { opacity: 0; transform: translateY(-8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* Fade-in overlay */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+/* Bounce dots (loading indicator) */
+@keyframes bounceDot {
+  0%, 80%, 100% { transform: scale(0.6); opacity: 0.4; }
+  40%           { transform: scale(1);   opacity: 1;   }
+}
+
+/* Progress bar indeterminate */
+@keyframes indeterminate {
+  0%   { left: -35%; right: 100%; }
+  60%  { left: 100%; right: -90%; }
+  100% { left: 100%; right: -90%; }
+}
+
+/* Spin (keep the standard one) */
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* ─────────────────────────────────────────────────
+   ANIMATION UTILITY CLASSES
+───────────────────────────────────────────────── */
+.animate-shimmer {
+  background: linear-gradient(
+    90deg,
+    var(--shimmer-from) 0%,
+    var(--shimmer-via)  50%,
+    var(--shimmer-to)   100%
+  );
+  background-size: 800px 100%;
+  animation: shimmer 1.6s ease-in-out infinite;
+}
+
+.animate-pop-in    { animation: popIn    260ms cubic-bezier(0.34, 1.56, 0.64, 1) forwards; }
+.animate-slide-up  { animation: slideUp  320ms cubic-bezier(0.4, 0, 0.2, 1) forwards; }
+.animate-slide-down{ animation: slideDown 200ms cubic-bezier(0.4, 0, 0.2, 1) forwards; }
+.animate-fade-in   { animation: fadeIn   200ms ease forwards; }
+.animate-float     { animation: float    3s ease-in-out infinite; }
+.animate-spin      { animation: spin     700ms linear infinite; }
+
+/* ─────────────────────────────────────────────────
+   CARD HOVER — richer lift effect
+───────────────────────────────────────────────── */
+.card-hover {
+  transition:
+    transform  220ms cubic-bezier(0.34, 1.56, 0.64, 1),
+    box-shadow 220ms ease,
+    border-color 200ms ease;
+  will-change: transform;
+}
+
+.card-hover:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-lg);
+  border-color: color-mix(in srgb, var(--color-primary) 18%, transparent);
+}
+
+.card-hover:active {
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-md);
+}
+
+/* ─────────────────────────────────────────────────
+   GLASS CARD (optional utility)
+───────────────────────────────────────────────── */
+.glass {
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(12px) saturate(160%);
+  -webkit-backdrop-filter: blur(12px) saturate(160%);
+  border: 1px solid rgba(255, 255, 255, 0.4);
+}
+
+/* ─────────────────────────────────────────────────
+   SKELETON LOADER (replaces animate-pulse)
+───────────────────────────────────────────────── */
+.skeleton {
+  position: relative;
+  overflow: hidden;
+  background: var(--shimmer-from);
+  border-radius: 8px;
+}
+
+.skeleton::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    90deg,
+    transparent        0%,
+    var(--shimmer-via) 50%,
+    transparent        100%
+  );
+  background-size: 400px 100%;
+  animation: shimmer 1.5s ease-in-out infinite;
+}
+
+/* Override Tailwind's animate-pulse with our shimmer for consistency */
+.animate-pulse {
+  animation: none !important;
+  position: relative;
+  overflow: hidden;
+  background: var(--shimmer-from) !important;
+}
+
+.animate-pulse::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    90deg,
+    transparent        0%,
+    var(--shimmer-via) 50%,
+    transparent        100%
+  );
+  background-size: 400px 100%;
+  animation: shimmer 1.5s ease-in-out infinite;
+  border-radius: inherit;
+}
+
+/* ─────────────────────────────────────────────────
+   MODAL & OVERLAY
+───────────────────────────────────────────────── */
+.modal-overlay {
+  animation: fadeIn 180ms ease forwards;
+}
+
+.modal-panel {
+  animation: popIn 260ms cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+
+/* ─────────────────────────────────────────────────
+   DROPDOWN MENUS
+───────────────────────────────────────────────── */
+.dropdown-menu {
+  animation: slideDown 180ms cubic-bezier(0.4, 0, 0.2, 1) forwards;
+  transform-origin: top center;
+}
+
+/* ─────────────────────────────────────────────────
+   INTERACTIVE ROWS (e.g. booking/lesson rows)
+───────────────────────────────────────────────── */
+.row-hover {
+  transition: background-color 150ms ease;
+  border-radius: 10px;
+}
+
+.row-hover:hover {
+  background-color: color-mix(in srgb, var(--color-surface) 60%, transparent);
+}
+
+/* ─────────────────────────────────────────────────
+   BADGE PILL
+───────────────────────────────────────────────── */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  font-size: 0.7rem;
+  font-weight: 500;
+  padding: 2px 10px;
+  border-radius: 99px;
+  letter-spacing: 0.01em;
+  transition: filter 150ms ease;
+}
+
+.badge:hover { filter: brightness(0.95); }
+
+/* ─────────────────────────────────────────────────
+   STAT CARD NUMBER — count-up feel
+───────────────────────────────────────────────── */
+.stat-number {
+  font-family: Georgia, serif;
+  transition: color 300ms ease;
+}
+
+/* ─────────────────────────────────────────────────
+   PROGRESS BAR
+───────────────────────────────────────────────── */
+.progress-bar-track {
+  height: 6px;
+  border-radius: 99px;
+  background: var(--color-surface);
+  overflow: hidden;
+}
+
+.progress-bar-fill {
+  height: 100%;
+  border-radius: 99px;
+  background: var(--color-progress);
+  transition: width 600ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* ─────────────────────────────────────────────────
+   NAV LINK ACTIVE INDICATOR
+───────────────────────────────────────────────── */
+.nav-active-indicator {
+  transition:
+    left   250ms cubic-bezier(0.4, 0, 0.2, 1),
+    width  250ms cubic-bezier(0.4, 0, 0.2, 1),
+    opacity 200ms ease;
+}
+
+/* ─────────────────────────────────────────────────
+   TOAST NOTIFICATION
+───────────────────────────────────────────────── */
+.toast-enter {
+  animation: slideUp 300ms cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+
+/* ─────────────────────────────────────────────────
+   IMAGE LOADING
+───────────────────────────────────────────────── */
+img {
+  transition: opacity 300ms ease;
+}
+
+img[data-loading="true"] {
+  opacity: 0;
+}
+
+img[data-loading="false"],
+img.loaded {
+  opacity: 1;
+}
+
+/* ─────────────────────────────────────────────────
+   SUBJECT GRADIENT CARDS — richer feel
+───────────────────────────────────────────────── */
+.subject-gradient-math {
+  background: linear-gradient(135deg, #f0fdf4 0%, #d1fae5 100%);
+}
+.subject-gradient-english {
+  background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%);
+}
+.subject-gradient-science {
+  background: linear-gradient(135deg, #fefce8 0%, #fef9c3 100%);
+}
+.subject-gradient-social {
+  background: linear-gradient(135deg, #fdf2f8 0%, #fce7f3 100%);
+}
+.subject-gradient-tech {
+  background: linear-gradient(135deg, #f5f3ff 0%, #ede9fe 100%);
+}
+.subject-gradient-commerce {
+  background: linear-gradient(135deg, #fff7ed 0%, #fed7aa 100%);
+}
+.subject-gradient-default {
+  background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+}
+
+/* ─────────────────────────────────────────────────
+   HERO PATTERN — more atmospheric
+───────────────────────────────────────────────── */
 .hero-pattern {
   background-image:
-    radial-gradient(circle at 20% 50%, rgba(250,199,117,0.15) 0%, transparent 50%),
-    radial-gradient(circle at 80% 20%, rgba(192,221,151,0.1) 0%, transparent 40%),
-    radial-gradient(circle at 60% 80%, rgba(250,199,117,0.08) 0%, transparent 45%);
+    radial-gradient(ellipse at 15% 50%, rgba(250,199,117,0.18) 0%, transparent 55%),
+    radial-gradient(ellipse at 85% 20%, rgba(192,221,151,0.14) 0%, transparent 45%),
+    radial-gradient(ellipse at 55% 85%, rgba(250,199,117,0.10) 0%, transparent 50%),
+    radial-gradient(ellipse at 70% 50%, rgba(168,212,122,0.08) 0%, transparent 40%);
 }
 
-/* ── Smooth card hover ─────────────────────────── */
-.card-hover {
-  transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+/* ─────────────────────────────────────────────────
+   SECTION FADE-IN (replace FadeIn component fallback)
+───────────────────────────────────────────────── */
+.section-enter {
+  animation: slideUp 400ms cubic-bezier(0.4, 0, 0.2, 1) both;
 }
-.card-hover:hover {
+
+/* ─────────────────────────────────────────────────
+   INTERACTIVE BUTTON RIPPLE FEEL (no JS needed)
+───────────────────────────────────────────────── */
+.btn-primary {
+  position: relative;
+  overflow: hidden;
+  transition:
+    background-color 200ms ease,
+    box-shadow 200ms ease,
+    transform 150ms cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.btn-primary:hover:not(:disabled) {
+  box-shadow: var(--shadow-md);
+  transform: translateY(-1px);
+}
+
+.btn-primary:active:not(:disabled) {
+  transform: translateY(0) scale(0.98);
+  box-shadow: var(--shadow-xs);
+}
+
+/* ─────────────────────────────────────────────────
+   FORM INPUT FOCUS RING
+───────────────────────────────────────────────── */
+.input-base {
+  transition:
+    border-color 200ms ease,
+    box-shadow   200ms ease;
+}
+
+.input-base:focus {
+  border-color: var(--color-primary-lit) !important;
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-primary-lit) 20%, transparent);
+  outline: none;
+}
+
+/* ─────────────────────────────────────────────────
+   DASHBOARD SHELL — sidebar link transitions
+───────────────────────────────────────────────── */
+.sidebar-link {
+  transition:
+    background-color 160ms ease,
+    color 160ms ease,
+    border-left-color 160ms ease,
+    padding-left 160ms ease;
+}
+
+/* ─────────────────────────────────────────────────
+   STAT CARD HOVER
+───────────────────────────────────────────────── */
+.stat-card {
+  transition:
+    transform  200ms cubic-bezier(0.4, 0, 0.2, 1),
+    box-shadow 200ms ease;
+}
+
+.stat-card:hover {
   transform: translateY(-2px);
-  box-shadow: 0 8px 25px rgba(0,0,0,0.08);
+  box-shadow: var(--shadow-md);
+}
+
+/* ─────────────────────────────────────────────────
+   TABLE / LIST ROWS — alternating + hover
+───────────────────────────────────────────────── */
+.table-row-hover {
+  transition: background-color 120ms ease;
+}
+
+.table-row-hover:hover {
+  background-color: color-mix(in srgb, var(--color-surface) 40%, transparent);
+}
+
+/* ─────────────────────────────────────────────────
+   TOGGLE / TAB INDICATOR
+───────────────────────────────────────────────── */
+.tab-indicator {
+  transition:
+    transform 220ms cubic-bezier(0.4, 0, 0.2, 1),
+    width     220ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* ─────────────────────────────────────────────────
+   VIDEO PLAYER CONTROLS
+───────────────────────────────────────────────── */
+.player-controls {
+  transition: opacity 300ms ease;
+}
+
+/* ─────────────────────────────────────────────────
+   PAYMENT MODAL — waiting dots
+───────────────────────────────────────────────── */
+.bounce-dot {
+  animation: bounceDot 1.2s ease-in-out infinite;
+}
+.bounce-dot:nth-child(1) { animation-delay: 0s; }
+.bounce-dot:nth-child(2) { animation-delay: 0.16s; }
+.bounce-dot:nth-child(3) { animation-delay: 0.32s; }
+
+/* ─────────────────────────────────────────────────
+   SELECTION HIGHLIGHT
+───────────────────────────────────────────────── */
+::selection {
+  background: color-mix(in srgb, var(--color-accent-lit) 50%, transparent);
+  color: var(--color-primary);
+}
+
+/* ─────────────────────────────────────────────────
+   REDUCED MOTION — respect user preference
+───────────────────────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* ─────────────────────────────────────────────────
+   NAVBAR HOVER UTILITIES (CSS-only, no JS needed)
+───────────────────────────────────────────────── */
+.nav-brand:hover {
+  opacity: 0.85;
+}
+
+.nav-logout {
+  color: rgba(255,255,255,0.8);
+  border: 1px solid rgba(255,255,255,0.18);
+  background-color: transparent;
+  transition: background-color 200ms ease, color 200ms ease, border-color 200ms ease;
+}
+
+.nav-logout:hover {
+  background-color: rgba(255,255,255,0.10);
+  color: #fff;
+}
+
+.nav-login {
+  color: var(--color-nav-text);
+  border: 1px solid rgba(255,255,255,0.18);
+  background-color: transparent;
+  transition: background-color 200ms ease, color 200ms ease;
+}
+
+.nav-login:hover {
+  background-color: rgba(255,255,255,0.08);
+}
+
+.nav-cta {
+  background-color: var(--color-accent-btn);
+  color: var(--color-accent-btn-text);
+  transition: filter 200ms ease, transform 150ms ease, box-shadow 200ms ease;
+}
+
+.nav-cta:hover {
+  filter: brightness(1.08);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.20);
 }
