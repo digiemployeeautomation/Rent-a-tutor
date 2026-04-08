@@ -88,10 +88,10 @@ export default function StudentDashboard() {
   )
 
   const statCards = [
-    { label: 'Lessons purchased', value: stats.purchases, type: 'a' },
-    { label: 'Sessions booked',   value: stats.sessions,  type: 'a' },
-    { label: 'Upcoming sessions', value: stats.upcoming,  type: 'b' },
-    { label: 'Subjects studied',  value: stats.subjects,  type: 'b' },
+    { label: 'Lessons purchased', value: stats.purchases, type: 'a', href: '/dashboard/student/purchases' },
+    { label: 'Sessions booked',   value: stats.sessions,  type: 'a', href: '/tutor' },
+    { label: 'Upcoming sessions', value: stats.upcoming,  type: 'b', href: '/tutor' },
+    { label: 'Subjects studied',  value: stats.subjects,  type: 'b', href: '/browse' },
   ]
 
   if (loading) return (
@@ -130,7 +130,7 @@ export default function StudentDashboard() {
         {/* Stats */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
           {statCards.map(s => (
-            <div key={s.label} className="rounded-2xl p-4"
+            <Link key={s.label} href={s.href} className="rounded-2xl p-4 hover:opacity-80 transition"
               style={{ backgroundColor: s.type === 'a' ? 'var(--color-stat-a-bg)' : 'var(--color-stat-b-bg)' }}>
               <div className="text-xs font-medium mb-1"
                 style={{ color: s.type === 'a' ? 'var(--color-stat-a-sub)' : 'var(--color-stat-b-sub)' }}>
@@ -140,7 +140,7 @@ export default function StudentDashboard() {
                 style={{ color: s.type === 'a' ? 'var(--color-stat-a-text)' : 'var(--color-stat-b-text)' }}>
                 {s.value}
               </div>
-            </div>
+            </Link>
           ))}
         </div>
 
@@ -166,7 +166,8 @@ export default function StudentDashboard() {
             ) : (
               <div className="space-y-4">
                 {recentLessons.map(p => (
-                  <div key={p.id} className="flex items-center gap-4">
+                  <Link key={p.id} href={`/browse/${encodeURIComponent(p.lessons?.subject ?? '')}/lesson/${p.lessons?.id ?? ''}`}
+                    className="flex items-center gap-4 rounded-xl p-2 -mx-2 hover:bg-gray-50 transition">
                     <div className="w-11 h-11 rounded-xl flex items-center justify-center text-xs font-medium flex-shrink-0"
                       style={{ backgroundColor: 'var(--color-surface)', color: 'var(--color-primary-mid)' }}>
                       {p.lessons?.subject?.slice(0, 3) ?? '—'}
@@ -176,7 +177,7 @@ export default function StudentDashboard() {
                       <div className="text-xs text-gray-400">{p.lessons?.subject} · {p.lessons?.form_level}</div>
                     </div>
                     <div className="text-xs text-gray-400 flex-shrink-0">K{p.amount_paid}</div>
-                  </div>
+                  </Link>
                 ))}
                 {stats.purchases > 5 && (
                   <p className="text-xs text-gray-400 text-center pt-2">

@@ -212,9 +212,9 @@ export default function TutorDashboard() {
   const maxEarning = Math.max(...earnings.map(e => e.amount), 1)
 
   const statCards = [
-    { label: 'Lessons uploaded',   value: stats.lessons,                         type: 'a' },
-    { label: 'Total purchases',    value: stats.purchases,                       type: 'a' },
-    { label: 'Sessions completed', value: stats.completed,                       type: 'b' },
+    { label: 'Lessons uploaded',   value: stats.lessons,                         type: 'a', href: '/dashboard/tutor/lessons' },
+    { label: 'Total purchases',    value: stats.purchases,                       type: 'a', href: '/dashboard/tutor/lessons' },
+    { label: 'Sessions completed', value: stats.completed,                       type: 'b', href: '/dashboard/tutor/sessions' },
     { label: 'Total earned (ZMW)', value: `K${stats.earnings.toLocaleString()}`, type: 'b' },
   ]
 
@@ -258,19 +258,23 @@ export default function TutorDashboard() {
 
         {/* Stats */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
-          {statCards.map(s => (
-            <div key={s.label} className="rounded-2xl p-4"
-              style={{ backgroundColor: s.type === 'a' ? 'var(--color-stat-a-bg)' : 'var(--color-stat-b-bg)' }}>
-              <div className="text-xs font-medium mb-1"
-                style={{ color: s.type === 'a' ? 'var(--color-stat-a-sub)' : 'var(--color-stat-b-sub)' }}>
-                {s.label}
-              </div>
-              <div className="font-serif text-3xl"
-                style={{ color: s.type === 'a' ? 'var(--color-stat-a-text)' : 'var(--color-stat-b-text)' }}>
-                {s.value}
-              </div>
-            </div>
-          ))}
+          {statCards.map(s => {
+            const Card = s.href ? Link : 'div'
+            const linkProps = s.href ? { href: s.href } : {}
+            return (
+              <Card key={s.label} {...linkProps} className={`rounded-2xl p-4${s.href ? ' hover:opacity-80 transition' : ''}`}
+                style={{ backgroundColor: s.type === 'a' ? 'var(--color-stat-a-bg)' : 'var(--color-stat-b-bg)' }}>
+                <div className="text-xs font-medium mb-1"
+                  style={{ color: s.type === 'a' ? 'var(--color-stat-a-sub)' : 'var(--color-stat-b-sub)' }}>
+                  {s.label}
+                </div>
+                <div className="font-serif text-3xl"
+                  style={{ color: s.type === 'a' ? 'var(--color-stat-a-text)' : 'var(--color-stat-b-text)' }}>
+                  {s.value}
+                </div>
+              </Card>
+            )
+          })}
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
@@ -296,7 +300,8 @@ export default function TutorDashboard() {
             ) : (
               <div className="space-y-3">
                 {recentLessons.map(l => (
-                  <div key={l.id} className="flex items-center justify-between p-3 rounded-xl hover:bg-gray-50 transition">
+                  <Link key={l.id} href={`/browse/${encodeURIComponent(l.subject ?? '')}/lesson/${l.id}`}
+                    className="flex items-center justify-between p-3 rounded-xl hover:bg-gray-50 transition">
                     <div className="flex items-center gap-3 min-w-0">
                       <div className="w-9 h-9 rounded-lg flex items-center justify-center text-xs font-medium flex-shrink-0"
                         style={{ backgroundColor: 'var(--color-surface)', color: 'var(--color-primary-mid)' }}>
@@ -314,7 +319,7 @@ export default function TutorDashboard() {
                       }}>
                       {l.status ?? 'draft'}
                     </span>
-                  </div>
+                  </Link>
                 ))}
                 {stats.lessons > 10 && (
                   <p className="text-xs text-gray-400 text-center pt-2">
