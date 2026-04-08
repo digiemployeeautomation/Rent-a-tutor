@@ -3,6 +3,7 @@ import { useState, useEffect, useMemo } from 'react'
 import { useRouter } from 'next/navigation'
 import Navbar from '@/components/layout/Navbar'
 import { supabase } from '@/lib/supabase'
+import { NRCInput } from '@/components/ui/nrc-input'
 
 const MAX_FILE_SIZE = 10 * 1024 * 1024 // 10 MB
 
@@ -108,7 +109,7 @@ export default function TutorVerifyPage() {
     setError('')
 
     if (!selfie)          return setError('Please upload a selfie or passport photo.')
-    if (!idNumber.trim()) return setError('Please enter your National ID number.')
+    if (idNumber.replace(/\//g, '').length !== 9) return setError('Please enter all 9 digits of your National ID number.')
     if (!idFront)         return setError('Please upload the front of your National ID.')
     if (!idBack)          return setError('Please upload the back of your National ID.')
 
@@ -201,14 +202,15 @@ export default function TutorVerifyPage() {
               National ID number <span className="text-red-400">*</span>
             </label>
             <p className="text-xs text-gray-400 mb-2">Enter the number exactly as it appears on your card.</p>
-            <input
-              type="text"
-              required
-              value={idNumber}
-              onChange={e => setIdNumber(e.target.value)}
-              placeholder="e.g. 123456/78/9"
-              className="w-full border border-gray-300 rounded-lg px-4 py-2.5 text-sm outline-none focus:border-gray-400 font-mono"
+            <NRCInput
+              value={idNumber.replace(/\//g, '')}
+              onChange={(val) => {
+                if (val.length <= 6) setIdNumber(val)
+                else if (val.length <= 8) setIdNumber(val.slice(0, 6) + '/' + val.slice(6))
+                else setIdNumber(val.slice(0, 6) + '/' + val.slice(6, 8) + '/' + val.slice(8))
+              }}
             />
+            <p className="text-xs text-gray-400 mt-1.5">Format: XXXXXX/XX/X</p>
           </div>
 
           <FileUploadBox
