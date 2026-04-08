@@ -4,7 +4,7 @@ import Link from 'next/link'
 import Navbar from '@/components/layout/Navbar'
 import { supabase } from '@/lib/supabase'
 import { Spinner } from '@/components/ui/spinner'
-import { SUBJECTS } from '@/lib/constants'
+import { SUBJECTS, BADGE_LABELS } from '@/lib/constants'
 
 export default function FindTutorPage() {
   const [tutors, setTutors]         = useState([])
@@ -206,10 +206,10 @@ export default function FindTutorPage() {
 
                         <div className="text-sm font-medium text-gray-800 mb-0.5">{name}</div>
 
-                        {t.badge && (
+                        {t.badge && t.badge !== 'none' && (
                           <span className="inline-block text-xs px-2 py-0.5 rounded-full mb-2 w-fit"
                             style={{ backgroundColor: 'var(--color-surface)', color: 'var(--color-primary-mid)' }}>
-                            ✓ {t.badge}
+                            ✓ {BADGE_LABELS[t.badge] ?? t.badge}
                           </span>
                         )}
 

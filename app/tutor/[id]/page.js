@@ -4,6 +4,7 @@ import Link from 'next/link'
 import { useParams, useRouter } from 'next/navigation'
 import Navbar from '@/components/layout/Navbar'
 import { supabase } from '@/lib/supabase'
+import { BADGE_LABELS } from '@/lib/constants'
 
 function formatDate(iso) {
   return new Date(iso).toLocaleDateString('en-ZM', {
@@ -281,10 +282,10 @@ export default function TutorProfilePage() {
                   <h1 className="font-serif text-2xl" style={{ color: 'var(--color-primary)' }}>
                     {name}
                   </h1>
-                  {tutor.badge && (
+                  {tutor.badge && tutor.badge !== 'none' && (
                     <span className="text-xs px-2.5 py-1 rounded-full"
                       style={{ backgroundColor: 'var(--color-surface)', color: 'var(--color-primary-mid)' }}>
-                      ✓ {tutor.badge}
+                      ✓ {BADGE_LABELS[tutor.badge] ?? tutor.badge}
                     </span>
                   )}
                   {tutor.is_featured && (

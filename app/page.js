@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import Navbar from '@/components/layout/Navbar'
 import { supabase } from '@/lib/supabase'
+import { BADGE_LABELS } from '@/lib/constants'
 
 const subjectMeta = {
   'Mathematics':      { initials: 'Math', bg: 'bg-sage-100',   text: 'text-forest-600'  },
@@ -211,10 +212,10 @@ export default function HomePage() {
                     </div>
                     <div className="text-sm font-medium mb-1">{name}</div>
                     <div className="text-xs text-gray-500 mb-2">{(t.subjects ?? []).slice(0, 2).join(' · ')}</div>
-                    {t.badge && (
+                    {t.badge && t.badge !== 'none' && (
                       <span className="inline-block text-xs px-2 py-0.5 rounded-full mb-2"
                         style={{ backgroundColor: 'var(--color-surface)', color: 'var(--color-primary-mid)' }}>
-                        ✓ {t.badge}
+                        ✓ {BADGE_LABELS[t.badge] ?? t.badge}
                       </span>
                     )}
                     <div className="flex justify-between items-center border-t border-gray-100 pt-3 mt-2">
