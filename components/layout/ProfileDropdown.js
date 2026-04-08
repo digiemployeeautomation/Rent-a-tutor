@@ -2,8 +2,7 @@
 import { useState, useEffect, useRef } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
-import { useRouter } from 'next/navigation'
-import { supabase } from '@/lib/supabase'
+import { useTheme } from '@/context/ThemeContext'
 
 /* ── Icons (inline SVG — no extra deps) ─────────────────── */
 const Icon = ({ d, size = 15 }) => (
@@ -28,53 +27,17 @@ const ICONS = {
   topics:   'M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z',
 }
 
-/* ── Dark mode helpers ──────────────────────────────────── */
-function getSystemPref() {
-  if (typeof window === 'undefined') return 'light'
-  return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'
-}
-
-function getCurrentMode() {
-  if (typeof document === 'undefined') return 'light'
-  const attr = document.documentElement.getAttribute('data-dark')
-  if (attr === 'true') return 'dark'
-  if (attr === 'false' || attr === null) return 'light'
-  return getSystemPref()
-}
-
-function setDarkMode(mode) {
-  document.documentElement.setAttribute('data-dark', mode === 'dark' ? 'true' : 'false')
-  try {
-    localStorage.setItem('rat-dark', mode)
-  } catch (err) {
-    console.warn('[ProfileDropdown] Could not persist dark mode:', err)
-  }
-}
-
 /* ── Main component ─────────────────────────────────────── */
 export default function ProfileDropdown({ user, profile, onLogout }) {
-  const router = useRouter()
+  const { darkMode, toggleDark } = useTheme()
   const [open, setOpen]       = useState(false)
-  const [dark, setDark]       = useState(false)
   const containerRef          = useRef(null)
-  const menuRef               = useRef(null)
 
   const role      = profile?.role ?? 'student'
   const fullName  = profile?.full_name ?? user?.user_metadata?.full_name ?? 'Account'
   const email     = user?.email ?? ''
   const avatarUrl = profile?.avatar_url ?? null
   const initials  = fullName.split(' ').filter(Boolean).map(w => w[0]).join('').slice(0, 2).toUpperCase() || '??'
-
-  /* Sync dark state on mount */
-  useEffect(() => {
-    setDark(getCurrentMode() === 'dark')
-    try {
-      const saved = localStorage.getItem('rat-dark')
-      if (saved) setDark(saved === 'dark')
-    } catch (err) {
-      console.warn('[ProfileDropdown] Could not read dark mode pref:', err)
-    }
-  }, [])
 
   /* Close on outside click or Escape */
   useEffect(() => {
@@ -90,12 +53,6 @@ export default function ProfileDropdown({ user, profile, onLogout }) {
       document.removeEventListener('keydown', onKey)
     }
   }, [open])
-
-  function toggleDark() {
-    const next = dark ? 'light' : 'dark'
-    setDark(!dark)
-    setDarkMode(next)
-  }
 
   function handleLogout() {
     setOpen(false)
@@ -212,7 +169,6 @@ export default function ProfileDropdown({ user, profile, onLogout }) {
       {/* ── Dropdown panel ────────────────────────────── */}
       {open && (
         <div
-          ref={menuRef}
           role="menu"
           aria-label="Profile options"
           className="pd-panel"
@@ -293,13 +249,13 @@ export default function ProfileDropdown({ user, profile, onLogout }) {
             {/* Dark mode toggle */}
             <button className="pd-item" role="menuitem" onClick={toggleDark} style={{ width: '100%' }}>
               <span className="pd-icon">
-                <Icon d={dark ? ICONS.sun : ICONS.moon} />
+                <Icon d={darkMode ? ICONS.sun : ICONS.moon} />
               </span>
-              <span style={{ flex: 1 }}>{dark ? 'Light mode' : 'Dark mode'}</span>
+              <span style={{ flex: 1 }}>{darkMode ? 'Light mode' : 'Dark mode'}</span>
               {/* Toggle pill */}
               <span
                 role="switch"
-                aria-checked={dark}
+                aria-checked={darkMode}
                 aria-label="Toggle dark mode"
                 style={{
                   display: 'inline-flex',
@@ -307,7 +263,7 @@ export default function ProfileDropdown({ user, profile, onLogout }) {
                   width: 34,
                   height: 19,
                   borderRadius: 99,
-                  backgroundColor: dark ? 'var(--color-primary-mid, #27500a)' : '#d1d5db',
+                  backgroundColor: darkMode ? 'var(--color-primary-mid, #27500a)' : '#d1d5db',
                   padding: '0 2px',
                   transition: 'background-color 250ms ease',
                   flexShrink: 0,
@@ -319,7 +275,7 @@ export default function ProfileDropdown({ user, profile, onLogout }) {
                   borderRadius: '50%',
                   backgroundColor: '#fff',
                   boxShadow: '0 1px 3px rgba(0,0,0,0.20)',
-                  transform: dark ? 'translateX(15px)' : 'translateX(0)',
+                  transform: darkMode ? 'translateX(15px)' : 'translateX(0)',
                   transition: 'transform 250ms cubic-bezier(0.34,1.56,0.64,1)',
                   display: 'block',
                 }} />

@@ -1,12 +1,45 @@
 // context/ThemeContext.js
 'use client'
-import { createContext, useContext, useEffect, useState } from 'react'
+import { createContext, useContext, useEffect, useState, useCallback } from 'react'
 import { supabase } from '@/lib/supabase'
 
-const ThemeContext = createContext({ role: 'student' })
+const ThemeContext = createContext({ role: 'student', darkMode: false, toggleDark: () => {} })
+
+function getSystemDark() {
+  if (typeof window === 'undefined') return false
+  return window.matchMedia('(prefers-color-scheme: dark)').matches
+}
+
+function readDarkPref() {
+  if (typeof document === 'undefined') return false
+  try {
+    const saved = localStorage.getItem('rat-dark')
+    if (saved === 'dark') return true
+    if (saved === 'light') return false
+  } catch {}
+  // No saved preference — check current data-dark attribute
+  const attr = document.documentElement.getAttribute('data-dark')
+  if (attr === 'true') return true
+  if (attr === 'auto') return getSystemDark()
+  return false
+}
+
+function applyDarkToDOM(isDark) {
+  document.documentElement.setAttribute('data-dark', isDark ? 'true' : 'false')
+  try { localStorage.setItem('rat-dark', isDark ? 'dark' : 'light') } catch {}
+}
 
 export function ThemeProvider({ children }) {
   const [role, setRole] = useState('student')
+  const [darkMode, setDarkMode] = useState(false)
+
+  const toggleDark = useCallback(() => {
+    setDarkMode(prev => {
+      const next = !prev
+      applyDarkToDOM(next)
+      return next
+    })
+  }, [])
 
   function applyRole(r) {
     const validRole = ['student', 'tutor', 'admin'].includes(r) ? r : 'student'
@@ -14,13 +47,26 @@ export function ThemeProvider({ children }) {
     const theme = validRole === 'tutor' ? 'tutor' : 'student'
     document.documentElement.setAttribute('data-theme', theme)
 
-    // Add Secure flag when served over HTTPS (i.e. in production).
-    // Localhost skips it so local dev still works.
     const secureFlag = window.location.protocol === 'https:' ? '; Secure' : ''
     document.cookie = `rat-role=${validRole}; path=/; max-age=604800; SameSite=Lax${secureFlag}`
   }
 
   useEffect(() => {
+    // Sync dark mode state from DOM (already set by init script)
+    setDarkMode(readDarkPref())
+
+    // Listen for system preference changes when no explicit preference is saved
+    const mq = window.matchMedia('(prefers-color-scheme: dark)')
+    function onSystemChange(e) {
+      const saved = localStorage.getItem('rat-dark')
+      if (!saved) {
+        setDarkMode(e.matches)
+        applyDarkToDOM(e.matches)
+      }
+    }
+    mq.addEventListener('change', onSystemChange)
+
+    // Role setup
     supabase.auth.getUser().then(async ({ data: { user } }) => {
       if (!user) return applyRole('student')
       const { data: profile } = await supabase
@@ -42,11 +88,14 @@ export function ThemeProvider({ children }) {
       applyRole(profile?.role ?? session.user.user_metadata?.role ?? 'student')
     })
 
-    return () => subscription.unsubscribe()
+    return () => {
+      subscription.unsubscribe()
+      mq.removeEventListener('change', onSystemChange)
+    }
   }, [])
 
   return (
-    <ThemeContext.Provider value={{ role }}>
+    <ThemeContext.Provider value={{ role, darkMode, toggleDark }}>
       {children}
     </ThemeContext.Provider>
   )

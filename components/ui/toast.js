@@ -44,9 +44,9 @@ function Toast({ message, type, onDismiss }) {
   }, [])
 
   const colors = {
-    success: { bg: '#ecfdf5', border: '#a7f3d0', text: '#065f46', icon: '✓' },
-    error:   { bg: '#fef2f2', border: '#fecaca', text: '#991b1b', icon: '✕' },
-    info:    { bg: '#eff6ff', border: '#bfdbfe', text: '#1e40af', icon: 'i' },
+    success: { bg: 'var(--toast-success-bg, #ecfdf5)', border: 'var(--toast-success-border, #a7f3d0)', text: 'var(--toast-success-text, #065f46)', icon: '✓' },
+    error:   { bg: 'var(--toast-error-bg, #fef2f2)',   border: 'var(--toast-error-border, #fecaca)',   text: 'var(--toast-error-text, #991b1b)',   icon: '✕' },
+    info:    { bg: 'var(--toast-info-bg, #eff6ff)',    border: 'var(--toast-info-border, #bfdbfe)',    text: 'var(--toast-info-text, #1e40af)',    icon: 'i' },
   }
   const c = colors[type] ?? colors.info
 

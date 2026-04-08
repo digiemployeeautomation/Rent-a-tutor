@@ -40,8 +40,8 @@ function InputOTPSlot({ index, className, ...props }) {
       data-slot="input-otp-slot"
       data-active={isActive}
       className={cn(
-        'relative flex h-11 w-9 items-center justify-center border-y border-r border-gray-300 text-sm font-mono transition-all outline-none first:rounded-l-lg first:border-l last:rounded-r-lg',
-        isActive && 'z-10 border-gray-500 ring-2 ring-gray-300',
+        'nrc-slot relative flex h-11 w-9 items-center justify-center border-y border-r text-sm font-mono transition-all outline-none first:rounded-l-lg first:border-l last:rounded-r-lg',
+        isActive && 'z-10 nrc-slot-active',
         className
       )}
       {...props}
@@ -49,7 +49,7 @@ function InputOTPSlot({ index, className, ...props }) {
       {char}
       {hasFakeCaret && (
         <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
-          <div className="animate-pulse bg-gray-800 h-5 w-px" />
+          <div className="nrc-caret animate-pulse h-5 w-px" />
         </div>
       )}
     </div>
@@ -58,7 +58,7 @@ function InputOTPSlot({ index, className, ...props }) {
 
 function InputOTPSeparator({ ...props }) {
   return (
-    <div data-slot="input-otp-separator" role="separator" className="text-gray-400 text-lg font-mono mx-0.5" {...props}>
+    <div data-slot="input-otp-separator" role="separator" className="nrc-separator text-lg font-mono mx-0.5" {...props}>
       /
     </div>
   )
