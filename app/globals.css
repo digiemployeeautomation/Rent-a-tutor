@@ -673,7 +673,7 @@ a {
 }
 
 .card-hover:hover {
-  transform: translateY(-3px);
+  transform: translateY(-4px);
   box-shadow: var(--shadow-lg);
   border-color: color-mix(in srgb, var(--color-primary) 18%, transparent);
 }
@@ -681,6 +681,24 @@ a {
 .card-hover:active {
   transform: translateY(-1px);
   box-shadow: var(--shadow-md);
+}
+
+/* ─────────────────────────────────────────────────
+   SIDEBAR NAV HOVER
+───────────────────────────────────────────────── */
+.sidebar-link {
+  transition:
+    background-color 180ms ease,
+    color 180ms ease,
+    box-shadow 180ms ease,
+    transform 180ms ease;
+}
+
+.sidebar-link:hover {
+  background-color: color-mix(in srgb, var(--color-primary) 8%, transparent);
+  box-shadow: 0 0 0 1.5px color-mix(in srgb, var(--color-primary) 20%, transparent);
+  border-radius: 14px;
+  transform: translateX(2px);
 }
 
 /* ─────────────────────────────────────────────────

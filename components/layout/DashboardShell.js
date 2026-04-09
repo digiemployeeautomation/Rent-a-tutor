@@ -68,19 +68,19 @@ export default function DashboardShell({ children, role }) {
             const active = isActive(item)
             return (
               <Link key={item.href} href={item.href}
+                className={active ? '' : 'sidebar-link'}
                 style={{
                   display: 'flex',
                   alignItems: 'center',
                   gap: 10,
                   padding: '8px 10px',
-                  borderRadius: 14,            /* was 10px */
+                  borderRadius: 14,
                   fontSize: 13,
                   fontWeight: active ? 500 : 400,
                   textDecoration: 'none',
                   color: active ? 'var(--color-primary)' : '#6b7280',
                   backgroundColor: active ? 'var(--color-surface)' : 'transparent',
                   borderLeft: active ? '3px solid var(--color-primary-mid)' : '3px solid transparent',
-                  transition: 'background 0.1s, color 0.1s',
                 }}>
                 <span style={{ fontSize: 14, width: 18, textAlign: 'center', flexShrink: 0 }}>
                   {item.icon}
