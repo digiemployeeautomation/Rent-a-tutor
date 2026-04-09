@@ -421,6 +421,8 @@ export default function LessonPage() {
     const [videoDuration, setVideoDuration] = useState(0)
     const [showControls, setShowControls] = useState(true)
     const [seeking, setSeeking]           = useState(false)
+    const [volume, setVolume]             = useState(1)
+    const [muted, setMuted]              = useState(false)
 
     const containerRef = useRef(null)
     const ytPlayerRef  = useRef(null)
@@ -591,6 +593,27 @@ export default function LessonPage() {
       else streamRef.current?.play()
     }
 
+    function changeVolume(val) {
+      const v = Math.max(0, Math.min(1, val))
+      setVolume(v)
+      setMuted(v === 0)
+      if (ytId) ytPlayerRef.current?.setVolume(v * 100)
+      else if (streamRef.current) { streamRef.current.volume = v; streamRef.current.muted = v === 0 }
+    }
+
+    function toggleMute() {
+      if (muted) {
+        const restore = volume > 0 ? volume : 0.5
+        setMuted(false)
+        if (ytId) { ytPlayerRef.current?.unMute(); ytPlayerRef.current?.setVolume(restore * 100) }
+        else if (streamRef.current) { streamRef.current.muted = false; streamRef.current.volume = restore }
+      } else {
+        setMuted(true)
+        if (ytId) ytPlayerRef.current?.mute()
+        else if (streamRef.current) streamRef.current.muted = true
+      }
+    }
+
     function onBarClick(e) {
       const rect = e.currentTarget.getBoundingClientRect()
       const pct = Math.max(0, Math.min(1, (e.clientX - rect.left) / rect.width))
@@ -716,6 +739,31 @@ export default function LessonPage() {
               <span className="text-white text-xs ml-2 tabular-nums">
                 {fmtTime(currentTime)} / {fmtTime(videoDuration)}
               </span>
+
+              {/* Volume */}
+              <div className="flex items-center gap-1 ml-2 group/vol">
+                <button onClick={toggleMute} className="text-white p-1.5 rounded hover:bg-white/20 transition" title={muted ? 'Unmute' : 'Mute'}>
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    {muted || volume === 0 ? (
+                      <><polygon points="11 5 6 9 2 9 2 15 6 15 11 19" fill="white" stroke="none" /><line x1="23" y1="9" x2="17" y2="15" /><line x1="17" y1="9" x2="23" y2="15" /></>
+                    ) : volume < 0.5 ? (
+                      <><polygon points="11 5 6 9 2 9 2 15 6 15 11 19" fill="white" stroke="none" /><path d="M15.54 8.46a5 5 0 0 1 0 7.07" /></>
+                    ) : (
+                      <><polygon points="11 5 6 9 2 9 2 15 6 15 11 19" fill="white" stroke="none" /><path d="M15.54 8.46a5 5 0 0 1 0 7.07" /><path d="M19.07 4.93a10 10 0 0 1 0 14.14" /></>
+                    )}
+                  </svg>
+                </button>
+                <input
+                  type="range"
+                  min="0"
+                  max="1"
+                  step="0.05"
+                  value={muted ? 0 : volume}
+                  onChange={e => changeVolume(parseFloat(e.target.value))}
+                  className="vol-slider w-0 group-hover/vol:w-20 transition-all duration-200 accent-[#e8c84a] h-1 cursor-pointer opacity-0 group-hover/vol:opacity-100"
+                  title={`Volume: ${Math.round((muted ? 0 : volume) * 100)}%`}
+                />
+              </div>
             </div>
 
             <div className="flex items-center gap-1">

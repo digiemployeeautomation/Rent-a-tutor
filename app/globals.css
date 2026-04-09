@@ -910,6 +910,47 @@ img.loaded {
 }
 
 /* ─────────────────────────────────────────────────
+   VIDEO VOLUME SLIDER
+───────────────────────────────────────────────── */
+.vol-slider {
+  -webkit-appearance: none;
+  appearance: none;
+  background: rgba(255,255,255,0.25);
+  border-radius: 99px;
+  outline: none;
+}
+
+.vol-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: #e8c84a;
+  cursor: pointer;
+  border: none;
+}
+
+.vol-slider::-moz-range-thumb {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: #e8c84a;
+  cursor: pointer;
+  border: none;
+}
+
+.vol-slider::-webkit-slider-runnable-track {
+  height: 4px;
+  border-radius: 99px;
+}
+
+.vol-slider::-moz-range-track {
+  height: 4px;
+  border-radius: 99px;
+  background: rgba(255,255,255,0.25);
+}
+
+/* ─────────────────────────────────────────────────
    FORM INPUT FOCUS RING
 ───────────────────────────────────────────────── */
 .input-base {
