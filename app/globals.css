@@ -100,10 +100,112 @@
   --color-body-text: #111827;
 }
 
-/* ── Dark mode ─────────────────────────────────── */
+/* ── Dark mode — explicit toggle (no media query needed) ── */
+[data-theme="student"][data-dark="true"] {
+  --color-primary:          #c0dd97;
+  --color-primary-mid:      #8ac165;
+  --color-primary-lit:      #a8d47a;
+  --color-accent:           #fac775;
+  --color-accent-mid:       #ef9f27;
+  --color-accent-lit:       #fac775;
+  --color-surface:          #1e2a14;
+  --color-surface-mid:      #2d3f1e;
+  --color-highlight:        #2a2010;
+  --color-page-bg:          #0f1a08;
+  --color-nav-bg:           #0a1204;
+  --color-nav-text:         #c0dd97;
+  --color-nav-accent:       #fac775;
+  --color-badge-bg:         #1e2a14;
+  --color-badge-text:       #a8d47a;
+  --color-btn-bg:           #3b6d11;
+  --color-btn-text:         #eaf3de;
+  --color-btn-hover:        #27500a;
+  --color-accent-btn:       #ba7517;
+  --color-accent-btn-text:  #faeeda;
+  --color-progress:         #3b6d11;
+  --color-stat-a-bg:        #1e2a14;
+  --color-stat-a-text:      #c0dd97;
+  --color-stat-a-sub:       #8ac165;
+  --color-stat-b-bg:        #2a2010;
+  --color-stat-b-text:      #fac775;
+  --color-stat-b-sub:       #ef9f27;
+
+  --shadow-xs:  0 1px 2px rgba(0,0,0,0.25);
+  --shadow-sm:  0 2px 6px rgba(0,0,0,0.30);
+  --shadow-md:  0 4px 16px rgba(0,0,0,0.35);
+  --shadow-lg:  0 8px 32px rgba(0,0,0,0.40);
+  --shadow-xl:  0 16px 48px rgba(0,0,0,0.50);
+
+  --shimmer-from: #1a2810;
+  --shimmer-via:  #253818;
+  --shimmer-to:   #1a2810;
+  --color-body-text: #e5e7eb;
+
+  --toast-success-bg: rgba(34,197,94,0.15);
+  --toast-success-border: rgba(34,197,94,0.30);
+  --toast-success-text: #86efac;
+  --toast-error-bg: rgba(220,38,38,0.15);
+  --toast-error-border: rgba(220,38,38,0.30);
+  --toast-error-text: #fca5a5;
+  --toast-info-bg: rgba(59,130,246,0.15);
+  --toast-info-border: rgba(59,130,246,0.30);
+  --toast-info-text: #93c5fd;
+}
+
+[data-theme="tutor"][data-dark="true"] {
+  --color-primary:          #b5d4f4;
+  --color-primary-mid:      #6aafe8;
+  --color-primary-lit:      #8cc4f0;
+  --color-accent:           #fac775;
+  --color-accent-mid:       #ef9f27;
+  --color-accent-lit:       #fac775;
+  --color-surface:          #0c1a2a;
+  --color-surface-mid:      #132d47;
+  --color-highlight:        #2a2010;
+  --color-page-bg:          #060e18;
+  --color-nav-bg:           #040a14;
+  --color-nav-text:         #b5d4f4;
+  --color-nav-accent:       #fac775;
+  --color-badge-bg:         #0c1a2a;
+  --color-badge-text:       #8cc4f0;
+  --color-btn-bg:           #185fa5;
+  --color-btn-text:         #e6f1fb;
+  --color-btn-hover:        #0c447c;
+  --color-accent-btn:       #ba7517;
+  --color-accent-btn-text:  #faeeda;
+  --color-progress:         #185fa5;
+  --color-stat-a-bg:        #0c1a2a;
+  --color-stat-a-text:      #b5d4f4;
+  --color-stat-a-sub:       #6aafe8;
+  --color-stat-b-bg:        #2a2010;
+  --color-stat-b-text:      #fac775;
+  --color-stat-b-sub:       #ef9f27;
+
+  --shadow-xs:  0 1px 2px rgba(0,0,0,0.30);
+  --shadow-sm:  0 2px 6px rgba(0,0,0,0.35);
+  --shadow-md:  0 4px 16px rgba(0,0,0,0.40);
+  --shadow-lg:  0 8px 32px rgba(0,0,0,0.50);
+  --shadow-xl:  0 16px 48px rgba(0,0,0,0.60);
+
+  --shimmer-from: #0a1828;
+  --shimmer-via:  #112238;
+  --shimmer-to:   #0a1828;
+  --color-body-text: #e5e7eb;
+
+  --toast-success-bg: rgba(34,197,94,0.15);
+  --toast-success-border: rgba(34,197,94,0.30);
+  --toast-success-text: #86efac;
+  --toast-error-bg: rgba(220,38,38,0.15);
+  --toast-error-border: rgba(220,38,38,0.30);
+  --toast-error-text: #fca5a5;
+  --toast-info-bg: rgba(59,130,246,0.15);
+  --toast-info-border: rgba(59,130,246,0.30);
+  --toast-info-text: #93c5fd;
+}
+
+/* ── Dark mode — system preference (auto) ─────── */
 @media (prefers-color-scheme: dark) {
-  [data-theme="student"][data-dark="auto"],
-  [data-theme="student"][data-dark="true"] {
+  [data-theme="student"][data-dark="auto"] {
     --color-primary:          #c0dd97;
     --color-primary-mid:      #8ac165;
     --color-primary-lit:      #a8d47a;
@@ -154,8 +256,7 @@
     --toast-info-text: #93c5fd;
   }
 
-  [data-theme="tutor"][data-dark="auto"],
-  [data-theme="tutor"][data-dark="true"] {
+  [data-theme="tutor"][data-dark="auto"] {
     --color-primary:          #b5d4f4;
     --color-primary-mid:      #6aafe8;
     --color-primary-lit:      #8cc4f0;

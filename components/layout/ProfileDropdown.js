@@ -4,7 +4,6 @@ import Link from 'next/link'
 import Image from 'next/image'
 import { Sun, Moon } from 'lucide-react'
 import { useTheme } from '@/context/ThemeContext'
-import { Toggle } from '@/components/ui/toggle'
 
 /* ── Icons (inline SVG — no extra deps) ─────────────────── */
 const Icon = ({ d, size = 15 }) => (
@@ -249,23 +248,17 @@ export default function ProfileDropdown({ user, profile, onLogout }) {
             ))}
 
             {/* Dark mode toggle */}
-            <div className="pd-item" role="menuitem" style={{ width: '100%' }}>
+            <button
+              className="pd-item"
+              role="menuitem"
+              onClick={toggleDark}
+              style={{ width: '100%' }}
+            >
               <span className="pd-icon">
                 {darkMode ? <Sun size={15} /> : <Moon size={15} />}
               </span>
-              <span style={{ flex: 1 }}>{darkMode ? 'Light mode' : 'Dark mode'}</span>
-              <Toggle
-                pressed={darkMode}
-                onPressedChange={toggleDark}
-                aria-label="Toggle dark mode"
-                size="sm"
-                className="dark-toggle"
-              >
-                <span className="dark-toggle-track" data-pressed={darkMode || undefined}>
-                  <span className="dark-toggle-thumb" data-pressed={darkMode || undefined} />
-                </span>
-              </Toggle>
-            </div>
+              {darkMode ? 'Light mode' : 'Dark mode'}
+            </button>
           </div>
 
           <div className="pd-divider" />
