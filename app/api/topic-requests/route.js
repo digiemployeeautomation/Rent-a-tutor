@@ -22,7 +22,7 @@ async function sendAdminAlert({ studentName, subject, topic, formLevel, urgency,
   if (!process.env.RESEND_API_KEY) return
 
   const urgencyLabel = urgency === 'urgent' ? '🟡 Urgent' : '🟢 Normal'
-  const adminUrl     = `${process.env.NEXT_PUBLIC_SITE_URL?.replace('rentatutor', 'admin.rentatutor') ?? 'https://admin.rentatutor.co.zm'}/topic-requests`
+  const adminUrl     = `${process.env.ADMIN_SITE_URL ?? 'https://admin.rentatutor.co.zm'}/topic-requests`
 
   // Escape all user-supplied values
   const safeName        = escapeHtml(studentName)
@@ -66,7 +66,7 @@ async function sendAdminAlert({ studentName, subject, topic, formLevel, urgency,
         </div>
       `,
     }),
-  }).catch(err => console.error('[topic-request alert]', err))
+  })
 }
 
 export async function POST(request) {
@@ -151,7 +151,7 @@ export async function POST(request) {
       urgency:     urgency   || 'normal',
       description: description?.trim() || '',
       requestId:   newRequest.id,
-    })
+    }).catch(err => console.error('[topic-request alert]', err))
 
     return NextResponse.json({ request: newRequest })
 

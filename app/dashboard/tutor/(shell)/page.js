@@ -23,8 +23,11 @@ function WithdrawModal({ balance, onClose }) {
       setError('Enter a valid Zambian mobile number.')
       return
     }
-    const num = parseInt(amount, 10)
-    if (isNaN(num) || num < 50)  { setError('Minimum withdrawal is K50.'); return }
+    const num = Number(amount)
+    if (!Number.isFinite(num) || num !== Math.floor(num) || num < 50) {
+      setError('Enter a whole number. Minimum withdrawal is K50.')
+      return
+    }
     if (num > balance)            { setError(`You only have K${balance} available.`); return }
 
     setSaving(true)
@@ -210,7 +213,7 @@ export default function TutorDashboard() {
     byMonth[month] = (byMonth[month] ?? 0) + (b.amount ?? 0)
   })
   const earnings   = Object.entries(byMonth).slice(-3).map(([month, amount]) => ({ month, amount }))
-  const maxEarning = Math.max(...earnings.map(e => e.amount), 1)
+  const maxEarning = earnings.length > 0 ? Math.max(...earnings.map(e => e.amount), 1) : 1
 
   const statCards = [
     { label: 'Lessons uploaded',   value: stats.lessons,                         type: 'a', href: '/dashboard/tutor/lessons' },

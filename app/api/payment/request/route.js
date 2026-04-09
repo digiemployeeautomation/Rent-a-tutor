@@ -49,15 +49,28 @@ export async function POST(request) {
 
     const amount = lesson.price
 
-    const { data: existing } = await supabase
-      .from('lesson_purchases')
-      .select('id')
-      .eq('student_id', user.id)
-      .eq('lesson_id', lessonId)
-      .maybeSingle()
+    // Check for existing purchase — also check pending transactions to prevent
+    // race conditions where two requests pass this check simultaneously
+    const [{ data: existing }, { data: pendingTx }] = await Promise.all([
+      supabase
+        .from('lesson_purchases')
+        .select('id')
+        .eq('student_id', user.id)
+        .eq('lesson_id', lessonId)
+        .maybeSingle(),
+      supabase
+        .from('pending_transactions')
+        .select('id')
+        .eq('student_id', user.id)
+        .eq('lesson_id', lessonId)
+        .maybeSingle(),
+    ])
 
     if (existing) {
       return NextResponse.json({ error: 'You already own this lesson.' }, { status: 409 })
+    }
+    if (pendingTx) {
+      return NextResponse.json({ error: 'A payment is already in progress for this lesson.' }, { status: 409 })
     }
 
     if (!process.env.MONEYUNIFY_AUTH_ID) {
