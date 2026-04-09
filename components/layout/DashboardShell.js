@@ -73,7 +73,7 @@ export default function DashboardShell({ children, role }) {
                   alignItems: 'center',
                   gap: 10,
                   padding: '8px 10px',
-                  borderRadius: 10,
+                  borderRadius: 14,            /* was 10px */
                   fontSize: 13,
                   fontWeight: active ? 500 : 400,
                   textDecoration: 'none',
@@ -141,9 +141,9 @@ export default function DashboardShell({ children, role }) {
                     top: 0,
                     left: '50%',
                     transform: 'translateX(-50%)',
-                    width: 20,
-                    height: 2,
-                    borderRadius: 1,
+                    width: 24,              /* slightly wider */
+                    height: 3,             /* slightly taller */
+                    borderRadius: 2,
                     backgroundColor: 'var(--color-primary)',
                   }} />
                 )}

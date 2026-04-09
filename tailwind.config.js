@@ -9,6 +9,16 @@ module.exports = {
   ],
   theme: {
     extend: {
+      borderRadius: {
+        sm:    '0.25rem',   //  4px (was 2px)
+        DEFAULT:'0.375rem', //  6px (was 4px)
+        md:    '0.5rem',    //  8px (was 6px)
+        lg:    '0.75rem',   // 12px (was 8px)
+        xl:    '1rem',      // 16px (was 12px)
+        '2xl': '1.25rem',   // 20px (was 16px)
+        '3xl': '1.75rem',   // 28px (was 24px)
+        '4xl': '2rem',      // 32px (new)
+      },
       colors: {
         forest: {
           50:  '#f0f7ee',

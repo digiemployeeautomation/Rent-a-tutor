@@ -1,3 +1,4 @@
+// components/layout/ProfileDropdown.js
 'use client'
 import { useState, useEffect, useRef } from 'react'
 import Link from 'next/link'
@@ -101,7 +102,7 @@ export default function ProfileDropdown({ user, profile, onLogout }) {
           border: 'none',
           cursor: 'pointer',
           padding: '4px 2px',
-          borderRadius: 10,
+          borderRadius: 12,           /* was 10px */
           outline: 'none',
           transition: 'opacity 150ms ease',
         }}
@@ -178,7 +179,7 @@ export default function ProfileDropdown({ user, profile, onLogout }) {
             top: 'calc(100% + 10px)',
             right: 0,
             width: 240,
-            borderRadius: 16,
+            borderRadius: 20,           /* was 16px */
             boxShadow: '0 8px 40px rgba(0,0,0,0.14), 0 2px 8px rgba(0,0,0,0.08)',
             overflow: 'hidden',
             zIndex: 100,
