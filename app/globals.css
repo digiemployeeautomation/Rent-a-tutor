@@ -928,6 +928,7 @@ img.loaded {
   background: #e8c84a;
   cursor: pointer;
   border: none;
+  margin-top: -4px;
 }
 
 .vol-slider::-moz-range-thumb {
@@ -942,6 +943,7 @@ img.loaded {
 .vol-slider::-webkit-slider-runnable-track {
   height: 4px;
   border-radius: 99px;
+  background: rgba(255,255,255,0.25);
 }
 
 .vol-slider::-moz-range-track {
