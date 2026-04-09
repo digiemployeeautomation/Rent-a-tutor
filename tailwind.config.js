@@ -20,6 +20,21 @@ module.exports = {
         '4xl': '2rem',      // 32px (new)
       },
       colors: {
+        background: 'var(--background)',
+        foreground: 'var(--foreground)',
+        muted: {
+          DEFAULT: 'var(--muted)',
+          foreground: 'var(--muted-foreground)',
+        },
+        accent: {
+          DEFAULT: 'var(--accent)',
+          foreground: 'var(--accent-foreground)',
+        },
+        border: 'var(--border)',
+        ring: 'var(--ring)',
+        destructive: {
+          DEFAULT: 'var(--destructive)',
+        },
         forest: {
           50:  '#f0f7ee',
           100: '#d8eccc',
@@ -49,6 +64,9 @@ module.exports = {
           500: '#4d8520',
           600: '#346314',
         },
+      },
+      borderColor: {
+        DEFAULT: 'var(--border)',
       },
       fontFamily: {
         serif: ['Georgia', 'serif'],

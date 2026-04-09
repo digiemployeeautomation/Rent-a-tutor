@@ -46,6 +46,17 @@
   --shimmer-to:   #e8f0de;
   --color-body-text: #111827;
 
+  /* shadcn-compatible tokens (mapped from project palette) */
+  --background:         var(--color-page-bg);
+  --foreground:         var(--color-body-text);
+  --muted:              var(--color-surface);
+  --muted-foreground:   #6b7280;
+  --accent:             var(--color-surface);
+  --accent-foreground:  var(--color-primary);
+  --border:             rgba(0,0,0,0.10);
+  --ring:               var(--color-primary-lit);
+  --destructive:        #dc2626;
+
   /* Toast colors */
   --toast-success-bg: #ecfdf5;
   --toast-success-border: #a7f3d0;
@@ -150,6 +161,17 @@
   --toast-info-bg: rgba(59,130,246,0.15);
   --toast-info-border: rgba(59,130,246,0.30);
   --toast-info-text: #93c5fd;
+
+  /* shadcn-compatible tokens (dark) */
+  --background:         var(--color-page-bg);
+  --foreground:         var(--color-body-text);
+  --muted:              var(--color-surface);
+  --muted-foreground:   #9ca3af;
+  --accent:             var(--color-surface-mid, #2a382a);
+  --accent-foreground:  var(--color-primary);
+  --border:             rgba(255,255,255,0.10);
+  --ring:               var(--color-primary-lit);
+  --destructive:        #ef4444;
 }
 
 [data-theme="tutor"][data-dark="true"] {
@@ -201,6 +223,17 @@
   --toast-info-bg: rgba(59,130,246,0.15);
   --toast-info-border: rgba(59,130,246,0.30);
   --toast-info-text: #93c5fd;
+
+  /* shadcn-compatible tokens (dark) */
+  --background:         var(--color-page-bg);
+  --foreground:         var(--color-body-text);
+  --muted:              var(--color-surface);
+  --muted-foreground:   #9ca3af;
+  --accent:             var(--color-surface-mid);
+  --accent-foreground:  var(--color-primary);
+  --border:             rgba(255,255,255,0.10);
+  --ring:               var(--color-primary-lit);
+  --destructive:        #ef4444;
 }
 
 /* ── Dark mode — system preference (auto) ─────── */
