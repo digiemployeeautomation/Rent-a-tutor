@@ -5,6 +5,7 @@ import Link from 'next/link'
 import Image from 'next/image'
 import { Sun, Moon } from 'lucide-react'
 import { useTheme } from '@/context/ThemeContext'
+import StudentSettingsSidebar from './StudentSettingsSidebar'
 
 /* ── Icons (inline SVG — no extra deps) ─────────────────── */
 const Icon = ({ d, size = 15 }) => (
@@ -33,6 +34,7 @@ const ICONS = {
 export default function ProfileDropdown({ user, profile, onLogout }) {
   const { darkMode, toggleDark } = useTheme()
   const [open, setOpen]       = useState(false)
+  const [settingsOpen, setSettingsOpen] = useState(false)
   const containerRef          = useRef(null)
 
   const role      = profile?.role ?? 'student'
@@ -82,7 +84,10 @@ export default function ProfileDropdown({ user, profile, onLogout }) {
 
   const bottomItems = [
     { label: 'Help & Support', href: '/contact', icon: 'help' },
-    { label: 'Settings',       href: role === 'tutor' ? '/dashboard/tutor/profile' : '/dashboard/student', icon: 'settings' },
+    ...(role === 'tutor'
+      ? [{ label: 'Settings', href: '/dashboard/tutor/profile', icon: 'settings' }]
+      : [{ label: 'Settings', icon: 'settings', action: () => { setOpen(false); setSettingsOpen(true) } }]
+    ),
   ]
 
   return (
@@ -234,18 +239,33 @@ export default function ProfileDropdown({ user, profile, onLogout }) {
           {/* Bottom items */}
           <div style={{ padding: '6px 0' }}>
             {bottomItems.map((item) => (
-              <Link
-                key={item.href}
-                href={item.href}
-                className="pd-item"
-                role="menuitem"
-                onClick={() => setOpen(false)}
-              >
-                <span className="pd-icon">
-                  <Icon d={ICONS[item.icon]} />
-                </span>
-                {item.label}
-              </Link>
+              item.action ? (
+                <button
+                  key={item.label}
+                  className="pd-item"
+                  role="menuitem"
+                  onClick={item.action}
+                  style={{ width: '100%' }}
+                >
+                  <span className="pd-icon">
+                    <Icon d={ICONS[item.icon]} />
+                  </span>
+                  {item.label}
+                </button>
+              ) : (
+                <Link
+                  key={item.href}
+                  href={item.href}
+                  className="pd-item"
+                  role="menuitem"
+                  onClick={() => setOpen(false)}
+                >
+                  <span className="pd-icon">
+                    <Icon d={ICONS[item.icon]} />
+                  </span>
+                  {item.label}
+                </Link>
+              )
             ))}
 
             {/* Dark mode toggle */}
@@ -279,6 +299,12 @@ export default function ProfileDropdown({ user, profile, onLogout }) {
             </button>
           </div>
         </div>
+      )}
+      {role !== 'tutor' && (
+        <StudentSettingsSidebar
+          open={settingsOpen}
+          onClose={() => setSettingsOpen(false)}
+        />
       )}
     </div>
   )
