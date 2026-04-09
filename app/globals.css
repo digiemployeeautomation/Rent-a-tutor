@@ -102,30 +102,30 @@
 
 /* ── Dark mode — explicit toggle (no media query needed) ── */
 [data-theme="student"][data-dark="true"] {
-  --color-primary:          #c0dd97;
-  --color-primary-mid:      #8ac165;
-  --color-primary-lit:      #a8d47a;
+  --color-primary:          #d4e8b0;
+  --color-primary-mid:      #7db85a;
+  --color-primary-lit:      #a0cc7a;
   --color-accent:           #fac775;
   --color-accent-mid:       #ef9f27;
   --color-accent-lit:       #fac775;
-  --color-surface:          #1e2a14;
-  --color-surface-mid:      #2d3f1e;
+  --color-surface:          #1e281e;
+  --color-surface-mid:      #2a382a;
   --color-highlight:        #2a2010;
-  --color-page-bg:          #0f1a08;
-  --color-nav-bg:           #0a1204;
-  --color-nav-text:         #c0dd97;
+  --color-page-bg:          #141a14;
+  --color-nav-bg:           #0a0f0a;
+  --color-nav-text:         #d4e8b0;
   --color-nav-accent:       #fac775;
-  --color-badge-bg:         #1e2a14;
-  --color-badge-text:       #a8d47a;
-  --color-btn-bg:           #3b6d11;
-  --color-btn-text:         #eaf3de;
-  --color-btn-hover:        #27500a;
+  --color-badge-bg:         #1e281e;
+  --color-badge-text:       #7db85a;
+  --color-btn-bg:           #4a6b4a;
+  --color-btn-text:         #d4e8b0;
+  --color-btn-hover:        #2a382a;
   --color-accent-btn:       #ba7517;
   --color-accent-btn-text:  #faeeda;
-  --color-progress:         #3b6d11;
-  --color-stat-a-bg:        #1e2a14;
-  --color-stat-a-text:      #c0dd97;
-  --color-stat-a-sub:       #8ac165;
+  --color-progress:         #7db85a;
+  --color-stat-a-bg:        #1e281e;
+  --color-stat-a-text:      #d4e8b0;
+  --color-stat-a-sub:       #7db85a;
   --color-stat-b-bg:        #2a2010;
   --color-stat-b-text:      #fac775;
   --color-stat-b-sub:       #ef9f27;
@@ -136,10 +136,10 @@
   --shadow-lg:  0 8px 32px rgba(0,0,0,0.40);
   --shadow-xl:  0 16px 48px rgba(0,0,0,0.50);
 
-  --shimmer-from: #1a2810;
-  --shimmer-via:  #253818;
-  --shimmer-to:   #1a2810;
-  --color-body-text: #e5e7eb;
+  --shimmer-from: #182018;
+  --shimmer-via:  #243024;
+  --shimmer-to:   #182018;
+  --color-body-text: #d4e8b0;
 
   --toast-success-bg: rgba(34,197,94,0.15);
   --toast-success-border: rgba(34,197,94,0.30);
@@ -206,30 +206,30 @@
 /* ── Dark mode — system preference (auto) ─────── */
 @media (prefers-color-scheme: dark) {
   [data-theme="student"][data-dark="auto"] {
-    --color-primary:          #c0dd97;
-    --color-primary-mid:      #8ac165;
-    --color-primary-lit:      #a8d47a;
+    --color-primary:          #d4e8b0;
+    --color-primary-mid:      #7db85a;
+    --color-primary-lit:      #a0cc7a;
     --color-accent:           #fac775;
     --color-accent-mid:       #ef9f27;
     --color-accent-lit:       #fac775;
-    --color-surface:          #1e2a14;
-    --color-surface-mid:      #2d3f1e;
+    --color-surface:          #1e281e;
+    --color-surface-mid:      #2a382a;
     --color-highlight:        #2a2010;
-    --color-page-bg:          #0f1a08;
-    --color-nav-bg:           #0a1204;
-    --color-nav-text:         #c0dd97;
+    --color-page-bg:          #141a14;
+    --color-nav-bg:           #0a0f0a;
+    --color-nav-text:         #d4e8b0;
     --color-nav-accent:       #fac775;
-    --color-badge-bg:         #1e2a14;
-    --color-badge-text:       #a8d47a;
-    --color-btn-bg:           #3b6d11;
-    --color-btn-text:         #eaf3de;
-    --color-btn-hover:        #27500a;
+    --color-badge-bg:         #1e281e;
+    --color-badge-text:       #7db85a;
+    --color-btn-bg:           #4a6b4a;
+    --color-btn-text:         #d4e8b0;
+    --color-btn-hover:        #2a382a;
     --color-accent-btn:       #ba7517;
     --color-accent-btn-text:  #faeeda;
-    --color-progress:         #3b6d11;
-    --color-stat-a-bg:        #1e2a14;
-    --color-stat-a-text:      #c0dd97;
-    --color-stat-a-sub:       #8ac165;
+    --color-progress:         #7db85a;
+    --color-stat-a-bg:        #1e281e;
+    --color-stat-a-text:      #d4e8b0;
+    --color-stat-a-sub:       #7db85a;
     --color-stat-b-bg:        #2a2010;
     --color-stat-b-text:      #fac775;
     --color-stat-b-sub:       #ef9f27;
@@ -240,10 +240,10 @@
     --shadow-lg:  0 8px 32px rgba(0,0,0,0.40);
     --shadow-xl:  0 16px 48px rgba(0,0,0,0.50);
 
-    --shimmer-from: #1a2810;
-    --shimmer-via:  #253818;
-    --shimmer-to:   #1a2810;
-    --color-body-text: #e5e7eb;
+    --shimmer-from: #182018;
+    --shimmer-via:  #243024;
+    --shimmer-to:   #182018;
+    --color-body-text: #d4e8b0;
 
     --toast-success-bg: rgba(34,197,94,0.15);
     --toast-success-border: rgba(34,197,94,0.30);
@@ -333,8 +333,6 @@ body {
 
 h1, h2, h3, h4 { font-family: Georgia, serif; }
 
-/* Smooth colour transitions on theme-aware elements —
-   scoped to interactive/themed elements only (not *) to avoid perf overhead */
 a, button, input, select, textarea,
 [class*="card"], [class*="badge"], [class*="btn"],
 [class*="stat-"], [class*="nav-"], [class*="sidebar-"],
@@ -344,7 +342,6 @@ a, button, input, select, textarea,
   transition-timing-function: ease;
 }
 
-/* But don't transition on layout/transform — only on colour */
 a, button, input, select, textarea,
 [class*="animate-"],
 [class*="transition"] {
@@ -426,18 +423,14 @@ a {
 
 /* ─────────────────────────────────────────────────
    DARK MODE OVERRIDES — comprehensive
-   Two selector paths:
-     1. data-dark="auto" + prefers-color-scheme: dark (system pref)
-     2. data-dark="true" (explicit toggle — no media query needed)
 ───────────────────────────────────────────────── */
 
-/* Helper: explicit dark mode (user toggled) — no media query */
 [data-dark="true"] body { color: var(--color-body-text, #e5e7eb); }
 
 /* ── Backgrounds ── */
-[data-dark="true"] .bg-white               { background-color: #1a1a2e !important; }
-[data-dark="true"] .bg-gray-50             { background-color: #111827 !important; }
-[data-dark="true"] .bg-gray-100            { background-color: #1f2937 !important; }
+[data-dark="true"] .bg-white               { background-color: #1a2018 !important; }
+[data-dark="true"] .bg-gray-50             { background-color: #141a14 !important; }
+[data-dark="true"] .bg-gray-100            { background-color: #1e281e !important; }
 [data-dark="true"] .bg-red-50              { background-color: rgba(220,38,38,0.12) !important; }
 [data-dark="true"] .bg-green-50            { background-color: rgba(34,197,94,0.12) !important; }
 [data-dark="true"] .bg-blue-100,
@@ -446,21 +439,21 @@ a {
 [data-dark="true"] .bg-purple-100,
 [data-dark="true"] .bg-orange-100,
 [data-dark="true"] .bg-pink-100,
-[data-dark="true"] .bg-sage-100            { background-color: rgba(255,255,255,0.08) !important; }
+[data-dark="true"] .bg-sage-100            { background-color: rgba(255,255,255,0.06) !important; }
 
 /* ── Text colors ── */
-[data-dark="true"] .text-gray-800          { color: #e5e7eb !important; }
-[data-dark="true"] .text-gray-700          { color: #d1d5db !important; }
-[data-dark="true"] .text-gray-600          { color: #b0b5bf !important; }
-[data-dark="true"] .text-gray-500          { color: #9ca3af !important; }
-[data-dark="true"] .text-gray-400          { color: #6b7280 !important; }
+[data-dark="true"] .text-gray-800          { color: #d4e8b0 !important; }
+[data-dark="true"] .text-gray-700          { color: #bbd99a !important; }
+[data-dark="true"] .text-gray-600          { color: #9abb7e !important; }
+[data-dark="true"] .text-gray-500          { color: #7db85a !important; }
+[data-dark="true"] .text-gray-400          { color: #5a8a42 !important; }
 [data-dark="true"] .text-red-700           { color: #fca5a5 !important; }
 [data-dark="true"] .text-blue-800,
 [data-dark="true"] .text-green-800,
 [data-dark="true"] .text-yellow-800,
 [data-dark="true"] .text-purple-800,
 [data-dark="true"] .text-orange-800,
-[data-dark="true"] .text-pink-800          { color: #d1d5db !important; }
+[data-dark="true"] .text-pink-800          { color: #d4e8b0 !important; }
 
 /* ── Borders ── */
 [data-dark="true"] .border-gray-200        { border-color: rgba(255,255,255,0.08) !important; }
@@ -468,22 +461,21 @@ a {
 [data-dark="true"] .border-gray-300        { border-color: rgba(255,255,255,0.12) !important; }
 
 /* ── Hover states ── */
-[data-dark="true"] .hover\:bg-gray-50:hover { background-color: rgba(255,255,255,0.05) !important; }
-[data-dark="true"] .hover\:text-gray-600:hover { color: #d1d5db !important; }
+[data-dark="true"] .hover\:bg-gray-50:hover { background-color: rgba(255,255,255,0.04) !important; }
+[data-dark="true"] .hover\:text-gray-600:hover { color: #bbd99a !important; }
 
 /* ── Form inputs ── */
 [data-dark="true"] input,
 [data-dark="true"] textarea,
 [data-dark="true"] select {
-  background-color: #0f1a08;
   background-color: var(--color-page-bg);
-  color: var(--color-body-text, #e5e7eb);
+  color: var(--color-body-text, #d4e8b0);
   border-color: rgba(255,255,255,0.12);
 }
 
 [data-dark="true"] input::placeholder,
 [data-dark="true"] textarea::placeholder {
-  color: #6b7280;
+  color: #5a8a42;
 }
 
 /* ── Subject gradient cards — dark variants ── */
@@ -510,7 +502,7 @@ a {
 
 /* ── Glass card ── */
 [data-dark="true"] .glass {
-  background: rgba(20, 20, 46, 0.80);
+  background: rgba(14, 22, 14, 0.85);
   border-color: rgba(255,255,255,0.08);
 }
 
@@ -521,11 +513,11 @@ a {
 
 /* System dark preference path — same rules under media query */
 @media (prefers-color-scheme: dark) {
-  [data-dark="auto"] body { color: var(--color-body-text, #e5e7eb); }
+  [data-dark="auto"] body { color: var(--color-body-text, #d4e8b0); }
 
-  [data-dark="auto"] .bg-white               { background-color: #1a1a2e !important; }
-  [data-dark="auto"] .bg-gray-50             { background-color: #111827 !important; }
-  [data-dark="auto"] .bg-gray-100            { background-color: #1f2937 !important; }
+  [data-dark="auto"] .bg-white               { background-color: #1a2018 !important; }
+  [data-dark="auto"] .bg-gray-50             { background-color: #141a14 !important; }
+  [data-dark="auto"] .bg-gray-100            { background-color: #1e281e !important; }
   [data-dark="auto"] .bg-red-50              { background-color: rgba(220,38,38,0.12) !important; }
   [data-dark="auto"] .bg-green-50            { background-color: rgba(34,197,94,0.12) !important; }
   [data-dark="auto"] .bg-blue-100,
@@ -534,39 +526,39 @@ a {
   [data-dark="auto"] .bg-purple-100,
   [data-dark="auto"] .bg-orange-100,
   [data-dark="auto"] .bg-pink-100,
-  [data-dark="auto"] .bg-sage-100            { background-color: rgba(255,255,255,0.08) !important; }
+  [data-dark="auto"] .bg-sage-100            { background-color: rgba(255,255,255,0.06) !important; }
 
-  [data-dark="auto"] .text-gray-800          { color: #e5e7eb !important; }
-  [data-dark="auto"] .text-gray-700          { color: #d1d5db !important; }
-  [data-dark="auto"] .text-gray-600          { color: #b0b5bf !important; }
-  [data-dark="auto"] .text-gray-500          { color: #9ca3af !important; }
-  [data-dark="auto"] .text-gray-400          { color: #6b7280 !important; }
+  [data-dark="auto"] .text-gray-800          { color: #d4e8b0 !important; }
+  [data-dark="auto"] .text-gray-700          { color: #bbd99a !important; }
+  [data-dark="auto"] .text-gray-600          { color: #9abb7e !important; }
+  [data-dark="auto"] .text-gray-500          { color: #7db85a !important; }
+  [data-dark="auto"] .text-gray-400          { color: #5a8a42 !important; }
   [data-dark="auto"] .text-red-700           { color: #fca5a5 !important; }
   [data-dark="auto"] .text-blue-800,
   [data-dark="auto"] .text-green-800,
   [data-dark="auto"] .text-yellow-800,
   [data-dark="auto"] .text-purple-800,
   [data-dark="auto"] .text-orange-800,
-  [data-dark="auto"] .text-pink-800          { color: #d1d5db !important; }
+  [data-dark="auto"] .text-pink-800          { color: #d4e8b0 !important; }
 
   [data-dark="auto"] .border-gray-200        { border-color: rgba(255,255,255,0.08) !important; }
   [data-dark="auto"] .border-gray-100        { border-color: rgba(255,255,255,0.05) !important; }
   [data-dark="auto"] .border-gray-300        { border-color: rgba(255,255,255,0.12) !important; }
 
-  [data-dark="auto"] .hover\:bg-gray-50:hover { background-color: rgba(255,255,255,0.05) !important; }
-  [data-dark="auto"] .hover\:text-gray-600:hover { color: #d1d5db !important; }
+  [data-dark="auto"] .hover\:bg-gray-50:hover { background-color: rgba(255,255,255,0.04) !important; }
+  [data-dark="auto"] .hover\:text-gray-600:hover { color: #bbd99a !important; }
 
   [data-dark="auto"] input,
   [data-dark="auto"] textarea,
   [data-dark="auto"] select {
     background-color: var(--color-page-bg);
-    color: var(--color-body-text, #e5e7eb);
+    color: var(--color-body-text, #d4e8b0);
     border-color: rgba(255,255,255,0.12);
   }
 
   [data-dark="auto"] input::placeholder,
   [data-dark="auto"] textarea::placeholder {
-    color: #6b7280;
+    color: #5a8a42;
   }
 
   [data-dark="auto"] .subject-gradient-math,
@@ -589,7 +581,7 @@ a {
   }
 
   [data-dark="auto"] .glass {
-    background: rgba(20, 20, 46, 0.80);
+    background: rgba(14, 22, 14, 0.85);
     border-color: rgba(255,255,255,0.08);
   }
 
@@ -602,57 +594,48 @@ a {
    ANIMATIONS
 ───────────────────────────────────────────────── */
 
-/* Shimmer — replaces the plain "pulse" skeleton */
 @keyframes shimmer {
   0%   { background-position: -400px 0; }
   100% { background-position:  400px 0; }
 }
 
-/* Gentle float for decorative elements */
 @keyframes float {
   0%, 100% { transform: translateY(0); }
   50%       { transform: translateY(-6px); }
 }
 
-/* Smooth pop-in for modals / toasts */
 @keyframes popIn {
   0%   { opacity: 0; transform: scale(0.94) translateY(6px); }
   60%  { transform: scale(1.02) translateY(-1px); }
   100% { opacity: 1; transform: scale(1) translateY(0); }
 }
 
-/* Slide-up for page sections */
 @keyframes slideUp {
   from { opacity: 0; transform: translateY(18px); }
   to   { opacity: 1; transform: translateY(0); }
 }
 
-/* Slide-down for dropdowns */
 @keyframes slideDown {
   from { opacity: 0; transform: translateY(-8px); }
   to   { opacity: 1; transform: translateY(0); }
 }
 
-/* Fade-in overlay */
 @keyframes fadeIn {
   from { opacity: 0; }
   to   { opacity: 1; }
 }
 
-/* Bounce dots (loading indicator) */
 @keyframes bounceDot {
   0%, 80%, 100% { transform: scale(0.6); opacity: 0.4; }
   40%           { transform: scale(1);   opacity: 1;   }
 }
 
-/* Progress bar indeterminate */
 @keyframes indeterminate {
   0%   { left: -35%; right: 100%; }
   60%  { left: 100%; right: -90%; }
   100% { left: 100%; right: -90%; }
 }
 
-/* Spin (keep the standard one) */
 @keyframes spin {
   to { transform: rotate(360deg); }
 }
@@ -679,7 +662,7 @@ a {
 .animate-spin      { animation: spin     700ms linear infinite; }
 
 /* ─────────────────────────────────────────────────
-   CARD HOVER — richer lift effect
+   CARD HOVER
 ───────────────────────────────────────────────── */
 .card-hover {
   transition:
@@ -701,7 +684,7 @@ a {
 }
 
 /* ─────────────────────────────────────────────────
-   GLASS CARD (optional utility)
+   GLASS CARD
 ───────────────────────────────────────────────── */
 .glass {
   background: rgba(255, 255, 255, 0.7);
@@ -711,7 +694,7 @@ a {
 }
 
 /* ─────────────────────────────────────────────────
-   SKELETON LOADER (replaces animate-pulse)
+   SKELETON LOADER
 ───────────────────────────────────────────────── */
 .skeleton {
   position: relative;
@@ -734,7 +717,6 @@ a {
   animation: shimmer 1.5s ease-in-out infinite;
 }
 
-/* Override Tailwind's animate-pulse with our shimmer for consistency */
 .animate-pulse {
   animation: none !important;
   position: relative;
@@ -777,7 +759,7 @@ a {
 }
 
 /* ─────────────────────────────────────────────────
-   INTERACTIVE ROWS (e.g. booking/lesson rows)
+   INTERACTIVE ROWS
 ───────────────────────────────────────────────── */
 .row-hover {
   transition: background-color 150ms ease;
@@ -805,7 +787,7 @@ a {
 .badge:hover { filter: brightness(0.95); }
 
 /* ─────────────────────────────────────────────────
-   STAT CARD NUMBER — count-up feel
+   STAT CARD NUMBER
 ───────────────────────────────────────────────── */
 .stat-number {
   font-family: Georgia, serif;
@@ -863,7 +845,7 @@ img.loaded {
 }
 
 /* ─────────────────────────────────────────────────
-   SUBJECT GRADIENT CARDS — richer feel
+   SUBJECT GRADIENT CARDS
 ───────────────────────────────────────────────── */
 .subject-gradient-math {
   background: linear-gradient(135deg, #f0fdf4 0%, #d1fae5 100%);
@@ -888,7 +870,7 @@ img.loaded {
 }
 
 /* ─────────────────────────────────────────────────
-   HERO PATTERN — more atmospheric
+   HERO PATTERN
 ───────────────────────────────────────────────── */
 .hero-pattern {
   background-image:
@@ -899,14 +881,14 @@ img.loaded {
 }
 
 /* ─────────────────────────────────────────────────
-   SECTION FADE-IN (replace FadeIn component fallback)
+   SECTION FADE-IN
 ───────────────────────────────────────────────── */
 .section-enter {
   animation: slideUp 400ms cubic-bezier(0.4, 0, 0.2, 1) both;
 }
 
 /* ─────────────────────────────────────────────────
-   INTERACTIVE BUTTON RIPPLE FEEL (no JS needed)
+   INTERACTIVE BUTTON RIPPLE FEEL
 ───────────────────────────────────────────────── */
 .btn-primary {
   position: relative;
@@ -943,7 +925,7 @@ img.loaded {
 }
 
 /* ─────────────────────────────────────────────────
-   NRC INPUT — theme-aware OTP slots
+   NRC INPUT
 ───────────────────────────────────────────────── */
 .nrc-slot {
   border-color: var(--color-primary-mid, #d1d5db);
@@ -991,7 +973,7 @@ img.loaded {
 }
 
 /* ─────────────────────────────────────────────────
-   TABLE / LIST ROWS — alternating + hover
+   TABLE / LIST ROWS
 ───────────────────────────────────────────────── */
 .table-row-hover {
   transition: background-color 120ms ease;
@@ -1036,7 +1018,7 @@ img.loaded {
 }
 
 /* ─────────────────────────────────────────────────
-   DARK MODE TOGGLE (Toggle component integration)
+   DARK MODE TOGGLE
 ───────────────────────────────────────────────── */
 .dark-toggle {
   padding: 0 !important;
@@ -1084,7 +1066,7 @@ img.loaded {
 }
 
 /* ─────────────────────────────────────────────────
-   REDUCED MOTION — respect user preference
+   REDUCED MOTION
 ───────────────────────────────────────────────── */
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {
@@ -1096,7 +1078,7 @@ img.loaded {
 }
 
 /* ─────────────────────────────────────────────────
-   NAVBAR HOVER UTILITIES (CSS-only, no JS needed)
+   NAVBAR HOVER UTILITIES
 ───────────────────────────────────────────────── */
 .nav-brand:hover {
   opacity: 0.85;
@@ -1198,7 +1180,7 @@ img.loaded {
 @media (prefers-color-scheme: dark) {
   [data-dark="auto"] .pd-panel,
   [data-dark="true"] .pd-panel {
-    background-color: #1a1a2e;
+    background-color: #1a2018;
     border-color: rgba(255,255,255,0.08);
   }
 
@@ -1215,17 +1197,17 @@ img.loaded {
 
   [data-dark="auto"] .pd-item,
   [data-dark="true"] .pd-item {
-    color: #d1d5db;
+    color: #d4e8b0;
   }
 
   [data-dark="auto"] .pd-item:hover,
   [data-dark="true"] .pd-item:hover {
-    background-color: rgba(255,255,255,0.06);
+    background-color: rgba(255,255,255,0.05);
     color: var(--color-primary);
   }
 
   [data-dark="auto"] .pd-icon,
   [data-dark="true"] .pd-icon {
-    color: #6b7280;
+    color: #5a8a42;
   }
 }
