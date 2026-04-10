@@ -32,9 +32,23 @@ module.exports = {
         },
         border: 'var(--border)',
         ring: 'var(--ring)',
+        primary: {
+          DEFAULT: 'var(--primary)',
+          foreground: 'var(--primary-foreground)',
+        },
+        secondary: {
+          DEFAULT: 'var(--secondary)',
+          foreground: 'var(--secondary-foreground)',
+        },
         destructive: {
           DEFAULT: 'var(--destructive)',
+          foreground: 'var(--destructive-foreground)',
         },
+        popover: {
+          DEFAULT: 'var(--popover)',
+          foreground: 'var(--popover-foreground)',
+        },
+        input: 'var(--input)',
         forest: {
           50:  '#f0f7ee',
           100: '#d8eccc',

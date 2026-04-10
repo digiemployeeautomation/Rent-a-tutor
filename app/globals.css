@@ -56,6 +56,14 @@
   --border:             rgba(0,0,0,0.10);
   --ring:               var(--color-primary-lit);
   --destructive:        #dc2626;
+  --destructive-foreground: #ffffff;
+  --primary:            var(--color-btn-bg);
+  --primary-foreground: var(--color-btn-text);
+  --secondary:          var(--color-surface);
+  --secondary-foreground: var(--color-primary);
+  --popover:            var(--color-page-bg);
+  --popover-foreground: var(--color-body-text);
+  --input:              var(--border);
 
   /* Toast colors */
   --toast-success-bg: #ecfdf5;
@@ -172,6 +180,14 @@
   --border:             rgba(255,255,255,0.10);
   --ring:               var(--color-primary-lit);
   --destructive:        #ef4444;
+  --destructive-foreground: #ffffff;
+  --primary:            var(--color-btn-bg);
+  --primary-foreground: var(--color-btn-text);
+  --secondary:          var(--color-surface-mid, #2a382a);
+  --secondary-foreground: var(--color-primary);
+  --popover:            var(--color-page-bg);
+  --popover-foreground: var(--color-body-text);
+  --input:              var(--border);
 }
 
 [data-theme="tutor"][data-dark="true"] {
@@ -234,6 +250,14 @@
   --border:             rgba(255,255,255,0.10);
   --ring:               var(--color-primary-lit);
   --destructive:        #ef4444;
+  --destructive-foreground: #ffffff;
+  --primary:            var(--color-btn-bg);
+  --primary-foreground: var(--color-btn-text);
+  --secondary:          var(--color-surface-mid);
+  --secondary-foreground: var(--color-primary);
+  --popover:            var(--color-page-bg);
+  --popover-foreground: var(--color-body-text);
+  --input:              var(--border);
 }
 
 /* ── Dark mode — system preference (auto) ─────── */
