@@ -2,6 +2,7 @@ import './globals.css'
 import { cookies } from 'next/headers'
 import { ThemeProvider } from '@/context/ThemeContext'
 import { ToastProvider } from '@/components/ui/toast'
+import AppShell from '@/components/layout/AppShell'
 
 export const metadata = {
   title: 'Rent a Tutor',
@@ -36,7 +37,9 @@ export default async function RootLayout({ children }) {
       <body>
         <ThemeProvider>
           <ToastProvider>
-            {children}
+            <AppShell>
+              {children}
+            </AppShell>
           </ToastProvider>
         </ThemeProvider>
       </body>

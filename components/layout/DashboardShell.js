@@ -48,59 +48,12 @@ export default function DashboardShell({ children, role }) {
     <div style={{ minHeight: '100vh', backgroundColor: 'var(--color-page-bg)' }}>
       <Navbar />
 
-      <div className="flex" style={{ minHeight: 'calc(100vh - 64px)' }}>
-
-        {/* ── Desktop sidebar — hidden on mobile ─────────────────── */}
-        <aside className="hidden lg:flex lg:flex-col"
-          style={{
-            width: 200,
-            flexShrink: 0,
-            backgroundColor: 'var(--color-page-bg)',
-            borderRight: '1px solid rgba(0,0,0,0.06)',
-            padding: '16px 8px',
-            gap: 2,
-            position: 'sticky',
-            top: 64,
-            height: 'calc(100vh - 64px)',
-            overflowY: 'auto',
-          }}>
-          {nav.map(item => {
-            const active = isActive(item)
-            return (
-              <Link key={item.href} href={item.href}
-                className={active ? '' : 'sidebar-link'}
-                style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: 10,
-                  padding: '8px 10px',
-                  borderRadius: 14,
-                  fontSize: 13,
-                  fontWeight: active ? 500 : 400,
-                  textDecoration: 'none',
-                  color: active ? 'var(--color-primary)' : '#6b7280',
-                  backgroundColor: active ? 'var(--color-surface)' : 'transparent',
-                  borderLeft: active ? '3px solid var(--color-primary-mid)' : '3px solid transparent',
-                }}>
-                <span style={{ fontSize: 14, width: 18, textAlign: 'center', flexShrink: 0 }}>
-                  {item.icon}
-                </span>
-                <span style={{ flex: 1 }}>{item.label}</span>
-                {item.external && (
-                  <span style={{ fontSize: 10, color: '#d1d5db' }}>↗</span>
-                )}
-              </Link>
-            )
-          })}
-        </aside>
-
-        {/* ── Main content ──────────────────────────────────────────
-            pb-20 on mobile leaves room for the bottom nav bar.
-            lg:pb-0 removes it on desktop where the nav is a sidebar. */}
-        <main className="flex-1 min-w-0 pb-20 lg:pb-0">
-          {children}
-        </main>
-      </div>
+      {/* ── Main content ──────────────────────────────────────────
+          pb-20 on mobile leaves room for the bottom nav bar.
+          lg:pb-0 removes it on desktop where the sidebar is in AppShell. */}
+      <main className="flex-1 min-w-0 pb-20 lg:pb-0">
+        {children}
+      </main>
 
       {/* ── Mobile bottom nav — hidden on desktop ──────────────────
           Uses safe-area-inset-bottom so content clears the iPhone
