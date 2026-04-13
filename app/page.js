@@ -1,6 +1,6 @@
 // app/page.js
 'use client'
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
 import Navbar from '@/components/layout/Navbar'
@@ -28,6 +28,10 @@ function getMeta(name) {
   return subjectMeta[name] ?? { initials: (name ?? '???').slice(0, 3), bg: 'bg-gray-100', text: 'text-gray-700' }
 }
 
+function clamp(val, min, max) {
+  return Math.min(Math.max(val, min), max)
+}
+
 export default function HomePage() {
   const [user, setUser]                     = useState(null)
   const [role, setRole]                     = useState(null)
@@ -37,6 +41,23 @@ export default function HomePage() {
   const [tutorsLoading, setTutorsLoading]   = useState(true)
   const [lessonCounts, setLessonCounts]     = useState({})
   const [loadingSubjects, setLoadingSubjects] = useState(true)
+
+  const [scrollY, setScrollY]               = useState(0)
+  const heroRef                             = useRef(null)
+
+  useEffect(() => {
+    function handleScroll() {
+      setScrollY(window.scrollY)
+    }
+    window.addEventListener('scroll', handleScroll, { passive: true })
+    return () => window.removeEventListener('scroll', handleScroll)
+  }, [])
+
+  const COLLAPSE_DISTANCE = 280
+  const progress = clamp(scrollY / COLLAPSE_DISTANCE, 0, 1)
+  const heroPaddingV = Math.round(96 * (1 - progress))
+  const heroOpacity  = clamp(1 - progress * 2, 0, 1)
+  const heroTranslateY = Math.round(-20 * progress)
 
   useEffect(() => {
     supabase.auth.getUser().then(async ({ data: { user } }) => {
@@ -107,45 +128,66 @@ export default function HomePage() {
     <div className="min-h-screen">
       <Navbar />
 
-      {/* Hero */}
-      <section className="px-6 py-24 text-center hero-pattern relative overflow-hidden" style={{ backgroundColor: 'var(--color-primary)' }}>
-        <FadeIn>
-          <h1 className="font-serif text-5xl sm:text-6xl mb-4 leading-tight" style={{ color: 'var(--color-surface-mid)' }}>
-            Learn better.<br />
-            <span style={{ color: 'var(--color-accent-lit)' }} className="italic">Pass your exams.</span>
-          </h1>
-          <p className="text-base mb-10 opacity-80 max-w-md mx-auto" style={{ color: 'var(--color-surface-mid)' }}>
-            Zambia&apos;s tutoring platform — built for O-Level and A-Level students.
-          </p>
+      {/* Hero — collapses on scroll */}
+      <section
+        ref={heroRef}
+        className="text-center hero-pattern relative overflow-hidden"
+        style={{
+          backgroundColor: 'var(--color-primary)',
+          paddingTop:    heroPaddingV,
+          paddingBottom: heroPaddingV,
+          paddingLeft:   '1.5rem',
+          paddingRight:  '1.5rem',
+          transition: scrollY === 0 ? 'padding 300ms ease' : 'none',
+          minHeight: progress >= 1 ? 0 : undefined,
+        }}
+      >
+        <div
+          style={{
+            opacity:   heroOpacity,
+            transform: `translateY(${heroTranslateY}px)`,
+            transition: scrollY === 0 ? 'opacity 300ms ease, transform 300ms ease' : 'none',
+            pointerEvents: heroOpacity === 0 ? 'none' : 'auto',
+          }}
+        >
+          <FadeIn>
+            <h1 className="font-serif text-5xl sm:text-6xl mb-4 leading-tight" style={{ color: 'var(--color-surface-mid)' }}>
+              Learn better.<br />
+              <span style={{ color: 'var(--color-accent-lit)' }} className="italic">Pass your exams.</span>
+            </h1>
+            <p className="text-base mb-10 opacity-80 max-w-md mx-auto" style={{ color: 'var(--color-surface-mid)' }}>
+              Zambia&apos;s tutoring platform — built for O-Level and A-Level students.
+            </p>
 
-          <div className="flex flex-col items-center gap-3">
-            {user ? (
-              roleLoading ? (
-                <div className="h-12 w-52 rounded-xl animate-pulse" style={{ backgroundColor: 'rgba(255,255,255,0.15)' }} />
-              ) : (
-                <Link href={dashboardHref}
-                  className="text-sm font-medium px-10 py-3.5 rounded-xl transition hover:scale-105"
-                  style={{ backgroundColor: '#e8c84a', color: '#1a2a00' }}>
-                  Go to your dashboard →
-                </Link>
-              )
-            ) : (
-              <>
-                <Link href="/auth/register"
-                  className="text-sm font-medium px-10 py-3.5 rounded-xl transition hover:scale-105"
-                  style={{ backgroundColor: '#e8c84a', color: '#1a2a00' }}>
-                  Create a free account →
-                </Link>
-                <p className="text-xs" style={{ color: 'var(--color-surface)', opacity: 0.7 }}>
-                  Already a member?{' '}
-                  <Link href="/auth/login" style={{ color: 'var(--color-accent-lit)', borderBottom: '1px solid rgba(201,184,122,0.4)' }}>
-                    Sign in
+            <div className="flex flex-col items-center gap-3">
+              {user ? (
+                roleLoading ? (
+                  <div className="h-12 w-52 rounded-xl animate-pulse" style={{ backgroundColor: 'rgba(255,255,255,0.15)' }} />
+                ) : (
+                  <Link href={dashboardHref}
+                    className="text-sm font-medium px-10 py-3.5 rounded-xl transition hover:scale-105"
+                    style={{ backgroundColor: '#e8c84a', color: '#1a2a00' }}>
+                    Go to your dashboard →
                   </Link>
-                </p>
-              </>
-            )}
-          </div>
-        </FadeIn>
+                )
+              ) : (
+                <>
+                  <Link href="/auth/register"
+                    className="text-sm font-medium px-10 py-3.5 rounded-xl transition hover:scale-105"
+                    style={{ backgroundColor: '#e8c84a', color: '#1a2a00' }}>
+                    Create a free account →
+                  </Link>
+                  <p className="text-xs" style={{ color: 'var(--color-surface)', opacity: 0.7 }}>
+                    Already a member?{' '}
+                    <Link href="/auth/login" style={{ color: 'var(--color-accent-lit)', borderBottom: '1px solid rgba(201,184,122,0.4)' }}>
+                      Sign in
+                    </Link>
+                  </p>
+                </>
+              )}
+            </div>
+          </FadeIn>
+        </div>
       </section>
 
       {/* Subjects */}
