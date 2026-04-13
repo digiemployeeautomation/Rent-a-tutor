@@ -88,10 +88,10 @@ export default function AppShell({ children }) {
           flexShrink: 0,
           backgroundColor: 'var(--color-nav-bg)',
           borderRight: '1px solid rgba(255,255,255,0.08)',
-          padding: collapsed ? '16px 4px' : '16px 8px',
+          padding: collapsed ? '0 4px' : '0 8px',
           gap: 2,
           position: 'fixed',
-          top: 64,
+          top: 0,
           left: 0,
           bottom: 0,
           zIndex: 40,
@@ -100,28 +100,51 @@ export default function AppShell({ children }) {
           transition: 'width 200ms ease, padding 200ms ease',
         }}
       >
-        {/* Collapse toggle */}
-        <button
-          onClick={toggleCollapse}
-          aria-label={collapsed ? 'Expand sidebar' : 'Collapse sidebar'}
-          title={collapsed ? 'Expand sidebar' : 'Collapse sidebar'}
-          style={{
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: collapsed ? 'center' : 'flex-end',
-            padding: '6px 10px',
-            marginBottom: 8,
-            background: 'none',
-            border: 'none',
-            cursor: 'pointer',
-            color: 'var(--color-nav-text)',
-            opacity: 0.5,
-            borderRadius: 10,
-            transition: 'opacity 150ms',
-          }}
-        >
-          {collapsed ? <PanelLeftOpen size={18} /> : <PanelLeftClose size={18} />}
-        </button>
+        {/* Brand header — matches navbar height (64px) */}
+        <div style={{
+          height: 64,
+          flexShrink: 0,
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: collapsed ? 'center' : 'space-between',
+          padding: collapsed ? '0' : '0 10px',
+          borderBottom: '1px solid rgba(255,255,255,0.08)',
+          marginBottom: 12,
+        }}>
+          {!collapsed && (
+            <Link href="/" className="font-serif" style={{
+              color: 'var(--color-nav-text)',
+              fontSize: 16,
+              textDecoration: 'none',
+              whiteSpace: 'nowrap',
+              overflow: 'hidden',
+            }}>
+              Rent a{' '}
+              <span style={{ color: 'var(--color-nav-accent)' }} className="italic">Tutor</span>
+            </Link>
+          )}
+          <button
+            onClick={toggleCollapse}
+            aria-label={collapsed ? 'Expand sidebar' : 'Collapse sidebar'}
+            title={collapsed ? 'Expand sidebar' : 'Collapse sidebar'}
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              padding: 6,
+              background: 'none',
+              border: 'none',
+              cursor: 'pointer',
+              color: 'var(--color-nav-text)',
+              opacity: 0.5,
+              borderRadius: 10,
+              transition: 'opacity 150ms',
+              flexShrink: 0,
+            }}
+          >
+            {collapsed ? <PanelLeftOpen size={18} /> : <PanelLeftClose size={18} />}
+          </button>
+        </div>
 
         {/* Nav items */}
         {nav.map(item => {
@@ -185,11 +208,6 @@ export default function AppShell({ children }) {
             [data-main-content] {
               margin-left: ${sidebarWidth}px !important;
               transition: margin-left 200ms ease;
-            }
-            [data-main-content] nav[aria-label="Main navigation"] {
-              margin-left: -${sidebarWidth}px;
-              padding-left: calc(${sidebarWidth}px + 1.5rem);
-              transition: margin-left 200ms ease, padding-left 200ms ease;
             }
           }
           [data-app-sidebar] .sidebar-link:hover {

@@ -79,11 +79,13 @@ export default function Navbar() {
       }}
       className="px-6 h-16 flex items-center justify-between"
     >
-      {/* Logo */}
-      <Link href="/" className="nav-brand font-serif text-xl" style={{ color: 'var(--color-nav-text)' }}>
+      {/* Logo — hidden on desktop when sidebar is visible */}
+      <Link href="/" className="nav-brand font-serif text-xl lg:hidden" style={{ color: 'var(--color-nav-text)' }}>
         Rent a{' '}
         <span style={{ color: 'var(--color-nav-accent)' }} className="italic">Tutor</span>
       </Link>
+      {/* Spacer on desktop so right-side items stay right-aligned */}
+      <div className="hidden lg:block" />
 
       {/* Right side */}
       <div className="flex items-center gap-3">
