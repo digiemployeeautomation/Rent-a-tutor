@@ -74,7 +74,7 @@ export default function AppShell({ children }) {
   // Don't show sidebar if not signed in or auth not ready
   if (!authReady || !user) return children
 
-  const sidebarWidth = collapsed ? 56 : 200
+  const sidebarWidth = collapsed ? 140 : 200
 
   return (
     <div className="flex" style={{ minHeight: '100vh' }}>
@@ -106,23 +106,21 @@ export default function AppShell({ children }) {
           flexShrink: 0,
           display: 'flex',
           alignItems: 'center',
-          justifyContent: collapsed ? 'center' : 'space-between',
-          padding: collapsed ? '0' : '0 10px',
+          justifyContent: 'space-between',
+          padding: '0 10px',
           borderBottom: '1px solid rgba(255,255,255,0.08)',
           marginBottom: 12,
         }}>
-          {!collapsed && (
-            <Link href="/" className="font-serif" style={{
-              color: 'var(--color-nav-text)',
-              fontSize: 16,
-              textDecoration: 'none',
-              whiteSpace: 'nowrap',
-              overflow: 'hidden',
-            }}>
-              Rent a{' '}
-              <span style={{ color: 'var(--color-nav-accent)' }} className="italic">Tutor</span>
-            </Link>
-          )}
+          <Link href="/" className="font-serif" style={{
+            color: 'var(--color-nav-text)',
+            fontSize: 16,
+            textDecoration: 'none',
+            whiteSpace: 'nowrap',
+            overflow: 'hidden',
+          }}>
+            Rent a{' '}
+            <span style={{ color: 'var(--color-nav-accent)' }} className="italic">Tutor</span>
+          </Link>
           <button
             onClick={toggleCollapse}
             aria-label={collapsed ? 'Expand sidebar' : 'Collapse sidebar'}
