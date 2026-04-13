@@ -81,12 +81,13 @@ export default function AppShell({ children }) {
 
       {/* ── Desktop sidebar — hidden on mobile ── */}
       <aside
+        data-app-sidebar=""
         className="hidden lg:flex lg:flex-col"
         style={{
           width: sidebarWidth,
           flexShrink: 0,
-          backgroundColor: 'var(--color-page-bg)',
-          borderRight: '1px solid rgba(0,0,0,0.06)',
+          backgroundColor: 'var(--color-nav-bg)',
+          borderRight: '1px solid rgba(255,255,255,0.08)',
           padding: collapsed ? '16px 4px' : '16px 8px',
           gap: 2,
           position: 'fixed',
@@ -113,9 +114,10 @@ export default function AppShell({ children }) {
             background: 'none',
             border: 'none',
             cursor: 'pointer',
-            color: '#9ca3af',
+            color: 'var(--color-nav-text)',
+            opacity: 0.5,
             borderRadius: 10,
-            transition: 'color 150ms',
+            transition: 'opacity 150ms',
           }}
         >
           {collapsed ? <PanelLeftOpen size={18} /> : <PanelLeftClose size={18} />}
@@ -141,12 +143,12 @@ export default function AppShell({ children }) {
                 fontSize: 13,
                 fontWeight: active ? 500 : 400,
                 textDecoration: 'none',
-                color: active ? 'var(--color-primary)' : '#6b7280',
-                backgroundColor: active ? 'var(--color-surface)' : 'transparent',
+                color: active ? 'var(--color-nav-accent)' : 'var(--color-nav-text)',
+                backgroundColor: active ? 'rgba(255,255,255,0.1)' : 'transparent',
                 borderLeft: collapsed
                   ? 'none'
                   : active
-                    ? '3px solid var(--color-primary-mid)'
+                    ? '3px solid var(--color-nav-accent)'
                     : '3px solid transparent',
                 whiteSpace: 'nowrap',
                 overflow: 'hidden',
@@ -161,7 +163,7 @@ export default function AppShell({ children }) {
                 <>
                   <span style={{ flex: 1 }}>{item.label}</span>
                   {item.external && (
-                    <span style={{ fontSize: 10, color: '#d1d5db' }}>&#8599;</span>
+                    <span style={{ fontSize: 10, color: 'rgba(255,255,255,0.35)' }}>&#8599;</span>
                   )}
                 </>
               )}
@@ -189,6 +191,11 @@ export default function AppShell({ children }) {
               padding-left: calc(${sidebarWidth}px + 1.5rem);
               transition: margin-left 200ms ease, padding-left 200ms ease;
             }
+          }
+          [data-app-sidebar] .sidebar-link:hover {
+            background-color: rgba(255,255,255,0.08) !important;
+            box-shadow: none !important;
+            color: var(--color-nav-accent) !important;
           }
         `}</style>
         <div data-main-content="">
