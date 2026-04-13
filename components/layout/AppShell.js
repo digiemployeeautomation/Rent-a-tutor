@@ -90,7 +90,7 @@ export default function AppShell({ children }) {
           padding: collapsed ? '16px 4px' : '16px 8px',
           gap: 2,
           position: 'fixed',
-          top: 0,
+          top: 64,
           left: 0,
           bottom: 0,
           zIndex: 40,
@@ -183,6 +183,11 @@ export default function AppShell({ children }) {
             [data-main-content] {
               margin-left: ${sidebarWidth}px !important;
               transition: margin-left 200ms ease;
+            }
+            [data-main-content] nav[aria-label="Main navigation"] {
+              margin-left: -${sidebarWidth}px;
+              padding-left: calc(${sidebarWidth}px + 1.5rem);
+              transition: margin-left 200ms ease, padding-left 200ms ease;
             }
           }
         `}</style>
