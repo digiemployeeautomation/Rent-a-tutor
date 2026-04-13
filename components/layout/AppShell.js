@@ -32,6 +32,10 @@ function readCollapsed() {
   try { return localStorage.getItem('rat-sidebar') === 'collapsed' } catch { return false }
 }
 
+const BRAND_WIDTH = 200
+const NAV_EXPANDED = 200
+const NAV_COLLAPSED = 56
+
 export default function AppShell({ children }) {
   const { role } = useTheme()
   const pathname = usePathname()
@@ -39,7 +43,6 @@ export default function AppShell({ children }) {
   const [authReady, setAuthReady] = useState(false)
   const [collapsed, setCollapsed] = useState(false)
 
-  // Hydrate collapsed state from localStorage after mount
   useEffect(() => { setCollapsed(readCollapsed()) }, [])
 
   useEffect(() => {
@@ -71,80 +74,82 @@ export default function AppShell({ children }) {
     return pathname.startsWith(item.href)
   }
 
-  // Don't show sidebar if not signed in or auth not ready
   if (!authReady || !user) return children
 
-  const sidebarWidth = 200
+  const navWidth = collapsed ? NAV_COLLAPSED : NAV_EXPANDED
 
   return (
     <div className="flex" style={{ minHeight: '100vh' }}>
 
-      {/* ── Desktop sidebar — hidden on mobile ── */}
+      {/* ── Brand header — always 200px, fixed top-left ── */}
+      <div
+        className="hidden lg:flex"
+        style={{
+          position: 'fixed',
+          top: 0,
+          left: 0,
+          width: BRAND_WIDTH,
+          height: 64,
+          zIndex: 50,
+          backgroundColor: 'var(--color-nav-bg)',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          padding: '0 16px',
+          borderBottom: '1px solid rgba(255,255,255,0.08)',
+          borderRight: '1px solid rgba(255,255,255,0.08)',
+        }}
+      >
+        <Link href="/" className="font-serif" style={{
+          color: 'var(--color-nav-text)',
+          fontSize: 16,
+          textDecoration: 'none',
+          whiteSpace: 'nowrap',
+        }}>
+          Rent a{' '}
+          <span style={{ color: 'var(--color-nav-accent)' }} className="italic">Tutor</span>
+        </Link>
+        <button
+          onClick={toggleCollapse}
+          aria-label={collapsed ? 'Expand sidebar' : 'Collapse sidebar'}
+          title={collapsed ? 'Expand sidebar' : 'Collapse sidebar'}
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            padding: 6,
+            background: 'none',
+            border: 'none',
+            cursor: 'pointer',
+            color: 'var(--color-nav-text)',
+            opacity: 0.5,
+            borderRadius: 10,
+          }}
+        >
+          {collapsed ? <PanelLeftOpen size={18} /> : <PanelLeftClose size={18} />}
+        </button>
+      </div>
+
+      {/* ── Nav sidebar — collapses below brand header ── */}
       <aside
         data-app-sidebar=""
         className="hidden lg:flex lg:flex-col"
         style={{
-          width: sidebarWidth,
+          width: navWidth,
           flexShrink: 0,
           backgroundColor: 'var(--color-nav-bg)',
           borderRight: '1px solid rgba(255,255,255,0.08)',
-          padding: '0 8px',
+          padding: collapsed ? '8px 4px' : '8px 8px',
           gap: 2,
           position: 'fixed',
-          top: 0,
+          top: 64,
           left: 0,
           bottom: 0,
           zIndex: 40,
           overflowY: 'auto',
           overflowX: 'hidden',
-          transition: 'none',
+          transition: 'width 200ms ease, padding 200ms ease',
         }}
       >
-        {/* Brand header — matches navbar height (64px) */}
-        <div style={{
-          height: 64,
-          flexShrink: 0,
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'space-between',
-          padding: '0 10px',
-          borderBottom: '1px solid rgba(255,255,255,0.08)',
-          marginBottom: 12,
-        }}>
-          <Link href="/" className="font-serif" style={{
-            color: 'var(--color-nav-text)',
-            fontSize: 16,
-            textDecoration: 'none',
-            whiteSpace: 'nowrap',
-            overflow: 'hidden',
-          }}>
-            Rent a{' '}
-            <span style={{ color: 'var(--color-nav-accent)' }} className="italic">Tutor</span>
-          </Link>
-          <button
-            onClick={toggleCollapse}
-            aria-label={collapsed ? 'Expand sidebar' : 'Collapse sidebar'}
-            title={collapsed ? 'Expand sidebar' : 'Collapse sidebar'}
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              padding: 6,
-              background: 'none',
-              border: 'none',
-              cursor: 'pointer',
-              color: 'var(--color-nav-text)',
-              opacity: 0.5,
-              borderRadius: 10,
-              transition: 'opacity 150ms',
-              flexShrink: 0,
-            }}
-          >
-            {collapsed ? <PanelLeftOpen size={18} /> : <PanelLeftClose size={18} />}
-          </button>
-        </div>
-
-        {/* Nav items */}
         {nav.map(item => {
           const active = isActive(item)
           const IconComp = item.icon
@@ -158,26 +163,25 @@ export default function AppShell({ children }) {
                 display: 'flex',
                 alignItems: 'center',
                 gap: 10,
-                padding: '8px 10px',
-                justifyContent: 'flex-start',
+                padding: collapsed ? '10px 0' : '8px 10px',
+                justifyContent: collapsed ? 'center' : 'flex-start',
                 borderRadius: 14,
                 fontSize: 13,
                 fontWeight: active ? 500 : 400,
                 textDecoration: 'none',
                 color: active ? 'var(--color-nav-accent)' : 'var(--color-nav-text)',
                 backgroundColor: active ? 'rgba(255,255,255,0.1)' : 'transparent',
-                borderLeft: active
-                  ? '3px solid var(--color-nav-accent)'
-                  : '3px solid transparent',
+                borderLeft: collapsed
+                  ? 'none'
+                  : active
+                    ? '3px solid var(--color-nav-accent)'
+                    : '3px solid transparent',
                 whiteSpace: 'nowrap',
                 overflow: 'hidden',
-                transition: 'background-color 150ms',
+                transition: 'background-color 150ms, padding 200ms ease',
               }}
             >
-              <IconComp
-                size={18}
-                style={{ flexShrink: 0 }}
-              />
+              <IconComp size={18} style={{ flexShrink: 0 }} />
               {!collapsed && (
                 <>
                   <span style={{ flex: 1 }}>{item.label}</span>
@@ -192,17 +196,12 @@ export default function AppShell({ children }) {
       </aside>
 
       {/* ── Main content ── */}
-      <div
-        className="flex-1 min-w-0"
-        style={{
-          marginLeft: undefined, // mobile: no margin
-          transition: 'margin-left 200ms ease',
-        }}
-      >
+      <div className="flex-1 min-w-0">
         <style>{`
           @media (min-width: 1024px) {
             [data-main-content] {
-              margin-left: 200px !important;
+              margin-left: ${navWidth}px !important;
+              transition: margin-left 200ms ease;
             }
           }
           [data-app-sidebar] .sidebar-link:hover {
