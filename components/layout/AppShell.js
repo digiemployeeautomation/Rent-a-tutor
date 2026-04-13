@@ -74,7 +74,7 @@ export default function AppShell({ children }) {
   // Don't show sidebar if not signed in or auth not ready
   if (!authReady || !user) return children
 
-  const sidebarWidth = collapsed ? 140 : 200
+  const sidebarWidth = 200
 
   return (
     <div className="flex" style={{ minHeight: '100vh' }}>
@@ -88,7 +88,7 @@ export default function AppShell({ children }) {
           flexShrink: 0,
           backgroundColor: 'var(--color-nav-bg)',
           borderRight: '1px solid rgba(255,255,255,0.08)',
-          padding: collapsed ? '0 4px' : '0 8px',
+          padding: '0 8px',
           gap: 2,
           position: 'fixed',
           top: 0,
@@ -97,7 +97,7 @@ export default function AppShell({ children }) {
           zIndex: 40,
           overflowY: 'auto',
           overflowX: 'hidden',
-          transition: 'width 200ms ease, padding 200ms ease',
+          transition: 'none',
         }}
       >
         {/* Brand header — matches navbar height (64px) */}
@@ -152,28 +152,26 @@ export default function AppShell({ children }) {
             <Link
               key={item.href}
               href={item.href}
-              title={collapsed ? item.label : undefined}
+              title={item.label}
               className={active ? '' : 'sidebar-link'}
               style={{
                 display: 'flex',
                 alignItems: 'center',
                 gap: 10,
-                padding: collapsed ? '10px 0' : '8px 10px',
-                justifyContent: collapsed ? 'center' : 'flex-start',
+                padding: '8px 10px',
+                justifyContent: 'flex-start',
                 borderRadius: 14,
                 fontSize: 13,
                 fontWeight: active ? 500 : 400,
                 textDecoration: 'none',
                 color: active ? 'var(--color-nav-accent)' : 'var(--color-nav-text)',
                 backgroundColor: active ? 'rgba(255,255,255,0.1)' : 'transparent',
-                borderLeft: collapsed
-                  ? 'none'
-                  : active
-                    ? '3px solid var(--color-nav-accent)'
-                    : '3px solid transparent',
+                borderLeft: active
+                  ? '3px solid var(--color-nav-accent)'
+                  : '3px solid transparent',
                 whiteSpace: 'nowrap',
                 overflow: 'hidden',
-                transition: 'background-color 150ms, padding 200ms ease',
+                transition: 'background-color 150ms',
               }}
             >
               <IconComp
@@ -204,8 +202,7 @@ export default function AppShell({ children }) {
         <style>{`
           @media (min-width: 1024px) {
             [data-main-content] {
-              margin-left: ${sidebarWidth}px !important;
-              transition: margin-left 200ms ease;
+              margin-left: 200px !important;
             }
           }
           [data-app-sidebar] .sidebar-link:hover {
