@@ -12,6 +12,32 @@ const STEP_QUIZ = 'quiz'
 const STEP_TIER = 'tier'
 const STEP_SUBJECTS = 'subjects'
 
+const STEPS = [STEP_WELCOME, STEP_QUIZ, STEP_TIER, STEP_SUBJECTS]
+
+function StepDots({ current }) {
+  return (
+    <div className="flex items-center justify-center gap-2 mb-8">
+      {STEPS.map((s, i) => {
+        const currentIdx = STEPS.indexOf(current)
+        const isCurrent = i === currentIdx
+        const isDone = i < currentIdx
+        return (
+          <div
+            key={s}
+            className={`rounded-full transition-all ${
+              isCurrent
+                ? 'w-3 h-3 bg-blue-600'
+                : isDone
+                ? 'w-3 h-3 bg-blue-400'
+                : 'w-2.5 h-2.5 bg-gray-300'
+            }`}
+          />
+        )
+      })}
+    </div>
+  )
+}
+
 export default function OnboardingPage() {
   const router = useRouter()
   const [step, setStep] = useState(STEP_WELCOME)
@@ -128,6 +154,8 @@ export default function OnboardingPage() {
   if (step === STEP_WELCOME) {
     return (
       <div className="space-y-8">
+        <StepDots current={step} />
+
         <div className="text-center">
           <h2 className="text-2xl font-bold text-gray-800">Welcome!</h2>
           <p className="mt-3 text-gray-600">
@@ -139,7 +167,7 @@ export default function OnboardingPage() {
         <div className="space-y-3">
           <button
             onClick={() => handleQuickStart(5)}
-            className="flex w-full items-center justify-between rounded-xl border-2 border-gray-200 bg-white px-5 py-4 text-left transition-colors hover:border-forest-600 hover:bg-sage-200 focus:outline-none focus:ring-2 focus:ring-forest-600 focus:ring-offset-2"
+            className="flex w-full items-center justify-between rounded-2xl border-2 border-blue-200 bg-white px-5 py-4 text-left transition-colors hover:border-blue-500 hover:bg-blue-50 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-offset-2"
           >
             <div>
               <span className="font-semibold text-gray-800">Quick</span>
@@ -150,7 +178,7 @@ export default function OnboardingPage() {
 
           <button
             onClick={() => handleQuickStart(10)}
-            className="flex w-full items-center justify-between rounded-xl border-2 border-gray-200 bg-white px-5 py-4 text-left transition-colors hover:border-forest-600 hover:bg-sage-200 focus:outline-none focus:ring-2 focus:ring-forest-600 focus:ring-offset-2"
+            className="flex w-full items-center justify-between rounded-2xl border-2 border-blue-200 bg-white px-5 py-4 text-left transition-colors hover:border-blue-500 hover:bg-blue-50 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-offset-2"
           >
             <div>
               <span className="font-semibold text-gray-800">Standard</span>
@@ -161,7 +189,7 @@ export default function OnboardingPage() {
 
           <button
             onClick={() => handleQuickStart(15)}
-            className="flex w-full items-center justify-between rounded-xl border-2 border-gray-200 bg-white px-5 py-4 text-left transition-colors hover:border-forest-600 hover:bg-sage-200 focus:outline-none focus:ring-2 focus:ring-forest-600 focus:ring-offset-2"
+            className="flex w-full items-center justify-between rounded-2xl border-2 border-blue-200 bg-white px-5 py-4 text-left transition-colors hover:border-blue-500 hover:bg-blue-50 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-offset-2"
           >
             <div>
               <span className="font-semibold text-gray-800">Full</span>
@@ -172,7 +200,7 @@ export default function OnboardingPage() {
 
           <button
             onClick={handleSkip}
-            className="w-full rounded-xl border-2 border-dashed border-gray-300 px-5 py-4 text-center text-gray-500 transition-colors hover:border-gray-400 hover:text-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-400 focus:ring-offset-2"
+            className="w-full rounded-2xl border-2 border-dashed border-gray-300 px-5 py-4 text-center text-gray-500 transition-colors hover:border-gray-400 hover:text-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-400 focus:ring-offset-2"
           >
             Skip for now
           </button>
@@ -185,6 +213,7 @@ export default function OnboardingPage() {
     const questions = getQuestions(questionCount)
     return (
       <div className="space-y-4">
+        <StepDots current={step} />
         <div>
           <h2 className="text-xl font-bold text-gray-800">Quick personality quiz</h2>
           <p className="mt-1 text-sm text-gray-500">
@@ -198,16 +227,21 @@ export default function OnboardingPage() {
 
   if (step === STEP_TIER) {
     return (
-      <TierRecommendation
-        recommendedTier={recommendedTier}
-        onConfirm={handleTierConfirm}
-      />
+      <div className="space-y-4">
+        <StepDots current={step} />
+        <TierRecommendation
+          recommendedTier={recommendedTier}
+          onConfirm={handleTierConfirm}
+        />
+      </div>
     )
   }
 
   if (step === STEP_SUBJECTS) {
     return (
       <div className="space-y-6">
+        <StepDots current={step} />
+
         <div>
           <h2 className="text-xl font-bold text-gray-800">Which subjects interest you?</h2>
           <p className="mt-1 text-sm text-gray-500">
@@ -223,10 +257,10 @@ export default function OnboardingPage() {
                 <button
                   key={subject.id}
                   onClick={() => toggleSubject(subject.id)}
-                  className={`rounded-lg border-2 px-3 py-2 text-sm font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-forest-600 focus:ring-offset-2 ${
+                  className={`rounded-full border px-4 py-2 text-sm font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-offset-2 ${
                     isSelected
-                      ? 'border-forest-600 bg-sage-200 text-forest-600'
-                      : 'border-gray-200 bg-white text-gray-700 hover:border-gray-300'
+                      ? 'border-blue-600 bg-blue-600 text-white'
+                      : 'border-gray-200 bg-gray-100 text-gray-600 hover:border-gray-300 hover:bg-gray-200'
                   }`}
                 >
                   {subject.name}
@@ -246,9 +280,9 @@ export default function OnboardingPage() {
           <button
             onClick={handleFinish}
             disabled={saving}
-            className="w-full rounded-lg bg-[var(--color-btn-bg,theme(colors.forest.600))] px-6 py-3 font-semibold text-white transition-opacity hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-forest-600 focus:ring-offset-2 disabled:opacity-60"
+            className="w-full rounded-xl bg-blue-600 px-6 py-3 font-semibold text-white transition-opacity hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-offset-2 disabled:opacity-60"
           >
-            {saving ? 'Saving…' : 'Continue to dashboard'}
+            {saving ? 'Saving…' : 'Start learning'}
           </button>
 
           <button

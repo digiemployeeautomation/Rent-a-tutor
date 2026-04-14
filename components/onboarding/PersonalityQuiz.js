@@ -5,6 +5,7 @@ import { useState } from 'react'
 export default function PersonalityQuiz({ questions, onComplete }) {
   const [currentIndex, setCurrentIndex] = useState(0)
   const [answers, setAnswers] = useState([])
+  const [direction, setDirection] = useState(1) // 1 = forward, -1 = back
 
   const totalQuestions = questions.length
   const currentQuestion = questions[currentIndex]
@@ -15,6 +16,7 @@ export default function PersonalityQuiz({ questions, onComplete }) {
     const updatedAnswers = [...answers.slice(0, currentIndex), newAnswer]
 
     if (currentIndex + 1 < totalQuestions) {
+      setDirection(1)
       setAnswers(updatedAnswers)
       setCurrentIndex(currentIndex + 1)
     } else {
@@ -24,9 +26,12 @@ export default function PersonalityQuiz({ questions, onComplete }) {
 
   function handleBack() {
     if (currentIndex > 0) {
+      setDirection(-1)
       setCurrentIndex(currentIndex - 1)
     }
   }
+
+  const selectedAnswer = answers[currentIndex]
 
   return (
     <div className="space-y-6">
@@ -38,28 +43,35 @@ export default function PersonalityQuiz({ questions, onComplete }) {
         </div>
         <div className="h-2 w-full overflow-hidden rounded-full bg-gray-200">
           <div
-            className="h-full rounded-full bg-forest-600 transition-all duration-300"
+            className="h-full rounded-full bg-blue-600 transition-all duration-300"
             style={{ width: `${progress}%` }}
           />
         </div>
       </div>
 
       {/* Question card */}
-      <div className="rounded-xl border border-gray-200 bg-white p-6 shadow-sm">
+      <div className="rounded-2xl border border-gray-200 bg-white p-6 shadow-sm">
         <h2 className="mb-6 text-lg font-semibold text-gray-800">
           {currentQuestion.question}
         </h2>
 
         <div className="space-y-3">
-          {currentQuestion.options.map((option, index) => (
-            <button
-              key={index}
-              onClick={() => handleOptionSelect(index)}
-              className="w-full rounded-lg border border-gray-200 px-4 py-3 text-left text-gray-700 transition-colors hover:border-forest-600 hover:bg-sage-200 hover:text-forest-600 focus:outline-none focus:ring-2 focus:ring-forest-600 focus:ring-offset-2"
-            >
-              {option.label}
-            </button>
-          ))}
+          {currentQuestion.options.map((option, index) => {
+            const isSelected = selectedAnswer?.optionIndex === index
+            return (
+              <button
+                key={index}
+                onClick={() => handleOptionSelect(index)}
+                className={`w-full rounded-xl border px-4 py-3 text-left transition-colors focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-offset-2 ${
+                  isSelected
+                    ? 'border-blue-600 bg-blue-600 text-white'
+                    : 'border-gray-200 bg-white text-gray-700 hover:border-blue-400 hover:bg-blue-50'
+                }`}
+              >
+                {option.label}
+              </button>
+            )
+          })}
         </div>
       </div>
 
@@ -67,7 +79,7 @@ export default function PersonalityQuiz({ questions, onComplete }) {
       {currentIndex > 0 && (
         <button
           onClick={handleBack}
-          className="flex items-center gap-1 text-sm text-gray-500 hover:text-gray-700"
+          className="flex items-center gap-1 text-sm text-gray-400 hover:text-gray-600 transition-colors"
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
