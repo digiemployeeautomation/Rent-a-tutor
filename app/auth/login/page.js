@@ -80,8 +80,8 @@ function LoginForm() {
   return (
     <div className="min-h-screen bg-gray-50 flex items-center justify-center px-4">
       <div className="w-full max-w-sm">
-        <Link href="/" className="block text-center font-serif text-2xl text-forest-600 mb-8">
-          Rent a <span className="text-gold-500 italic">Tutor</span>
+        <Link href="/" className="block text-center font-serif text-2xl text-blue-600 mb-8">
+          Rent<span className="text-pink-400 italic">a</span>Tutor
         </Link>
 
         <div className="bg-white border border-gray-200 rounded-2xl p-8">
@@ -101,7 +101,7 @@ function LoginForm() {
                 required
                 value={email}
                 onChange={e => setEmail(e.target.value)}
-                className="w-full border border-gray-300 rounded-lg px-4 py-2.5 text-sm outline-none focus:border-forest-500"
+                className="w-full border border-gray-300 rounded-lg px-4 py-2.5 text-sm outline-none focus:border-blue-500"
                 placeholder="you@example.com"
               />
             </div>
@@ -112,7 +112,7 @@ function LoginForm() {
                 required
                 value={password}
                 onChange={e => setPassword(e.target.value)}
-                className="w-full border border-gray-300 rounded-lg px-4 py-2.5 text-sm outline-none focus:border-forest-500"
+                className="w-full border border-gray-300 rounded-lg px-4 py-2.5 text-sm outline-none focus:border-blue-500"
                 placeholder="••••••••"
               />
             </div>
@@ -120,7 +120,7 @@ function LoginForm() {
             <button
               type="submit"
               disabled={loading}
-              className="w-full bg-forest-600 text-sage-200 py-2.5 rounded-lg text-sm font-medium hover:bg-forest-700 disabled:opacity-60"
+              className="w-full bg-blue-600 text-white py-2.5 rounded-lg text-sm font-medium hover:bg-blue-700 disabled:opacity-60"
             >
               {loading ? 'Signing in...' : 'Sign in'}
             </button>
@@ -128,7 +128,7 @@ function LoginForm() {
 
           <p className="text-center text-sm text-gray-500 mt-5">
             Don&apos;t have an account?{' '}
-            <Link href="/auth/register" className="text-forest-500 hover:underline">Sign up</Link>
+            <Link href="/auth/register" className="text-blue-500 hover:underline">Sign up</Link>
           </p>
         </div>
       </div>

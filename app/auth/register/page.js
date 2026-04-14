@@ -54,11 +54,11 @@ export default function RegisterPage() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center px-4" style={{ backgroundColor: 'var(--color-page-bg)' }}>
+    <div className="min-h-screen bg-gray-50 flex items-center justify-center px-4">
       <div className="w-full max-w-sm">
 
-        <Link href="/" className="block text-center font-serif text-2xl mb-8" style={{ color: 'var(--color-primary)' }}>
-          Rent a <span style={{ color: 'var(--color-accent)' }} className="italic">Tutor</span>
+        <Link href="/" className="block text-center font-serif text-2xl text-blue-600 mb-8">
+          Rent<span className="text-pink-400 italic">a</span>Tutor
         </Link>
 
         <div className="bg-white border border-gray-200 rounded-2xl p-8">
@@ -80,7 +80,7 @@ export default function RegisterPage() {
                 required
                 value={fullName}
                 onChange={e => setFullName(e.target.value)}
-                className="w-full border border-gray-300 rounded-lg px-4 py-2.5 text-sm outline-none focus:border-gray-400"
+                className="w-full border border-gray-300 rounded-lg px-4 py-2.5 text-sm outline-none focus:border-blue-400"
                 placeholder="Your full name"
               />
             </div>
@@ -92,7 +92,7 @@ export default function RegisterPage() {
                 required
                 value={email}
                 onChange={e => setEmail(e.target.value)}
-                className="w-full border border-gray-300 rounded-lg px-4 py-2.5 text-sm outline-none focus:border-gray-400"
+                className="w-full border border-gray-300 rounded-lg px-4 py-2.5 text-sm outline-none focus:border-blue-400"
                 placeholder="you@example.com"
               />
             </div>
@@ -105,7 +105,7 @@ export default function RegisterPage() {
                 minLength={6}
                 value={password}
                 onChange={e => setPassword(e.target.value)}
-                className="w-full border border-gray-300 rounded-lg px-4 py-2.5 text-sm outline-none focus:border-gray-400"
+                className="w-full border border-gray-300 rounded-lg px-4 py-2.5 text-sm outline-none focus:border-blue-400"
                 placeholder="At least 6 characters"
               />
             </div>
@@ -116,7 +116,7 @@ export default function RegisterPage() {
                 required
                 value={formLevel}
                 onChange={e => setFormLevel(Number(e.target.value))}
-                className="w-full border border-gray-300 rounded-lg px-4 py-2.5 text-sm outline-none focus:border-gray-400 bg-white"
+                className="w-full border border-gray-300 rounded-lg px-4 py-2.5 text-sm outline-none focus:border-blue-400 bg-white"
               >
                 <option value={1}>Form 1</option>
                 <option value={2}>Form 2</option>
@@ -128,8 +128,7 @@ export default function RegisterPage() {
             <button
               type="submit"
               disabled={loading}
-              className="w-full py-2.5 rounded-lg text-sm font-medium disabled:opacity-60"
-              style={{ backgroundColor: 'var(--color-btn-bg)', color: 'var(--color-btn-text)' }}
+              className="w-full bg-blue-600 text-white py-2.5 rounded-lg text-sm font-medium hover:bg-blue-700 disabled:opacity-60"
             >
               {loading ? 'Creating account...' : 'Create account'}
             </button>
@@ -137,7 +136,7 @@ export default function RegisterPage() {
 
           <p className="text-center text-sm text-gray-500 mt-5">
             Already have an account?{' '}
-            <Link href="/auth/login" className="hover:underline" style={{ color: 'var(--color-primary-lit)' }}>
+            <Link href="/auth/login" className="text-blue-500 hover:underline">
               Sign in
             </Link>
           </p>
