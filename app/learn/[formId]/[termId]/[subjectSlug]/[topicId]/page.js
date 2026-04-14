@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react'
 import { useParams } from 'next/navigation'
 import Link from 'next/link'
-import Navbar from '@/components/layout/Navbar'
+import FeedLayout from '@/components/layout/FeedLayout'
 import { supabase } from '@/lib/supabase'
 import { hasAccess } from '@/lib/subscription'
 import Paywall from '@/components/lesson/Paywall'
@@ -25,29 +25,20 @@ function LessonStatusBadge({ totalSections, completedSections, isComingSoon }) {
   }
   if (completedSections >= totalSections) {
     return (
-      <span
-        className="text-xs px-2.5 py-1 rounded-full font-medium"
-        style={{ backgroundColor: 'var(--color-surface)', color: 'var(--color-primary)' }}
-      >
+      <span className="text-xs px-2.5 py-1 rounded-full font-medium bg-green-100 text-green-700">
         Completed
       </span>
     )
   }
   if (completedSections > 0) {
     return (
-      <span
-        className="text-xs px-2.5 py-1 rounded-full font-medium"
-        style={{ backgroundColor: 'var(--color-highlight)', color: 'var(--color-accent)' }}
-      >
+      <span className="text-xs px-2.5 py-1 rounded-full font-medium bg-blue-100 text-blue-700">
         In progress
       </span>
     )
   }
   return (
-    <span
-      className="text-xs px-2.5 py-1 rounded-full font-medium"
-      style={{ backgroundColor: 'var(--color-btn-bg)', color: 'var(--color-btn-text)' }}
-    >
+    <span className="text-xs px-2.5 py-1 rounded-full font-medium bg-gray-100 text-gray-500">
       Not started
     </span>
   )
@@ -166,14 +157,12 @@ export default function TopicPage() {
   const topicLabel   = topic   ? topic.title  : 'Topic'
 
   return (
-    <div className="min-h-screen" style={{ backgroundColor: 'var(--color-page-bg)' }}>
-      <Navbar />
-
+    <div className="min-h-screen bg-gray-50">
       {/* Header */}
-      <div className="px-4 sm:px-6 py-10" style={{ backgroundColor: 'var(--color-primary)' }}>
+      <div className="bg-gradient-to-br from-blue-600 to-blue-800 px-4 sm:px-6 py-10">
         <div className="max-w-4xl mx-auto">
           {/* Breadcrumb */}
-          <nav className="flex items-center gap-1.5 text-xs mb-4 opacity-60 flex-wrap" style={{ color: 'var(--color-surface-mid)' }}>
+          <nav className="flex items-center gap-1.5 text-xs mb-4 text-blue-200 opacity-80 flex-wrap">
             <Link href="/learn" className="hover:opacity-100">Learn</Link>
             <span>›</span>
             <Link href={`/learn/${formId}`} className="hover:opacity-100">{formLabel}</Link>
@@ -184,11 +173,11 @@ export default function TopicPage() {
             <span>›</span>
             <span>{topicLabel}</span>
           </nav>
-          <h1 className="font-serif text-4xl mb-2" style={{ color: 'var(--color-surface-mid)' }}>
+          <h1 className="font-serif text-4xl mb-2 text-white">
             {loading ? 'Loading...' : topicLabel}
           </h1>
           {topic?.description && (
-            <p className="text-sm opacity-70 max-w-xl" style={{ color: 'var(--color-surface-mid)' }}>
+            <p className="text-sm text-blue-100 opacity-80 max-w-xl">
               {topic.description}
             </p>
           )}
@@ -206,11 +195,7 @@ export default function TopicPage() {
         ) : !topic ? (
           <div className="text-center py-16">
             <p className="text-sm text-gray-400 mb-2">Topic not found.</p>
-            <Link
-              href={`/learn/${formId}/${termId}/${subjectSlug}`}
-              className="text-xs underline"
-              style={{ color: 'var(--color-primary-lit)' }}
-            >
+            <Link href={`/learn/${formId}/${termId}/${subjectSlug}`} className="text-xs underline text-blue-600">
               Back to units
             </Link>
           </div>
@@ -219,8 +204,7 @@ export default function TopicPage() {
             {/* Back to units link */}
             <Link
               href={`/learn/${formId}/${termId}/${subjectSlug}`}
-              className="inline-flex items-center gap-1.5 text-sm hover:opacity-70 transition"
-              style={{ color: 'var(--color-primary-mid)' }}
+              className="inline-flex items-center gap-1.5 text-sm text-blue-600 hover:text-blue-800 transition"
             >
               <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
@@ -262,26 +246,22 @@ export default function TopicPage() {
 
                   const cardInner = (
                     <div
-                      className={`bg-white border rounded-2xl p-5 flex flex-col gap-3 transition ${
-                        isComingSoon ? 'opacity-50 cursor-not-allowed border-gray-100' : 'border-gray-200 hover:border-gray-300 hover:shadow-md'
+                      className={`bg-white border rounded-2xl shadow-sm p-5 flex flex-col gap-3 transition ${
+                        isComingSoon ? 'opacity-50 cursor-not-allowed border-gray-100' : 'border-gray-200 hover:border-blue-300 hover:shadow-md'
                       }`}
                     >
                       <div className="flex items-start justify-between gap-4">
                         <div className="flex items-start gap-3 min-w-0">
                           {/* Lesson number circle */}
                           <span
-                            className="w-8 h-8 rounded-full flex items-center justify-center text-sm font-semibold flex-shrink-0 mt-0.5"
-                            style={isComingSoon
-                              ? { backgroundColor: '#f3f4f6', color: '#9ca3af' }
-                              : { backgroundColor: 'var(--color-surface)', color: 'var(--color-primary-mid)' }}
+                            className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-semibold flex-shrink-0 mt-0.5 ${
+                              isComingSoon ? 'bg-gray-100 text-gray-400' : 'bg-blue-100 text-blue-700'
+                            }`}
                           >
                             {index + 1}
                           </span>
                           <div className="min-w-0">
-                            <h2
-                              className="text-sm font-semibold leading-snug"
-                              style={{ color: isComingSoon ? '#9ca3af' : '#111827' }}
-                            >
+                            <h2 className={`text-sm font-semibold leading-snug ${isComingSoon ? 'text-gray-400' : 'text-gray-900'}`}>
                               {lesson.title}
                             </h2>
                             {lesson.description && (
@@ -308,13 +288,8 @@ export default function TopicPage() {
                           </p>
                           <div className="w-full h-1.5 rounded-full bg-gray-100 overflow-hidden">
                             <div
-                              className="h-full rounded-full transition-all"
-                              style={{
-                                width: `${progressPct}%`,
-                                backgroundColor: progressPct === 100
-                                  ? 'var(--color-primary)'
-                                  : 'var(--color-accent)',
-                              }}
+                              className="h-full rounded-full bg-blue-500 transition-all"
+                              style={{ width: `${progressPct}%` }}
                             />
                           </div>
                         </div>

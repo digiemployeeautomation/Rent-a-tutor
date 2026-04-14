@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react'
 import { useParams } from 'next/navigation'
 import Link from 'next/link'
-import Navbar from '@/components/layout/Navbar'
+import FeedLayout from '@/components/layout/FeedLayout'
 import { supabase } from '@/lib/supabase'
 import { hasAccess } from '@/lib/subscription'
 
@@ -77,24 +77,22 @@ export default function TermPage() {
   const termLabel    = term ? term.name : 'Term'
 
   return (
-    <div className="min-h-screen" style={{ backgroundColor: 'var(--color-page-bg)' }}>
-      <Navbar />
-
+    <div className="min-h-screen bg-gray-50">
       {/* Header */}
-      <div className="px-4 sm:px-6 py-10" style={{ backgroundColor: 'var(--color-primary)' }}>
+      <div className="bg-gradient-to-br from-blue-600 to-blue-800 px-4 sm:px-6 py-10">
         <div className="max-w-5xl mx-auto">
           {/* Breadcrumb */}
-          <nav className="flex items-center gap-1.5 text-xs mb-4 opacity-60" style={{ color: 'var(--color-surface-mid)' }}>
+          <nav className="flex items-center gap-1.5 text-xs mb-4 text-blue-200 opacity-80">
             <Link href="/learn" className="hover:opacity-100">Learn</Link>
             <span>›</span>
             <Link href={`/learn/${formId}`} className="hover:opacity-100">{formLabel}</Link>
             <span>›</span>
             <span>{termLabel}</span>
           </nav>
-          <h1 className="font-serif text-4xl mb-2" style={{ color: 'var(--color-surface-mid)' }}>
+          <h1 className="font-serif text-4xl mb-2 text-white">
             {loading ? 'Loading...' : `${formLabel}, ${termLabel} — Subjects`}
           </h1>
-          <p className="text-sm opacity-70" style={{ color: 'var(--color-surface-mid)' }}>
+          <p className="text-sm text-blue-100 opacity-80">
             Choose a subject to start learning.
           </p>
         </div>
@@ -121,35 +119,30 @@ export default function TermPage() {
               const cardContent = (
                 <>
                   {/* Icon */}
-                  <div
-                    className="w-12 h-12 rounded-xl flex items-center justify-center text-2xl mb-3"
-                    style={{ backgroundColor: hasContent ? 'var(--color-surface)' : '#f3f4f6' }}
-                  >
+                  <div className={`w-12 h-12 rounded-xl flex items-center justify-center text-2xl mb-3 ${hasContent ? 'bg-blue-50' : 'bg-gray-100'}`}>
                     {subject.icon ?? '📖'}
                   </div>
 
-                  <h2
-                    className="font-semibold text-sm mb-1 leading-snug"
-                    style={{ color: hasContent ? 'var(--color-primary)' : '#9ca3af' }}
-                  >
+                  <h2 className={`font-semibold text-sm mb-1 leading-snug ${hasContent ? 'text-blue-800' : 'text-gray-400'}`}>
                     {subject.name}
                   </h2>
 
                   {subject.description && (
-                    <p className="text-xs mb-2 line-clamp-2" style={{ color: hasContent ? '#6b7280' : '#d1d5db' }}>
+                    <p className={`text-xs mb-2 line-clamp-2 ${hasContent ? 'text-gray-500' : 'text-gray-300'}`}>
                       {subject.description}
                     </p>
                   )}
 
                   <div className="mt-auto flex items-center justify-between">
-                    <span
-                      className="text-xs px-2 py-0.5 rounded-full"
-                      style={hasContent
-                        ? { backgroundColor: 'var(--color-surface)', color: 'var(--color-primary-mid)' }
-                        : { backgroundColor: '#f3f4f6', color: '#9ca3af' }}
-                    >
-                      {hasContent ? `${count} unit${count !== 1 ? 's' : ''}` : 'Coming soon'}
-                    </span>
+                    {hasContent ? (
+                      <span className="text-xs px-2 py-0.5 rounded-full bg-blue-100 text-blue-700">
+                        {count} unit{count !== 1 ? 's' : ''}
+                      </span>
+                    ) : (
+                      <span className="text-xs px-2 py-0.5 rounded-full bg-gray-100 text-gray-500">
+                        Coming soon
+                      </span>
+                    )}
                     {showLock && (
                       <span className="text-gray-400 text-sm" title="Subscription required">🔒</span>
                     )}
@@ -172,7 +165,7 @@ export default function TermPage() {
                 <Link
                   key={subject.id}
                   href={`/learn/${formId}/${termId}/${subject.slug}`}
-                  className="group bg-white border border-gray-200 rounded-2xl p-4 hover:border-gray-300 hover:shadow-md transition flex flex-col"
+                  className="group bg-white border border-gray-200 rounded-2xl p-4 hover:border-blue-300 hover:shadow-md transition flex flex-col"
                 >
                   {cardContent}
                 </Link>

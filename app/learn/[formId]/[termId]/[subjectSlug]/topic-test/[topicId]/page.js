@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react'
 import { useParams } from 'next/navigation'
 import Link from 'next/link'
-import Navbar from '@/components/layout/Navbar'
+import FeedLayout from '@/components/layout/FeedLayout'
 import { supabase } from '@/lib/supabase'
 import QuizPlayer from '@/components/lesson/QuizPlayer'
 
@@ -201,14 +201,12 @@ export default function TopicTestPage() {
   const topicLabel   = topic   ? topic.title  : 'Topic'
 
   return (
-    <div className="min-h-screen" style={{ backgroundColor: 'var(--color-page-bg)' }}>
-      <Navbar />
-
+    <div className="min-h-screen bg-gray-50">
       {/* Header */}
-      <div className="px-4 sm:px-6 py-10" style={{ backgroundColor: 'var(--color-primary)' }}>
+      <div className="bg-gradient-to-br from-blue-600 to-blue-800 px-4 sm:px-6 py-10">
         <div className="max-w-4xl mx-auto">
           {/* Breadcrumb */}
-          <nav className="flex items-center gap-1.5 text-xs mb-4 opacity-60 flex-wrap" style={{ color: 'var(--color-surface-mid)' }}>
+          <nav className="flex items-center gap-1.5 text-xs mb-4 text-blue-200 opacity-80 flex-wrap">
             <Link href="/learn" className="hover:opacity-100">Learn</Link>
             <span>›</span>
             <Link href={`/learn/${formId}`} className="hover:opacity-100">{formLabel}</Link>
@@ -221,10 +219,10 @@ export default function TopicTestPage() {
             <span>›</span>
             <span>Topic Test</span>
           </nav>
-          <h1 className="font-serif text-4xl mb-2" style={{ color: 'var(--color-surface-mid)' }}>
+          <h1 className="font-serif text-4xl mb-2 text-white">
             {loading ? 'Loading...' : `Topic Test: ${topicLabel}`}
           </h1>
-          <p className="text-sm opacity-70" style={{ color: 'var(--color-surface-mid)' }}>
+          <p className="text-sm text-blue-100 opacity-80">
             Test your understanding of this topic.
           </p>
         </div>
@@ -241,23 +239,18 @@ export default function TopicTestPage() {
         ) : error ? (
           <div className="text-center py-16">
             <p className="text-sm text-gray-500 mb-4">{error}</p>
-            <Link
-              href={`/learn/${formId}/${termId}/${subjectSlug}/${topicId}`}
-              className="text-sm underline"
-              style={{ color: 'var(--color-primary-lit)' }}
-            >
+            <Link href={`/learn/${formId}/${termId}/${subjectSlug}/${topicId}`} className="text-sm underline text-blue-600">
               Back to topic
             </Link>
           </div>
         ) : !allComplete ? (
           /* Locked — not all lessons complete */
-          <div className="bg-white border border-gray-200 rounded-2xl p-8">
+          <div className="bg-white border border-gray-200 rounded-2xl shadow-sm p-8">
             <div className="flex items-start gap-4">
-              <div
-                className="w-12 h-12 rounded-full flex items-center justify-center flex-shrink-0 text-xl"
-                style={{ backgroundColor: 'var(--color-surface)' }}
-              >
-                🔒
+              <div className="w-12 h-12 rounded-full bg-gray-100 flex items-center justify-center flex-shrink-0">
+                <svg className="w-6 h-6 text-gray-400" fill="currentColor" viewBox="0 0 20 20">
+                  <path fillRule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clipRule="evenodd" />
+                </svg>
               </div>
               <div>
                 <h2 className="text-lg font-semibold text-gray-800 mb-1">Test is locked</h2>
@@ -275,8 +268,7 @@ export default function TopicTestPage() {
                         <li key={lesson.id}>
                           <Link
                             href={`/learn/${formId}/${termId}/${subjectSlug}/${topicId}/lesson/${lesson.id}`}
-                            className="flex items-center gap-2 text-sm hover:opacity-70 transition"
-                            style={{ color: 'var(--color-primary-mid)' }}
+                            className="flex items-center gap-2 text-sm text-blue-600 hover:text-blue-800 transition"
                           >
                             <span className="w-1.5 h-1.5 rounded-full bg-current flex-shrink-0" />
                             {lesson.title}
@@ -290,8 +282,7 @@ export default function TopicTestPage() {
                 <div className="mt-6">
                   <Link
                     href={`/learn/${formId}/${termId}/${subjectSlug}/${topicId}`}
-                    className="inline-flex items-center gap-1.5 text-sm font-medium px-4 py-2 rounded-lg transition"
-                    style={{ backgroundColor: 'var(--color-btn-bg)', color: 'var(--color-btn-text)' }}
+                    className="inline-flex items-center gap-1.5 text-sm font-medium px-4 py-2 rounded-lg bg-blue-600 text-white hover:bg-blue-700 transition"
                   >
                     Go to topic
                   </Link>
@@ -302,13 +293,9 @@ export default function TopicTestPage() {
         ) : quizResult ? (
           /* Results screen */
           <div className="space-y-6">
-            <div
-              className={`bg-white border rounded-2xl p-8 text-center ${
-                quizResult.passed ? 'border-green-200' : 'border-red-200'
-              }`}
-            >
+            <div className={`bg-white border rounded-2xl shadow-sm p-8 text-center ${quizResult.passed ? 'border-green-200' : 'border-red-200'}`}>
               <div className="text-5xl mb-4">{quizResult.passed ? '🎉' : '📚'}</div>
-              <h2 className="text-2xl font-bold mb-2" style={{ color: 'var(--color-primary)' }}>
+              <h2 className="text-2xl font-bold mb-2 text-blue-800">
                 {quizResult.passed ? 'Well done!' : 'Keep practising!'}
               </h2>
               <p className="text-lg text-gray-700 mb-1">
@@ -323,10 +310,7 @@ export default function TopicTestPage() {
               </p>
 
               {allTopicsTested && (
-                <div
-                  className="mt-6 p-4 rounded-xl text-sm"
-                  style={{ backgroundColor: 'var(--color-surface)', color: 'var(--color-primary)' }}
-                >
+                <div className="mt-6 p-4 rounded-xl text-sm bg-pink-50 text-pink-700 border border-pink-100">
                   All topics in this unit have been tested — well done! You are ready to move on to the next unit.
                 </div>
               )}
@@ -342,8 +326,7 @@ export default function TopicTestPage() {
               {!quizResult.passed && (
                 <button
                   onClick={() => { setQuizResult(null) }}
-                  className="inline-flex items-center gap-1.5 text-sm font-medium px-4 py-2 rounded-lg transition"
-                  style={{ backgroundColor: 'var(--color-btn-bg)', color: 'var(--color-btn-text)' }}
+                  className="inline-flex items-center gap-1.5 text-sm font-medium px-4 py-2 rounded-lg bg-blue-600 text-white hover:bg-blue-700 transition"
                 >
                   Try again
                 </button>
@@ -355,8 +338,7 @@ export default function TopicTestPage() {
           <div className="space-y-4">
             <Link
               href={`/learn/${formId}/${termId}/${subjectSlug}/${topicId}`}
-              className="inline-flex items-center gap-1.5 text-sm hover:opacity-70 transition"
-              style={{ color: 'var(--color-primary-mid)' }}
+              className="inline-flex items-center gap-1.5 text-sm text-blue-600 hover:text-blue-800 transition"
             >
               <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
