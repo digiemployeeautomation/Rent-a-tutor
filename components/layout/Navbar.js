@@ -1,196 +1,75 @@
 'use client'
-import { useState, useEffect } from 'react'
 import Link from 'next/link'
-import Image from 'next/image'
-import { useTheme } from '@/context/ThemeContext'
+import { usePathname } from 'next/navigation'
+import { useEffect, useState } from 'react'
 import { supabase } from '@/lib/supabase'
-import { useRouter } from 'next/navigation'
+
+const NAV_LINKS = [
+  { href: '/dashboard/student', label: 'Home' },
+  { href: '/learn', label: 'Learn' },
+  { href: '/dashboard/student/leaderboard', label: 'Leaderboard' },
+  { href: '/dashboard/student/settings', label: 'Settings' },
+]
+
+const PUBLIC_LINKS = [
+  { href: '/', label: 'Home' },
+  { href: '/about', label: 'About' },
+  { href: '/contact', label: 'Contact' },
+]
 
 export default function Navbar() {
-  const { role } = useTheme()
-  const router = useRouter()
-  const [user, setUser]       = useState(null)
-  const [profile, setProfile] = useState(null)
+  const pathname = usePathname()
+  const [user, setUser] = useState(null)
   const [loading, setLoading] = useState(true)
-
-  async function fetchProfile(userId) {
-    const { data } = await supabase
-      .from('profiles')
-      .select('full_name, avatar_url, role')
-      .eq('id', userId)
-      .single()
-    setProfile(data)
-  }
 
   useEffect(() => {
     supabase.auth.getUser().then(({ data: { user } }) => {
       setUser(user)
-      if (user) fetchProfile(user.id)
       setLoading(false)
     })
-
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
-      const u = session?.user ?? null
-      setUser(u)
-      if (u) fetchProfile(u.id)
-      else setProfile(null)
-    })
-
-    return () => subscription.unsubscribe()
   }, [])
 
-  async function handleLogout() {
-    await supabase.auth.signOut()
-    router.push('/')
-    router.refresh()
-  }
-
-  const fullName  = profile?.full_name ?? user?.user_metadata?.full_name ?? null
-  const avatarUrl = profile?.avatar_url ?? null
-  const initials  = fullName
-    ? fullName.split(' ').map(w => w[0]).join('').slice(0, 2).toUpperCase()
-    : '??'
-  const userRole  = profile?.role ?? role
+  const links = user ? NAV_LINKS : PUBLIC_LINKS
 
   return (
-    <nav style={{ backgroundColor: 'var(--color-nav-bg)' }} className="px-6 h-16 flex items-center justify-between">
-      <Link href="/" className="font-serif text-xl" style={{ color: 'var(--color-nav-text)' }}>
-        Rent a <span style={{ color: 'var(--color-nav-accent)' }} className="italic">Tutor</span>
-      </Link>
+    <header className="sticky top-0 z-40 bg-white border-b border-gray-100">
+      <div className="max-w-5xl mx-auto px-6 flex items-center justify-between h-14">
+        <Link href={user ? '/dashboard/student' : '/'} className="text-xl font-bold text-blue-600">
+          Rent<span className="text-pink-400">a</span>Tutor
+        </Link>
 
-      <div className="flex items-center gap-3">
-        {loading ? (
-          <div className="w-20 h-8 rounded-lg animate-pulse" style={{ backgroundColor: 'rgba(255,255,255,0.1)' }} />
-        ) : user ? (
-          <>
-            {/* Nav links for logged-in users */}
-            <div className="hidden md:flex items-center gap-1">
-              {userRole === 'admin' ? (
-                <Link
-                  href="/admin"
-                  className="text-xs px-3 py-1.5 rounded-lg"
-                  style={{ color: 'rgba(255,255,255,0.85)' }}
-                >
-                  Admin
-                </Link>
-              ) : (
-                <>
-                  <Link
-                    href="/dashboard/student"
-                    className="text-xs px-3 py-1.5 rounded-lg"
-                    style={{ color: 'rgba(255,255,255,0.85)' }}
-                  >
-                    Dashboard
-                  </Link>
-                  <Link
-                    href="/learn"
-                    className="text-xs px-3 py-1.5 rounded-lg"
-                    style={{ color: 'rgba(255,255,255,0.85)' }}
-                  >
-                    Learn
-                  </Link>
-                  <Link
-                    href="/dashboard/student/leaderboard"
-                    className="text-xs px-3 py-1.5 rounded-lg"
-                    style={{ color: 'rgba(255,255,255,0.85)' }}
-                  >
-                    Leaderboard
-                  </Link>
-                  <Link
-                    href="/dashboard/student/settings"
-                    className="text-xs px-3 py-1.5 rounded-lg"
-                    style={{ color: 'rgba(255,255,255,0.85)' }}
-                  >
-                    Settings
-                  </Link>
-                </>
-              )}
-            </div>
-
-            <div className="text-right hidden sm:block">
-              <div className="text-xs font-semibold" style={{ color: '#ffffff' }}>
-                {fullName || 'My account'}
-              </div>
-              <div className="text-xs capitalize" style={{ color: 'rgba(255,255,255,0.6)' }}>
-                {userRole}
-              </div>
-            </div>
-
-            {avatarUrl ? (
-              <div className="w-9 h-9 rounded-full overflow-hidden border-2" style={{ borderColor: 'rgba(255,255,255,0.2)' }}>
-                <Image
-                  src={avatarUrl}
-                  alt={fullName ?? 'Profile'}
-                  width={36}
-                  height={36}
-                  className="object-cover w-full h-full"
-                />
-              </div>
-            ) : (
-              <div
-                className="w-9 h-9 rounded-full flex items-center justify-center text-xs font-medium border-2"
-                style={{
-                  backgroundColor: 'var(--color-primary-mid)',
-                  color: '#ffffff',
-                  borderColor: 'rgba(255,255,255,0.15)',
-                }}
-              >
-                {initials}
-              </div>
-            )}
-
-            <button
-              onClick={handleLogout}
-              className="text-xs px-3 py-1.5 rounded-lg border"
-              style={{ color: '#ffffff', borderColor: 'rgba(255,255,255,0.2)' }}
-            >
-              Log out
-            </button>
-          </>
-        ) : (
-          <>
-            {/* Nav links for logged-out users */}
-            <div className="hidden md:flex items-center gap-1">
+        <nav className="flex items-center gap-1">
+          {links.map(link => {
+            const active = pathname === link.href || (link.href !== '/' && link.href !== '/dashboard/student' && pathname.startsWith(link.href))
+            return (
               <Link
-                href="/"
-                className="text-xs px-3 py-1.5 rounded-lg"
-                style={{ color: 'rgba(255,255,255,0.85)' }}
+                key={link.href}
+                href={link.href}
+                className={`px-3 py-2 text-sm font-medium rounded-lg transition-colors ${
+                  active ? 'text-blue-600 bg-blue-50' : 'text-gray-500 hover:text-gray-700 hover:bg-gray-50'
+                }`}
               >
-                Home
+                {link.label}
               </Link>
-              <Link
-                href="/about"
-                className="text-xs px-3 py-1.5 rounded-lg"
-                style={{ color: 'rgba(255,255,255,0.85)' }}
-              >
-                About
-              </Link>
-              <Link
-                href="/contact"
-                className="text-xs px-3 py-1.5 rounded-lg"
-                style={{ color: 'rgba(255,255,255,0.85)' }}
-              >
-                Contact
-              </Link>
-            </div>
+            )
+          })}
+        </nav>
 
-            <Link
-              href="/auth/login"
-              className="text-sm px-4 py-2 rounded-lg border"
-              style={{ color: 'var(--color-nav-text)', borderColor: 'rgba(255,255,255,0.2)' }}
-            >
-              Log in
+        <div className="flex items-center gap-3">
+          {loading ? (
+            <div className="w-8 h-8 rounded-full bg-gray-100 animate-pulse" />
+          ) : user ? (
+            <Link href="/dashboard/student/settings" className="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 text-sm font-semibold">
+              {user.user_metadata?.full_name?.[0]?.toUpperCase() || '?'}
             </Link>
-            <Link
-              href="/auth/register"
-              className="text-sm px-4 py-2 rounded-lg"
-              style={{ backgroundColor: 'var(--color-accent-btn)', color: 'var(--color-accent-btn-text)' }}
-            >
-              Sign Up
-            </Link>
-          </>
-        )}
+          ) : (
+            <>
+              <Link href="/auth/login" className="text-sm text-gray-600 hover:text-gray-900">Log in</Link>
+              <Link href="/auth/register" className="text-sm bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors">Sign up</Link>
+            </>
+          )}
+        </div>
       </div>
-    </nav>
+    </header>
   )
 }
