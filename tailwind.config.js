@@ -10,80 +10,32 @@ module.exports = {
   theme: {
     extend: {
       borderRadius: {
-        sm:    '0.25rem',   //  4px (was 2px)
-        DEFAULT:'0.375rem', //  6px (was 4px)
-        md:    '0.5rem',    //  8px (was 6px)
-        lg:    '0.75rem',   // 12px (was 8px)
-        xl:    '1rem',      // 16px (was 12px)
-        '2xl': '1.25rem',   // 20px (was 16px)
-        '3xl': '1.75rem',   // 28px (was 24px)
-        '4xl': '2rem',      // 32px (new)
+        sm: '0.25rem', DEFAULT: '0.5rem', md: '0.625rem', lg: '0.75rem',
+        xl: '1rem', '2xl': '1.25rem', '3xl': '1.5rem', '4xl': '2rem',
       },
       colors: {
-        background: 'var(--background)',
-        foreground: 'var(--foreground)',
-        muted: {
-          DEFAULT: 'var(--muted)',
-          foreground: 'var(--muted-foreground)',
-        },
-        accent: {
-          DEFAULT: 'var(--accent)',
-          foreground: 'var(--accent-foreground)',
-        },
-        border: 'var(--border)',
-        ring: 'var(--ring)',
-        primary: {
-          DEFAULT: 'var(--primary)',
-          foreground: 'var(--primary-foreground)',
-        },
-        secondary: {
-          DEFAULT: 'var(--secondary)',
-          foreground: 'var(--secondary-foreground)',
-        },
-        destructive: {
-          DEFAULT: 'var(--destructive)',
-          foreground: 'var(--destructive-foreground)',
-        },
-        popover: {
-          DEFAULT: 'var(--popover)',
-          foreground: 'var(--popover-foreground)',
-        },
+        background: 'var(--background)', foreground: 'var(--foreground)',
+        muted: { DEFAULT: 'var(--muted)', foreground: 'var(--muted-foreground)' },
+        accent: { DEFAULT: 'var(--accent)', foreground: 'var(--accent-foreground)' },
+        border: 'var(--border)', ring: 'var(--ring)',
+        primary: { DEFAULT: 'var(--primary)', foreground: 'var(--primary-foreground)' },
+        secondary: { DEFAULT: 'var(--secondary)', foreground: 'var(--secondary-foreground)' },
+        destructive: { DEFAULT: 'var(--destructive)', foreground: 'var(--destructive-foreground)' },
+        popover: { DEFAULT: 'var(--popover)', foreground: 'var(--popover-foreground)' },
         input: 'var(--input)',
-        forest: {
-          50:  '#f0f7ee',
-          100: '#d8eccc',
-          200: '#b4d99a',
-          300: '#8ac165',
-          400: '#639922',
-          500: '#3b6d11',
-          600: '#27500a',
-          700: '#173404',
-          800: '#0e2202',
-          900: '#071101',
-        },
-        gold: {
-          100: '#faeeda',
-          200: '#fac775',
-          300: '#ef9f27',
-          400: '#ba7517',
-          500: '#854f0b',
-          600: '#633806',
-          700: '#412402',
-        },
-        sage: {
-          100: '#eaf3de',
-          200: '#c0dd97',
-          300: '#97c459',
-          400: '#6ea832',
-          500: '#4d8520',
-          600: '#346314',
-        },
+        blue: { 50:'#EFF6FF',100:'#DBEAFE',200:'#BFDBFE',300:'#93C5FD',400:'#60A5FA',500:'#3B82F6',600:'#2563EB',700:'#1D4ED8',800:'#1E40AF',900:'#1E3A8A' },
+        pink: { 50:'#FDF2F8',100:'#FCE7F3',200:'#FBCFE8',300:'#F9A8D4',400:'#F472B6',500:'#EC4899',600:'#DB2777',700:'#BE185D',800:'#9D174D',900:'#831843' },
       },
-      borderColor: {
-        DEFAULT: 'var(--border)',
-      },
-      fontFamily: {
-        serif: ['Georgia', 'serif'],
+      borderColor: { DEFAULT: 'var(--border)' },
+      fontFamily: { sans: ['Inter', 'system-ui', '-apple-system', 'sans-serif'] },
+      animation: {
+        'fade-in-up': 'fadeInUp 0.4s ease-out both',
+        'fade-in': 'fadeIn 0.3s ease-out both',
+        'slide-in-right': 'slideInRight 0.3s ease-out both',
+        'float-up': 'floatUp 1s ease-out both',
+        'pulse-pink': 'pulse-pink 2s ease-in-out infinite',
+        'level-up': 'levelUp 0.5s ease-out both',
+        'progress-fill': 'progressFill 0.6s ease-out both',
       },
     },
   },

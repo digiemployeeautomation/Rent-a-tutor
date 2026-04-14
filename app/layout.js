@@ -1,40 +1,22 @@
 import './globals.css'
-import { cookies } from 'next/headers'
 import { ThemeProvider } from '@/context/ThemeContext'
 import { ToastProvider } from '@/components/ui/toast'
 import AppShell from '@/components/layout/AppShell'
 
 export const metadata = {
   title: 'Rent a Tutor',
-  description: "Zambia's online tutoring platform for O-Level and A-Level students",
+  description: "Zambia's online learning platform for O-Level students",
 }
 
-// Inline script that runs before React hydration to prevent dark mode flash.
-// Reads the user's saved preference from localStorage and sets data-dark immediately.
-const DARK_MODE_INIT = `
-(function(){
-  try {
-    var saved = localStorage.getItem('rat-dark');
-    if (saved === 'dark') document.documentElement.setAttribute('data-dark', 'true');
-    else if (saved === 'light') document.documentElement.setAttribute('data-dark', 'false');
-  } catch(e) {}
-})();
-`
-
-export default async function RootLayout({ children }) {
-  // Read the role cookie set at login so the server renders the correct theme
-  // immediately — prevents the green→blue flash tutors would otherwise see.
-  // The ThemeContext will keep it in sync on the client after hydration.
-  const cookieStore = await cookies()
-  const roleCookie  = cookieStore.get('rat-role')?.value
-  const theme       = roleCookie === 'tutor' ? 'tutor' : 'student'
-
+export default function RootLayout({ children }) {
   return (
-    <html lang="en" data-theme={theme} data-dark="auto" suppressHydrationWarning>
+    <html lang="en" suppressHydrationWarning>
       <head>
-        <script dangerouslySetInnerHTML={{ __html: DARK_MODE_INIT }} />
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
       </head>
-      <body>
+      <body className="font-sans bg-white text-gray-900">
         <ThemeProvider>
           <ToastProvider>
             <AppShell>

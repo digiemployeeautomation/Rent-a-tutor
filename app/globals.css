@@ -2,121 +2,74 @@
 @tailwind components;
 @tailwind utilities;
 
-/* ── Student theme (default) — Forest & Gold ── */
-:root,
-[data-theme="student"] {
-  --color-primary:          #173404;
-  --color-primary-mid:      #27500a;
-  --color-primary-lit:      #3b6d11;
-  --color-accent:           #854f0b;
-  --color-accent-mid:       #ba7517;
-  --color-accent-lit:       #fac775;
-  --color-surface:          #eaf3de;
-  --color-surface-mid:      #c0dd97;
-  --color-highlight:        #faeeda;
-  --color-page-bg:          #f6faf2;
-  --color-nav-bg:           #173404;
-  --color-nav-text:         #c0dd97;
-  --color-nav-accent:       #fac775;
-  --color-badge-bg:         #eaf3de;
-  --color-badge-text:       #27500a;
-  --color-btn-bg:           #27500a;
-  --color-btn-text:         #c0dd97;
-  --color-btn-hover:        #173404;
-  --color-accent-btn:       #854f0b;
-  --color-accent-btn-text:  #faeeda;
-  --color-progress:         #27500a;
-  --color-stat-a-bg:        #eaf3de;
-  --color-stat-a-text:      #173404;
-  --color-stat-a-sub:       #3b6d11;
-  --color-stat-b-bg:        #faeeda;
-  --color-stat-b-text:      #412402;
-  --color-stat-b-sub:       #854f0b;
-
-  /* Shadow tokens */
-  --shadow-xs:  0 1px 2px rgba(23,52,4,0.06);
-  --shadow-sm:  0 2px 6px rgba(23,52,4,0.08);
-  --shadow-md:  0 4px 16px rgba(23,52,4,0.10);
-  --shadow-lg:  0 8px 32px rgba(23,52,4,0.14);
-  --shadow-xl:  0 16px 48px rgba(23,52,4,0.18);
-
-  /* Shimmer gradient for skeletons */
-  --shimmer-from: #e8f0de;
-  --shimmer-via:  #f4f8ee;
-  --shimmer-to:   #e8f0de;
+/* ── Modern Blue / White / Pink theme ── */
+:root {
+  --color-primary: #2563EB;
+  --color-primary-mid: #3B82F6;
+  --color-primary-lit: #60A5FA;
+  --color-primary-dark: #1D4ED8;
+  --color-accent: #EC4899;
+  --color-accent-mid: #F472B6;
+  --color-accent-lit: #FBCFE8;
+  --color-surface: #F9FAFB;
+  --color-surface-mid: #F3F4F6;
+  --color-highlight: #FDF2F8;
+  --color-page-bg: #FFFFFF;
+  --color-nav-bg: #FFFFFF;
+  --color-nav-text: #1F2937;
+  --color-nav-accent: #2563EB;
+  --color-badge-bg: #EFF6FF;
+  --color-badge-text: #1D4ED8;
+  --color-btn-bg: #2563EB;
+  --color-btn-text: #FFFFFF;
+  --color-btn-hover: #1D4ED8;
+  --color-accent-btn: #EC4899;
+  --color-accent-btn-text: #FFFFFF;
+  --color-progress: #3B82F6;
+  --color-stat-a-bg: #EFF6FF;
+  --color-stat-a-text: #1E40AF;
+  --color-stat-a-sub: #3B82F6;
+  --color-stat-b-bg: #FDF2F8;
+  --color-stat-b-text: #9D174D;
+  --color-stat-b-sub: #EC4899;
+  --shadow-xs: 0 1px 2px rgba(0,0,0,0.04);
+  --shadow-sm: 0 2px 6px rgba(0,0,0,0.06);
+  --shadow-md: 0 4px 16px rgba(0,0,0,0.08);
+  --shadow-lg: 0 8px 32px rgba(0,0,0,0.10);
+  --shadow-xl: 0 16px 48px rgba(0,0,0,0.14);
+  --shimmer-from: #F3F4F6;
+  --shimmer-via: #F9FAFB;
+  --shimmer-to: #F3F4F6;
   --color-body-text: #111827;
-
-  /* shadcn-compatible tokens (mapped from project palette) */
-  --background:         var(--color-page-bg);
-  --foreground:         var(--color-body-text);
-  --muted:              var(--color-surface);
-  --muted-foreground:   #6b7280;
-  --accent:             var(--color-surface);
-  --accent-foreground:  var(--color-primary);
-  --border:             rgba(0,0,0,0.10);
-  --ring:               var(--color-primary-lit);
-  --destructive:        #dc2626;
-  --destructive-foreground: #ffffff;
-  --primary:            var(--color-btn-bg);
-  --primary-foreground: var(--color-btn-text);
-  --secondary:          var(--color-surface);
-  --secondary-foreground: var(--color-primary);
-  --popover:            var(--color-page-bg);
-  --popover-foreground: var(--color-body-text);
-  --input:              var(--border);
-
-  /* Toast colors */
-  --toast-success-bg: #ecfdf5;
-  --toast-success-border: #a7f3d0;
-  --toast-success-text: #065f46;
-  --toast-error-bg: #fef2f2;
-  --toast-error-border: #fecaca;
-  --toast-error-text: #991b1b;
-  --toast-info-bg: #eff6ff;
-  --toast-info-border: #bfdbfe;
-  --toast-info-text: #1e40af;
-}
-
-/* ── Tutor theme — Deep Blue & Amber ── */
-[data-theme="tutor"] {
-  --color-primary:          #042c53;
-  --color-primary-mid:      #0c447c;
-  --color-primary-lit:      #185fa5;
-  --color-accent:           #ba7517;
-  --color-accent-mid:       #ef9f27;
-  --color-accent-lit:       #fac775;
-  --color-surface:          #e6f1fb;
-  --color-surface-mid:      #b5d4f4;
-  --color-highlight:        #faeeda;
-  --color-page-bg:          #f4f8fd;
-  --color-nav-bg:           #042c53;
-  --color-nav-text:         #b5d4f4;
-  --color-nav-accent:       #fac775;
-  --color-badge-bg:         #e6f1fb;
-  --color-badge-text:       #0c447c;
-  --color-btn-bg:           #0c447c;
-  --color-btn-text:         #b5d4f4;
-  --color-btn-hover:        #042c53;
-  --color-accent-btn:       #ba7517;
-  --color-accent-btn-text:  #faeeda;
-  --color-progress:         #0c447c;
-  --color-stat-a-bg:        #e6f1fb;
-  --color-stat-a-text:      #042c53;
-  --color-stat-a-sub:       #185fa5;
-  --color-stat-b-bg:        #faeeda;
-  --color-stat-b-text:      #412402;
-  --color-stat-b-sub:       #854f0b;
-
-  --shadow-xs:  0 1px 2px rgba(4,44,83,0.06);
-  --shadow-sm:  0 2px 6px rgba(4,44,83,0.08);
-  --shadow-md:  0 4px 16px rgba(4,44,83,0.10);
-  --shadow-lg:  0 8px 32px rgba(4,44,83,0.14);
-  --shadow-xl:  0 16px 48px rgba(4,44,83,0.18);
-
-  --shimmer-from: #ddeaf8;
-  --shimmer-via:  #eef4fc;
-  --shimmer-to:   #ddeaf8;
-  --color-body-text: #111827;
+  --background: #FFFFFF;
+  --foreground: #111827;
+  --muted: #F3F4F6;
+  --muted-foreground: #6B7280;
+  --accent: #FDF2F8;
+  --accent-foreground: #EC4899;
+  --border: #E5E7EB;
+  --ring: #3B82F6;
+  --destructive: #EF4444;
+  --destructive-foreground: #FFFFFF;
+  --primary: #2563EB;
+  --primary-foreground: #FFFFFF;
+  --secondary: #F3F4F6;
+  --secondary-foreground: #1F2937;
+  --popover: #FFFFFF;
+  --popover-foreground: #111827;
+  --input: #E5E7EB;
+  --color-success: #22C55E;
+  --color-error: #EF4444;
+  --color-warning: #F59E0B;
+  --toast-success-bg: #F0FDF4;
+  --toast-success-border: #BBF7D0;
+  --toast-success-text: #166534;
+  --toast-error-bg: #FEF2F2;
+  --toast-error-border: #FECACA;
+  --toast-error-text: #991B1B;
+  --toast-info-bg: #EFF6FF;
+  --toast-info-border: #BFDBFE;
+  --toast-info-text: #1E40AF;
 }
 
 /* ── Dark mode — explicit toggle (no media query needed) ── */
@@ -1330,3 +1283,49 @@ img.loaded {
     color: #5a8a42;
   }
 }
+
+/* ─────────────────────────────────────────────────
+   NEW ANIMATION KEYFRAMES & UTILITIES
+───────────────────────────────────────────────── */
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes slideInRight {
+  from { opacity: 0; transform: translateX(20px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+@keyframes slideOutLeft {
+  from { opacity: 1; transform: translateX(0); }
+  to { opacity: 0; transform: translateX(-20px); }
+}
+@keyframes floatUp {
+  0% { opacity: 1; transform: translateY(0); }
+  100% { opacity: 0; transform: translateY(-40px); }
+}
+@keyframes pulse-pink {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(236, 72, 153, 0.4); }
+  50% { box-shadow: 0 0 0 8px rgba(236, 72, 153, 0); }
+}
+@keyframes progressFill { from { width: 0%; } }
+@keyframes levelUp {
+  0% { opacity: 0; transform: scale(0.8); }
+  50% { opacity: 1; transform: scale(1.05); }
+  100% { opacity: 1; transform: scale(1); }
+}
+
+.animate-fade-in-up { animation: fadeInUp 0.4s ease-out both; }
+.animate-slide-in-right { animation: slideInRight 0.3s ease-out both; }
+.animate-slide-out-left { animation: slideOutLeft 0.3s ease-out both; }
+.animate-float-up { animation: floatUp 1s ease-out both; }
+.animate-pulse-pink { animation: pulse-pink 2s ease-in-out infinite; }
+.animate-level-up { animation: levelUp 0.5s ease-out both; }
+
+.stagger-children > *:nth-child(1) { animation-delay: 0ms; }
+.stagger-children > *:nth-child(2) { animation-delay: 60ms; }
+.stagger-children > *:nth-child(3) { animation-delay: 120ms; }
+.stagger-children > *:nth-child(4) { animation-delay: 180ms; }
+.stagger-children > *:nth-child(5) { animation-delay: 240ms; }
+.stagger-children > *:nth-child(6) { animation-delay: 300ms; }
+.stagger-children > *:nth-child(7) { animation-delay: 360ms; }
+.stagger-children > *:nth-child(8) { animation-delay: 420ms; }
