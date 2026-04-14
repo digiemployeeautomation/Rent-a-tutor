@@ -5,13 +5,16 @@ import { supabase } from '@/lib/supabase'
 import { useRouter, useSearchParams } from 'next/navigation'
 
 // Ensures the redirectTo path actually belongs to the role that just logged in.
-// Prevents a student from being sent to /dashboard/tutor via a crafted URL.
+// Prevents a student from being sent to an unauthorized path via a crafted URL.
 function getSafeRedirect(redirectTo, role) {
   if (!redirectTo) return null
   // Allow role-specific dashboard redirects
-  if (role === 'tutor'   && redirectTo.startsWith('/dashboard/tutor'))   return redirectTo
   if (role === 'student' && redirectTo.startsWith('/dashboard/student')) return redirectTo
   if (role === 'admin'   && redirectTo.startsWith('/admin'))             return redirectTo
+  // Allow student onboarding and learning paths
+  if (role === 'student' && (redirectTo.startsWith('/learn') || redirectTo.startsWith('/onboarding'))) {
+    return redirectTo
+  }
   // Allow redirects to public pages (browse, tutor profiles, etc.)
   if (redirectTo.startsWith('/browse/') || redirectTo.startsWith('/tutor/') || redirectTo.startsWith('/about')) {
     return redirectTo
@@ -56,11 +59,21 @@ function LoginForm() {
       return
     }
 
+    // For students, check onboarding completion before redirecting
+    const { data: studentProfile } = await supabase
+      .from('student_profiles')
+      .select('onboarding_complete')
+      .eq('user_id', data.user.id)
+      .single()
+
+    if (!studentProfile || !studentProfile.onboarding_complete) {
+      return router.push('/onboarding')
+    }
+
     // Only honour redirectTo if it matches the user's actual role
     const safeDest = getSafeRedirect(redirectTo, role)
     if (safeDest) return router.push(safeDest)
 
-    if (role === 'tutor') return router.push('/dashboard/tutor')
     return router.push('/dashboard/student')
   }
 
