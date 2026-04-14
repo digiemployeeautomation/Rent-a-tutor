@@ -3,6 +3,9 @@ import { NextResponse } from 'next/server'
 import { createRouteHandlerClient } from '@supabase/auth-helpers-nextjs'
 import { cookies } from 'next/headers'
 import { verifyCsrf } from '@/lib/csrf'
+import { rateLimit } from '@/lib/rate-limit'
+
+const MU_TIMEOUT_MS = 30_000
 
 export async function POST(request) {
   const csrf = verifyCsrf(request)
@@ -16,6 +19,10 @@ export async function POST(request) {
     if (!user) {
       return NextResponse.json({ error: 'Unauthorised' }, { status: 401 })
     }
+
+    // Rate limit: 20 verify attempts per minute per user (polling)
+    const { limited } = await rateLimit(`pay-verify:${user.id}`, 20)
+    if (limited) return NextResponse.json({ error: 'Too many requests. Please wait.' }, { status: 429 })
 
     const { transactionId, lessonId } = await request.json()
 
@@ -45,6 +52,7 @@ export async function POST(request) {
       .select('id, price, status')
       .eq('id', lessonId)
       .eq('status', 'active')
+      .or('flagged.is.null,flagged.eq.false')
       .single()
 
     if (lessonError || !lesson) {
@@ -58,16 +66,50 @@ export async function POST(request) {
       auth_id:        process.env.MONEYUNIFY_AUTH_ID,
     })
 
-    const muRes = await fetch('https://api.moneyunify.one/payments/verify', {
-      method:  'POST',
-      headers: {
-        'Content-Type': 'application/x-www-form-urlencoded',
-        'Accept':        'application/json',
-      },
-      body: body.toString(),
-    })
+    // Call MoneyUnify with timeout
+    const controller = new AbortController()
+    const timeoutId = setTimeout(() => controller.abort(), MU_TIMEOUT_MS)
 
-    const muData = await muRes.json()
+    let muRes
+    try {
+      muRes = await fetch('https://api.moneyunify.one/payments/verify', {
+        method:  'POST',
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+          'Accept':        'application/json',
+        },
+        body:   body.toString(),
+        signal: controller.signal,
+      })
+    } catch (fetchErr) {
+      clearTimeout(timeoutId)
+      console.error('[payment/verify] MoneyUnify fetch failed:', fetchErr.message)
+      return NextResponse.json(
+        { error: 'Payment verification temporarily unavailable. Please try again.' },
+        { status: 502 }
+      )
+    }
+    clearTimeout(timeoutId)
+
+    if (!muRes.ok) {
+      console.error('[payment/verify] MoneyUnify HTTP error:', muRes.status)
+      return NextResponse.json(
+        { error: 'Payment verification failed. Please try again.' },
+        { status: 502 }
+      )
+    }
+
+    let muData
+    try {
+      muData = await muRes.json()
+    } catch {
+      console.error('[payment/verify] MoneyUnify returned non-JSON response')
+      return NextResponse.json(
+        { error: 'Payment service returned an invalid response.' },
+        { status: 502 }
+      )
+    }
+
     const status = muData.data?.status
 
     if (status === 'initiated' || status === 'otp-pending') {
@@ -76,14 +118,21 @@ export async function POST(request) {
 
     if (muData.isError || status !== 'successful') {
       return NextResponse.json(
-        { status: 'failed', error: muData.message ?? 'Payment failed.' },
+        { status: 'failed', error: 'Payment failed or was declined.' },
         { status: 402 }
       )
     }
 
     // Verify the gateway amount matches the lesson price
     const gatewayAmount = Number(muData.data?.amount)
-    if (!isNaN(gatewayAmount) && gatewayAmount < amount) {
+    if (isNaN(gatewayAmount)) {
+      console.error(`[payment/verify] gateway returned non-numeric amount: ${muData.data?.amount}`)
+      return NextResponse.json(
+        { error: 'Payment service returned an invalid amount. Please contact support.' },
+        { status: 502 }
+      )
+    }
+    if (gatewayAmount !== amount) {
       console.error(`[payment/verify] amount mismatch: gateway=${gatewayAmount}, lesson=${amount}`)
       return NextResponse.json(
         { error: 'Payment amount does not match lesson price.' },
@@ -113,10 +162,15 @@ export async function POST(request) {
     const { error: rpcError } = await supabase.rpc('increment_purchase_count', { lesson_id_input: lessonId })
     if (rpcError) {
       console.error('[payment/verify] increment_purchase_count error:', rpcError)
+      // Non-fatal: purchase was recorded, count can be reconciled later
     }
 
     // Clean up the pending transaction
-    await supabase.from('pending_transactions').delete().eq('transaction_id', transactionId)
+    const { error: deleteError } = await supabase.from('pending_transactions').delete().eq('transaction_id', transactionId)
+    if (deleteError) {
+      console.error('[payment/verify] pending_transactions cleanup error:', deleteError)
+      // Non-fatal: purchase was recorded, stale pending tx won't cause harm
+    }
 
     return NextResponse.json({ status: 'successful' })
 

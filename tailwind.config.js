@@ -4,10 +4,51 @@ module.exports = {
     './pages/**/*.{js,ts,jsx,tsx,mdx}',
     './components/**/*.{js,ts,jsx,tsx,mdx}',
     './app/**/*.{js,ts,jsx,tsx,mdx}',
+    './context/**/*.{js,ts,jsx,tsx,mdx}',
+    './lib/**/*.{js,ts,jsx,tsx,mdx}',
   ],
   theme: {
     extend: {
+      borderRadius: {
+        sm:    '0.25rem',   //  4px (was 2px)
+        DEFAULT:'0.375rem', //  6px (was 4px)
+        md:    '0.5rem',    //  8px (was 6px)
+        lg:    '0.75rem',   // 12px (was 8px)
+        xl:    '1rem',      // 16px (was 12px)
+        '2xl': '1.25rem',   // 20px (was 16px)
+        '3xl': '1.75rem',   // 28px (was 24px)
+        '4xl': '2rem',      // 32px (new)
+      },
       colors: {
+        background: 'var(--background)',
+        foreground: 'var(--foreground)',
+        muted: {
+          DEFAULT: 'var(--muted)',
+          foreground: 'var(--muted-foreground)',
+        },
+        accent: {
+          DEFAULT: 'var(--accent)',
+          foreground: 'var(--accent-foreground)',
+        },
+        border: 'var(--border)',
+        ring: 'var(--ring)',
+        primary: {
+          DEFAULT: 'var(--primary)',
+          foreground: 'var(--primary-foreground)',
+        },
+        secondary: {
+          DEFAULT: 'var(--secondary)',
+          foreground: 'var(--secondary-foreground)',
+        },
+        destructive: {
+          DEFAULT: 'var(--destructive)',
+          foreground: 'var(--destructive-foreground)',
+        },
+        popover: {
+          DEFAULT: 'var(--popover)',
+          foreground: 'var(--popover-foreground)',
+        },
+        input: 'var(--input)',
         forest: {
           50:  '#f0f7ee',
           100: '#d8eccc',
@@ -37,6 +78,9 @@ module.exports = {
           500: '#4d8520',
           600: '#346314',
         },
+      },
+      borderColor: {
+        DEFAULT: 'var(--border)',
       },
       fontFamily: {
         serif: ['Georgia', 'serif'],

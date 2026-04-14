@@ -1,11 +1,25 @@
 import './globals.css'
 import { cookies } from 'next/headers'
 import { ThemeProvider } from '@/context/ThemeContext'
+import { ToastProvider } from '@/components/ui/toast'
+import AppShell from '@/components/layout/AppShell'
 
 export const metadata = {
   title: 'Rent a Tutor',
   description: "Zambia's online tutoring platform for O-Level and A-Level students",
 }
+
+// Inline script that runs before React hydration to prevent dark mode flash.
+// Reads the user's saved preference from localStorage and sets data-dark immediately.
+const DARK_MODE_INIT = `
+(function(){
+  try {
+    var saved = localStorage.getItem('rat-dark');
+    if (saved === 'dark') document.documentElement.setAttribute('data-dark', 'true');
+    else if (saved === 'light') document.documentElement.setAttribute('data-dark', 'false');
+  } catch(e) {}
+})();
+`
 
 export default async function RootLayout({ children }) {
   // Read the role cookie set at login so the server renders the correct theme
@@ -16,10 +30,17 @@ export default async function RootLayout({ children }) {
   const theme       = roleCookie === 'tutor' ? 'tutor' : 'student'
 
   return (
-    <html lang="en" data-theme={theme}>
+    <html lang="en" data-theme={theme} data-dark="auto" suppressHydrationWarning>
+      <head>
+        <script dangerouslySetInnerHTML={{ __html: DARK_MODE_INIT }} />
+      </head>
       <body>
         <ThemeProvider>
-          {children}
+          <ToastProvider>
+            <AppShell>
+              {children}
+            </AppShell>
+          </ToastProvider>
         </ThemeProvider>
       </body>
     </html>

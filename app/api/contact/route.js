@@ -1,6 +1,7 @@
 // app/api/contact/route.js
 import { NextResponse } from 'next/server'
 import { verifyCsrf } from '@/lib/csrf'
+import { rateLimit } from '@/lib/rate-limit'
 
 const SUBJECTS = [
   'General enquiry', 'Payment issue', 'Tutor application',
@@ -26,6 +27,11 @@ export async function POST(request) {
   }
 
   try {
+    // Rate limit: 5 contact form submissions per minute per IP
+    const ip = request.headers.get('x-forwarded-for')?.split(',')[0]?.trim() ?? 'unknown'
+    const { limited } = await rateLimit(`contact:${ip}`, 5)
+    if (limited) return NextResponse.json({ error: 'Too many submissions. Please wait a moment.' }, { status: 429 })
+
     const { name, email, subject, message } = await request.json()
 
     if (!name?.trim() || !email?.trim() || !message?.trim()) {

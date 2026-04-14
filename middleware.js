@@ -6,8 +6,17 @@ const PROTECTED_ANY     = ['/dashboard']
 const ADMIN_ROUTES      = ['/admin']
 const AUTH_ROUTES       = ['/auth/login', '/auth/register']
 
+function withSecurityHeaders(response) {
+  response.headers.set('X-Content-Type-Options', 'nosniff')
+  response.headers.set('X-Frame-Options', 'DENY')
+  response.headers.set('Referrer-Policy', 'strict-origin-when-cross-origin')
+  response.headers.set('Permissions-Policy', 'geolocation=(), microphone=(), camera=()')
+  return response
+}
+
 export async function middleware(request) {
   const response = NextResponse.next()
+  withSecurityHeaders(response)
   const { pathname } = request.nextUrl
   const supabase = createMiddlewareClient({ req: request, res: response })
   const { data: { user } } = await supabase.auth.getUser()
