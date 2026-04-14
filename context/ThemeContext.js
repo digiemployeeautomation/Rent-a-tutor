@@ -9,15 +9,10 @@ export function ThemeProvider({ children }) {
   const [role, setRole] = useState('student')
 
   function applyRole(r) {
-    const validRole = ['student', 'tutor', 'admin'].includes(r) ? r : 'student'
+    const validRole = ['student', 'admin'].includes(r) ? r : 'student'
     setRole(validRole)
-    const theme = validRole === 'tutor' ? 'tutor' : 'student'
-    document.documentElement.setAttribute('data-theme', theme)
-
-    // Add Secure flag when served over HTTPS (i.e. in production).
-    // Localhost skips it so local dev still works.
-    const secureFlag = window.location.protocol === 'https:' ? '; Secure' : ''
-    document.cookie = `rat-role=${validRole}; path=/; max-age=604800; SameSite=Lax${secureFlag}`
+    // Always use the student theme
+    document.documentElement.setAttribute('data-theme', 'student')
   }
 
   useEffect(() => {
@@ -30,8 +25,6 @@ export function ThemeProvider({ children }) {
 
     const { data: { subscription } } = supabase.auth.onAuthStateChange(async (_event, session) => {
       if (!session?.user) {
-        const secureFlag = window.location.protocol === 'https:' ? '; Secure' : ''
-        document.cookie = `rat-role=; path=/; max-age=0; SameSite=Lax${secureFlag}`
         return applyRole('student')
       }
       const { data: profile } = await supabase

@@ -50,6 +50,7 @@ export default function Navbar() {
   const initials  = fullName
     ? fullName.split(' ').map(w => w[0]).join('').slice(0, 2).toUpperCase()
     : '??'
+  const userRole  = profile?.role ?? role
 
   return (
     <nav style={{ backgroundColor: 'var(--color-nav-bg)' }} className="px-6 h-16 flex items-center justify-between">
@@ -62,12 +63,56 @@ export default function Navbar() {
           <div className="w-20 h-8 rounded-lg animate-pulse" style={{ backgroundColor: 'rgba(255,255,255,0.1)' }} />
         ) : user ? (
           <>
+            {/* Nav links for logged-in users */}
+            <div className="hidden md:flex items-center gap-1">
+              {userRole === 'admin' ? (
+                <Link
+                  href="/admin"
+                  className="text-xs px-3 py-1.5 rounded-lg"
+                  style={{ color: 'rgba(255,255,255,0.85)' }}
+                >
+                  Admin
+                </Link>
+              ) : (
+                <>
+                  <Link
+                    href="/dashboard/student"
+                    className="text-xs px-3 py-1.5 rounded-lg"
+                    style={{ color: 'rgba(255,255,255,0.85)' }}
+                  >
+                    Dashboard
+                  </Link>
+                  <Link
+                    href="/learn"
+                    className="text-xs px-3 py-1.5 rounded-lg"
+                    style={{ color: 'rgba(255,255,255,0.85)' }}
+                  >
+                    Learn
+                  </Link>
+                  <Link
+                    href="/dashboard/student/leaderboard"
+                    className="text-xs px-3 py-1.5 rounded-lg"
+                    style={{ color: 'rgba(255,255,255,0.85)' }}
+                  >
+                    Leaderboard
+                  </Link>
+                  <Link
+                    href="/dashboard/student/settings"
+                    className="text-xs px-3 py-1.5 rounded-lg"
+                    style={{ color: 'rgba(255,255,255,0.85)' }}
+                  >
+                    Settings
+                  </Link>
+                </>
+              )}
+            </div>
+
             <div className="text-right hidden sm:block">
               <div className="text-xs font-semibold" style={{ color: '#ffffff' }}>
                 {fullName || 'My account'}
               </div>
               <div className="text-xs capitalize" style={{ color: 'rgba(255,255,255,0.6)' }}>
-                {profile?.role ?? role}
+                {userRole}
               </div>
             </div>
 
@@ -104,6 +149,31 @@ export default function Navbar() {
           </>
         ) : (
           <>
+            {/* Nav links for logged-out users */}
+            <div className="hidden md:flex items-center gap-1">
+              <Link
+                href="/"
+                className="text-xs px-3 py-1.5 rounded-lg"
+                style={{ color: 'rgba(255,255,255,0.85)' }}
+              >
+                Home
+              </Link>
+              <Link
+                href="/about"
+                className="text-xs px-3 py-1.5 rounded-lg"
+                style={{ color: 'rgba(255,255,255,0.85)' }}
+              >
+                About
+              </Link>
+              <Link
+                href="/contact"
+                className="text-xs px-3 py-1.5 rounded-lg"
+                style={{ color: 'rgba(255,255,255,0.85)' }}
+              >
+                Contact
+              </Link>
+            </div>
+
             <Link
               href="/auth/login"
               className="text-sm px-4 py-2 rounded-lg border"
@@ -116,7 +186,7 @@ export default function Navbar() {
               className="text-sm px-4 py-2 rounded-lg"
               style={{ backgroundColor: 'var(--color-accent-btn)', color: 'var(--color-accent-btn-text)' }}
             >
-              Get started
+              Sign Up
             </Link>
           </>
         )}

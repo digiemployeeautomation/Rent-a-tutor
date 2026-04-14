@@ -1,9 +1,8 @@
 import { createMiddlewareClient } from '@supabase/auth-helpers-nextjs'
 import { NextResponse } from 'next/server'
 
-const PROTECTED_STUDENT = ['/dashboard/student']
-const PROTECTED_TUTOR   = ['/dashboard/tutor']
-const PROTECTED_ANY     = ['/dashboard', '/messages', '/bookings']
+const PROTECTED_STUDENT = ['/dashboard/student', '/learn', '/onboarding']
+const PROTECTED_ANY     = ['/dashboard']
 const ADMIN_ROUTES      = ['/admin']
 const AUTH_ROUTES       = ['/auth/login', '/auth/register']
 
@@ -31,7 +30,6 @@ export async function middleware(request) {
     const role = await getRole()
     if (role === null)      return NextResponse.redirect(new URL('/auth/register', request.url))
     if (role === 'admin')   return NextResponse.redirect(new URL('/admin', request.url))
-    if (role === 'tutor')   return NextResponse.redirect(new URL('/dashboard/tutor', request.url))
     if (role === 'student') return NextResponse.redirect(new URL('/dashboard/student', request.url))
     return NextResponse.redirect(new URL('/', request.url))
   }
@@ -49,7 +47,6 @@ export async function middleware(request) {
   // ── Role-level route protection ─────────────────────────────────────────────
   const needsRole =
     PROTECTED_STUDENT.some(r => pathname.startsWith(r)) ||
-    PROTECTED_TUTOR.some(r => pathname.startsWith(r))   ||
     ADMIN_ROUTES.some(r => pathname.startsWith(r))
 
   if (needsRole) {
@@ -65,14 +62,9 @@ export async function middleware(request) {
       return NextResponse.redirect(new URL('/', request.url))
     }
 
-    // Tutor-only routes — tutors and admins allowed
-    if (PROTECTED_TUTOR.some(r => pathname.startsWith(r)) && role !== 'tutor' && role !== 'admin') {
-      return NextResponse.redirect(new URL('/dashboard/student', request.url))
-    }
-
     // Student-only routes — students and admins allowed
     if (PROTECTED_STUDENT.some(r => pathname.startsWith(r)) && role !== 'student' && role !== 'admin') {
-      return NextResponse.redirect(new URL('/dashboard/tutor', request.url))
+      return NextResponse.redirect(new URL('/dashboard/student', request.url))
     }
   }
 

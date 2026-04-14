@@ -4,40 +4,24 @@ import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import Navbar from './Navbar'
 
-const TUTOR_NAV = [
-  { href: '/dashboard/tutor',                  label: 'Dashboard',      icon: '⬡', exact: true },
-  { href: '/dashboard/tutor/lessons',          label: 'My Lessons',     icon: '📹' },
-  { href: '/dashboard/tutor/upload',           label: 'Upload Lesson',  icon: '＋' },
-  { href: '/dashboard/tutor/sessions',         label: 'Sessions',       icon: '📅' },
-  { href: '/dashboard/tutor/topic-requests',   label: 'Topic Requests', icon: '💬' },
-  { href: '/dashboard/tutor/profile',          label: 'My Profile',     icon: '👤' },
-]
-
 const STUDENT_NAV = [
-  { href: '/dashboard/student',                label: 'Dashboard',      icon: '⬡', exact: true },
-  { href: '/dashboard/student/purchases',      label: 'My Purchases',   icon: '🎓' },
-  { href: '/browse',                           label: 'Browse Lessons', icon: '📚', external: true },
-  { href: '/tutor',                            label: 'Find a Tutor',   icon: '👤', external: true },
-  { href: '/dashboard/student/topic-requests', label: 'Request a Topic', icon: '💬' },
+  { href: '/dashboard/student',                label: 'Dashboard',   icon: '⬡', exact: true },
+  { href: '/learn',                            label: 'Learn',       icon: '📚' },
+  { href: '/dashboard/student/leaderboard',    label: 'Leaderboard', icon: '🏆' },
+  { href: '/dashboard/student/settings',       label: 'Settings',    icon: '⚙' },
 ]
 
 // Short labels for the mobile bottom nav where space is tight
 const SHORT_LABELS = {
-  'Dashboard':      'Home',
-  'My Lessons':     'Lessons',
-  'Upload Lesson':  'Upload',
-  'Sessions':       'Sessions',
-  'Topic Requests': 'Topics',
-  'My Profile':     'Profile',
-  'My Purchases':   'Purchases',
-  'Browse Lessons': 'Browse',
-  'Find a Tutor':   'Tutors',
-  'Request a Topic': 'Requests',
+  'Dashboard':   'Home',
+  'Learn':       'Learn',
+  'Leaderboard': 'Ranks',
+  'Settings':    'Settings',
 }
 
 export default function DashboardShell({ children, role }) {
   const pathname = usePathname()
-  const nav      = role === 'tutor' ? TUTOR_NAV : STUDENT_NAV
+  const nav      = STUDENT_NAV
 
   function isActive(item) {
     if (item.exact) return pathname === item.href
@@ -86,9 +70,6 @@ export default function DashboardShell({ children, role }) {
                   {item.icon}
                 </span>
                 <span style={{ flex: 1 }}>{item.label}</span>
-                {item.external && (
-                  <span style={{ fontSize: 10, color: '#d1d5db' }}>↗</span>
-                )}
               </Link>
             )
           })}
