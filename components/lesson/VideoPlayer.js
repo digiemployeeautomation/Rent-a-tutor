@@ -6,7 +6,7 @@ export default function VideoPlayer({ cloudflareVideoId, contentUrl }) {
   const isYouTube = cloudflareVideoId && /^[A-Za-z0-9_-]{11}$/.test(cloudflareVideoId)
 
   return (
-    <div className="w-full">
+    <div className="w-full bg-white rounded-2xl shadow-sm overflow-hidden border border-gray-100">
       <div className="relative w-full" style={{ paddingBottom: '56.25%' /* 16:9 */ }}>
         {isCloudflare ? (
           <iframe
@@ -31,7 +31,7 @@ export default function VideoPlayer({ cloudflareVideoId, contentUrl }) {
             className="absolute inset-0 w-full h-full rounded-xl bg-black"
           />
         ) : (
-          <div className="absolute inset-0 flex flex-col items-center justify-center rounded-xl bg-gray-100 text-gray-400 gap-3">
+          <div className="absolute inset-0 flex flex-col items-center justify-center rounded-xl bg-gray-50 text-gray-400 gap-3">
             <svg className="h-12 w-12 opacity-40" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5}
                 d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />

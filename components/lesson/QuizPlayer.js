@@ -1,11 +1,24 @@
 'use client'
 
 import { useState } from 'react'
+import QuizOneAtATime from '@/components/lesson/QuizOneAtATime'
+import QuizCardStack from '@/components/lesson/QuizCardStack'
+import QuizScrollableList from '@/components/lesson/QuizScrollableList'
 
 // ── helpers ──────────────────────────────────────────────────────────────────
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(' ')
+}
+
+function getQuizMode(quizType, tier) {
+  if (quizType === 'lesson_reflection') return 'scrollable'
+  if (quizType === 'lesson_short' || quizType === 'topic_test' || quizType === 'term_exam') return 'scrollable'
+  // MC and MC+TF quizzes:
+  if (tier === 'guided') return 'one-at-a-time'
+  if (tier === 'balanced') return quizType === 'lesson_mc' ? 'one-at-a-time' : 'card-stack'
+  if (tier === 'exam_ready') return 'card-stack'
+  return 'one-at-a-time'
 }
 
 // ── sub-components ───────────────────────────────────────────────────────────
@@ -137,16 +150,18 @@ function ShortQuestion({ question, answer, onChange, result }) {
 
 // ── main component ────────────────────────────────────────────────────────────
 
-export default function QuizPlayer({ quiz, questions, tierConfig, onComplete }) {
+export default function QuizPlayer({ quiz, questions, tierConfig, tier, onComplete }) {
   const [answers, setAnswers]           = useState({})
   const [submitting, setSubmitting]     = useState(false)
   const [gradedResults, setGradedResults] = useState(null)
   const [reflectionResult, setReflectionResult] = useState(null)
   const [error, setError]               = useState('')
   const [retryCount, setRetryCount]     = useState(0)
+  const [modeAnswers, setModeAnswers]   = useState(null)
 
   const isReflection = quiz.quiz_type === 'lesson_reflection'
   const isGraded     = !isReflection
+  const quizMode     = getQuizMode(quiz.quiz_type, tier ?? 'balanced')
 
   const passMarkPct   = tierConfig?.pass_mark ?? 0
   const maxRetries    = tierConfig?.max_retries ?? null
@@ -217,6 +232,66 @@ export default function QuizPlayer({ quiz, questions, tierConfig, onComplete }) 
   }
 
   const canRetry = isGraded && gradedResults && !gradedResults.passed && (maxRetries === null || retryCount < maxRetries)
+
+  // ── handle mode-based submission (one-at-a-time / card-stack collect answers then auto-submit) ──
+  async function handleModeSubmit(answersArray) {
+    setModeAnswers(answersArray)
+    setError('')
+    setSubmitting(true)
+    try {
+      const res = await fetch('/api/quiz/submit', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ quizId: quiz.id, answers: answersArray }),
+      })
+      const data = await res.json()
+      if (!res.ok) throw new Error(data.error ?? 'Submission failed')
+      setGradedResults(data)
+    } catch (err) {
+      setError(err.message)
+    } finally {
+      setSubmitting(false)
+    }
+  }
+
+  function handleScrollableSubmit(answersArray) {
+    setError('')
+    setSubmitting(true)
+    const innerAnswers = {}
+    answersArray.forEach(({ questionId, answer }) => { innerAnswers[questionId] = answer })
+    setAnswers(innerAnswers)
+    // Use the existing handleSubmit but with the collected answers
+    const doSubmit = async () => {
+      try {
+        if (isReflection) {
+          const firstQId = questions[0]?.id
+          const response = innerAnswers[firstQId] ?? Object.values(innerAnswers)[0] ?? ''
+          const res = await fetch('/api/quiz/reflection', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ quizId: quiz.id, response }),
+          })
+          const data = await res.json()
+          if (!res.ok) throw new Error(data.error ?? 'Submission failed')
+          setReflectionResult(data)
+        } else {
+          const res = await fetch('/api/quiz/submit', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ quizId: quiz.id, answers: answersArray }),
+          })
+          const data = await res.json()
+          if (!res.ok) throw new Error(data.error ?? 'Submission failed')
+          setGradedResults(data)
+        }
+      } catch (err) {
+        setError(err.message)
+      } finally {
+        setSubmitting(false)
+      }
+    }
+    doSubmit()
+  }
 
   // ── render results ────────────────────────────────────────────────────────
 
@@ -363,6 +438,61 @@ export default function QuizPlayer({ quiz, questions, tierConfig, onComplete }) 
         >
           Continue
         </button>
+      </div>
+    )
+  }
+
+  // ── quiz mode rendering (one-at-a-time / card-stack) ─────────────────────
+
+  if (isGraded && !gradedResults && quizMode === 'one-at-a-time') {
+    if (submitting) {
+      return (
+        <div className="flex items-center justify-center py-20">
+          <svg className="h-8 w-8 animate-spin text-blue-500" fill="none" viewBox="0 0 24 24">
+            <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+            <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
+          </svg>
+        </div>
+      )
+    }
+    return <QuizOneAtATime questions={questions} onSubmit={handleModeSubmit} />
+  }
+
+  if (isGraded && !gradedResults && quizMode === 'card-stack') {
+    if (submitting) {
+      return (
+        <div className="flex items-center justify-center py-20">
+          <svg className="h-8 w-8 animate-spin text-blue-500" fill="none" viewBox="0 0 24 24">
+            <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+            <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
+          </svg>
+        </div>
+      )
+    }
+    return <QuizCardStack questions={questions} onSubmit={handleModeSubmit} />
+  }
+
+  if (!gradedResults && quizMode === 'scrollable' && !isReflection) {
+    const resultsList = gradedResults?.results ?? null
+    return (
+      <div className="space-y-6">
+        <QuizScrollableList
+          questions={questions}
+          onSubmit={handleScrollableSubmit}
+          results={resultsList}
+          showExplanations={showExplain}
+        />
+        {error && (
+          <p className="rounded-lg bg-red-50 border border-red-200 px-4 py-3 text-sm text-red-600">{error}</p>
+        )}
+        {submitting && (
+          <div className="flex items-center justify-center py-4">
+            <svg className="h-6 w-6 animate-spin text-blue-500" fill="none" viewBox="0 0 24 24">
+              <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+              <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
+            </svg>
+          </div>
+        )}
       </div>
     )
   }

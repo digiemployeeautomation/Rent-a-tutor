@@ -4,6 +4,7 @@ import { useState, useEffect, useCallback } from 'react'
 import { useParams, useRouter } from 'next/navigation'
 import Link from 'next/link'
 import Navbar from '@/components/layout/Navbar'
+import FullScreenLayout from '@/components/layout/FullScreenLayout'
 import VideoPlayer from '@/components/lesson/VideoPlayer'
 import SlideViewer from '@/components/lesson/SlideViewer'
 import QuizPlayer from '@/components/lesson/QuizPlayer'
@@ -291,29 +292,27 @@ export default function LessonPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen" style={{ backgroundColor: 'var(--color-page-bg)' }}>
-        <Navbar />
+      <FullScreenLayout title="Loading…">
         <div className="flex items-center justify-center py-32">
           <svg className="h-8 w-8 animate-spin text-blue-500" fill="none" viewBox="0 0 24 24">
             <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
             <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
           </svg>
         </div>
-      </div>
+      </FullScreenLayout>
     )
   }
 
   if (!lesson) {
     return (
-      <div className="min-h-screen" style={{ backgroundColor: 'var(--color-page-bg)' }}>
-        <Navbar />
+      <FullScreenLayout title="Lesson not found">
         <div className="flex flex-col items-center justify-center py-32 gap-4 text-center">
           <p className="text-sm text-gray-500">Lesson not found.</p>
           <Link href={`/learn/${formId}/${termId}/${subjectSlug}`} className="text-xs text-blue-600 underline">
             Back to subject
           </Link>
         </div>
-      </div>
+      </FullScreenLayout>
     )
   }
 
@@ -328,49 +327,24 @@ export default function LessonPage() {
     label: s.label,
   }))
 
+  // Progress percentage for FullScreenLayout header bar
+  const progressPct = steps.length === 0
+    ? 0
+    : lessonDone
+      ? 100
+      : Math.round((completedSteps.size / steps.length) * 100)
+
+  const isLastStep = currentStepIndex === steps.length - 1
+  const isQuizStep = currentStep?.kind === 'quiz'
+
   // ── render ─────────────────────────────────────────────────────────────────
 
   return (
-    <div className="min-h-screen" style={{ backgroundColor: 'var(--color-page-bg)' }}>
-      <Navbar />
-
-      {/* Lesson header */}
-      <div className="px-4 sm:px-6 py-8" style={{ backgroundColor: 'var(--color-primary)' }}>
-        <div className="max-w-3xl mx-auto">
-          {/* Breadcrumb */}
-          <nav className="flex items-center gap-1.5 text-xs mb-3 opacity-60 flex-wrap" style={{ color: 'var(--color-surface-mid)' }}>
-            <Link href="/learn" className="hover:opacity-100">Learn</Link>
-            <span>›</span>
-            <Link href={`/learn/${formId}`} className="hover:opacity-100">{form?.name ?? formId}</Link>
-            <span>›</span>
-            <Link href={`/learn/${formId}/${termId}`} className="hover:opacity-100">{term?.name ?? termId}</Link>
-            <span>›</span>
-            <Link href={`/learn/${formId}/${termId}/${subjectSlug}`} className="hover:opacity-100">
-              {subject?.name ?? subjectSlug}
-            </Link>
-            <span>›</span>
-            <Link href={`/learn/${formId}/${termId}/${subjectSlug}/${topicId}`} className="hover:opacity-100">
-              Topic
-            </Link>
-            <span>›</span>
-            <span>{lesson.title}</span>
-          </nav>
-
-          <h1 className="font-serif text-2xl sm:text-3xl font-semibold" style={{ color: 'var(--color-surface-mid)' }}>
-            {lesson.title}
-          </h1>
-          {lesson.description && (
-            <p className="mt-1 text-sm opacity-70 max-w-xl" style={{ color: 'var(--color-surface-mid)' }}>
-              {lesson.description}
-            </p>
-          )}
-        </div>
-      </div>
-
+    <FullScreenLayout title={lesson.title} progress={progressPct}>
       {/* Main content */}
-      <div className="max-w-3xl mx-auto px-4 sm:px-6 py-8 space-y-6">
+      <div className="max-w-3xl mx-auto px-4 sm:px-6 py-6 space-y-6 pb-32">
 
-        {/* Progress bar */}
+        {/* Progress dots */}
         {steps.length > 0 && !lessonDone && (
           <LessonProgress
             sections={progressSections}
@@ -416,35 +390,15 @@ export default function LessonPage() {
 
             {/* Video step */}
             {currentStep.kind === 'section' && currentStep.type === 'video' && (
-              <div className="space-y-4">
-                <VideoPlayer
-                  cloudflareVideoId={currentStep.data.cloudflare_video_id}
-                  contentUrl={currentStep.data.content_url}
-                />
-                <div className="flex justify-end">
-                  <button
-                    onClick={handleSectionDone}
-                    className="rounded-xl bg-blue-600 px-6 py-2.5 text-sm font-semibold text-white hover:bg-blue-700 transition-colors"
-                  >
-                    Continue →
-                  </button>
-                </div>
-              </div>
+              <VideoPlayer
+                cloudflareVideoId={currentStep.data.cloudflare_video_id}
+                contentUrl={currentStep.data.content_url}
+              />
             )}
 
             {/* Slides step */}
             {currentStep.kind === 'section' && currentStep.type === 'slides' && (
-              <div className="space-y-4">
-                <SlideViewer slidesData={currentStep.data.slides_data} />
-                <div className="flex justify-end">
-                  <button
-                    onClick={handleSectionDone}
-                    className="rounded-xl bg-blue-600 px-6 py-2.5 text-sm font-semibold text-white hover:bg-blue-700 transition-colors"
-                  >
-                    Continue →
-                  </button>
-                </div>
-              </div>
+              <SlideViewer slidesData={currentStep.data.slides_data} />
             )}
 
             {/* Quiz step */}
@@ -454,10 +408,7 @@ export default function LessonPage() {
                 <div className="text-sm text-gray-400 text-center py-8">Quiz data not available.</div>
               )
 
-              const quizType   = quizData.quiz.quiz_type
-              const tierQuiz   = tierCfg?.lesson_quiz ?? {}
-
-              // Build tierConfig for this quiz
+              const tierQuiz = tierCfg?.lesson_quiz ?? {}
               const tierConfig = {
                 pass_mark:         tierQuiz.pass_mark ?? 0,
                 show_explanations: tierQuiz.show_explanations ?? 'after_submit',
@@ -469,6 +420,7 @@ export default function LessonPage() {
                   quiz={quizData.quiz}
                   questions={quizData.questions}
                   tierConfig={tierConfig}
+                  tier={learningTier}
                   onComplete={handleQuizComplete}
                 />
               )
@@ -478,6 +430,25 @@ export default function LessonPage() {
           <div className="text-sm text-gray-400 text-center py-16">No content available for this lesson yet.</div>
         )}
       </div>
-    </div>
+
+      {/* Bottom Continue / Complete button — shown for video and slides steps */}
+      {!lessonDone && !showPaywall && currentStep && currentStep.kind === 'section' && (
+        <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-100 px-4 py-4 safe-area-inset-bottom">
+          <div className="max-w-3xl mx-auto">
+            <button
+              onClick={handleSectionDone}
+              className={classNames(
+                'w-full rounded-xl py-3.5 text-base font-semibold text-white transition-colors',
+                isLastStep
+                  ? 'bg-pink-500 hover:bg-pink-600'
+                  : 'bg-blue-600 hover:bg-blue-700'
+              )}
+            >
+              {isLastStep ? 'Complete Lesson' : 'Continue →'}
+            </button>
+          </div>
+        </div>
+      )}
+    </FullScreenLayout>
   )
 }

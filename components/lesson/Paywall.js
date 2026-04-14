@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import BottomSheet from '@/components/ui/BottomSheet'
 
 // Plan definitions
 const PLANS = [
@@ -207,7 +208,7 @@ export default function Paywall({
     return (
       <div className="flex flex-col items-center justify-center gap-4 rounded-2xl border border-gray-200 bg-white p-10 shadow-sm text-center">
         <svg
-          className="h-10 w-10 animate-spin text-forest-600"
+          className="h-10 w-10 animate-spin text-blue-600"
           xmlns="http://www.w3.org/2000/svg"
           fill="none"
           viewBox="0 0 24 24"
@@ -238,7 +239,7 @@ export default function Paywall({
         <p className="text-sm text-gray-500 max-w-sm">{errorMsg}</p>
         <button
           onClick={handleRetry}
-          className="mt-2 rounded-lg bg-forest-600 px-6 py-2.5 text-sm font-medium text-white hover:bg-forest-700 transition-colors"
+          className="mt-2 rounded-lg bg-blue-600 px-6 py-2.5 text-sm font-medium text-white hover:bg-blue-700 transition-colors"
         >
           Try again
         </button>
@@ -249,11 +250,11 @@ export default function Paywall({
   // ── STEP: select ──────────────────────────────────────────────────────────
   if (step === 'select') {
     return (
-      <div className="rounded-2xl border border-gray-200 bg-white shadow-sm overflow-hidden">
+      <BottomSheet open onClose={() => {}}>
         {/* Header */}
-        <div className="flex flex-col items-center gap-3 border-b border-gray-100 bg-sage-50 px-6 py-8 text-center">
-          <div className="flex h-14 w-14 items-center justify-center rounded-full bg-forest-100">
-            <svg className="h-7 w-7 text-forest-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <div className="flex flex-col items-center gap-3 pb-6 text-center border-b border-gray-100 mb-4">
+          <div className="flex h-14 w-14 items-center justify-center rounded-full bg-blue-100">
+            <svg className="h-7 w-7 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path
                 strokeLinecap="round"
                 strokeLinejoin="round"
@@ -271,27 +272,33 @@ export default function Paywall({
         </div>
 
         {/* Plan cards */}
-        <div className="grid gap-3 p-6 sm:grid-cols-3">
+        <div className="grid gap-3 mb-4 sm:grid-cols-3">
           {PLANS.map((plan) => {
             const primaryBilling = plan.billing[0]
             const isSelected = selectedPlanId === plan.id
+            const isPopular = plan.id === 'term'
             return (
               <button
                 key={plan.id}
                 onClick={() => handlePlanChange(plan.id)}
-                className={`flex flex-col gap-2 rounded-xl border-2 p-4 text-left transition-all ${
+                className={`relative flex flex-col gap-2 rounded-xl border-2 p-4 text-left transition-all ${
                   isSelected
-                    ? 'border-forest-600 bg-forest-50 shadow-sm'
-                    : 'border-gray-200 hover:border-forest-300 hover:bg-sage-50'
+                    ? 'border-blue-600 bg-blue-50 shadow-sm'
+                    : 'border-gray-200 hover:border-blue-300 hover:bg-gray-50'
                 }`}
               >
+                {isPopular && (
+                  <span className="absolute -top-2.5 left-3 rounded-full bg-pink-500 px-2.5 py-0.5 text-xs font-semibold text-white">
+                    Popular
+                  </span>
+                )}
                 <div className="flex items-center justify-between">
-                  <span className={`text-sm font-semibold ${isSelected ? 'text-forest-700' : 'text-gray-700'}`}>
+                  <span className={`text-sm font-semibold ${isSelected ? 'text-blue-700' : 'text-gray-700'}`}>
                     {plan.label}
                   </span>
                   <span
                     className={`h-4 w-4 rounded-full border-2 flex-shrink-0 ${
-                      isSelected ? 'border-forest-600 bg-forest-600' : 'border-gray-300'
+                      isSelected ? 'border-blue-600 bg-blue-600' : 'border-gray-300'
                     }`}
                   />
                 </div>
@@ -299,12 +306,12 @@ export default function Paywall({
                   {plan.accessLabel(subjectName, formName, termName)}
                 </p>
                 <div className="mt-auto pt-2">
-                  <span className={`text-lg font-bold ${isSelected ? 'text-forest-700' : 'text-gray-800'}`}>
+                  <span className={`text-lg font-bold ${isSelected ? 'text-blue-700' : 'text-gray-800'}`}>
                     {formatPrice(primaryBilling.price)}
                   </span>
                   <span className="text-xs text-gray-400">/mo</span>
                   {plan.billing.length > 1 && (
-                    <p className="text-xs text-gold-600 font-medium mt-0.5">
+                    <p className="text-xs text-pink-600 font-medium mt-0.5">
                       or {formatPrice(plan.billing[1].price)} one-time
                     </p>
                   )}
@@ -317,7 +324,7 @@ export default function Paywall({
 
         {/* Billing toggle (Term / Form plans only) */}
         {selectedPlan.billing.length > 1 && (
-          <div className="flex items-center gap-2 px-6 pb-2">
+          <div className="flex items-center gap-2 mb-4">
             <span className="text-sm text-gray-500">Billing:</span>
             {selectedPlan.billing.map((b) => (
               <button
@@ -325,7 +332,7 @@ export default function Paywall({
                 onClick={() => setBillingType(b.type)}
                 className={`rounded-full px-4 py-1.5 text-sm font-medium transition-colors ${
                   billingType === b.type
-                    ? 'bg-forest-600 text-white'
+                    ? 'bg-blue-600 text-white'
                     : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
                 }`}
               >
@@ -336,16 +343,14 @@ export default function Paywall({
         )}
 
         {/* CTA */}
-        <div className="px-6 pb-6 pt-4">
-          <button
-            onClick={() => setStep('pay')}
-            className="w-full rounded-xl bg-forest-600 py-3 text-base font-semibold text-white hover:bg-forest-700 active:bg-forest-800 transition-colors"
-          >
-            Continue with {selectedPlan.label} — {formatPrice(activeBilling.price)}
-            {activeBilling.type === 'monthly' ? '/mo' : ' one-time'}
-          </button>
-        </div>
-      </div>
+        <button
+          onClick={() => setStep('pay')}
+          className="w-full rounded-xl bg-blue-600 py-3 text-base font-semibold text-white hover:bg-blue-700 active:bg-blue-800 transition-colors"
+        >
+          Continue with {selectedPlan.label} — {formatPrice(activeBilling.price)}
+          {activeBilling.type === 'monthly' ? '/mo' : ' one-time'}
+        </button>
+      </BottomSheet>
     )
   }
 
@@ -385,8 +390,8 @@ export default function Paywall({
                 onClick={() => setNetwork(n.id)}
                 className={`rounded-lg border-2 py-3 px-2 text-center text-sm font-medium transition-colors ${
                   network === n.id
-                    ? 'border-forest-600 bg-forest-50 text-forest-700'
-                    : 'border-gray-200 text-gray-600 hover:border-forest-300 hover:bg-sage-50'
+                    ? 'border-blue-600 bg-blue-50 text-blue-700'
+                    : 'border-gray-200 text-gray-600 hover:border-blue-300 hover:bg-gray-50'
                 }`}
               >
                 {n.label}
@@ -407,7 +412,7 @@ export default function Paywall({
             placeholder="09XXXXXXXX"
             value={phone}
             onChange={(e) => setPhone(e.target.value)}
-            className="w-full rounded-lg border border-gray-300 px-4 py-2.5 text-gray-800 placeholder-gray-400 focus:border-forest-600 focus:outline-none focus:ring-2 focus:ring-forest-600/20 transition"
+            className="w-full rounded-lg border border-gray-300 px-4 py-2.5 text-gray-800 placeholder-gray-400 focus:border-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-600/20 transition"
           />
         </div>
 
@@ -422,7 +427,7 @@ export default function Paywall({
         <button
           onClick={handlePayRequest}
           disabled={isLoading}
-          className="w-full rounded-xl bg-gold-500 py-3 text-base font-semibold text-white hover:bg-gold-600 active:bg-gold-700 disabled:cursor-not-allowed disabled:opacity-60 transition-colors"
+          className="w-full rounded-xl bg-blue-600 py-3 text-base font-semibold text-white hover:bg-blue-700 active:bg-blue-800 disabled:cursor-not-allowed disabled:opacity-60 transition-colors"
         >
           {isLoading ? (
             <span className="flex items-center justify-center gap-2">

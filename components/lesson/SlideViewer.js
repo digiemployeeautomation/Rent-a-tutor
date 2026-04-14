@@ -29,7 +29,7 @@ export default function SlideViewer({ slidesData }) {
   }
 
   return (
-    <div className="rounded-xl border border-gray-200 bg-white overflow-hidden">
+    <div className="rounded-2xl border border-gray-100 bg-white shadow-sm overflow-hidden">
       {/* Slide content */}
       <div className="px-8 py-10 min-h-64">
         {slide.title && (
@@ -48,7 +48,7 @@ export default function SlideViewer({ slidesData }) {
           <ul className="space-y-2 mb-4">
             {slide.bullets.map((bullet, idx) => (
               <li key={idx} className="flex items-start gap-2 text-gray-600 text-sm">
-                <span className="mt-1.5 h-1.5 w-1.5 rounded-full bg-gray-400 flex-shrink-0" />
+                <span className="mt-1.5 h-1.5 w-1.5 rounded-full bg-blue-400 flex-shrink-0" />
                 <span>{bullet}</span>
               </li>
             ))}
@@ -64,12 +64,33 @@ export default function SlideViewer({ slidesData }) {
         )}
       </div>
 
+      {/* Stories-style progress dots */}
+      <div className="flex items-center justify-center gap-1.5 py-3 border-t border-gray-50">
+        {slidesData.map((_, idx) => {
+          const isDone = idx < currentIndex
+          const isCurrent = idx === currentIndex
+          return (
+            <div
+              key={idx}
+              className={[
+                'rounded-full transition-all duration-200',
+                isDone
+                  ? 'h-2 w-2 bg-blue-500'
+                  : isCurrent
+                    ? 'h-2.5 w-2.5 bg-blue-500'
+                    : 'h-2 w-2 bg-gray-200'
+              ].join(' ')}
+            />
+          )
+        })}
+      </div>
+
       {/* Navigation footer */}
       <div className="flex items-center justify-between border-t border-gray-100 px-6 py-3 bg-gray-50">
         <button
           onClick={goToPrev}
           disabled={currentIndex === 0}
-          className="flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-sm font-medium text-gray-600 hover:bg-gray-200 disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
+          className="flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-sm font-medium text-blue-600 hover:bg-blue-50 disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
         >
           <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
@@ -78,13 +99,13 @@ export default function SlideViewer({ slidesData }) {
         </button>
 
         <span className="text-xs text-gray-400 font-medium">
-          Slide {currentIndex + 1} of {total}
+          {currentIndex + 1} / {total}
         </span>
 
         <button
           onClick={goToNext}
           disabled={currentIndex === total - 1}
-          className="flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-sm font-medium text-gray-600 hover:bg-gray-200 disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
+          className="flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-sm font-medium text-blue-600 hover:bg-blue-50 disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
         >
           Next
           <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">

@@ -78,7 +78,7 @@ export default function LessonProgress({ sections, currentIndex, completedIndexe
           const dotColor = isCompleted
             ? 'bg-green-500 border-green-500'
             : isCurrent
-              ? 'bg-blue-600 border-blue-600 ring-2 ring-blue-200'
+              ? 'bg-blue-600 border-blue-600 ring-4 ring-blue-100'
               : 'bg-white border-gray-300'
 
           return (
@@ -87,7 +87,7 @@ export default function LessonProgress({ sections, currentIndex, completedIndexe
               {idx > 0 && (
                 <div className={classNames(
                   'h-0.5 w-6 flex-shrink-0',
-                  completedSet.has(idx - 1) || idx <= currentIndex ? 'bg-green-400' : 'bg-gray-200'
+                  completedSet.has(idx - 1) ? 'bg-green-400' : idx <= currentIndex ? 'bg-blue-300' : 'bg-gray-200'
                 )} />
               )}
 
