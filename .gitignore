@@ -28,6 +28,11 @@ yarn-error.log*
 # vercel
 .vercel
 
+# curriculum PDFs and archived code
+/curriculum-materials/
+/archive/
+/systematic-debugging/
+
 # typescript
 *.tsbuildinfo
 next-env.d.ts
