@@ -36,18 +36,18 @@ export default function LeaderboardPreview({ leaderboard = [], currentRank = nul
               <tr
                 key={entry.rank}
                 className={`border-b border-gray-50 last:border-0 ${
-                  isCurrentUser ? 'bg-forest-50 rounded' : ''
+                  isCurrentUser ? 'bg-pink-50 rounded' : ''
                 }`}
               >
                 <td className="py-2 text-xs text-gray-500 font-mono">
                   {rankBadge(entry.rank)}
                 </td>
                 <td className={`py-2 font-medium truncate max-w-[120px] ${
-                  isCurrentUser ? 'text-forest-600' : 'text-gray-700'
+                  isCurrentUser ? 'text-pink-600' : 'text-gray-700'
                 }`}>
                   {entry.displayName}
                   {isCurrentUser && (
-                    <span className="ml-1 text-xs text-forest-400 font-normal">(you)</span>
+                    <span className="ml-1 text-xs text-pink-400 font-normal">(you)</span>
                   )}
                 </td>
                 <td className="py-2 text-right text-xs text-gray-600">
@@ -71,7 +71,7 @@ export default function LeaderboardPreview({ leaderboard = [], currentRank = nul
       <div className="mt-4 text-center">
         <Link
           href="/dashboard/student/leaderboard"
-          className="text-xs text-forest-500 hover:text-forest-600 hover:underline"
+          className="text-xs text-blue-500 hover:text-blue-600 hover:underline"
         >
           View full leaderboard →
         </Link>

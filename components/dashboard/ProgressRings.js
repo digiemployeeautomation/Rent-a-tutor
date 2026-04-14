@@ -13,10 +13,10 @@ export default function ProgressRings({ subjects = [] }) {
         const percent = Math.round(subject.percentComplete ?? 0)
 
         let ringColor
-        if (percent > 60) {
-          ringColor = '#3b6d11' // forest-500
+        if (percent > 80) {
+          ringColor = '#ec4899' // pink-500
         } else if (percent > 30) {
-          ringColor = '#ef9f27' // gold-300
+          ringColor = '#3b82f6' // blue-500
         } else {
           ringColor = '#9ca3af' // gray-400
         }

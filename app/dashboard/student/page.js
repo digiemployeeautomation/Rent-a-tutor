@@ -4,12 +4,16 @@ import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { supabase } from '@/lib/supabase'
-import { getLevelForXP } from '@/lib/xp'
-import ProgressRings from '@/components/dashboard/ProgressRings'
-import StreakCounter from '@/components/dashboard/StreakCounter'
-import XPBar from '@/components/dashboard/XPBar'
-import ActivityFeed from '@/components/dashboard/ActivityFeed'
-import LeaderboardPreview from '@/components/dashboard/LeaderboardPreview'
+import { getLevelForXP, getXPForNextLevel, LEVELS } from '@/lib/xp'
+import FeedLayout from '@/components/layout/FeedLayout'
+import ContinueLearningCard from '@/components/feed/ContinueLearningCard'
+import StreakCard from '@/components/feed/StreakCard'
+import XPSummaryCard from '@/components/feed/XPSummaryCard'
+import SubjectProgressCard from '@/components/feed/SubjectProgressCard'
+import QuizResultCard from '@/components/feed/QuizResultCard'
+import LeaderboardSnippetCard from '@/components/feed/LeaderboardSnippetCard'
+import NudgeCard from '@/components/feed/NudgeCard'
+import AchievementCard from '@/components/feed/AchievementCard'
 
 // ─────────────────────────────────────────────
 // Helpers
@@ -36,6 +40,8 @@ export default function StudentDashboard() {
   const [currentRank, setCurrentRank]     = useState(null)
   const [achievements, setAchievements]   = useState([])   // recent earned achievements
   const [showNudge, setShowNudge]         = useState(false)
+  const [inProgressLesson, setInProgressLesson] = useState(null) // { title, subjectName, progress, href }
+  const [recentQuizzes, setRecentQuizzes] = useState([])   // last 2-3 quiz attempts with names
 
   useEffect(() => {
     async function load() {
@@ -79,13 +85,10 @@ export default function StudentDashboard() {
         const subjectInfo = subjectMap[sub.subject_id]
         if (!subjectInfo) return null
 
-        // Count total lessons for this subject+form+term via units → topics → lessons_new
-        // We join through the hierarchy. If any table is missing, fall back gracefully.
         let totalLessons = 0
         let completedLessons = 0
 
         try {
-          // Get all lessons_new for subject+form+term (via units → topics)
           const { data: units } = await supabase
             .from('units')
             .select('id')
@@ -112,7 +115,6 @@ export default function StudentDashboard() {
 
               totalLessons = lessonCount ?? 0
 
-              // Count completed lessons for this student
               if (totalLessons > 0) {
                 const { data: lessonRows } = await supabase
                   .from('lessons_new')
@@ -191,6 +193,31 @@ export default function StudentDashboard() {
 
       setActivities(allActivities)
 
+      // Recent quiz results for QuizResultCards (last 3)
+      const recentQuizResults = (quizAttempts ?? []).slice(0, 3).map((q, i) => ({
+        quizName: `Quiz ${i + 1}`,
+        score: q.score,
+        maxScore: q.max_score,
+        passed: q.passed,
+        href: `/dashboard/student/quiz/${q.quiz_id}`,
+      }))
+      setRecentQuizzes(recentQuizResults)
+
+      // In-progress lesson — most recent incomplete lesson
+      const recentProgress = (progressRows ?? [])
+      if (recentProgress.length > 0 && subjectResults.length > 0) {
+        const lastProgress = recentProgress[0]
+        const firstSubject = subjectResults[0]
+        if (firstSubject) {
+          setInProgressLesson({
+            lessonTitle: 'Continue where you left off',
+            subjectName: firstSubject.name,
+            progress: firstSubject.percentComplete,
+            href: `/learn/${firstSubject.slug}`,
+          })
+        }
+      }
+
       // 7. Leaderboard — top 5 students with same form_level + current user rank
       if (prof.form_level) {
         const { data: topStudents } = await supabase
@@ -208,7 +235,6 @@ export default function StudentDashboard() {
         }))
         setLeaderboard(board)
 
-        // Find current user's rank
         const { count: rankCount } = await supabase
           .from('student_profiles')
           .select('user_id', { count: 'exact', head: true })
@@ -235,10 +261,18 @@ export default function StudentDashboard() {
   }, [router])
 
   // ─── Derived values ────────────────────────
-  const firstName   = profile?.display_name?.split(' ')[0] ?? 'there'
-  const xpTotal     = profile?.xp_total ?? 0
+  const firstName    = profile?.display_name?.split(' ')[0] ?? 'there'
+  const xpTotal      = profile?.xp_total ?? 0
   const currentLevel = profile?.current_level ?? getLevelForXP(xpTotal)
-  const streak      = profile?.current_streak ?? 0
+  const streak       = profile?.current_streak ?? 0
+
+  // XP progress toward next level
+  const levelStartXP   = LEVELS ? (LEVELS[currentLevel - 1] ?? 0) : 0
+  const levelEndXP     = LEVELS ? (LEVELS[currentLevel] ?? xpTotal) : xpTotal
+  const levelRange     = levelEndXP - levelStartXP
+  const xpIntoLevel    = xpTotal - levelStartXP
+  const xpProgressPct  = levelRange > 0 ? Math.min(100, Math.round((xpIntoLevel / levelRange) * 100)) : 100
+  const xpToNext       = getXPForNextLevel ? (getXPForNextLevel(xpTotal) ?? 0) : 0
 
   // ─── Loading state ─────────────────────────
   if (loading) {
@@ -254,7 +288,7 @@ export default function StudentDashboard() {
       <div className="flex items-center justify-center h-64">
         <div className="text-sm text-gray-400">
           Profile not found.{' '}
-          <Link href="/dashboard/student/onboarding" className="underline text-forest-500">
+          <Link href="/dashboard/student/onboarding" className="underline text-blue-500">
             Complete onboarding
           </Link>
         </div>
@@ -265,118 +299,126 @@ export default function StudentDashboard() {
   // ─── Render ────────────────────────────────
   return (
     <>
-      {/* ── Onboarding nudge banner ── */}
-      {showNudge && (
-        <div className="bg-gold-100 border-b border-gold-200 px-4 py-3">
-          <div className="max-w-5xl mx-auto flex items-center justify-between gap-3 flex-wrap">
-            <p className="text-sm text-gold-600">
-              Finish setting up your profile to get personalised subject recommendations.
-            </p>
-            <div className="flex items-center gap-3 flex-shrink-0">
-              <Link
-                href="/dashboard/student/onboarding"
-                className="text-xs px-4 py-2 rounded-lg font-medium bg-gold-300 text-white hover:bg-gold-400 transition-colors"
-              >
-                Complete profile
-              </Link>
-              <button
-                onClick={() => setShowNudge(false)}
-                className="text-xs text-gold-500 hover:text-gold-700"
-              >
-                Dismiss
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
-
       {/* ── Top banner ── */}
-      <div className="bg-forest-600 px-4 sm:px-6 py-5">
-        <div className="max-w-5xl mx-auto flex flex-wrap justify-between items-start gap-3">
+      <div className="bg-blue-600 px-4 sm:px-6 py-5">
+        <div className="max-w-xl mx-auto flex flex-wrap justify-between items-start gap-3">
           <div>
             <h1 className="font-serif text-2xl text-white">
               Welcome back, {firstName}
             </h1>
-            <p className="text-sm mt-0.5 text-forest-200">
+            <p className="text-sm mt-0.5 text-blue-200">
               Keep up the momentum — every lesson counts.
             </p>
           </div>
           <Link
             href="/learn"
-            className="text-sm px-5 py-2.5 rounded-lg font-medium bg-gold-300 text-white hover:bg-gold-400 transition-colors self-start flex-shrink-0"
+            className="text-sm px-5 py-2.5 rounded-xl font-medium bg-pink-500 text-white hover:bg-pink-600 transition-colors self-start flex-shrink-0"
           >
-            Continue learning →
+            Browse lessons →
           </Link>
         </div>
       </div>
 
-      <div className="max-w-5xl mx-auto px-4 sm:px-6 py-8">
+      <FeedLayout>
+        <div className="stagger-children space-y-4 pt-6">
 
-        {/* ── Streak + XP row ── */}
-        <div className="flex flex-col sm:flex-row items-start sm:items-center gap-6 mb-8 p-4 bg-white border border-gray-200 rounded-2xl">
-          <div className="flex items-center gap-3">
-            <StreakCounter days={streak} />
-            <span className="text-xs text-gray-400 hidden sm:block">streak</span>
-          </div>
-          <div className="w-px h-8 bg-gray-200 hidden sm:block flex-shrink-0" />
-          <div className="flex-1 w-full">
-            <XPBar xpTotal={xpTotal} currentLevel={currentLevel} />
-          </div>
-        </div>
+          {/* 1. Continue Learning Card */}
+          {inProgressLesson && (
+            <ContinueLearningCard
+              lessonTitle={inProgressLesson.lessonTitle}
+              subjectName={inProgressLesson.subjectName}
+              progress={inProgressLesson.progress}
+              href={inProgressLesson.href}
+            />
+          )}
 
-        {/* ── Subject progress rings ── */}
-        {subjects.length > 0 && (
-          <div className="mb-8 bg-white border border-gray-200 rounded-2xl p-6">
-            <h2 className="font-serif text-lg text-forest-700 mb-4">Subject progress</h2>
-            <ProgressRings subjects={subjects} />
-          </div>
-        )}
-
-        {/* ── Bottom 2-col section ── */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-
-          {/* Left — Activity Feed */}
-          <div className="bg-white border border-gray-200 rounded-2xl p-6">
-            <h2 className="font-serif text-lg text-forest-700 mb-4">Recent activity</h2>
-            <ActivityFeed activities={activities} />
+          {/* 2. Streak + XP in 2-col grid */}
+          <div className="grid grid-cols-2 gap-4">
+            <StreakCard days={streak} />
+            <XPSummaryCard
+              xpToday={0}
+              level={currentLevel}
+              xpToNextLevel={xpToNext}
+              xpProgress={xpProgressPct}
+            />
           </div>
 
-          {/* Right — Leaderboard + Achievements */}
-          <div className="flex flex-col gap-6">
-
-            {/* Leaderboard */}
-            <div className="bg-white border border-gray-200 rounded-2xl p-6">
-              <h2 className="font-serif text-lg text-forest-700 mb-4">Leaderboard</h2>
-              <LeaderboardPreview leaderboard={leaderboard} currentRank={currentRank} />
-            </div>
-
-            {/* Recent achievements */}
-            {achievements.length > 0 && (
-              <div className="bg-white border border-gray-200 rounded-2xl p-6">
-                <h2 className="font-serif text-lg text-forest-700 mb-4">Recent achievements</h2>
-                <div className="space-y-3">
-                  {achievements.map((a, i) => {
-                    const ach = a.achievements
-                    if (!ach) return null
-                    return (
-                      <div key={i} className="flex items-center gap-3">
-                        <div className="w-8 h-8 rounded-full bg-gold-100 flex items-center justify-center text-base flex-shrink-0">
-                          {ach.icon ?? '🏆'}
-                        </div>
-                        <div>
-                          <p className="text-sm font-medium text-gray-800">{ach.name}</p>
-                          <p className="text-xs text-gray-400">{ach.description}</p>
-                        </div>
-                      </div>
-                    )
-                  })}
-                </div>
+          {/* 3. Subject progress in 2-col grid */}
+          {subjects.length > 0 && (
+            <>
+              <h2 className="text-sm font-semibold text-gray-500 uppercase tracking-wide px-1">Subject progress</h2>
+              <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+                {subjects.map((subject, i) => (
+                  <SubjectProgressCard
+                    key={subject.slug}
+                    name={subject.name}
+                    percentComplete={subject.percentComplete}
+                    href={`/learn/${subject.slug}`}
+                    delay={i * 50}
+                  />
+                ))}
               </div>
-            )}
-          </div>
-        </div>
+            </>
+          )}
 
-      </div>
+          {/* 4. Recent quiz results */}
+          {recentQuizzes.length > 0 && (
+            <>
+              <h2 className="text-sm font-semibold text-gray-500 uppercase tracking-wide px-1">Recent quizzes</h2>
+              <div className="space-y-3">
+                {recentQuizzes.map((quiz, i) => (
+                  <QuizResultCard
+                    key={i}
+                    quizName={quiz.quizName}
+                    score={quiz.score}
+                    maxScore={quiz.maxScore}
+                    passed={quiz.passed}
+                    href={quiz.href}
+                    delay={i * 50}
+                  />
+                ))}
+              </div>
+            </>
+          )}
+
+          {/* 5. Leaderboard snippet */}
+          {leaderboard.length > 0 && (
+            <LeaderboardSnippetCard
+              rank={currentRank}
+              topThree={leaderboard.slice(0, 3)}
+              delay={100}
+            />
+          )}
+
+          {/* Recent achievements */}
+          {achievements.length > 0 && (
+            <>
+              <h2 className="text-sm font-semibold text-gray-500 uppercase tracking-wide px-1">Recent achievements</h2>
+              <div className="space-y-3">
+                {achievements.map((a, i) => {
+                  const ach = a.achievements
+                  if (!ach) return null
+                  return (
+                    <AchievementCard
+                      key={i}
+                      name={ach.name}
+                      description={ach.description}
+                      icon={ach.icon}
+                      delay={i * 50}
+                    />
+                  )
+                })}
+              </div>
+            </>
+          )}
+
+          {/* 6. Nudge card (if onboarding incomplete) */}
+          {showNudge && (
+            <NudgeCard onDismiss={() => setShowNudge(false)} delay={150} />
+          )}
+
+        </div>
+      </FeedLayout>
     </>
   )
 }

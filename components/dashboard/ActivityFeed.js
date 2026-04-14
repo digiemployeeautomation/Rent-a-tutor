@@ -49,8 +49,8 @@ function ActivityIcon({ type }) {
 
 function iconBgColor(type) {
   if (type === 'quiz') return 'bg-blue-100 text-blue-600'
-  if (type === 'lesson') return 'bg-forest-100 text-forest-600'
-  if (type === 'achievement') return 'bg-gold-100 text-gold-400'
+  if (type === 'lesson') return 'bg-blue-100 text-blue-600'
+  if (type === 'achievement') return 'bg-pink-100 text-pink-500'
   return 'bg-orange-100 text-orange-500'
 }
 
@@ -77,7 +77,7 @@ export default function ActivityFeed({ activities = [] }) {
             <p className="text-xs text-gray-400 mt-0.5">{timeAgo(activity.timestamp)}</p>
           </div>
           {activity.xp > 0 && (
-            <span className="text-xs px-2 py-0.5 rounded-full bg-gold-100 text-gold-500 font-medium flex-shrink-0">
+            <span className="text-xs px-2 py-0.5 rounded-full bg-pink-100 text-pink-600 font-medium flex-shrink-0">
               +{activity.xp} XP
             </span>
           )}

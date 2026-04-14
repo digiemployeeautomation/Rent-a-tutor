@@ -10,7 +10,7 @@ export default function StreakCounter({ days = 0 }) {
         xmlns="http://www.w3.org/2000/svg"
         viewBox="0 0 24 24"
         fill="currentColor"
-        className={`w-6 h-6 flex-shrink-0 ${active ? 'text-orange-400' : 'text-gray-300'}`}
+        className={`w-6 h-6 flex-shrink-0 ${active ? 'text-pink-500 animate-pulse' : 'text-gray-300'}`}
       >
         <path
           fillRule="evenodd"
@@ -21,7 +21,7 @@ export default function StreakCounter({ days = 0 }) {
 
       <div>
         <span
-          className={`text-xl font-bold leading-none ${active ? 'text-orange-500' : 'text-gray-400'}`}
+          className={`text-xl font-bold leading-none ${active ? 'text-pink-600' : 'text-gray-400'}`}
         >
           {days}
         </span>

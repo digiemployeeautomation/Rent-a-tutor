@@ -17,7 +17,7 @@ export default function XPBar({ xpTotal = 0, currentLevel = 1 }) {
   return (
     <div className="flex flex-col gap-1.5 min-w-0">
       <div className="flex items-center justify-between gap-2">
-        <span className="text-sm font-semibold text-forest-600">
+        <span className="text-sm font-semibold text-blue-600">
           Level {currentLevel}
         </span>
         <span className="text-xs text-gray-500">
@@ -31,7 +31,7 @@ export default function XPBar({ xpTotal = 0, currentLevel = 1 }) {
           className="h-full rounded-full transition-all duration-500"
           style={{
             width: `${progressPercent}%`,
-            backgroundColor: '#3b6d11', // forest-500
+            backgroundColor: progressPercent >= 90 ? '#ec4899' : '#3b82f6', // pink-500 near level-up, else blue-500
           }}
         />
       </div>
