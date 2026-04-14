@@ -10,9 +10,12 @@ import SlideViewer from '@/components/lesson/SlideViewer'
 import QuizPlayer from '@/components/lesson/QuizPlayer'
 import LessonProgress from '@/components/lesson/LessonProgress'
 import Paywall from '@/components/lesson/Paywall'
+import FloatingXP from '@/components/ui/FloatingXP'
+import LevelUpOverlay from '@/components/ui/LevelUpOverlay'
 import { supabase } from '@/lib/supabase'
 import { hasAccess } from '@/lib/subscription'
 import { getTierConfig } from '@/lib/tier-config'
+import { getLevelForXP, XP_REWARDS } from '@/lib/xp'
 
 // ── helpers ──────────────────────────────────────────────────────────────────
 
@@ -106,6 +109,10 @@ export default function LessonPage() {
   const [currentStepIndex, setCurrentStepIndex] = useState(0)
   const [completedSteps, setCompletedSteps]     = useState(new Set())
   const [lessonDone, setLessonDone]             = useState(false)
+
+  // ── gamification state ─────────────────────────────────────────────────────
+  const [floatingXP, setFloatingXP] = useState(null)
+  const [levelUp, setLevelUp]       = useState(null)
 
   // ── paywall gating ─────────────────────────────────────────────────────────
   // Index 0 (first video) is always free. After that, require subscription.
@@ -276,11 +283,33 @@ export default function LessonPage() {
 
   // ── handlers ───────────────────────────────────────────────────────────────
 
+  async function awardXP(amount) {
+    setFloatingXP(amount)
+    // Check if level changed after awarding XP by fetching updated profile
+    if (studentId) {
+      const { data: profile } = await supabase
+        .from('student_profiles')
+        .select('xp_total, current_level')
+        .eq('user_id', studentId)
+        .single()
+      if (profile) {
+        const newLevel = getLevelForXP(profile.xp_total)
+        if (newLevel > (profile.current_level ?? 1)) {
+          setLevelUp(newLevel)
+        }
+      }
+    }
+  }
+
   function handleSectionDone() {
+    awardXP(XP_REWARDS.complete_section)
     advanceStep(currentStepIndex)
   }
 
   function handleQuizComplete({ passed, score, maxScore }) {
+    if (passed) {
+      awardXP(XP_REWARDS.pass_lesson_quiz)
+    }
     advanceStep(currentStepIndex)
   }
 
@@ -341,6 +370,11 @@ export default function LessonPage() {
 
   return (
     <FullScreenLayout title={lesson.title} progress={progressPct}>
+      {/* Gamification overlays */}
+      {levelUp !== null && (
+        <LevelUpOverlay level={levelUp} onDone={() => setLevelUp(null)} />
+      )}
+
       {/* Main content */}
       <div className="max-w-3xl mx-auto px-4 sm:px-6 py-6 space-y-6 pb-32">
 
@@ -416,13 +450,18 @@ export default function LessonPage() {
               }
 
               return (
-                <QuizPlayer
-                  quiz={quizData.quiz}
-                  questions={quizData.questions}
-                  tierConfig={tierConfig}
-                  tier={learningTier}
-                  onComplete={handleQuizComplete}
-                />
+                <div className="relative">
+                  {floatingXP !== null && (
+                    <FloatingXP amount={floatingXP} onDone={() => setFloatingXP(null)} />
+                  )}
+                  <QuizPlayer
+                    quiz={quizData.quiz}
+                    questions={quizData.questions}
+                    tierConfig={tierConfig}
+                    tier={learningTier}
+                    onComplete={handleQuizComplete}
+                  />
+                </div>
               )
             })()}
           </div>
@@ -434,7 +473,10 @@ export default function LessonPage() {
       {/* Bottom Continue / Complete button — shown for video and slides steps */}
       {!lessonDone && !showPaywall && currentStep && currentStep.kind === 'section' && (
         <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-100 px-4 py-4 safe-area-inset-bottom">
-          <div className="max-w-3xl mx-auto">
+          <div className="max-w-3xl mx-auto relative">
+            {floatingXP !== null && (
+              <FloatingXP amount={floatingXP} onDone={() => setFloatingXP(null)} />
+            )}
             <button
               onClick={handleSectionDone}
               className={classNames(
