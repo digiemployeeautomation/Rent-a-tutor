@@ -1,0 +1,43 @@
+[
+  {
+    "type": "free_form",
+    "question_text": "In your own words, describe everything you learned in this lesson about the nervous system. What were the main concepts? What examples stood out to you?",
+    "options": [
+      {
+        "description": "CNS and PNS distinction",
+        "keywords": ["central nervous system", "peripheral nervous system", "CNS", "PNS", "brain", "spinal cord"]
+      },
+      {
+        "description": "Three types of neurones and their roles",
+        "keywords": ["sensory", "motor", "relay", "neurone", "impulse", "receptor", "effector"]
+      },
+      {
+        "description": "Structure of a neurone",
+        "keywords": ["cell body", "dendrites", "axon", "myelin sheath", "myelin", "nucleus"]
+      },
+      {
+        "description": "Reflex arc and how impulses travel",
+        "keywords": ["reflex arc", "reflex", "stimulus", "response", "pathway", "automatic", "rapid"]
+      },
+      {
+        "description": "Types of reflexes — spinal, cranial, and conditioned",
+        "keywords": ["spinal reflex", "cranial reflex", "conditioned reflex", "knee jerk", "blinking", "pupil", "Pavlov", "conditioned"]
+      },
+      {
+        "description": "Brain parts and their functions",
+        "keywords": ["cerebral hemispheres", "cerebellum", "hypothalamus", "pituitary", "medulla oblongata", "forebrain", "hindbrain"]
+      },
+      {
+        "description": "Drug effects on the nervous system",
+        "keywords": ["depressants", "stimulants", "hallucinogens", "drugs", "slow", "speed up", "distort", "tetanus"]
+      },
+      {
+        "description": "Nervous system vs endocrine system",
+        "keywords": ["endocrine", "hormones", "fast", "slow", "electrical", "chemical", "coordination"]
+      }
+    ],
+    "correct_answer": null,
+    "explanation": null,
+    "points": 0
+  }
+]

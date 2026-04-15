@@ -1,0 +1,82 @@
+[
+  {
+    "type": "short_answer",
+    "question_text": "Name the part of the brain that controls balance and coordination.",
+    "options": null,
+    "correct_answer": "cerebellum",
+    "explanation": "The cerebellum is located at the back of the brain and is responsible for controlling balance and coordination. It ensures movements are smooth and precise.",
+    "points": 1
+  },
+  {
+    "type": "short_answer",
+    "question_text": "What type of drug is alcohol classified as?",
+    "options": null,
+    "correct_answer": "depressant",
+    "explanation": "Alcohol is classified as a depressant. Depressants slow down the nervous system, increasing reaction time and impairing coordination and judgment.",
+    "points": 1
+  },
+  {
+    "type": "short_answer",
+    "question_text": "Name the brain structure that regulates body temperature and hunger.",
+    "options": null,
+    "correct_answer": "hypothalamus",
+    "explanation": "The hypothalamus is part of the forebrain and is responsible for regulating the body's internal environment, including body temperature, hunger, thirst, and sleep.",
+    "points": 1
+  },
+  {
+    "type": "short_answer",
+    "question_text": "Which part of the brain controls breathing and heartbeat automatically?",
+    "options": null,
+    "correct_answer": "medulla oblongata",
+    "explanation": "The medulla oblongata, located at the base of the brain, controls vital automatic functions including breathing, heartbeat, blood pressure, and swallowing.",
+    "points": 1
+  },
+  {
+    "type": "short_answer",
+    "question_text": "Give one example of a stimulant drug.",
+    "options": null,
+    "correct_answer": "cocaine / caffeine / nicotine",
+    "explanation": "Stimulants include cocaine, caffeine, and nicotine. They speed up nervous system activity, increasing motor activity, heart rate, and temporarily improving attention.",
+    "points": 1
+  },
+  {
+    "type": "short_answer",
+    "question_text": "What effect do depressants have on reaction time?",
+    "options": null,
+    "correct_answer": "increase reaction time",
+    "explanation": "Depressants increase reaction time, meaning the nervous system takes longer to respond to stimuli. This slows down responses and impairs coordination.",
+    "points": 1
+  },
+  {
+    "type": "short_answer",
+    "question_text": "Which drug category does marijuana belong to?",
+    "options": null,
+    "correct_answer": "hallucinogens",
+    "explanation": "Marijuana is classified as a hallucinogen. Hallucinogens distort judgment and interfere with how the brain processes information, leading to unreliable decision-making and altered perception.",
+    "points": 1
+  },
+  {
+    "type": "short_answer",
+    "question_text": "Name the gland attached to the hypothalamus that controls hormone release.",
+    "options": null,
+    "correct_answer": "pituitary gland",
+    "explanation": "The pituitary gland is attached to the hypothalamus and is responsible for controlling and releasing hormones. It acts as the link between the nervous system and the endocrine system.",
+    "points": 1
+  },
+  {
+    "type": "short_answer",
+    "question_text": "How does tetanus infection affect the nervous system?",
+    "options": null,
+    "correct_answer": "damages brain cells / impairs nerve tissue",
+    "explanation": "Tetanus is a bacterial infection whose toxin damages brain cells and impairs nerve tissue. This damage to the nervous system causes the muscle spasms characteristic of the disease.",
+    "points": 1
+  },
+  {
+    "type": "short_answer",
+    "question_text": "Name one key difference between how the nervous system and endocrine system send messages.",
+    "options": null,
+    "correct_answer": "nervous system uses electrical impulses / endocrine uses hormones",
+    "explanation": "The nervous system sends messages as electrical impulses along neurones — fast and short-lived. The endocrine system sends messages using hormones released into the bloodstream — slower but longer-lasting.",
+    "points": 1
+  }
+]

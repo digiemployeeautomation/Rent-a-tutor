@@ -1,0 +1,117 @@
+[
+  {
+    "type": "multiple_choice",
+    "question_text": "What is the correct order of components in a spinal reflex arc?",
+    "options": [
+      "A) Receptor → motor neurone → CNS → sensory neurone → effector",
+      "B) Receptor → sensory neurone → CNS → motor neurone → effector",
+      "C) Effector → sensory neurone → CNS → motor neurone → receptor",
+      "D) Receptor → relay neurone → sensory neurone → motor neurone → effector"
+    ],
+    "correct_answer": "B",
+    "explanation": "The reflex arc always follows this sequence: receptor detects the stimulus, sensory neurone carries the impulse to the CNS, a relay neurone connects within the CNS, the motor neurone carries the impulse away from the CNS, and the effector produces the response.",
+    "points": 1
+  },
+  {
+    "type": "multiple_choice",
+    "question_text": "In a spinal reflex, where is the impulse processed?",
+    "options": [
+      "A) The brain",
+      "B) The sensory neurone",
+      "C) The spinal cord",
+      "D) The effector"
+    ],
+    "correct_answer": "C",
+    "explanation": "In a spinal reflex, the impulse is processed in the spinal cord — not the brain. The brain receives a separate signal and becomes aware of the reflex after it has already occurred, but the brain is not part of the reflex arc pathway.",
+    "points": 1
+  },
+  {
+    "type": "multiple_choice",
+    "question_text": "Which of the following is an example of a cranial reflex?",
+    "options": [
+      "A) Knee jerk",
+      "B) Arm flexing when touching heat",
+      "C) Pupil reflex",
+      "D) Salivating at the sound of a bell"
+    ],
+    "correct_answer": "C",
+    "explanation": "The pupil reflex is a cranial reflex — the impulse travels via the optic nerve to the brain, which processes the signal and causes the iris muscles to constrict the pupil. Knee jerk and arm flexing are spinal reflexes; salivating at a bell is a conditioned reflex.",
+    "points": 1
+  },
+  {
+    "type": "multiple_choice",
+    "question_text": "In Pavlov's experiment, what role did the ringing bell play after conditioning was complete?",
+    "options": [
+      "A) Unconditioned stimulus",
+      "B) Conditioned stimulus",
+      "C) Unconditioned response",
+      "D) Neutral stimulus"
+    ],
+    "correct_answer": "B",
+    "explanation": "After repeated pairing with food, the bell became the conditioned stimulus — it alone was sufficient to trigger salivation (the conditioned response). Before conditioning, the bell was a neutral stimulus that produced no salivation response.",
+    "points": 1
+  },
+  {
+    "type": "multiple_choice",
+    "question_text": "A student touches a sharp pin and immediately pulls their hand back. Which neurone carries the impulse FROM the skin receptor TO the spinal cord?",
+    "options": [
+      "A) Motor neurone",
+      "B) Relay neurone",
+      "C) Effector neurone",
+      "D) Sensory neurone"
+    ],
+    "correct_answer": "D",
+    "explanation": "The sensory neurone carries the impulse from the receptor (in the skin) toward the CNS (the spinal cord). Motor neurones carry impulses away from the CNS to effectors. Relay neurones connect sensory and motor neurones within the CNS.",
+    "points": 1
+  },
+  {
+    "type": "multiple_choice",
+    "question_text": "Which structure acts as the effector in the pupil reflex?",
+    "options": [
+      "A) The retina",
+      "B) The optic nerve",
+      "C) The muscles of the iris",
+      "D) The lens of the eye"
+    ],
+    "correct_answer": "C",
+    "explanation": "The effector in the pupil reflex is the circular muscles of the iris. When the motor neurone delivers the impulse, these muscles contract, reducing the size of the pupil and limiting the amount of light entering the eye.",
+    "points": 1
+  },
+  {
+    "type": "multiple_choice",
+    "question_text": "What distinguishes a conditioned reflex from a spinal or cranial reflex?",
+    "options": [
+      "A) It is faster than other reflexes",
+      "B) It is a learned response built through repeated association",
+      "C) It does not involve the nervous system",
+      "D) It is processed in the spinal cord instead of the brain"
+    ],
+    "correct_answer": "B",
+    "explanation": "A conditioned reflex is a learned response — it develops when a neutral stimulus is repeatedly paired with a stimulus that normally triggers a reflex. Spinal and cranial reflexes are innate (you are born with them). Conditioned reflexes can be built through experience and can also be unlearned.",
+    "points": 1
+  },
+  {
+    "type": "true_false",
+    "question_text": "In a spinal reflex, the brain sends the response signal to the effector.",
+    "options": ["True", "False"],
+    "correct_answer": "False",
+    "explanation": "This is false. In a spinal reflex, the response signal is sent from the spinal cord — not the brain. The spinal cord processes the impulse and sends the signal to the effector directly. The brain is informed but does not control the spinal reflex response.",
+    "points": 1
+  },
+  {
+    "type": "true_false",
+    "question_text": "Coughing and blinking are examples of cranial reflex actions.",
+    "options": ["True", "False"],
+    "correct_answer": "True",
+    "explanation": "This is true. Both coughing and blinking are cranial reflexes — the impulses are processed in the brain, not the spinal cord. Other cranial reflexes include the pupil reflex. They are all involuntary, automatic responses controlled by the brain.",
+    "points": 1
+  },
+  {
+    "type": "true_false",
+    "question_text": "In Pavlov's experiment, the dogs were conditioned to salivate at the sound of a bell because the bell was always rung at the same time as food was presented.",
+    "options": ["True", "False"],
+    "correct_answer": "True",
+    "explanation": "This is true. Pavlov repeatedly rang a bell just before presenting food to dogs. Over time, the dogs associated the bell with food. Eventually, ringing the bell alone — with no food present — was enough to trigger salivation, demonstrating a conditioned reflex.",
+    "points": 1
+  }
+]

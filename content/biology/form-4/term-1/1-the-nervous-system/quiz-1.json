@@ -1,0 +1,82 @@
+[
+  {
+    "type": "multiple_choice",
+    "question_text": "Which two organs make up the Central Nervous System (CNS)?",
+    "options": ["A) Brain and nerves", "B) Brain and spinal cord", "C) Spinal cord and muscles", "D) Nerves and glands"],
+    "correct_answer": "B",
+    "explanation": "The CNS consists of the brain and spinal cord. All other nerves belong to the Peripheral Nervous System (PNS).",
+    "points": 1
+  },
+  {
+    "type": "multiple_choice",
+    "question_text": "What is the main function of sensory neurones?",
+    "options": ["A) Carry signals from the CNS to muscles", "B) Connect sensory and motor neurones", "C) Carry signals from sense organs to the CNS", "D) Produce electrical impulses in the brain"],
+    "correct_answer": "C",
+    "explanation": "Sensory neurones detect stimuli and carry signals FROM sense organs TO the central nervous system.",
+    "points": 1
+  },
+  {
+    "type": "multiple_choice",
+    "question_text": "Motor neurones carry impulses to effectors. What are effectors?",
+    "options": ["A) Sense organs like the eyes and ears", "B) Neurones in the spinal cord", "C) Muscles or glands that carry out a response", "D) The brain and spinal cord"],
+    "correct_answer": "C",
+    "explanation": "Effectors are muscles or glands that receive signals from motor neurones and carry out the body's response.",
+    "points": 1
+  },
+  {
+    "type": "multiple_choice",
+    "question_text": "Where are relay neurones found?",
+    "options": ["A) In muscles and glands", "B) Throughout the whole body", "C) Only in the brain and spinal cord", "D) Only in the peripheral nervous system"],
+    "correct_answer": "C",
+    "explanation": "Relay neurones are found only in the CNS (brain and spinal cord), where they connect sensory neurones to motor neurones.",
+    "points": 1
+  },
+  {
+    "type": "multiple_choice",
+    "question_text": "What is the function of the myelin sheath?",
+    "options": ["A) It produces nerve impulses", "B) It insulates the axon and speeds up signal transmission", "C) It stores nutrients for the neurone", "D) It connects neurones to muscles"],
+    "correct_answer": "B",
+    "explanation": "The myelin sheath is a fatty layer that insulates the axon. This insulation makes electrical impulses travel much faster along the neurone.",
+    "points": 1
+  },
+  {
+    "type": "multiple_choice",
+    "question_text": "In which direction does a nerve impulse travel along a neurone?",
+    "options": ["A) Axon → cell body → dendrites", "B) Cell body → dendrites → axon", "C) Dendrites → cell body → axon", "D) Axon → dendrites → cell body"],
+    "correct_answer": "C",
+    "explanation": "Nerve impulses travel from dendrites (which receive the signal) → through the cell body → along the axon to the next neurone or effector.",
+    "points": 1
+  },
+  {
+    "type": "multiple_choice",
+    "question_text": "Which part of the neurone contains the nucleus?",
+    "options": ["A) The axon", "B) The myelin sheath", "C) The dendrites", "D) The cell body"],
+    "correct_answer": "D",
+    "explanation": "The cell body is the main part of the neurone and contains the nucleus, which controls the cell's activities.",
+    "points": 1
+  },
+  {
+    "type": "multiple_choice",
+    "question_text": "A student touches a hot surface and pulls their hand away. Which type of neurone first detects the heat?",
+    "options": ["A) Motor neurone", "B) Relay neurone", "C) Sensory neurone", "D) Peripheral neurone"],
+    "correct_answer": "C",
+    "explanation": "Sensory neurones in the skin detect the heat stimulus and send the signal to the CNS. This is always the first step in detecting a change in the environment.",
+    "points": 1
+  },
+  {
+    "type": "multiple_choice",
+    "question_text": "The Peripheral Nervous System (PNS) consists of:",
+    "options": ["A) The brain only", "B) The spinal cord only", "C) All nerves outside the brain and spinal cord", "D) Relay neurones inside the spinal cord"],
+    "correct_answer": "C",
+    "explanation": "The PNS includes all the nerves that branch out from the brain and spinal cord to the rest of the body.",
+    "points": 1
+  },
+  {
+    "type": "multiple_choice",
+    "question_text": "Which neurone acts as the 'middle man' between sensory and motor neurones?",
+    "options": ["A) Sensory neurone", "B) Motor neurone", "C) Peripheral neurone", "D) Relay neurone"],
+    "correct_answer": "D",
+    "explanation": "Relay neurones (also called interneurones) are found in the CNS and connect sensory neurones to motor neurones, passing the signal between them.",
+    "points": 1
+  }
+]

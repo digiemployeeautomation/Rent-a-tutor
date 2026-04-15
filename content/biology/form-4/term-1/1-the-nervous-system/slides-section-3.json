@@ -1,0 +1,167 @@
+[
+  {
+    "title": "Section 3: The Brain and Drug Effects",
+    "content": "In this section: brain structure, brain functions, drug effects on the nervous system, tetanus, and how the nervous and endocrine systems compare.",
+    "bullets": [
+      "5 main parts of the brain",
+      "Forebrain vs hindbrain functions",
+      "Depressants, stimulants, hallucinogens",
+      "Nervous vs endocrine system"
+    ],
+    "image": "Labelled diagram of the human brain showing all five main regions",
+    "type": "section_opener"
+  },
+  {
+    "title": "The Brain: Five Main Parts",
+    "content": "The brain has five key structures — each with a distinct function. You need to know all five by name.",
+    "bullets": [
+      "Cerebral hemispheres",
+      "Cerebellum",
+      "Hypothalamus",
+      "Pituitary gland",
+      "Medulla oblongata"
+    ],
+    "image": "Brain diagram with five regions colour-coded and labelled",
+    "type": "concept"
+  },
+  {
+    "title": "Forebrain vs Hindbrain",
+    "content": "The brain is divided into two broad regions: the forebrain and the hindbrain.",
+    "bullets": [
+      "Forebrain: cerebrum, hypothalamus, pituitary gland",
+      "Hindbrain: cerebellum, medulla oblongata",
+      "Cerebrum = cerebral hemispheres"
+    ],
+    "image": "Split brain diagram — forebrain highlighted in one colour, hindbrain in another",
+    "type": "concept"
+  },
+  {
+    "title": "Cerebral Hemispheres — Functions",
+    "content": "The cerebral hemispheres (cerebrum) form the largest part of the brain and control conscious activity.",
+    "bullets": [
+      "Thinking and reasoning",
+      "Memory and language",
+      "Voluntary movement",
+      "Processing sensory information"
+    ],
+    "image": "Diagram showing the cerebral hemispheres at the top of the brain",
+    "type": "concept"
+  },
+  {
+    "title": "Hypothalamus and Pituitary Gland",
+    "content": "These two forebrain structures work closely together to regulate the body's internal environment and hormone output.",
+    "bullets": [
+      "Hypothalamus: regulates temperature, hunger, thirst, sleep",
+      "Pituitary gland: controls hormone release",
+      "Pituitary gland attached to hypothalamus"
+    ],
+    "image": "Close-up diagram showing hypothalamus and pituitary gland location in the brain",
+    "type": "concept"
+  },
+  {
+    "title": "Did You Know?",
+    "content": "The pituitary gland is about the size of a pea — yet it controls growth, reproduction, and the activity of several other glands in the body. Small but powerful.",
+    "bullets": [],
+    "image": "Size comparison: pea next to an outline of the human body with arrows to glands",
+    "type": "fun_fact"
+  },
+  {
+    "title": "Cerebellum — Function",
+    "content": "The cerebellum is located at the back of the brain and is part of the hindbrain.",
+    "bullets": [
+      "Controls balance and coordination",
+      "Ensures smooth, precise movement",
+      "Active during walking, sports, writing"
+    ],
+    "image": "Diagram highlighting the cerebellum at the rear of the brain",
+    "type": "concept"
+  },
+  {
+    "title": "Medulla Oblongata — Function",
+    "content": "The medulla oblongata is at the base of the brain and connects to the spinal cord. It controls vital automatic functions.",
+    "bullets": [
+      "Controls breathing and heartbeat",
+      "Regulates blood pressure",
+      "Controls swallowing and sneezing"
+    ],
+    "image": "Diagram showing medulla oblongata at base of brain, connecting to spinal cord",
+    "type": "concept"
+  },
+  {
+    "title": "Think About It",
+    "content": "If the medulla oblongata controls breathing and heartbeat automatically — does that mean you can breathe even when you are not thinking about it? Yes. That is exactly why you breathe while you sleep.",
+    "bullets": [],
+    "image": "Simple illustration of a sleeping person with a small brain diagram inset",
+    "type": "fun_fact"
+  },
+  {
+    "title": "Effects of Drugs: Three Categories",
+    "content": "The syllabus classifies drugs into three categories based on how they affect the nervous system.",
+    "bullets": [
+      "Depressants — slow the nervous system",
+      "Stimulants — speed up the nervous system",
+      "Hallucinogens — distort perception and judgment"
+    ],
+    "image": "Three-column table showing the three drug categories with examples under each",
+    "type": "concept"
+  },
+  {
+    "title": "Depressants",
+    "content": "Depressants slow down nervous system activity, making responses slower and less coordinated.",
+    "bullets": [
+      "Examples: alcohol, heroin",
+      "Increase reaction time",
+      "Impair coordination and judgment",
+      "Slow message transmission along neurones"
+    ],
+    "image": "Diagram showing a slowed nerve signal, with a downward arrow on reaction speed",
+    "type": "concept"
+  },
+  {
+    "title": "Stimulants",
+    "content": "Stimulants speed up activity in the nervous system, producing increased alertness and physical activity.",
+    "bullets": [
+      "Examples: cocaine, caffeine, nicotine",
+      "Increase motor activity",
+      "Increase heart rate",
+      "Temporarily improve attention"
+    ],
+    "image": "Diagram showing accelerated nerve signals with upward arrows on heart rate and alertness",
+    "type": "concept"
+  },
+  {
+    "title": "Hallucinogens and Tetanus",
+    "content": "Hallucinogens distort how the brain processes information. Tetanus is a bacterial infection that damages the nervous system directly.",
+    "bullets": [
+      "Hallucinogens (e.g. marijuana): distort judgment",
+      "Tetanus: bacterial infection",
+      "Tetanus toxin damages brain cells",
+      "Tetanus impairs nerve tissue"
+    ],
+    "image": "Split slide: hallucinogen effect on perception (cerebral hemispheres) vs tetanus toxin pathway to nerve tissue",
+    "type": "concept"
+  },
+  {
+    "title": "Nervous System vs Endocrine System",
+    "content": "Both systems coordinate the body's responses — but they work differently. You must be able to compare and contrast them.",
+    "bullets": [
+      "Nervous: electrical impulses, fast, short-lived",
+      "Endocrine: hormones in blood, slower, longer-lasting",
+      "Hypothalamus and pituitary gland link both systems"
+    ],
+    "image": "Side-by-side comparison table: Nervous System vs Endocrine System — signal type, speed, duration, example organ",
+    "type": "visual"
+  },
+  {
+    "title": "Section 3 Summary",
+    "content": "You have covered all the key content for the brain and drug effects. Here is what to remember.",
+    "bullets": [
+      "5 brain parts: cerebral hemispheres, cerebellum, hypothalamus, pituitary gland, medulla oblongata",
+      "Depressants increase reaction time; stimulants increase motor activity and heart rate; hallucinogens distort judgment",
+      "Tetanus toxin damages brain cells and impairs nerve tissue",
+      "Nervous system: fast signals; endocrine system: slower hormones — linked via hypothalamus and pituitary gland"
+    ],
+    "image": "Summary graphic with all five brain regions and three drug categories in one visual",
+    "type": "summary"
+  }
+]

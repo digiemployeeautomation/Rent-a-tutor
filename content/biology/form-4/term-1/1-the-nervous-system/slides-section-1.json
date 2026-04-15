@@ -1,0 +1,140 @@
+[
+  {
+    "title": "Section 1: Neurones — The Messengers",
+    "content": "In this section, we'll look at the cells that carry messages through your nervous system.",
+    "bullets": [],
+    "image": null,
+    "type": "section_opener"
+  },
+  {
+    "title": "What Is the Nervous System?",
+    "content": "The nervous system is the body's communication network.",
+    "bullets": [
+      "Detects changes in your environment",
+      "Sends electrical signals through the body",
+      "Coordinates your body's responses"
+    ],
+    "image": "Simple body outline showing brain, spinal cord, and branching nerves",
+    "type": "concept"
+  },
+  {
+    "title": "Two Main Divisions",
+    "content": "The nervous system is divided into two parts:",
+    "bullets": [
+      "Central Nervous System (CNS) — brain and spinal cord",
+      "Peripheral Nervous System (PNS) — all other nerves"
+    ],
+    "image": "Diagram: body with CNS highlighted in blue, PNS nerves branching out in green",
+    "type": "concept"
+  },
+  {
+    "title": "What Are Neurones?",
+    "content": "Neurones are specialised nerve cells that transmit electrical impulses.",
+    "bullets": [
+      "They carry messages as electrical signals",
+      "They connect the CNS to the rest of the body",
+      "There are three types of neurones"
+    ],
+    "image": "Simple neurone shape with 'electrical signal' arrow",
+    "type": "concept"
+  },
+  {
+    "title": "Type 1: Sensory Neurones",
+    "content": "Sensory neurones carry signals FROM sense organs TO the CNS.",
+    "bullets": [
+      "Detect stimuli (heat, light, sound, touch)",
+      "Send information to the brain or spinal cord",
+      "Example: touching a hot pot sends a signal to your brain"
+    ],
+    "image": "Labelled diagram of a sensory neurone: cell body, dendron, axon, myelin sheath",
+    "type": "concept"
+  },
+  {
+    "title": "Type 2: Motor Neurones",
+    "content": "Motor neurones carry signals FROM the CNS TO muscles or glands.",
+    "bullets": [
+      "They tell your body how to respond",
+      "Signal goes from brain/spinal cord to effectors",
+      "Effectors are muscles or glands that carry out the response"
+    ],
+    "image": "Labelled diagram of a motor neurone: cell body, dendrites, long axon, motor end plate",
+    "type": "concept"
+  },
+  {
+    "title": "Type 3: Relay Neurones",
+    "content": "Relay neurones connect sensory and motor neurones inside the CNS.",
+    "bullets": [
+      "Found in the brain and spinal cord only",
+      "Act as the 'middle man' between sensory and motor neurones",
+      "Also called interneurones"
+    ],
+    "image": "Diagram showing relay neurone connecting sensory neurone to motor neurone within the spinal cord",
+    "type": "concept"
+  },
+  {
+    "title": "Think About It 🤔",
+    "content": "When you accidentally step on a sharp object, which type of neurone detects the pain first?",
+    "bullets": [
+      "Hint: which type carries signals TO the CNS?"
+    ],
+    "image": null,
+    "type": "fun_fact"
+  },
+  {
+    "title": "Structure of a Neurone",
+    "content": "All neurones share some common features:",
+    "bullets": [
+      "Cell body — contains the nucleus",
+      "Dendrites — receive signals from other neurones",
+      "Axon — long fibre that carries the impulse away",
+      "Myelin sheath — insulates the axon, speeds up signals"
+    ],
+    "image": "Detailed labelled neurone diagram: cell body, nucleus, dendrites, axon, myelin sheath, axon terminal",
+    "type": "concept"
+  },
+  {
+    "title": "How Signals Travel",
+    "content": "Nerve impulses travel as electrical signals along the neurone.",
+    "bullets": [
+      "Impulse moves from dendrites → cell body → axon",
+      "Myelin sheath makes the signal travel faster",
+      "At the end, the signal passes to the next neurone or effector"
+    ],
+    "image": "Animation-style diagram: signal moving along a neurone with directional arrows",
+    "type": "concept"
+  },
+  {
+    "title": "Did You Know? ⚡",
+    "content": "Nerve impulses can travel up to 120 metres per second in myelinated neurones.",
+    "bullets": [
+      "That's faster than the fastest car in Zambia on the highway",
+      "Without myelin, signals slow down dramatically",
+      "Diseases like Multiple Sclerosis damage the myelin sheath"
+    ],
+    "image": "Speed comparison infographic: nerve impulse vs car vs running",
+    "type": "fun_fact"
+  },
+  {
+    "title": "Comparing the Three Neurones",
+    "content": "Here's how sensory, motor, and relay neurones differ:",
+    "bullets": [
+      "Sensory: long dendron, cell body on the side",
+      "Motor: cell body at one end, long axon",
+      "Relay: short, found only in the CNS"
+    ],
+    "image": "Side-by-side comparison diagram of all three neurone types with labels",
+    "type": "visual"
+  },
+  {
+    "title": "Section 1 Summary",
+    "content": "What you need to remember:",
+    "bullets": [
+      "The nervous system = CNS + PNS",
+      "Neurones carry electrical impulses",
+      "3 types: sensory, motor, relay",
+      "Key parts: cell body, dendrites, axon, myelin sheath"
+    ],
+    "image": null,
+    "type": "summary"
+  }
+]

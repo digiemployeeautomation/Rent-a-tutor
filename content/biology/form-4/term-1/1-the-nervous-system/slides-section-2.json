@@ -1,0 +1,176 @@
+[
+  {
+    "title": "Section 2: The Spinal Cord and Reflex Actions",
+    "content": "In this section: how the spinal cord processes signals, the reflex arc pathway, and the three types of reflex actions.",
+    "bullets": [
+      "The spinal cord as part of the CNS",
+      "The reflex arc — step by step",
+      "Spinal, cranial, and conditioned reflexes"
+    ],
+    "image": "Diagram: cross-section of spinal cord with sensory and motor neurones entering and leaving, brain connected above",
+    "type": "section_opener"
+  },
+  {
+    "title": "The Spinal Cord",
+    "content": "The spinal cord is part of the central nervous system (CNS) and runs from the brain down through the vertebral column.",
+    "bullets": [
+      "Carries impulses to and from brain",
+      "Processes spinal reflex signals",
+      "Protected by vertebral column"
+    ],
+    "image": "Diagram: human body outline with brain and spinal cord highlighted as the CNS",
+    "type": "concept"
+  },
+  {
+    "title": "What Is a Reflex Action?",
+    "content": "A reflex action is a rapid, automatic response to a stimulus that does not require conscious thought.",
+    "bullets": [
+      "Automatic — no decision required",
+      "Rapid — faster than conscious responses",
+      "Protective — prevents injury",
+      "Controlled by the CNS"
+    ],
+    "image": "Illustration: hand pulling back from a hot surface — showing speed of reflex response",
+    "type": "concept"
+  },
+  {
+    "title": "The Reflex Arc",
+    "content": "The reflex arc is the pathway an impulse follows from receptor to effector during a reflex action.",
+    "bullets": [
+      "Receptor detects the stimulus",
+      "Sensory neurone carries impulse to CNS",
+      "Relay neurone connects within CNS",
+      "Motor neurone carries impulse to effector"
+    ],
+    "image": "Labelled diagram: full reflex arc — receptor, sensory neurone, relay neurone in spinal cord, motor neurone, effector — with arrows showing direction of impulse",
+    "type": "visual"
+  },
+  {
+    "title": "Think About It",
+    "content": "You tap someone's knee and their leg kicks forward — before they even feel the tap. How is that possible?",
+    "bullets": [
+      "The impulse never reached the brain first",
+      "Spinal cord processed the response",
+      "Brain is notified after the response",
+      "This is the spinal reflex at work"
+    ],
+    "image": "Illustration: doctor tapping patient's knee with reflex hammer — leg extended",
+    "type": "fun_fact"
+  },
+  {
+    "title": "Spinal Reflexes",
+    "content": "A spinal reflex is a reflex action in which the impulse is processed by the spinal cord, not the brain.",
+    "bullets": [
+      "CNS involvement: spinal cord only",
+      "Brain is not part of the response",
+      "Examples: knee jerk, arm flexing"
+    ],
+    "image": "Diagram: reflex arc with spinal cord highlighted as the processing centre — brain shown receiving a separate notification signal",
+    "type": "concept"
+  },
+  {
+    "title": "Spinal Reflex Example: Knee Jerk",
+    "content": "The knee jerk reflex traces a complete spinal reflex arc — from stimulus at the knee to muscle contraction in the thigh.",
+    "bullets": [
+      "Stimulus: tap on patellar tendon",
+      "Receptor: stretch receptor in muscle",
+      "Impulse: travels to spinal cord",
+      "Effector: thigh muscle contracts"
+    ],
+    "image": "Step-by-step diagram: knee jerk reflex arc labelled — tap, receptor, sensory neurone, spinal cord, relay neurone, motor neurone, thigh muscle",
+    "type": "example"
+  },
+  {
+    "title": "Spinal Reflex Example: Arm Flexing",
+    "content": "When you touch something painfully hot, your arm pulls back automatically — this is a spinal reflex known as the flexion reflex.",
+    "bullets": [
+      "Stimulus: painful heat or sharp object",
+      "Receptor: pain receptors in skin",
+      "Impulse: processed in spinal cord",
+      "Effector: arm muscles flex and withdraw"
+    ],
+    "image": "Diagram: hand touching flame — receptor in skin, impulse path to spinal cord, bicep muscle as effector pulling arm back",
+    "type": "example"
+  },
+  {
+    "title": "Real Life",
+    "content": "Spinal reflexes protect you before your brain can react — they are faster than any conscious response you could make.",
+    "bullets": [
+      "Spinal reflex: 20–50 milliseconds",
+      "Conscious reaction: 150–300 milliseconds",
+      "The gap explains why you pull back first",
+      "Then feel the pain — that's the brain registering"
+    ],
+    "image": "Timeline graphic: reflex response (20ms) vs conscious response (200ms) shown side by side",
+    "type": "fun_fact"
+  },
+  {
+    "title": "Cranial Reflexes",
+    "content": "A cranial reflex is a reflex action in which the impulse is processed by the brain rather than the spinal cord.",
+    "bullets": [
+      "CNS involvement: brain",
+      "Impulse travels via cranial nerves",
+      "Examples: blinking, coughing, pupil reflex"
+    ],
+    "image": "Diagram: reflex arc with brain highlighted as the processing centre — showing cranial nerve pathway",
+    "type": "concept"
+  },
+  {
+    "title": "Cranial Reflex Examples",
+    "content": "Three key cranial reflexes to know: blinking, coughing, and the pupil reflex — all processed in the brain.",
+    "bullets": [
+      "Blinking: eye protection from debris",
+      "Coughing: clears airway obstruction",
+      "Pupil reflex: adjusts to light intensity"
+    ],
+    "image": "Three small panels: eye blinking, person coughing, pupil constricting in bright light — each labelled with reflex name",
+    "type": "example"
+  },
+  {
+    "title": "Conditioned Reflexes",
+    "content": "A conditioned reflex is a learned response that develops when a neutral stimulus is repeatedly paired with a stimulus that normally triggers a reflex.",
+    "bullets": [
+      "Not innate — learned through association",
+      "Stimulus becomes a trigger over time",
+      "Can be built and also unlearned",
+      "Pavlov's experiment is the classic example"
+    ],
+    "image": "Illustration: dog, bell, and food dish — showing the association between bell and food",
+    "type": "concept"
+  },
+  {
+    "title": "Pavlov's Experiment",
+    "content": "Ivan Pavlov demonstrated conditioned reflexes using dogs — showing that a neutral stimulus (a bell) could trigger salivation after repeated pairing with food.",
+    "bullets": [
+      "Unconditioned stimulus: food → salivation",
+      "Neutral stimulus: ringing bell",
+      "Repeated pairing: bell rung before food",
+      "Result: bell alone triggers salivation"
+    ],
+    "image": "Three-stage diagram: Stage 1 — food causes salivation; Stage 2 — bell + food together; Stage 3 — bell alone causes salivation",
+    "type": "example"
+  },
+  {
+    "title": "Did You Know?",
+    "content": "You have conditioned reflexes too — your mouth waters when you smell your favourite food cooking, even before you see or taste it.",
+    "bullets": [
+      "The smell is the conditioned stimulus",
+      "Salivation is the conditioned response",
+      "Your nervous system learned this association",
+      "Same principle as Pavlov's dogs"
+    ],
+    "image": "Illustration: person smelling nshima cooking from a distance — saliva droplets shown as a humorous exaggeration",
+    "type": "fun_fact"
+  },
+  {
+    "title": "Summary: Types of Reflex Actions",
+    "content": "Three types of reflex actions — each defined by where the impulse is processed and how the response is triggered.",
+    "bullets": [
+      "Spinal reflex: processed in spinal cord",
+      "Cranial reflex: processed in brain",
+      "Conditioned reflex: learned association"
+    ],
+    "image": "Comparison table: three columns (Spinal / Cranial / Conditioned) with rows for CNS location, example, and innate/learned",
+    "type": "summary"
+  }
+]
