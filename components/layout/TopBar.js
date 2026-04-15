@@ -14,7 +14,7 @@ export default function TopBar() {
 
   return (
     <header className="sticky top-0 z-40 bg-white border-b border-gray-100 px-4 py-3 flex items-center justify-between">
-      <Link href="/dashboard/student" className="text-xl font-bold text-blue-600">
+      <Link href="/" className="text-xl font-bold text-blue-600">
         Rent<span className="text-pink-400">a</span>Tutor
       </Link>
       <Link href="/dashboard/student/settings" className="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 text-sm font-semibold overflow-hidden">

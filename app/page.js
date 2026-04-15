@@ -2,7 +2,6 @@
 'use client'
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
-import Navbar from '@/components/layout/Navbar'
 import ScrollReveal from '@/components/ui/ScrollReveal'
 import { supabase } from '@/lib/supabase'
 
@@ -88,8 +87,6 @@ export default function HomePage() {
 
   return (
     <div className="min-h-screen bg-white">
-      <Navbar />
-
       {/* ── Hero ──────────────────────────────────────────────────── */}
       <section className="bg-gradient-to-br from-blue-600 to-blue-800 px-6 py-24 text-center">
         <ScrollReveal>
