@@ -1,7 +1,6 @@
 'use client'
 import { useState } from 'react'
 import Link from 'next/link'
-import Navbar from '@/components/layout/Navbar'
 
 export default function ContactPage() {
   const [form, setForm]       = useState({ name: '', email: '', subject: 'General enquiry', message: '' })
@@ -42,8 +41,6 @@ export default function ContactPage() {
 
   return (
     <div style={{ minHeight: '100vh', backgroundColor: 'var(--color-page-bg)' }}>
-      <Navbar />
-
       <div className="px-6 py-12 text-center" style={{ backgroundColor: 'var(--color-primary)' }}>
         <h1 className="font-serif text-4xl mb-3" style={{ color: 'var(--color-surface-mid)' }}>
           Contact us

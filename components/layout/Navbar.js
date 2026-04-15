@@ -34,7 +34,7 @@ export default function Navbar() {
   return (
     <header className="sticky top-0 z-40 bg-white border-b border-gray-100">
       <div className="max-w-5xl mx-auto px-6 flex items-center justify-between h-14">
-        <Link href={user ? '/dashboard/student' : '/'} className="text-xl font-bold text-blue-600">
+        <Link href="/" className="text-xl font-bold text-blue-600">
           Rent<span className="text-pink-400">a</span>Tutor
         </Link>
 

@@ -2,7 +2,6 @@
 'use client'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import Navbar from './Navbar'
 
 const STUDENT_NAV = [
   { href: '/dashboard/student',                label: 'Dashboard',   icon: '⬡', exact: true },
@@ -30,8 +29,6 @@ export default function DashboardShell({ children, role }) {
 
   return (
     <div style={{ minHeight: '100vh', backgroundColor: 'var(--color-page-bg)' }}>
-      <Navbar />
-
       <div className="flex" style={{ minHeight: 'calc(100vh - 64px)' }}>
 
         {/* ── Desktop sidebar — hidden on mobile ─────────────────── */}

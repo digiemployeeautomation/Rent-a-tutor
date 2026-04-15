@@ -1,6 +1,5 @@
 // app/about/page.js
 import Link from 'next/link'
-import Navbar from '@/components/layout/Navbar'
 
 export const metadata = {
   title: 'About — Rent a Tutor',
@@ -9,8 +8,6 @@ export const metadata = {
 export default function AboutPage() {
   return (
     <div style={{ minHeight: '100vh', backgroundColor: 'var(--color-page-bg)' }}>
-      <Navbar />
-
       {/* Hero */}
       <div className="px-6 py-16 text-center" style={{ backgroundColor: 'var(--color-primary)' }}>
         <h1 className="font-serif text-4xl mb-4" style={{ color: 'var(--color-surface-mid)' }}>
