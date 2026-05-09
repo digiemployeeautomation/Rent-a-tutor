@@ -30,24 +30,36 @@ Students subscribe to access content at three levels:
 - MTN MoMo
 - Zamtel Kwacha
 
+## V1 PoC Scope (decided 2026-05-09)
+
+- **Subject**: Mathematics only
+- **Form**: Form 1 only (all 3 terms)
+- **Format**: Slides only — no video, no AI runtime, no Voice/interest variants
+- **Personalization**: Three pedagogical tracks (Learner / Reviser / Exam-prep) selected per topic; topic-weighted + adaptive + track-aware tests and exams
+- **Onboarding**: 10 global + 4 per-subject + 1 per-topic micro-intake
+- **Detailed design**: see `docs/superpowers/specs/2026-05-09-form-1-math-personalization-design.md`
+
+V2 expands to other Form 1 subjects, then to Forms 2–4. Video and AI-generated content unlocked when budget allows.
+
 ## Content Strategy
 
-### Content Structure
+### Content Structure (V1 — slides only, video deferred)
 ```
 Subject (e.g., Mathematics)
   └── Form Level (e.g., Form 1)
        └── Term (e.g., Term 1)
             └── Topic (e.g., Algebraic Expressions)
                  └── Lesson (e.g., "Simplifying Expressions")
-                      ├── Video (intro)
-                      ├── Slides Section 1 → Quiz 1 (10 MC)
-                      ├── Video 2
-                      ├── Slides Section 2 → Quiz 2 (10 MC + T/F)
-                      ├── Video 3
-                      ├── Slides Section 3 → Quiz 3 (10 short answer)
-                      ├── Video (closing)
-                      └── Quiz 4 (free-form reflection, feedback only)
+                      └── Block pool, tagged: foundational │ core-full │
+                          core-summary │ worked-easy/medium/hard │
+                          practice │ common-mistakes │ recap
+
+                          The student's track (Learner / Reviser /
+                          Exam-prep) selects which blocks render.
+                          All tracks cover the full curriculum.
 ```
+
+V2+ adds video blocks back into the same pool when production budget allows.
 
 ### Assessments
 - **Lesson Quizzes**: 4 quizzes per lesson (MC → MC+T/F → Short answer → Reflection)
@@ -67,7 +79,13 @@ Subject (e.g., Mathematics)
 
 ## Engagement & Retention
 
-### Personalized Learning Tiers (chosen by student via personality test at onboarding)
+### Personalized Learning Tiers (assigned per topic via three-stage onboarding)
+
+V1 onboarding: 10 global questions at signup + 4 questions before each subject's first lesson + 1 micro-question before each topic's first lesson. The most-specific answer wins, so a student can be Reviser overall but Learner for one weak topic.
+
+The tier now drives both **assessment behavior** (the table below) and **slide-block selection** for each lesson — Learners see the full build-up, Revisers see a condensed pass, Exam-prep students see mastery and past-paper-style content. All tracks cover the full curriculum.
+
+
 
 | Feature | Guided (Relaxed) | Balanced (Recommended) | Exam Ready (Strict) |
 |---------|-------------------|------------------------|---------------------|
@@ -125,4 +143,4 @@ All term exams pull questions adaptively — heavier weighting on topics where t
 - Revenue per student
 
 ---
-*Last updated: 2026-04-14*
+*Last updated: 2026-05-09*
