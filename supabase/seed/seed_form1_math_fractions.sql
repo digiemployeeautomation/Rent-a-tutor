@@ -33,21 +33,25 @@ BEGIN
     WHERE term_id = v_term_id AND subject_id = v_subject_id AND number = 1;
 
   -- Topic: "Fractions"
-  INSERT INTO topics (unit_id, title, description, "order")
-  VALUES (v_unit_id, 'Fractions',
-          'What fractions mean, equivalent fractions, and basic operations.', 1)
-  ON CONFLICT DO NOTHING;
   SELECT id INTO v_topic_id FROM topics
     WHERE unit_id = v_unit_id AND title = 'Fractions';
+  IF v_topic_id IS NULL THEN
+    INSERT INTO topics (unit_id, title, description, "order")
+    VALUES (v_unit_id, 'Fractions',
+            'What fractions mean, equivalent fractions, and basic operations.', 1)
+    RETURNING id INTO v_topic_id;
+  END IF;
 
   -- Lesson: "Introduction to Fractions"
-  INSERT INTO lessons_new (topic_id, title, description, "order", status)
-  VALUES (v_topic_id, 'Introduction to Fractions',
-          'What a fraction is, the parts of a fraction, and reading fractions.',
-          1, 'published')
-  ON CONFLICT DO NOTHING;
   SELECT id INTO v_lesson_id FROM lessons_new
     WHERE topic_id = v_topic_id AND title = 'Introduction to Fractions';
+  IF v_lesson_id IS NULL THEN
+    INSERT INTO lessons_new (topic_id, title, description, "order", status)
+    VALUES (v_topic_id, 'Introduction to Fractions',
+            'What a fraction is, the parts of a fraction, and reading fractions.',
+            1, 'published')
+    RETURNING id INTO v_lesson_id;
+  END IF;
 
   -- Wipe and reseed blocks for this lesson (idempotent rebuild)
   DELETE FROM lesson_blocks WHERE lesson_id = v_lesson_id;
