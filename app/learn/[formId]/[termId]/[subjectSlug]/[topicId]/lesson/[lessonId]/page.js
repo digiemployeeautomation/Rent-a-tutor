@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect, useCallback } from 'react'
-import { useParams, useRouter } from 'next/navigation'
+import { useParams, useRouter, useSearchParams } from 'next/navigation'
 import Link from 'next/link'
 import Navbar from '@/components/layout/Navbar'
 import FullScreenLayout from '@/components/layout/FullScreenLayout'
@@ -15,6 +15,7 @@ import LevelUpOverlay from '@/components/ui/LevelUpOverlay'
 import { supabase } from '@/lib/supabase'
 import { hasAccess } from '@/lib/subscription'
 import { getTierConfig } from '@/lib/tier-config'
+import { selectBlocksForTrack } from '@/lib/blocks/block-selector'
 import { getLevelForXP, XP_REWARDS } from '@/lib/xp'
 
 // ── helpers ──────────────────────────────────────────────────────────────────
@@ -23,13 +24,12 @@ function classNames(...classes) {
   return classes.filter(Boolean).join(' ')
 }
 
-function buildSteps(sections, quizzes) {
-  // Merge lesson_sections and quizzes into a single ordered step array,
-  // sorted by their "order" field.
+function buildStepsFromSections(sections, quizzes) {
+  // Legacy path: merge lesson_sections (video|slides) with quizzes by `order`.
   const sectionSteps = (sections ?? []).map(s => ({
     kind: 'section',
     id: s.id,
-    type: s.type,               // 'video' | 'slides'
+    type: s.type,
     order: s.order ?? 0,
     data: s,
     label: s.type === 'video' ? 'Video' : 'Slides',
@@ -45,6 +45,46 @@ function buildSteps(sections, quizzes) {
   }))
 
   return [...sectionSteps, ...quizSteps].sort((a, b) => a.order - b.order)
+}
+
+function buildStepsFromBlocks(orderedBlocks, quizzes) {
+  // Block path: each selected block becomes a 'slides' step. Quizzes are
+  // appended after all block steps. Plan 3 will integrate quizzes into the
+  // block sequence; for Plan 1 we keep them as a trailing block.
+  const blockSteps = orderedBlocks.map((block, idx) => ({
+    kind: 'section',
+    id: block.id,
+    type: 'slides',
+    order: idx,
+    data: block,                  // exposes block.slides_data to the existing renderer
+    label: blockTagLabel(block.tag),
+  }))
+
+  const quizSteps = (quizzes ?? []).map((q, i) => ({
+    kind: 'quiz',
+    id: q.id,
+    type: 'quiz',
+    order: blockSteps.length + i,
+    data: q,
+    label: 'Quiz',
+  }))
+
+  return [...blockSteps, ...quizSteps]
+}
+
+function blockTagLabel(tag) {
+  switch (tag) {
+    case 'foundational':    return 'Why this matters'
+    case 'core-full':       return 'Core idea'
+    case 'core-summary':    return 'Key points'
+    case 'worked-easy':     return 'Worked example'
+    case 'worked-medium':   return 'Worked example'
+    case 'worked-hard':     return 'Challenge example'
+    case 'practice':        return 'Practice'
+    case 'common-mistakes': return 'Common mistakes'
+    case 'recap':           return 'Recap'
+    default:                return 'Slides'
+  }
 }
 
 // ── Lesson Complete screen ────────────────────────────────────────────────────
@@ -90,6 +130,8 @@ function LessonCompleteScreen({ lesson, formId, termId, subjectSlug, topicId }) 
 export default function LessonPage() {
   const { formId, termId, subjectSlug, topicId, lessonId } = useParams()
   const router = useRouter()
+  const searchParams = useSearchParams()
+  const trackOverride = searchParams.get('track')
 
   // ── data state ─────────────────────────────────────────────────────────────
   const [loading, setLoading]           = useState(true)
@@ -129,6 +171,17 @@ export default function LessonPage() {
       const sid = user?.id ?? null
       setStudentId(sid)
 
+      // 1b. Load student profile early — needed for track resolution.
+      let profileData = null
+      if (sid) {
+        const { data } = await supabase
+          .from('student_profiles')
+          .select('learning_tier')
+          .eq('user_id', sid)
+          .single()
+        profileData = data
+      }
+
       // 2. Lesson
       const { data: lessonData } = await supabase
         .from('lessons_new')
@@ -144,6 +197,14 @@ export default function LessonPage() {
         .select('id, lesson_id, type, order, content_url, cloudflare_video_id, slides_data')
         .eq('lesson_id', lessonId)
         .order('order', { ascending: true })
+
+      // 3b. Lesson blocks (new path — Plan 1 of personalization)
+      const { data: blocksData } = await supabase
+        .from('lesson_blocks')
+        .select('id, lesson_id, tag, order_within_tag, slides_data')
+        .eq('lesson_id', lessonId)
+        .order('tag', { ascending: true })
+        .order('order_within_tag', { ascending: true })
 
       // 4. Quizzes
       const { data: quizzesData } = await supabase
@@ -168,8 +229,16 @@ export default function LessonPage() {
       }
       setQuizMap(qMap)
 
-      // 6. Build steps
-      const builtSteps = buildSteps(sectionsData, quizzesData)
+      // 6. Build steps — prefer blocks if present, fall back to legacy sections.
+      const resolvedTrack = trackOverride || profileData?.learning_tier || 'balanced'
+
+      let builtSteps
+      if (blocksData && blocksData.length > 0) {
+        const ordered = selectBlocksForTrack(blocksData, resolvedTrack)
+        builtSteps = buildStepsFromBlocks(ordered, quizzesData)
+      } else {
+        builtSteps = buildStepsFromSections(sectionsData, quizzesData)
+      }
       setSteps(builtSteps)
 
       // 7. Student progress — which sections/quizzes are already done
@@ -219,13 +288,7 @@ export default function LessonPage() {
           setIsSubscribed(access)
         }
 
-        // 9. Learning tier
-        const { data: profileData } = await supabase
-          .from('student_profiles')
-          .select('learning_tier')
-          .eq('user_id', sid)
-          .single()
-
+        // 9. Learning tier (already loaded in step 1b)
         setLearningTier(profileData?.learning_tier ?? 'balanced')
       }
 
@@ -241,7 +304,7 @@ export default function LessonPage() {
     }
 
     load()
-  }, [lessonId, formId, termId, subjectSlug])
+  }, [lessonId, formId, termId, subjectSlug, trackOverride])
 
   // ── mark progress ──────────────────────────────────────────────────────────
 
