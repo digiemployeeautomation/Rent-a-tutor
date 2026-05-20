@@ -79,13 +79,15 @@ export async function POST(request) {
     // 8. Award XP (reflection always awards — it can't fail)
     const xpAmount = calculateXPAward('pass_lesson_quiz', { isFirstAttempt: true })
 
-    await supabase.rpc('increment_xp', {
+    const { error: xpErr } = await supabase.rpc('increment_xp', {
       p_user_id: user.id,
       p_amount:  xpAmount,
     })
+    if (xpErr) console.error('[quiz/reflection] increment_xp failed:', xpErr)
 
     // 9. Record activity
-    await supabase.rpc('record_activity', { p_user_id: user.id })
+    const { error: actErr } = await supabase.rpc('record_activity', { p_user_id: user.id })
+    if (actErr) console.error('[quiz/reflection] record_activity failed:', actErr)
 
     // 10. Return result
     return NextResponse.json({ coveredPoints, missedPoints, totalPoints, coveredCount })

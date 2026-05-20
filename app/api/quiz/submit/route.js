@@ -112,14 +112,16 @@ export async function POST(request) {
       const action = QUIZ_TYPE_TO_XP_ACTION[quiz.quiz_type] ?? 'pass_lesson_quiz'
       const xpAmount = calculateXPAward(action, { isFirstAttempt, isPerfectScore })
 
-      await supabase.rpc('increment_xp', {
+      const { error: xpErr } = await supabase.rpc('increment_xp', {
         p_user_id: user.id,
         p_amount:  xpAmount,
       })
+      if (xpErr) console.error('[quiz/submit] increment_xp failed:', xpErr)
     }
 
     // 11. Record activity
-    await supabase.rpc('record_activity', { p_user_id: user.id })
+    const { error: actErr } = await supabase.rpc('record_activity', { p_user_id: user.id })
+    if (actErr) console.error('[quiz/submit] record_activity failed:', actErr)
 
     // 12. Filter explanations based on tier's show_explanations setting
     const showExplanations = tierConfig.show_explanations

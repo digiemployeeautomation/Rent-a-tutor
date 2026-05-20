@@ -4,6 +4,8 @@ import { createServerClient } from '@/lib/supabaseServer'
 import { verifyCsrf } from '@/lib/csrf'
 import { getSubscriptionDuration } from '@/lib/subscription'
 
+const MU_TIMEOUT_MS = 30000
+
 export async function POST(request) {
   const csrf = verifyCsrf(request)
   if (!csrf.ok) {
@@ -30,14 +32,37 @@ export async function POST(request) {
       auth_id:        process.env.MONEYUNIFY_AUTH_ID,
     })
 
-    const muRes = await fetch('https://api.moneyunify.one/payments/verify', {
-      method:  'POST',
-      headers: {
-        'Content-Type': 'application/x-www-form-urlencoded',
-        'Accept':        'application/json',
-      },
-      body: body.toString(),
-    })
+    const controller = new AbortController()
+    const timeoutId = setTimeout(() => controller.abort(), MU_TIMEOUT_MS)
+
+    let muRes
+    try {
+      muRes = await fetch('https://api.moneyunify.one/payments/verify', {
+        method:  'POST',
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+          'Accept':        'application/json',
+        },
+        body:   body.toString(),
+        signal: controller.signal,
+      })
+    } catch (fetchErr) {
+      clearTimeout(timeoutId)
+      console.error('[subscription/verify] MoneyUnify fetch failed:', fetchErr.message)
+      return NextResponse.json(
+        { error: 'Payment verification temporarily unavailable. Please try again.' },
+        { status: 502 }
+      )
+    }
+    clearTimeout(timeoutId)
+
+    if (!muRes.ok) {
+      console.error('[subscription/verify] MoneyUnify non-OK response:', muRes.status)
+      return NextResponse.json(
+        { error: 'Payment verification failed. Please try again.' },
+        { status: 502 }
+      )
+    }
 
     const muData = await muRes.json()
     const status = muData.data?.status

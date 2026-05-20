@@ -168,6 +168,13 @@ export default function StudentSettingsPage() {
     )
   }
 
+  const [signingOut, setSigningOut] = useState(false)
+  async function handleSignOut() {
+    setSigningOut(true)
+    await supabase.auth.signOut()
+    router.push('/auth/login')
+  }
+
   // ── Loading screen ─────────────────────────────────────────────────────────
   if (loading) {
     return (
@@ -414,6 +421,23 @@ export default function StudentSettingsPage() {
               </span>
             )}
           </div>
+        </section>
+
+        {/* ── 5. Account ───────────────────────────────────────────────────── */}
+        <section className="bg-white border border-gray-200 rounded-2xl p-6 shadow-sm space-y-4">
+          <div>
+            <h2 className="text-lg font-semibold text-gray-800">Account</h2>
+            <p className="text-sm text-gray-500 mt-1">
+              Sign out of your account on this device.
+            </p>
+          </div>
+          <button
+            onClick={handleSignOut}
+            disabled={signingOut}
+            className="px-4 py-2 rounded-xl text-sm font-medium text-red-600 border border-red-200 bg-white hover:bg-red-50 disabled:opacity-60 transition-colors"
+          >
+            {signingOut ? 'Signing out…' : 'Sign out'}
+          </button>
         </section>
 
       </div>
