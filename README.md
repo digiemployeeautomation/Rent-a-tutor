@@ -1,19 +1,41 @@
-# Main Site — Audit Fixes
+# Rent a Tutor — IELTS Prep Platform
 
-## Fix 1: WithdrawModal (CRITICAL)
-File: app/dashboard/tutor/(shell)/page.js
+Fully-automated IELTS preparation: AI-graded Writing and Speaking, deterministic Listening and Reading, calibrated band-score feedback, and personalized study plans per sub-skill.
 
-Replace the entire `WithdrawModal` function with the one in
-`app/dashboard/tutor/(shell)/WithdrawModal-fix.js`.
+## Status
 
-The old version called setDone(true) with no database write.
-The new version inserts into `payout_requests` first.
+Pivoting from a Zambian O-Level schools product to IELTS-only as of 2026-05-20. Schools code is preserved under `archive/schools-v1/` and is not referenced from any live route. See `docs/business-plan.md` for current focus and `docs/superpowers/specs/2026-05-20-ielts-pivot-design.md` for the design.
 
-## Fix 2: Tutor browse page — mobile filters
-File: app/tutor/page.js
+## Tech stack
 
-1. Add state near the top of FindTutorPage:
-   const [filtersOpen, setFiltersOpen] = useState(false)
+- Next.js 14 (App Router)
+- Supabase (Postgres, Auth, Storage)
+- Vercel AI Gateway (Claude Sonnet 4.6, Whisper)
+- Vercel Workflow for the Speaking grading pipeline
+- Tailwind CSS
+- Vitest for pure-function unit tests
 
-2. Replace the <aside> block with the one in
-   app/tutor/tutor-page-mobile-filter-patch.jsx
+## Development
+
+```bash
+npm install
+npm run dev        # http://localhost:3000
+npm test           # vitest
+npm run build      # production build
+```
+
+## Environment
+
+Copy `.env.example` to `.env.local` and fill in Supabase + AI Gateway credentials.
+
+Set `USE_STUB_GRADER=true` for local development without an AI Gateway key — submissions are graded by a deterministic stub.
+
+## Project layout
+
+- `app/` — Next.js App Router routes
+- `components/` — shared React components
+- `lib/` — utilities, AI Gateway client, block engine, track rules
+- `supabase/migrations/` — schema migrations
+- `docs/superpowers/specs/` — design specs
+- `docs/superpowers/plans/` — implementation plans
+- `archive/schools-v1/` — paused schools product, preserved for later re-introduction

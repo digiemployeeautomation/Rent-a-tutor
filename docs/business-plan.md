@@ -1,6 +1,34 @@
 # Rent a Tutor — Business Plan
 
-## Platform Overview
+## Current Focus (2026-05-20): IELTS Test Prep
+
+The platform is pivoting to launch as a **fully-automated IELTS preparation platform**. The schools product is paused (code preserved under `archive/schools-v1/`) and will be re-introduced as a second product line later — there is no surface for it in the current UI.
+
+### IELTS product overview
+
+- Audience: IELTS test takers in Zambia + one other African market (specific country TBD).
+- Variants: both Academic and General Training.
+- Sections supported: all four (Listening, Reading, Writing, Speaking) at launch.
+- Automation: fully automated grading. Listening/Reading deterministic; Writing graded by LLM via Vercel AI Gateway with a calibrated rubric prompt; Speaking via Whisper STT + LLM grading (durable Vercel Workflow).
+- Content production: LLM-generated with a one-pass certified-examiner review before publish. ~30 reading sets / 30 listening sets / 40 writing prompts / 60 speaking cue-cards for V1 launch.
+- Onboarding: questionnaire + short placement diagnostic (1 reading passage, 1 listening set, 1 Writing Task 2, 1 Speaking Part 1).
+- Personalization: per-sub-skill tracks (`foundation` / `practice` / `mock`), seeded by diagnostic bands, auto-bumped by rolling 5-submission average.
+
+### IELTS revenue model
+
+Pricing tiers and payment methods are still TBD. Submission caps per tier are scaffolded so a plan ladder can be plugged in without further engineering.
+
+### Detailed design
+
+See `docs/superpowers/specs/2026-05-20-ielts-pivot-design.md` and `docs/superpowers/plans/2026-05-20-ielts-pivot-demo-plan.md`.
+
+---
+
+## Schools product (paused — preserved for re-introduction)
+
+The remainder of this document describes the schools product, which is paused as of 2026-05-20. Code lives under `archive/schools-v1/` and is not referenced anywhere in the live app.
+
+### Platform Overview
 
 Rent a Tutor is a self-serve learning platform for Zambian students (O-Level and A-Level) aligned with the Zambia Education Curriculum. The platform provides structured, engaging lessons through slides and videos, with quizzes and exams to track progress and prepare students for exams.
 
@@ -143,4 +171,4 @@ All term exams pull questions adaptively — heavier weighting on topics where t
 - Revenue per student
 
 ---
-*Last updated: 2026-05-09*
+*Last updated: 2026-05-20*
