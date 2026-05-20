@@ -5,17 +5,15 @@ import { usePathname } from 'next/navigation'
 
 const STUDENT_NAV = [
   { href: '/dashboard/student',                label: 'Dashboard',   icon: '⬡', exact: true },
-  { href: '/learn',                            label: 'Learn',       icon: '📚' },
+  { href: '/practice',                         label: 'Practice',    icon: '📚' },
   { href: '/dashboard/student/leaderboard',    label: 'Leaderboard', icon: '🏆' },
-  { href: '/dashboard/student/settings',       label: 'Settings',    icon: '⚙' },
 ]
 
 // Short labels for the mobile bottom nav where space is tight
 const SHORT_LABELS = {
   'Dashboard':   'Home',
-  'Learn':       'Learn',
+  'Practice':    'Practice',
   'Leaderboard': 'Ranks',
-  'Settings':    'Settings',
 }
 
 export default function DashboardShell({ children, role }) {

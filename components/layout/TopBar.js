@@ -17,7 +17,7 @@ export default function TopBar() {
       <Link href="/" className="text-xl font-bold text-blue-600">
         Rent<span className="text-pink-400">a</span>Tutor
       </Link>
-      <Link href="/dashboard/student/settings" className="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 text-sm font-semibold overflow-hidden">
+      <Link href="/dashboard/student" className="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 text-sm font-semibold overflow-hidden">
         {avatar ? <img src={avatar} alt="" className="w-full h-full object-cover" /> : '?'}
       </Link>
     </header>

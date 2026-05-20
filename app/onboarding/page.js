@@ -1,301 +1,54 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { supabase } from '@/lib/supabase'
-import { getQuestions, recommendTier } from '@/lib/personality'
-import PersonalityQuiz from '@/components/onboarding/PersonalityQuiz'
-import TierRecommendation from '@/components/onboarding/TierRecommendation'
-
-const STEP_WELCOME = 'welcome'
-const STEP_QUIZ = 'quiz'
-const STEP_TIER = 'tier'
-const STEP_SUBJECTS = 'subjects'
-
-const STEPS = [STEP_WELCOME, STEP_QUIZ, STEP_TIER, STEP_SUBJECTS]
-
-function StepDots({ current }) {
-  return (
-    <div className="flex items-center justify-center gap-2 mb-8">
-      {STEPS.map((s, i) => {
-        const currentIdx = STEPS.indexOf(current)
-        const isCurrent = i === currentIdx
-        const isDone = i < currentIdx
-        return (
-          <div
-            key={s}
-            className={`rounded-full transition-all ${
-              isCurrent
-                ? 'w-3 h-3 bg-blue-600'
-                : isDone
-                ? 'w-3 h-3 bg-blue-400'
-                : 'w-2.5 h-2.5 bg-gray-300'
-            }`}
-          />
-        )
-      })}
-    </div>
-  )
-}
+import IELTSQuestionnaire from '@/components/onboarding/IELTSQuestionnaire'
 
 export default function OnboardingPage() {
   const router = useRouter()
-  const [step, setStep] = useState(STEP_WELCOME)
-  const [questionCount, setQuestionCount] = useState(null)
-  const [quizAnswers, setQuizAnswers] = useState([])
-  const [recommendedTier, setRecommendedTier] = useState('balanced')
-  const [selectedTier, setSelectedTier] = useState('balanced')
-  const [subjects, setSubjects] = useState([])
-  const [selectedSubjects, setSelectedSubjects] = useState([])
-  const [saving, setSaving] = useState(false)
-  const [error, setError] = useState(null)
+  const [checking, setChecking] = useState(true)
 
-  // Fetch available subjects on mount
   useEffect(() => {
-    async function fetchSubjects() {
-      const { data, error } = await supabase
-        .from('subjects_new')
-        .select('id, name')
-        .order('name')
-      if (!error && data) {
-        setSubjects(data)
+    let cancelled = false
+    async function check() {
+      const { data: { user } } = await supabase.auth.getUser()
+      if (cancelled) return
+      if (!user) {
+        router.replace('/auth/signin?next=/onboarding')
+        return
       }
+      setChecking(false)
     }
-    fetchSubjects()
-  }, [])
+    check()
+    return () => { cancelled = true }
+  }, [router])
 
-  // --- Step handlers ---
+  async function handleSubmit(answers) {
+    const res = await fetch('/api/onboarding/ielts', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(answers),
+    })
 
-  function handleQuickStart(count) {
-    setQuestionCount(count)
-    setStep(STEP_QUIZ)
-  }
-
-  function handleSkip() {
-    // Skip quiz — go straight to subjects with balanced tier
-    setRecommendedTier('balanced')
-    setSelectedTier('balanced')
-    setStep(STEP_SUBJECTS)
-  }
-
-  function handleQuizComplete(answers) {
-    setQuizAnswers(answers)
-    const tier = recommendTier(answers)
-    setRecommendedTier(tier)
-    setSelectedTier(tier)
-    setStep(STEP_TIER)
-  }
-
-  function handleTierConfirm(tier) {
-    setSelectedTier(tier)
-    setStep(STEP_SUBJECTS)
-  }
-
-  function toggleSubject(id) {
-    setSelectedSubjects((prev) =>
-      prev.includes(id) ? prev.filter((s) => s !== id) : [...prev, id]
-    )
-  }
-
-  async function handleFinish() {
-    setSaving(true)
-    setError(null)
-
-    try {
-      const { data: { user }, error: authErr } = await supabase.auth.getUser()
-      if (authErr || !user) throw new Error('Not authenticated')
-
-      const { error: updateErr } = await supabase
-        .from('student_profiles')
-        .update({
-          personality_answers: quizAnswers,
-          learning_tier: selectedTier,
-          onboarding_complete: true,
-          interested_subjects: selectedSubjects,
-        })
-        .eq('user_id', user.id)
-
-      if (updateErr) throw updateErr
-
-      router.push('/dashboard/student')
-    } catch (err) {
-      setError(err.message || 'Something went wrong. Please try again.')
-      setSaving(false)
+    if (!res.ok) {
+      let message = 'Something went wrong. Please try again.'
+      try {
+        const body = await res.json()
+        if (body?.error) message = body.error
+      } catch {}
+      throw new Error(message)
     }
+
+    const body = await res.json()
+    router.push(body.redirect || '/dashboard/student')
   }
 
-  async function handleSkipAll() {
-    setSaving(true)
-    setError(null)
-
-    try {
-      const { data: { user }, error: authErr } = await supabase.auth.getUser()
-      if (authErr || !user) throw new Error('Not authenticated')
-
-      const { error: updateErr } = await supabase
-        .from('student_profiles')
-        .update({
-          learning_tier: 'balanced',
-          onboarding_complete: false,
-        })
-        .eq('user_id', user.id)
-
-      if (updateErr) throw updateErr
-
-      router.push('/dashboard/student')
-    } catch (err) {
-      setError(err.message || 'Something went wrong. Please try again.')
-      setSaving(false)
-    }
-  }
-
-  // --- Renders ---
-
-  if (step === STEP_WELCOME) {
+  if (checking) {
     return (
-      <div className="space-y-8">
-        <StepDots current={step} />
-
-        <div className="text-center">
-          <h2 className="text-2xl font-bold text-gray-800">Welcome!</h2>
-          <p className="mt-3 text-gray-600">
-            We want to get to know you so we can help you learn the best way
-            possible. How many questions can you answer right now?
-          </p>
-        </div>
-
-        <div className="space-y-3">
-          <button
-            onClick={() => handleQuickStart(5)}
-            className="flex w-full items-center justify-between rounded-2xl border-2 border-blue-200 bg-white px-5 py-4 text-left transition-colors hover:border-blue-500 hover:bg-blue-50 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-offset-2"
-          >
-            <div>
-              <span className="font-semibold text-gray-800">Quick</span>
-              <span className="ml-2 text-sm text-gray-500">5 questions</span>
-            </div>
-            <span className="text-sm text-gray-400">~1 minute</span>
-          </button>
-
-          <button
-            onClick={() => handleQuickStart(10)}
-            className="flex w-full items-center justify-between rounded-2xl border-2 border-blue-200 bg-white px-5 py-4 text-left transition-colors hover:border-blue-500 hover:bg-blue-50 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-offset-2"
-          >
-            <div>
-              <span className="font-semibold text-gray-800">Standard</span>
-              <span className="ml-2 text-sm text-gray-500">10 questions</span>
-            </div>
-            <span className="text-sm text-gray-400">~2 minutes</span>
-          </button>
-
-          <button
-            onClick={() => handleQuickStart(15)}
-            className="flex w-full items-center justify-between rounded-2xl border-2 border-blue-200 bg-white px-5 py-4 text-left transition-colors hover:border-blue-500 hover:bg-blue-50 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-offset-2"
-          >
-            <div>
-              <span className="font-semibold text-gray-800">Full</span>
-              <span className="ml-2 text-sm text-gray-500">15 questions</span>
-            </div>
-            <span className="text-sm text-gray-400">~5 minutes</span>
-          </button>
-
-          <button
-            onClick={handleSkip}
-            className="w-full rounded-2xl border-2 border-dashed border-gray-300 px-5 py-4 text-center text-gray-500 transition-colors hover:border-gray-400 hover:text-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-400 focus:ring-offset-2"
-          >
-            Skip for now
-          </button>
-        </div>
-      </div>
+      <div className="flex justify-center py-20 text-gray-400">Loading…</div>
     )
   }
 
-  if (step === STEP_QUIZ) {
-    const questions = getQuestions(questionCount)
-    return (
-      <div className="space-y-4">
-        <StepDots current={step} />
-        <div>
-          <h2 className="text-xl font-bold text-gray-800">Quick personality quiz</h2>
-          <p className="mt-1 text-sm text-gray-500">
-            Help us personalise your learning experience.
-          </p>
-        </div>
-        <PersonalityQuiz questions={questions} onComplete={handleQuizComplete} />
-      </div>
-    )
-  }
-
-  if (step === STEP_TIER) {
-    return (
-      <div className="space-y-4">
-        <StepDots current={step} />
-        <TierRecommendation
-          recommendedTier={recommendedTier}
-          onConfirm={handleTierConfirm}
-        />
-      </div>
-    )
-  }
-
-  if (step === STEP_SUBJECTS) {
-    return (
-      <div className="space-y-6">
-        <StepDots current={step} />
-
-        <div>
-          <h2 className="text-xl font-bold text-gray-800">Which subjects interest you?</h2>
-          <p className="mt-1 text-sm text-gray-500">
-            These help us personalise your dashboard. Select as many as you like.
-          </p>
-        </div>
-
-        {subjects.length > 0 ? (
-          <div className="grid grid-cols-2 gap-2 sm:grid-cols-3">
-            {subjects.map((subject) => {
-              const isSelected = selectedSubjects.includes(subject.id)
-              return (
-                <button
-                  key={subject.id}
-                  onClick={() => toggleSubject(subject.id)}
-                  className={`rounded-full border px-4 py-2 text-sm font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-offset-2 ${
-                    isSelected
-                      ? 'border-blue-600 bg-blue-600 text-white'
-                      : 'border-gray-200 bg-gray-100 text-gray-600 hover:border-gray-300 hover:bg-gray-200'
-                  }`}
-                >
-                  {subject.name}
-                </button>
-              )
-            })}
-          </div>
-        ) : (
-          <p className="text-sm text-gray-400">Loading subjects…</p>
-        )}
-
-        {error && (
-          <p className="rounded-lg bg-red-50 px-4 py-2 text-sm text-red-600">{error}</p>
-        )}
-
-        <div className="flex flex-col gap-3">
-          <button
-            onClick={handleFinish}
-            disabled={saving}
-            className="w-full rounded-xl bg-blue-600 px-6 py-3 font-semibold text-white transition-opacity hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-offset-2 disabled:opacity-60"
-          >
-            {saving ? 'Saving…' : 'Start learning'}
-          </button>
-
-          <button
-            onClick={handleSkipAll}
-            disabled={saving}
-            className="text-center text-sm text-gray-400 hover:text-gray-600 disabled:opacity-60"
-          >
-            Skip and set up later
-          </button>
-        </div>
-      </div>
-    )
-  }
-
-  return null
+  return <IELTSQuestionnaire onSubmit={handleSubmit} />
 }

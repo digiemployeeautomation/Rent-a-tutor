@@ -6,9 +6,8 @@ import { supabase } from '@/lib/supabase'
 
 const NAV_LINKS = [
   { href: '/dashboard/student', label: 'Home' },
-  { href: '/learn', label: 'Learn' },
+  { href: '/practice', label: 'Practice' },
   { href: '/dashboard/student/leaderboard', label: 'Leaderboard' },
-  { href: '/dashboard/student/settings', label: 'Settings' },
 ]
 
 const PUBLIC_LINKS = [
@@ -59,7 +58,7 @@ export default function Navbar() {
           {loading ? (
             <div className="w-8 h-8 rounded-full bg-gray-100 animate-pulse" />
           ) : user ? (
-            <Link href="/dashboard/student/settings" className="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 text-sm font-semibold">
+            <Link href="/dashboard/student" className="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 text-sm font-semibold">
               {user.user_metadata?.full_name?.[0]?.toUpperCase() || '?'}
             </Link>
           ) : (
