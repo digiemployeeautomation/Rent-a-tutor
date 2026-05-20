@@ -7,7 +7,6 @@ import { supabase } from '@/lib/supabase'
 const NAV_LINKS = [
   { href: '/dashboard/student', label: 'Home' },
   { href: '/practice', label: 'Practice' },
-  { href: '/dashboard/student/leaderboard', label: 'Leaderboard' },
 ]
 
 const PUBLIC_LINKS = [
