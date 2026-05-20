@@ -45,32 +45,31 @@ function LoginForm() {
       return
     }
 
+    // Role check is best-effort; failures fall through to the student path.
     const { data: profile } = await supabase
       .from('profiles')
       .select('role')
       .eq('id', data.user.id)
-      .single()
+      .maybeSingle()
 
     const role = profile?.role ?? data.user.user_metadata?.role ?? 'student'
 
-    // Admins always go to the separate admin console — never use redirectTo
     if (role === 'admin') {
       window.location.href = 'https://admin.rentatutor.co.zm'
       return
     }
 
-    // For students, check onboarding completion before redirecting
-    const { data: studentProfile } = await supabase
-      .from('student_profiles')
-      .select('onboarding_complete')
+    // Onboarding gate: students without an IELTS profile go to /onboarding.
+    const { data: ieltsProfile } = await supabase
+      .from('user_ielts_profile')
+      .select('user_id')
       .eq('user_id', data.user.id)
-      .single()
+      .maybeSingle()
 
-    if (!studentProfile || !studentProfile.onboarding_complete) {
+    if (!ieltsProfile) {
       return router.push('/onboarding')
     }
 
-    // Only honour redirectTo if it matches the user's actual role
     const safeDest = getSafeRedirect(redirectTo, role)
     if (safeDest) return router.push(safeDest)
 

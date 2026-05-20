@@ -6,12 +6,11 @@ import { useRouter } from 'next/navigation'
 
 export default function RegisterPage() {
   const router = useRouter()
-  const [fullName, setFullName]     = useState('')
-  const [email, setEmail]           = useState('')
-  const [password, setPassword]     = useState('')
-  const [formLevel, setFormLevel]   = useState(1)
-  const [loading, setLoading]       = useState(false)
-  const [error, setError]           = useState('')
+  const [fullName, setFullName] = useState('')
+  const [email, setEmail]       = useState('')
+  const [password, setPassword] = useState('')
+  const [loading, setLoading]   = useState(false)
+  const [error, setError]       = useState('')
 
   async function handleRegister(e) {
     e.preventDefault()
@@ -20,7 +19,7 @@ export default function RegisterPage() {
 
     const name = fullName.trim()
 
-    const { data, error: signUpError } = await supabase.auth.signUp({
+    const { error: signUpError } = await supabase.auth.signUp({
       email,
       password,
       options: {
@@ -34,22 +33,7 @@ export default function RegisterPage() {
       return
     }
 
-    const { error: profileError } = await supabase
-      .from('student_profiles')
-      .insert({
-        user_id: data.user.id,
-        display_name: name,
-        form_level: formLevel,
-        learning_tier: 'balanced',
-        onboarding_complete: false,
-      })
-
-    if (profileError) {
-      setError(profileError.message)
-      setLoading(false)
-      return
-    }
-
+    // Auth-only user. Profile is built in /onboarding.
     router.push('/onboarding')
   }
 
@@ -63,7 +47,7 @@ export default function RegisterPage() {
 
         <div className="bg-white border border-gray-200 rounded-2xl p-8">
           <h1 className="font-serif text-xl mb-1">Create your account</h1>
-          <p className="text-sm text-gray-500 mb-6">Start your learning journey</p>
+          <p className="text-sm text-gray-500 mb-6">Free placement diagnostic, no credit card.</p>
 
           {error && (
             <div className="bg-red-50 text-red-700 text-sm px-4 py-3 rounded-lg mb-4">
@@ -108,21 +92,6 @@ export default function RegisterPage() {
                 className="w-full border border-gray-300 rounded-lg px-4 py-2.5 text-sm outline-none focus:border-blue-400"
                 placeholder="At least 6 characters"
               />
-            </div>
-
-            <div>
-              <label className="block text-sm text-gray-600 mb-1">Form level</label>
-              <select
-                required
-                value={formLevel}
-                onChange={e => setFormLevel(Number(e.target.value))}
-                className="w-full border border-gray-300 rounded-lg px-4 py-2.5 text-sm outline-none focus:border-blue-400 bg-white"
-              >
-                <option value={1}>Form 1</option>
-                <option value={2}>Form 2</option>
-                <option value={3}>Form 3</option>
-                <option value={4}>Form 4</option>
-              </select>
             </div>
 
             <button
