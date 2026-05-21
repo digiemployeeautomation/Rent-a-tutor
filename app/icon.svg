@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+  <rect width="32" height="32" rx="6" fill="#2563eb"/>
+  <text x="50%" y="55%" text-anchor="middle" dominant-baseline="middle"
+        font-family="Georgia,serif" font-size="20" font-weight="700" fill="#ffffff">R</text>
+  <text x="22" y="12" text-anchor="middle" dominant-baseline="middle"
+        font-family="Georgia,serif" font-size="9" font-style="italic" fill="#f9a8d4">a</text>
+</svg>
