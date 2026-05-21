@@ -3,11 +3,11 @@
 // Server component that loads a Writing practice item and renders the
 // submission form. Auth-gated via the server-side Supabase client.
 import { redirect } from 'next/navigation'
-import { createServerClient } from '@/lib/supabaseServer'
+import { createServerComponentClientFor } from '@/lib/supabaseServer'
 import SubmissionForm from './SubmissionForm'
 
 export default async function WritingPracticePage({ params }) {
-  const supabase = createServerClient()
+  const supabase = createServerComponentClientFor()
 
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) {

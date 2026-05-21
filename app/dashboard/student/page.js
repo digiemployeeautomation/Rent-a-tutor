@@ -5,7 +5,7 @@
 // from the legacy schools schema.
 import Link from 'next/link'
 import { redirect } from 'next/navigation'
-import { createServerClient } from '@/lib/supabaseServer'
+import { createServerComponentClientFor } from '@/lib/supabaseServer'
 import FeedLayout from '@/components/layout/FeedLayout'
 
 const SECTION_LABEL = {
@@ -27,7 +27,7 @@ const SUB_SKILL_LABELS = {
 }
 
 export default async function StudentDashboardPage() {
-  const supabase = createServerClient()
+  const supabase = createServerComponentClientFor()
 
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) {

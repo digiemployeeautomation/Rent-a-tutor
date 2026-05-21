@@ -4,7 +4,7 @@
 // only ever see their own grades.
 import Link from 'next/link'
 import { redirect } from 'next/navigation'
-import { createServerClient } from '@/lib/supabaseServer'
+import { createServerComponentClientFor } from '@/lib/supabaseServer'
 
 const CRITERION_LABELS = {
   task_response: 'Task Response',
@@ -14,7 +14,7 @@ const CRITERION_LABELS = {
 }
 
 export default async function WritingResultPage({ params }) {
-  const supabase = createServerClient()
+  const supabase = createServerComponentClientFor()
 
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) {

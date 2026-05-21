@@ -4,7 +4,7 @@
 // type and lets the student start one. Auth-gated.
 import Link from 'next/link'
 import { redirect } from 'next/navigation'
-import { createServerClient } from '@/lib/supabaseServer'
+import { createServerComponentClientFor } from '@/lib/supabaseServer'
 
 const SECTION_LABELS = {
   writing_task:    'Writing',
@@ -30,7 +30,7 @@ function hrefForItem(item) {
 }
 
 export default async function PracticeIndexPage() {
-  const supabase = createServerClient()
+  const supabase = createServerComponentClientFor()
 
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) redirect('/auth/login?next=/practice')
