@@ -7,7 +7,7 @@
 // For the demo this only handles writing_task. Speaking and L/R will get
 // their own grader paths.
 import { NextResponse } from 'next/server'
-import { createServerClient } from '@/lib/supabaseServer'
+import { createServerClient, createServiceRoleClient } from '@/lib/supabaseServer'
 import { stubGradeWriting } from '@/lib/ai/stub-grader'
 import { gradeWriting, WRITING_GRADER_VERSION } from '@/lib/ai/gateway'
 
@@ -18,6 +18,9 @@ function isStubMode() {
 export async function POST(_request, { params }) {
   const { id: submissionId } = params
   const supabase = createServerClient()
+  // Writes to grades + submission status bypass RLS — only the server
+  // grader should be able to set band scores.
+  const admin = createServiceRoleClient()
 
   const { data: { user }, error: authErr } = await supabase.auth.getUser()
   if (authErr || !user) {
@@ -95,7 +98,7 @@ export async function POST(_request, { params }) {
   } catch (err) {
     console.error('[grade] grading error:', err)
     // Persist an error grade row so we don't lose the attempt.
-    await supabase.from('grades').insert({
+    await admin.from('grades').insert({
       submission_id: submissionId,
       band_overall: null,
       band_per_criterion: null,
@@ -103,14 +106,14 @@ export async function POST(_request, { params }) {
       graded_by: isStubMode() ? 'stub' : 'auto-llm',
       model_version: WRITING_GRADER_VERSION,
     })
-    await supabase
+    await admin
       .from('submissions')
       .update({ status: 'error', submitted_at: new Date().toISOString() })
       .eq('id', submissionId)
     return NextResponse.json({ error: 'Grading failed' }, { status: 500 })
   }
 
-  const { data: gradeRow, error: insertErr } = await supabase
+  const { data: gradeRow, error: insertErr } = await admin
     .from('grades')
     .insert({
       submission_id: submissionId,
@@ -134,7 +137,7 @@ export async function POST(_request, { params }) {
     return NextResponse.json({ error: 'Failed to persist grade' }, { status: 500 })
   }
 
-  await supabase
+  await admin
     .from('submissions')
     .update({ status: 'graded', submitted_at: new Date().toISOString() })
     .eq('id', submissionId)
