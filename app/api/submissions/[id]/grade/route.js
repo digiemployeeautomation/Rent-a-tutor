@@ -1,15 +1,12 @@
 // app/api/submissions/[id]/grade/route.js
 //
-// Grades a writing submission. Reads the submission, picks the stub or
-// live grader based on USE_STUB_GRADER, persists a grade row, and updates
-// the submission status. Returns the grade JSON.
-//
-// For the demo this only handles writing_task. Speaking and L/R will get
-// their own grader paths.
+// Grades a submission by dispatching to the registered grader for the
+// practice item's type (see lib/grading/index.js). The route owns auth,
+// ownership, idempotency, persistence, and the error path; each grader owns
+// only the scoring logic. Adding a section does not change this file.
 import { NextResponse } from 'next/server'
 import { createServerClient, createServiceRoleClient } from '@/lib/supabaseServer'
-import { stubGradeWriting } from '@/lib/ai/stub-grader'
-import { gradeWriting, WRITING_GRADER_VERSION } from '@/lib/ai/gateway'
+import { getGrader } from '@/lib/grading'
 
 function isStubMode() {
   return (process.env.USE_STUB_GRADER ?? '').toLowerCase() === 'true'
@@ -19,7 +16,8 @@ export async function POST(_request, { params }) {
   const { id: submissionId } = params
   const supabase = createServerClient()
   // Writes to grades + submission status bypass RLS — only the server
-  // grader should be able to set band scores.
+  // grader should be able to set scores. The deterministic grader also reads
+  // answer keys (server-only) through this client.
   const admin = createServiceRoleClient()
 
   const { data: { user }, error: authErr } = await supabase.auth.getUser()
@@ -54,7 +52,7 @@ export async function POST(_request, { params }) {
     return NextResponse.json({ grade: existingGrade })
   }
 
-  // Load the practice item to learn task type + prompt
+  // Load the practice item to learn its type
   const { data: item, error: itemErr } = await supabase
     .from('practice_items')
     .select('id, type, sub_skill, variant, payload')
@@ -64,37 +62,18 @@ export async function POST(_request, { params }) {
   if (itemErr || !item) {
     return NextResponse.json({ error: 'Practice item not found' }, { status: 404 })
   }
-  if (item.type !== 'writing_task') {
-    return NextResponse.json({ error: `Grading for ${item.type} is not implemented yet` }, { status: 400 })
+
+  const grader = getGrader(item.type)
+  if (!grader) {
+    return NextResponse.json(
+      { error: `Grading for ${item.type} is not implemented yet` },
+      { status: 400 },
+    )
   }
 
-  const taskPrompt   = item.payload?.prompt ?? ''
-  const responseText = submission.payload?.response_text ?? ''
-
-  let gradePayload
-  let gradedBy
-  let modelVersion
-  let costCents = null
-  let latencyMs = null
-
+  let fields
   try {
-    if (isStubMode()) {
-      gradePayload = stubGradeWriting({ taskType: item.sub_skill, taskPrompt, responseText })
-      gradedBy = 'stub'
-      modelVersion = `stub@${WRITING_GRADER_VERSION}`
-    } else {
-      const { grade, meta } = await gradeWriting({
-        taskType: item.sub_skill,
-        variant: item.variant,
-        taskPrompt,
-        responseText,
-      })
-      gradePayload = grade
-      gradedBy = 'auto-llm'
-      modelVersion = meta.model_version
-      costCents = meta.cost_cents
-      latencyMs = meta.latency_ms
-    }
+    fields = await grader(item, submission, { admin, isStub: isStubMode() })
   } catch (err) {
     console.error('[grade] grading error:', err)
     // Persist an error grade row so we don't lose the attempt.
@@ -103,8 +82,8 @@ export async function POST(_request, { params }) {
       band_overall: null,
       band_per_criterion: null,
       feedback: { error: err.message || 'Grading failed' },
-      graded_by: isStubMode() ? 'stub' : 'auto-llm',
-      model_version: WRITING_GRADER_VERSION,
+      graded_by: item.type === 'writing_task' ? (isStubMode() ? 'stub' : 'auto-llm') : 'deterministic',
+      model_version: 'error',
     })
     await admin
       .from('submissions')
@@ -117,17 +96,13 @@ export async function POST(_request, { params }) {
     .from('grades')
     .insert({
       submission_id: submissionId,
-      band_overall: gradePayload.band_overall,
-      band_per_criterion: gradePayload.band_per_criterion,
-      feedback: {
-        per_criterion: gradePayload.feedback,
-        corrections: gradePayload.corrections,
-        model_rewrite: gradePayload.model_rewrite,
-      },
-      graded_by: gradedBy,
-      model_version: modelVersion,
-      cost_cents: costCents,
-      latency_ms: latencyMs,
+      band_overall: fields.band_overall,
+      band_per_criterion: fields.band_per_criterion,
+      feedback: fields.feedback,
+      graded_by: fields.graded_by,
+      model_version: fields.model_version,
+      cost_cents: fields.cost_cents ?? null,
+      latency_ms: fields.latency_ms ?? null,
     })
     .select('*')
     .single()

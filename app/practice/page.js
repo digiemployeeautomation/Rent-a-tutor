@@ -5,29 +5,7 @@
 import Link from 'next/link'
 import { redirect } from 'next/navigation'
 import { createServerComponentClientFor } from '@/lib/supabaseServer'
-
-const SECTION_LABELS = {
-  writing_task:    'Writing',
-  reading_set:     'Reading',
-  listening_set:   'Listening',
-  speaking_task:   'Speaking',
-}
-
-const SUB_SKILL_LABELS = {
-  'listening':                'Listening',
-  'reading':                  'Reading',
-  'writing-task-1-academic':  'Task 1 (Academic)',
-  'writing-task-1-general':   'Task 1 (General)',
-  'writing-task-2':           'Task 2',
-  'speaking-part-1':          'Speaking Part 1',
-  'speaking-part-2':          'Speaking Part 2',
-  'speaking-part-3':          'Speaking Part 3',
-}
-
-function hrefForItem(item) {
-  if (item.type === 'writing_task') return `/practice/writing/${item.id}`
-  return null
-}
+import { labelForType, subSkillLabel, hrefForItem } from '@/lib/ielts/sections'
 
 export default async function PracticeIndexPage() {
   const supabase = createServerComponentClientFor()
@@ -62,16 +40,16 @@ export default async function PracticeIndexPage() {
           {Object.entries(groups).map(([type, list]) => (
             <section key={type}>
               <h2 className="text-sm font-semibold uppercase tracking-wide text-gray-500">
-                {SECTION_LABELS[type] || type}
+                {labelForType(type)}
               </h2>
               <div className="mt-3 grid grid-cols-1 gap-3 sm:grid-cols-2">
                 {list.map((item) => {
                   const href = hrefForItem(item)
-                  const title = item.payload?.title || SUB_SKILL_LABELS[item.sub_skill] || item.sub_skill
+                  const title = item.payload?.title || subSkillLabel(item.sub_skill)
                   const card = (
                     <div className="flex h-full flex-col rounded-2xl border border-gray-200 bg-white p-5 transition-shadow hover:shadow-md">
                       <div className="flex items-center gap-2 text-xs uppercase tracking-wide text-gray-400">
-                        <span>{SUB_SKILL_LABELS[item.sub_skill] || item.sub_skill}</span>
+                        <span>{subSkillLabel(item.sub_skill)}</span>
                         <span>•</span>
                         <span>Band {Number(item.difficulty_band).toFixed(1)}</span>
                       </div>
