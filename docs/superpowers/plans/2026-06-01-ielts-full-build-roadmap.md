@@ -41,11 +41,12 @@ Seam contracts (defined in Wave 1):
 - Audio storage helper (Supabase Storage signed-URL upload/read) for Listening + Speaking
 - Section descriptor module + practice index driven by it
 
-## Wave 2 — The four sections ⬜  *(parallel agents, isolated worktrees)*
-- **Reading** — deterministic grader + passage/questions UI + results + 1–2 seed sets (all 11 question types via the 3 primitives)
-- **Listening** — deterministic grader + audio player UI + results + seed set(s)
-- **Writing Task 1** — Academic + General, AI-graded, extends existing Writing flow + rubric prompts
-- **Speaking** — recording UI + audio upload + Whisper STT + Vercel Workflow + LLM grade + results
+## Wave 2 — The four sections 🔨  *(built 2026-06-02 — awaiting review gate)*
+Plan: `docs/superpowers/plans/2026-06-02-ielts-wave2-sections.md`. All four sections plug into the Wave 1 seams; the only shared edits were flipping `ready` flags + registering the speaking grader. 73 tests pass, build clean.
+- **Reading** ✅ — deterministic grader (Wave 1) + passage/questions UI (QuestionSetRunner via the 3 primitives) + results + academic seed set
+- **Listening** ✅ — deterministic grader + audio player UI (service-role-signed URL) + results + seed set (placeholder audio path; real TTS is Wave 3)
+- **Writing Task 1** ✅ — existing Writing flow + writing-grader-v1 prompt already handle Academic + General; added seed tasks (chart + letter)
+- **Speaking** ✅ — recorder UI + service-role audio upload + Whisper STT + LLM grade + results. Built synchronous through the grade route (Vercel Workflow seam documented for a later durability upgrade — `submissions.workflow_id` reserved)
 
 ## Wave 3 — Content production pipeline ⬜  (🔒 the content *bank* is gated on owner+reviewer)
 - Generation service + per-type prompt templates (`lib/content/prompts/`)
