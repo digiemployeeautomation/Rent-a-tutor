@@ -21,6 +21,9 @@ export default function SetResult({
   backHref,
   retryHref,
   dashboardHref = '/dashboard/student',
+  pathHref,
+  nextHref,
+  nextLabel,
   title = 'Your score',
 }) {
   if (!grade) {
@@ -94,6 +97,23 @@ export default function SetResult({
                 <dd className="text-gray-800">{formatAnswer(q.correct_answer)}</dd>
               </div>
             </dl>
+            {q.explanation && (
+              <div className="mt-3 rounded-xl bg-blue-50 px-4 py-3 text-sm text-gray-700">
+                {q.explanation.rationale && (
+                  <p><span className="font-semibold text-blue-700">Why: </span>{q.explanation.rationale}</p>
+                )}
+                {q.explanation.evidence && (
+                  <p className="mt-1 text-gray-600"><span className="font-medium">In the text: </span>{q.explanation.evidence}</p>
+                )}
+                {q.explanation.distractors && (
+                  <ul className="mt-1 space-y-0.5 text-gray-600">
+                    {Object.entries(q.explanation.distractors).map(([opt, note]) => (
+                      <li key={opt}><span className="font-medium">{opt}: </span>{note}</li>
+                    ))}
+                  </ul>
+                )}
+              </div>
+            )}
           </div>
         ))}
       </section>
@@ -105,6 +125,22 @@ export default function SetResult({
         >
           Back to dashboard
         </Link>
+        {pathHref ? (
+          <Link
+            href={pathHref}
+            className="rounded-xl border border-gray-200 px-6 py-3 text-center font-semibold text-gray-600 transition-colors hover:bg-gray-50"
+          >
+            Back to Reading path
+          </Link>
+        ) : null}
+        {nextHref ? (
+          <Link
+            href={nextHref}
+            className="rounded-xl bg-blue-600 px-6 py-3 text-center font-semibold text-white transition-colors hover:bg-blue-700"
+          >
+            {nextLabel || 'Next module'} →
+          </Link>
+        ) : null}
         {retryHref ? (
           <Link
             href={retryHref}
