@@ -54,7 +54,7 @@ INSERT INTO practice_items (
 );
 
 -- Q1 — matching_headings (single_select with options.choices)
-INSERT INTO practice_questions (practice_item_id, position, question_type, prompt, options, answer_key) VALUES
+INSERT INTO practice_questions (practice_item_id, position, question_type, prompt, options, answer_key, explanation) VALUES
 ('11111111-1111-4111-8111-111111111111', 1, 'matching_headings',
  'Choose the correct heading for paragraph B.',
  jsonb_build_object('choices', jsonb_build_array(
@@ -62,24 +62,34 @@ INSERT INTO practice_questions (practice_item_id, position, question_type, promp
    jsonb_build_object('value', 'ii',  'label', 'ii. The dangers of traffic'),
    jsonb_build_object('value', 'iii', 'label', 'iii. Warmer city temperatures')
  )),
- '{"value": "i"}'::jsonb);
+ '{"value": "i"}'::jsonb,
+ jsonb_build_object(
+   'rationale', 'Paragraph B is about the unusually varied diet city bees enjoy — hundreds of flowering plants — which is "a wider choice of food".',
+   'evidence', 'Paragraph B: "a city block can contain hundreds of different flowering plants".'
+ ));
 
--- Q2 — tfng (single_select, fixedOptions from the registry → options stays null)
-INSERT INTO practice_questions (practice_item_id, position, question_type, prompt, options, answer_key) VALUES
+-- Q2 — tfng
+INSERT INTO practice_questions (practice_item_id, position, question_type, prompt, options, answer_key, explanation) VALUES
 ('11111111-1111-4111-8111-111111111111', 2, 'tfng',
  'City bees usually have less food available to them than bees on farmland.',
- NULL,
- '{"value": "FALSE"}'::jsonb);
+ NULL, '{"value": "FALSE"}'::jsonb,
+ jsonb_build_object(
+   'rationale', 'The passage says urban variety means bees rarely run short of food — the opposite of the statement, so it is False (not Not Given).',
+   'evidence', 'Paragraph B: "urban bees rarely run short of food."'
+ ));
 
 -- Q3 — tfng (Not Given)
-INSERT INTO practice_questions (practice_item_id, position, question_type, prompt, options, answer_key) VALUES
+INSERT INTO practice_questions (practice_item_id, position, question_type, prompt, options, answer_key, explanation) VALUES
 ('11111111-1111-4111-8111-111111111111', 3, 'tfng',
  'More bee species live in cities than in the countryside.',
- NULL,
- '{"value": "NOT GIVEN"}'::jsonb);
+ NULL, '{"value": "NOT GIVEN"}'::jsonb,
+ jsonb_build_object(
+   'rationale', 'The passage says many species thrive in cities but never compares the number of city species with the countryside, so we cannot tell.',
+   'evidence', 'No sentence compares city and countryside species counts.'
+ ));
 
 -- Q4 — mcq_single (single_select with options.choices)
-INSERT INTO practice_questions (practice_item_id, position, question_type, prompt, options, answer_key) VALUES
+INSERT INTO practice_questions (practice_item_id, position, question_type, prompt, options, answer_key, explanation) VALUES
 ('11111111-1111-4111-8111-111111111111', 4, 'mcq_single',
  'According to the passage, the urban heat island effect allows bees to',
  jsonb_build_object('choices', jsonb_build_array(
@@ -88,18 +98,31 @@ INSERT INTO practice_questions (practice_item_id, position, question_type, promp
    jsonb_build_object('value', 'C', 'label', 'C. avoid the use of pesticides.'),
    jsonb_build_object('value', 'D', 'label', 'D. travel between cities more easily.')
  )),
- '{"value": "B"}'::jsonb);
+ '{"value": "B"}'::jsonb,
+ jsonb_build_object(
+   'rationale', 'Warmer cities let bees start foraging earlier and stay active later into autumn — a longer foraging season.',
+   'evidence', 'Paragraph C: "begin foraging earlier in the year and to remain active later into the autumn."',
+   'distractors', jsonb_build_object('A', 'Honey production is never mentioned.')
+ ));
 
 -- Q5 — sentence_completion (text_fill)
-INSERT INTO practice_questions (practice_item_id, position, question_type, prompt, options, answer_key) VALUES
+INSERT INTO practice_questions (practice_item_id, position, question_type, prompt, options, answer_key, explanation) VALUES
 ('11111111-1111-4111-8111-111111111111', 5, 'sentence_completion',
  'Conservationists suggest planting connected ____ of flowers to keep bee numbers stable.',
  jsonb_build_object('word_limit', 1),
- '{"accepted": ["corridors", "corridor"], "word_limit": 1}'::jsonb);
+ '{"accepted": ["corridors", "corridor"], "word_limit": 1}'::jsonb,
+ jsonb_build_object(
+   'rationale', 'The passage uses the exact phrase "connected corridors of flowers".',
+   'evidence', 'Paragraph D: "planting connected corridors of flowers would help".'
+ ));
 
 -- Q6 — short_answer (text_fill, numeric)
-INSERT INTO practice_questions (practice_item_id, position, question_type, prompt, options, answer_key) VALUES
+INSERT INTO practice_questions (practice_item_id, position, question_type, prompt, options, answer_key, explanation) VALUES
 ('11111111-1111-4111-8111-111111111111', 6, 'short_answer',
  'How many wild bee species were counted in the survey of one European capital?',
  jsonb_build_object('word_limit', 2),
- '{"accepted": ["50", "more than 50", "fifty"], "word_limit": 2}'::jsonb);
+ '{"accepted": ["50", "more than 50", "fifty"], "word_limit": 2}'::jsonb,
+ jsonb_build_object(
+   'rationale', 'The final sentence reports the survey counted more than 50 wild bee species.',
+   'evidence', 'Paragraph D: "more than 50 wild bee species in a single survey of one large European capital."'
+ ));
