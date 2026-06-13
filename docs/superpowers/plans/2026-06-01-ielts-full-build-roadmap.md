@@ -44,6 +44,7 @@ Seam contracts (defined in Wave 1):
 ## Wave 2 — The four sections 🔨  *(built 2026-06-02 — awaiting review gate)*
 Plan: `docs/superpowers/plans/2026-06-02-ielts-wave2-sections.md`. All four sections plug into the Wave 1 seams; the only shared edits were flipping `ready` flags + registering the speaking grader. 73 tests pass, build clean.
 - **Reading** ✅ — deterministic grader (Wave 1) + passage/questions UI (QuestionSetRunner via the 3 primitives) + results + academic seed set
+  - **Teach-then-test layer** ✅ (2026-06-13) — `skill_lessons` table + server-only `practice_questions.explanation` (migration 008), `/learn/reading` path hub + `/learn/reading/[slug]` lessons, explained results, and a fully-worked True/False/Not Given module as the format template. Engine + one module shipped; bulk lesson authoring for the other question types is owned by the CAO (Kripa). Plan: `docs/superpowers/plans/2026-06-04-reading-teach-then-test.md`.
 - **Listening** ✅ — deterministic grader + audio player UI (service-role-signed URL) + results + seed set (placeholder audio path; real TTS is Wave 3)
 - **Writing Task 1** ✅ — existing Writing flow + writing-grader-v1 prompt already handle Academic + General; added seed tasks (chart + letter)
 - **Speaking** ✅ — recorder UI + service-role audio upload + Whisper STT + LLM grade + results. Built synchronous through the grade route (Vercel Workflow seam documented for a later durability upgrade — `submissions.workflow_id` reserved)
