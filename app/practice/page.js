@@ -31,6 +31,17 @@ export default async function PracticeIndexPage() {
       <h1 className="text-3xl font-bold text-gray-800">Practice library</h1>
       <p className="mt-2 text-gray-500">Pick a task and get instant band-score feedback.</p>
 
+      <Link
+        href="/learn/reading"
+        className="mt-6 flex items-center justify-between rounded-2xl border-2 border-blue-600 bg-blue-50 px-6 py-4"
+      >
+        <span>
+          <span className="block text-base font-semibold text-blue-800">Learn Reading — step by step</span>
+          <span className="mt-0.5 block text-sm text-blue-700">Strategy lessons, guided practice, then a full exam.</span>
+        </span>
+        <span className="shrink-0 text-sm font-semibold text-blue-700">Start →</span>
+      </Link>
+
       {Object.keys(groups).length === 0 ? (
         <div className="mt-10 rounded-2xl border border-gray-200 bg-white px-6 py-12 text-center">
           <p className="text-gray-500">No tasks available yet. Check back soon.</p>
