@@ -7,6 +7,7 @@ import Link from 'next/link'
 import { redirect } from 'next/navigation'
 import { createServerComponentClientFor } from '@/lib/supabaseServer'
 import SetResult from '@/components/practice/SetResult'
+import { nextModule, moduleForDrill } from '@/lib/ielts/reading-modules'
 
 // Per-user, per-submission — never cacheable. Forcing dynamic prevents a
 // stale "grading in progress" view if a user lands before the grade commits.
@@ -48,6 +49,20 @@ export default async function ReadingResultPage({ params }) {
 
   const backHref = `/practice/reading/${params.itemId}`
 
+  const { data: modules } = await supabase
+    .from('skill_lessons')
+    .select('slug, title, drill_item_id, position')
+    .eq('section', 'reading')
+    .eq('status', 'published')
+    .order('position', { ascending: true })
+
+  const mods = modules ?? []
+  const isDrill = !!moduleForDrill(mods, params.itemId)
+  const next = isDrill ? nextModule(mods, params.itemId) : null
+  const pathHref = isDrill ? '/learn/reading' : undefined
+  const nextHref = next ? `/learn/reading/${next.slug}` : undefined
+  const nextLabel = next ? next.title : undefined
+
   return (
     <main className="mx-auto max-w-3xl px-4 py-10">
       <Link href={backHref} className="text-xs text-gray-400 hover:text-gray-600">
@@ -58,6 +73,9 @@ export default async function ReadingResultPage({ params }) {
       <SetResult
         grade={grade}
         retryHref={backHref}
+        pathHref={pathHref}
+        nextHref={nextHref}
+        nextLabel={nextLabel}
         title="Your raw score"
       />
     </main>
