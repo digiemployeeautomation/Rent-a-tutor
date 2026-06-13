@@ -6,7 +6,7 @@
 // grade.feedback.per_question. Handles grading-in-progress and error states so
 // both section result pages stay tiny.
 //
-// Props: { grade, backHref, retryHref, dashboardHref, title }
+// Props: { grade, backHref, retryHref, dashboardHref, pathHref, nextHref, nextLabel, title }
 import Link from 'next/link'
 
 function formatAnswer(value) {

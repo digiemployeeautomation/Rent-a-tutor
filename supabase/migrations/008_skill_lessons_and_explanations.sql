@@ -43,3 +43,9 @@ CREATE POLICY "skill_lessons_read_published"
 -- Per-question explanation. Server-only: intentionally NOT granted to
 -- anon/authenticated (table-wide SELECT was revoked in migration 006).
 ALTER TABLE practice_questions ADD COLUMN IF NOT EXISTS explanation JSONB;
+
+-- Defensive belt-and-braces: explicitly revoke the column from the client
+-- roles. This is a no-op today (006 revoked table-wide SELECT and grants are a
+-- per-column allowlist that excludes explanation), but it keeps 008
+-- self-documenting and guards against a future blanket GRANT re-exposing it.
+REVOKE SELECT (explanation) ON practice_questions FROM anon, authenticated;

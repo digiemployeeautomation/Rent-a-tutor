@@ -2,7 +2,8 @@
 //
 // Server component that loads a Reading set and renders the passage plus the
 // shared QuestionSetRunner. Auth-gated via the server-side Supabase client;
-// answer keys are never selected here (client-readable columns only).
+// the server-only columns (answer_key, explanation) are never selected here —
+// client-readable columns only.
 import { redirect } from 'next/navigation'
 import { createServerComponentClientFor } from '@/lib/supabaseServer'
 import { subSkillLabel } from '@/lib/ielts/sections'
