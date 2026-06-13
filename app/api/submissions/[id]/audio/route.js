@@ -30,7 +30,7 @@ export async function POST(request, { params }) {
   // Load submission (RLS ensures the user owns it).
   const { data: submission, error: subErr } = await supabase
     .from('submissions')
-    .select('id, user_id, payload')
+    .select('id, user_id, practice_item_id, payload')
     .eq('id', submissionId)
     .single()
 
@@ -39,6 +39,25 @@ export async function POST(request, { params }) {
   }
   if (submission.user_id !== user.id) {
     return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
+  }
+
+  // Only speaking submissions carry audio. Reject other item types so a
+  // non-speaking submission can't accumulate orphaned audio in the private
+  // bucket.
+  const { data: item, error: itemErr } = await supabase
+    .from('practice_items')
+    .select('id, type')
+    .eq('id', submission.practice_item_id)
+    .single()
+
+  if (itemErr || !item) {
+    return NextResponse.json({ error: 'Practice item not found' }, { status: 404 })
+  }
+  if (item.type !== 'speaking_task') {
+    return NextResponse.json(
+      { error: 'Audio upload is only valid for speaking tasks' },
+      { status: 400 },
+    )
   }
 
   // Read the raw audio bytes from the request body.

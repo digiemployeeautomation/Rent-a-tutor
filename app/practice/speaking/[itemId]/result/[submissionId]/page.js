@@ -16,6 +16,10 @@ const CRITERION_LABELS = {
   pronunciation: 'Pronunciation',
 }
 
+// Per-user, per-submission — never cacheable. Forcing dynamic prevents a
+// stale "grading in progress" view if a user lands before the grade commits.
+export const dynamic = 'force-dynamic'
+
 export default async function SpeakingResultPage({ params }) {
   const supabase = createServerComponentClientFor()
 

@@ -6,7 +6,7 @@
 // only the scoring logic. Adding a section does not change this file.
 import { NextResponse } from 'next/server'
 import { createServerClient, createServiceRoleClient } from '@/lib/supabaseServer'
-import { getGrader } from '@/lib/grading'
+import { getGrader, errorGradedBy } from '@/lib/grading'
 
 function isStubMode() {
   return (process.env.USE_STUB_GRADER ?? '').toLowerCase() === 'true'
@@ -82,7 +82,7 @@ export async function POST(_request, { params }) {
       band_overall: null,
       band_per_criterion: null,
       feedback: { error: err.message || 'Grading failed' },
-      graded_by: item.type === 'writing_task' ? (isStubMode() ? 'stub' : 'auto-llm') : 'deterministic',
+      graded_by: errorGradedBy(item.type, isStubMode()),
       model_version: 'error',
     })
     await admin

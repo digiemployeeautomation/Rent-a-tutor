@@ -8,6 +8,10 @@ import { redirect } from 'next/navigation'
 import { createServerComponentClientFor } from '@/lib/supabaseServer'
 import SetResult from '@/components/practice/SetResult'
 
+// Per-user, per-submission — never cacheable. Forcing dynamic prevents a
+// stale "grading in progress" view if a user lands before the grade commits.
+export const dynamic = 'force-dynamic'
+
 export default async function ReadingResultPage({ params }) {
   const supabase = createServerComponentClientFor()
 
