@@ -32,6 +32,12 @@ export default function SlideViewer({ slidesData }) {
     <div className="rounded-2xl border border-gray-100 bg-white shadow-sm overflow-hidden">
       {/* Slide content */}
       <div className="px-8 py-10 min-h-64">
+        {slide.tag && (
+          <p className="mb-3 text-xs font-semibold uppercase tracking-wide text-blue-500">
+            {slide.tag.replace(/-/g, ' ')}
+          </p>
+        )}
+
         {slide.title && (
           <h2 className="font-serif text-2xl font-semibold text-gray-800 mb-4">
             {slide.title}
@@ -61,6 +67,12 @@ export default function SlideViewer({ slidesData }) {
             alt={slide.title ?? `Slide ${currentIndex + 1}`}
             className="mt-4 max-w-full rounded-lg object-contain max-h-64"
           />
+        )}
+
+        {slide.answer && (
+          <div className="mt-4 rounded-xl border-l-4 border-green-400 bg-green-50 px-4 py-3 text-sm text-green-900">
+            <span className="font-semibold">Answer: </span>{slide.answer}
+          </div>
         )}
       </div>
 
