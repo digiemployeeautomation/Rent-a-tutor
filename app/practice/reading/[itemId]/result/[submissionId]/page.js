@@ -77,6 +77,10 @@ export default async function ReadingResultPage({ params }) {
         nextHref={nextHref}
         nextLabel={nextLabel}
         title="Your raw score"
+        band={grade?.band_overall ?? null}
+        bandVariant={grade?.feedback?.band_variant ?? null}
+        timeTakenSeconds={submission?.payload?.time_taken_seconds ?? null}
+        timedOut={submission?.payload?.timed_out ?? false}
       />
     </main>
   )

@@ -8,6 +8,7 @@
 //
 // Props: { grade, backHref, retryHref, dashboardHref, pathHref, nextHref, nextLabel, title }
 import Link from 'next/link'
+import { formatClock } from '@/lib/ielts/exam-timer'
 
 function formatAnswer(value) {
   if (value == null) return '—'
@@ -25,6 +26,10 @@ export default function SetResult({
   nextHref,
   nextLabel,
   title = 'Your score',
+  band = null,
+  bandVariant = null,
+  timeTakenSeconds = null,
+  timedOut = false,
 }) {
   if (!grade) {
     return (
@@ -57,6 +62,23 @@ export default function SetResult({
 
   return (
     <>
+      {band != null ? (
+        <div className="mt-6 rounded-3xl bg-gradient-to-br from-emerald-600 to-emerald-800 px-8 py-10 text-center text-white">
+          <div className="text-sm uppercase tracking-wide text-emerald-100">Estimated IELTS band</div>
+          <div className="mt-2 text-7xl font-bold">{band.toFixed(1)}</div>
+          <div className="mt-2 text-xs text-emerald-100">
+            {bandVariant === 'general' ? 'General Training' : 'Academic'} · estimated from a short set —
+            full-length mocks give a more reliable band.
+          </div>
+          {timeTakenSeconds != null ? (
+            <div className="mt-3 text-sm text-emerald-50">
+              {timedOut
+                ? `⏰ Ran out of time (${formatClock(timeTakenSeconds)})`
+                : `Completed in ${formatClock(timeTakenSeconds)}`}
+            </div>
+          ) : null}
+        </div>
+      ) : null}
       <div className="mt-6 rounded-3xl bg-gradient-to-br from-blue-600 to-blue-800 px-8 py-10 text-center text-white">
         <div className="text-sm uppercase tracking-wide text-blue-200">{title}</div>
         <div className="mt-2 text-7xl font-bold">
@@ -159,9 +181,11 @@ export default function SetResult({
         ) : null}
       </div>
 
-      <p className="mt-8 text-xs text-gray-400">
-        Raw score for this set. A full band score is estimated only across a complete mock test.
-      </p>
+      {band == null ? (
+        <p className="mt-8 text-xs text-gray-400">
+          Raw score for this set. A full band score is estimated only across a complete mock test.
+        </p>
+      ) : null}
     </>
   )
 }
