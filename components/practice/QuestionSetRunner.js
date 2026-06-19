@@ -16,23 +16,43 @@
 // Answer shapes match the submission payload contract:
 //   single_select → string, multi_select → string[], text_fill → string
 
-import { useState } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { useRouter } from 'next/navigation'
 import { getQuestionType, primitiveFor } from '@/lib/ielts/question-types'
 import { subSkillLabel } from '@/lib/ielts/sections'
 import SingleSelect from '@/components/practice/questions/SingleSelect'
 import MultiSelect from '@/components/practice/questions/MultiSelect'
 import TextFill from '@/components/practice/questions/TextFill'
+import { computeRemaining, formatClock } from '@/lib/ielts/exam-timer'
 
-export default function QuestionSetRunner({ item, questions = [], resultBase }) {
+export default function QuestionSetRunner({ item, questions = [], resultBase, timeLimitSeconds = null }) {
   const router = useRouter()
   const [answers, setAnswers] = useState({})
   const [submitting, setSubmitting] = useState(false)
   const [error, setError] = useState(null)
 
+  const timed = typeof timeLimitSeconds === 'number' && timeLimitSeconds > 0
+  const startedAtRef = useRef(null)
+  const [remaining, setRemaining] = useState(timed ? timeLimitSeconds : null)
+  const [timeUp, setTimeUp] = useState(false)
+
+  useEffect(() => {
+    if (!timed) return
+    startedAtRef.current = Date.now()
+    const tick = () => {
+      const left = computeRemaining(startedAtRef.current, timeLimitSeconds, Date.now())
+      setRemaining(left)
+      if (left <= 0) setTimeUp(true)
+    }
+    tick()
+    const interval = setInterval(tick, 1000)
+    return () => clearInterval(interval)
+  }, [timed, timeLimitSeconds])
+
   const payload = item.payload ?? {}
 
   function setAnswer(questionId, value) {
+    if (timeUp) return
     setAnswers((prev) => ({ ...prev, [questionId]: value }))
   }
 
@@ -46,7 +66,15 @@ export default function QuestionSetRunner({ item, questions = [], resultBase }) 
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           practice_item_id: item.id,
-          payload: { answers },
+          payload: {
+            answers,
+            ...(timed
+              ? {
+                  time_taken_seconds: Math.round((Date.now() - (startedAtRef.current ?? Date.now())) / 1000),
+                  timed_out: timeUp,
+                }
+              : {}),
+          },
         }),
       })
       if (!subRes.ok) {
@@ -79,16 +107,34 @@ export default function QuestionSetRunner({ item, questions = [], resultBase }) 
 
   return (
     <div className="space-y-8">
-      <div>
-        <div className="mb-1 text-xs uppercase tracking-wider text-gray-400">
-          {subSkillLabel(item.sub_skill)}
+      <div className="flex items-start justify-between gap-4">
+        <div>
+          <div className="mb-1 text-xs uppercase tracking-wider text-gray-400">
+            {subSkillLabel(item.sub_skill)}
+          </div>
+          <h2 className="text-2xl font-bold text-gray-800">
+            {payload.title || 'Practice set'}
+          </h2>
         </div>
-        <h2 className="text-2xl font-bold text-gray-800">
-          {payload.title || 'Practice set'}
-        </h2>
+        {timed && remaining != null ? (
+          <div
+            className={`shrink-0 rounded-lg px-3 py-1 font-mono text-sm font-semibold ${
+              remaining <= 60 ? 'bg-amber-50 text-amber-700' : 'bg-gray-100 text-gray-600'
+            }`}
+            aria-live="polite"
+          >
+            ⏱ {formatClock(remaining)}
+          </div>
+        ) : null}
       </div>
 
-      <ol className="space-y-6">
+      {timeUp ? (
+        <div className="rounded-lg bg-amber-50 px-4 py-2 text-sm font-medium text-amber-800">
+          ⏰ Time&apos;s up — submit your answers now.
+        </div>
+      ) : null}
+
+      <ol className={`space-y-6 ${timeUp ? 'pointer-events-none opacity-60' : ''}`}>
         {questions.map((question) => {
           const primitive = primitiveFor(question.question_type)
           const meta = getQuestionType(question.question_type)
