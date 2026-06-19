@@ -6,7 +6,10 @@
 // grade.feedback.per_question. Handles grading-in-progress and error states so
 // both section result pages stay tiny.
 //
-// Props: { grade, backHref, retryHref, dashboardHref, pathHref, nextHref, nextLabel, title }
+// Props: { grade, backHref, retryHref, dashboardHref, pathHref, nextHref, nextLabel, title,
+//          band, bandVariant, timeTakenSeconds, timedOut }
+//   - band/bandVariant/timeTakenSeconds/timedOut are optional (mock results only);
+//     when band is null the component renders exactly as before.
 import Link from 'next/link'
 import { formatClock } from '@/lib/ielts/exam-timer'
 
