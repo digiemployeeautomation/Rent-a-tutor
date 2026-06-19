@@ -46,7 +46,9 @@ INSERT INTO practice_items (
       'D. There are dangers, however. Pesticides used in private gardens can harm bees, and busy roads fragment the green spaces they depend on. ' ||
       'Conservationists argue that planting connected corridors of flowers would help urban bee populations remain stable. ' ||
       'Researchers counted more than 50 wild bee species in a single survey of one large European capital.',
-    'minimum_reading_minutes', 20
+    'minimum_reading_minutes', 20,
+    'is_mock', true,
+    'time_limit_seconds', 540
   ),
   'published',
   'seed-v1',
