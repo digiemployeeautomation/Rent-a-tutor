@@ -8,6 +8,7 @@ import { redirect } from 'next/navigation'
 import { createServerComponentClientFor } from '@/lib/supabaseServer'
 import { subSkillLabel } from '@/lib/ielts/sections'
 import QuestionSetRunner from '@/components/practice/QuestionSetRunner'
+import { proportionalLimit } from '@/lib/ielts/exam-timer'
 
 export default async function ReadingPracticePage({ params }) {
   const supabase = createServerComponentClientFor()
@@ -41,6 +42,9 @@ export default async function ReadingPracticePage({ params }) {
     .order('position', { ascending: true })
 
   const payload = item.payload ?? {}
+  const timeLimitSeconds =
+    payload.time_limit_seconds ??
+    (payload.is_mock ? proportionalLimit((questions ?? []).length) : null)
 
   return (
     <main className="mx-auto max-w-3xl px-4 py-10">
@@ -63,6 +67,7 @@ export default async function ReadingPracticePage({ params }) {
           item={item}
           questions={questions ?? []}
           resultBase={`/practice/reading/${item.id}/result`}
+          timeLimitSeconds={timeLimitSeconds}
         />
       </div>
     </main>
