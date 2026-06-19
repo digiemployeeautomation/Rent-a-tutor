@@ -8,15 +8,17 @@
 // the same two-step flow the Writing SubmissionForm uses — before routing to
 // the result page.
 //
-// Props: { item, questions, resultBase }
+// Props: { item, questions, resultBase, timeLimitSeconds }
 //   - item.payload.title / item.sub_skill drive the header
 //   - questions: rows { id, position, prompt, question_type, options }
 //   - resultBase: e.g. `/practice/reading/${item.id}/result` (section-agnostic)
+//   - timeLimitSeconds: positive number → timed set (countdown + warn-and-lock);
+//     null/absent → untimed, behaviour identical to before
 //
 // Answer shapes match the submission payload contract:
 //   single_select → string, multi_select → string[], text_fill → string
 
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect, useRef, useCallback } from 'react'
 import { useRouter } from 'next/navigation'
 import { getQuestionType, primitiveFor } from '@/lib/ielts/question-types'
 import { subSkillLabel } from '@/lib/ielts/sections'
@@ -33,21 +35,33 @@ export default function QuestionSetRunner({ item, questions = [], resultBase, ti
 
   const timed = typeof timeLimitSeconds === 'number' && timeLimitSeconds > 0
   const startedAtRef = useRef(null)
+  const intervalRef = useRef(null)
   const [remaining, setRemaining] = useState(timed ? timeLimitSeconds : null)
   const [timeUp, setTimeUp] = useState(false)
 
+  const stopClock = useCallback(() => {
+    if (intervalRef.current) {
+      clearInterval(intervalRef.current)
+      intervalRef.current = null
+    }
+  }, [])
+
+  // `timed` is derived from timeLimitSeconds, so the prop is the real dependency.
   useEffect(() => {
     if (!timed) return
     startedAtRef.current = Date.now()
     const tick = () => {
       const left = computeRemaining(startedAtRef.current, timeLimitSeconds, Date.now())
       setRemaining(left)
-      if (left <= 0) setTimeUp(true)
+      if (left <= 0) {
+        setTimeUp(true)
+        stopClock() // stop ticking at zero — no wasted renders or repeated SR announcements
+      }
     }
     tick()
-    const interval = setInterval(tick, 1000)
-    return () => clearInterval(interval)
-  }, [timed, timeLimitSeconds])
+    intervalRef.current = setInterval(tick, 1000)
+    return stopClock
+  }, [timed, timeLimitSeconds, stopClock])
 
   const payload = item.payload ?? {}
 
@@ -57,6 +71,7 @@ export default function QuestionSetRunner({ item, questions = [], resultBase, ti
   }
 
   async function handleSubmit() {
+    stopClock() // freeze the clock during the submit/grade round-trip
     setSubmitting(true)
     setError(null)
     try {
