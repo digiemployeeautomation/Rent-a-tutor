@@ -76,5 +76,21 @@ See `docs/reading-cao-test-script.md`.
 - `npm run build` — clean; all reading routes compile.
 - Seed audit — 0 blockers; all types/shapes valid; two over-permissive accepted
   answers tightened to verbatim passage words.
-- **Not** verified end-to-end in a running app against this DB (no seeded test
-  env here) — that is what the CAO test script confirms.
+- **Definitive local apply** — all 10 seed files applied to a real Postgres 16
+  with `ON_ERROR_STOP`: every file applied cleanly and is **re-runnable**
+  (idempotent — counts stable at 10 `reading_set` items / 48 questions /
+  5 modules). SQL-level data checks all passed: all **16 question types**
+  present; every single-select answer exists in its `options`; `mcq_multi`
+  `max == required` with valid values; every text-fill has `accepted[]` +
+  `word_limit`; every question has an `explanation`; exam `is_mock=true`,
+  `time_limit_seconds=540`.
+- Still pending: a click-through in the running app against the live DB (the CAO
+  test script) — UI/UX feel and content-quality review.
+
+## Note: migrations are not fresh-applyable (pre-existing issue)
+A from-scratch migration run fails at `002_lesson_blocks.sql` —
+it references a legacy `profiles` table created **before** `001` (pre-IELTS
+pivot). Your live DB already has `profiles`, so this does **not** affect the live
+project or the reading work. But a brand-new environment (e.g., a fresh staging
+DB) would need the legacy `profiles` table present first. Worth fixing before any
+clean redeploy; out of scope for the reading module.
