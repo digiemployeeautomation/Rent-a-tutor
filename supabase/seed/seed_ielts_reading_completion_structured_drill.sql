@@ -48,7 +48,7 @@ INSERT INTO practice_questions (practice_item_id, position, question_type, promp
 ('bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbbbb', 1, 'flowchart_completion',
  'Flow-chart gap [ 1 ]: After harvesting, workers remove the ____. (ONE WORD)',
  jsonb_build_object('word_limit', 1),
- '{"accepted": ["beans", "seeds"], "word_limit": 1}'::jsonb,
+ '{"accepted": ["beans"], "word_limit": 1}'::jsonb,
  jsonb_build_object(
    'rationale', 'The prose says workers remove the beans after harvesting.',
    'evidence', '"After harvesting, workers remove the beans".'

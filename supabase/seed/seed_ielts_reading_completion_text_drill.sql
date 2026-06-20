@@ -88,7 +88,7 @@ INSERT INTO practice_questions (practice_item_id, position, question_type, promp
 ('aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa', 5, 'short_answer',
  'What does the brain flush out during sleep? (NO MORE THAN TWO WORDS)',
  jsonb_build_object('word_limit', 2),
- '{"accepted": ["proteins", "waste proteins"], "word_limit": 2}'::jsonb,
+ '{"accepted": ["proteins"], "word_limit": 2}'::jsonb,
  jsonb_build_object(
    'rationale', 'During sleep the brain flushes out proteins that build up while awake.',
    'evidence', 'Paragraph C: "flushes out proteins that build up while we are awake".'
