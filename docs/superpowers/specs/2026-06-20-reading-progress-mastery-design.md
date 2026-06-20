@@ -101,18 +101,27 @@ fields):
   (never clear it). `first_viewed_at` preserved.
 Returns the saved row. Mirrors the `/api/submissions` route's auth/ownership shape.
 
-### 5.3 Paginated viewer — `components/lesson/LessonRunner.js` (new, client)
-Props `{ lessonId, blocks, resumeIndex }`. Holds `current` slide index
-(initialised to `resumeIndex` clamped to range). Renders the current block by
-delegating to the existing `SlideViewer` (`slidesData={[blocks[current]]}`) — no
-duplication of block rendering. Controls: Prev / Next + "Slide N of M". On mount
-(auto-log "viewed") and on each index change, POST to `/api/lesson-progress`
-with `{ lessonId, last_slide_index: current, slide_count: blocks.length }`
-(fire-and-forget; failures are non-blocking). `SlideViewer` is unchanged.
+### 5.3 Resume + progress via `SlideViewer` + a thin client wrapper
+`SlideViewer` is **already a client component with internal pagination**
+(Prev/Next, progress dots, "N / total") — so we reuse it, not reinvent it.
+Enhance it with two optional, backward-compatible props:
+- `initialIndex = 0` — the starting slide (clamped to range), for resume.
+- `onSlideChange(index, total)` — optional callback fired on mount and on each
+  navigation.
+Existing call sites (which pass neither prop) are unaffected.
+
+New client wrapper `components/lesson/LessonProgress.js`, props
+`{ lessonId, blocks, resumeIndex }`: renders
+`<SlideViewer slidesData={blocks} initialIndex={resumeIndex} onSlideChange={save} />`,
+where `save(index, total)` POSTs `{ lesson_id, last_slide_index: index,
+slide_count: total }` to `/api/lesson-progress` (fire-and-forget; failures
+non-blocking). The mount-time `onSlideChange` is the auto-log of "viewed". A
+server component cannot pass a function to a client component, so this wrapper
+owns the callback.
 
 ### 5.4 Lesson page — `app/learn/reading/[slug]/page.js`
 Also select `skill_lessons.id`; load the user's `lesson_progress` row for this
-lesson to get `last_slide_index`; render `<LessonRunner lessonId={lesson.id}
+lesson to get `last_slide_index`; render `<LessonProgress lessonId={lesson.id}
 blocks={blocks} resumeIndex={…} />` in place of the direct `SlideViewer`. The
 "Now try it →" drill CTA stays below, always visible.
 
@@ -174,8 +183,9 @@ Add a "Reading & Listening" progress block: reading modules complete / total
 | `lib/ielts/__tests__/lesson-progress.test.js` | **new** tests |
 | `supabase/migrations/009_lesson_progress.sql` | **new** table + RLS |
 | `app/api/lesson-progress/route.js` | **new** upsert endpoint |
-| `components/lesson/LessonRunner.js` | **new** client paginator |
-| `app/learn/reading/[slug]/page.js` | load progress, render LessonRunner |
+| `components/lesson/SlideViewer.js` | **modify** — optional `initialIndex` + `onSlideChange` props |
+| `components/lesson/LessonProgress.js` | **new** thin client wrapper (posts progress) |
+| `app/learn/reading/[slug]/page.js` | load progress, render LessonProgress |
 | `app/learn/reading/page.js` | load views, richer per-module + exam status |
 | `app/dashboard/student/page.js` | mastery card + reading/listening progress + continue |
 
