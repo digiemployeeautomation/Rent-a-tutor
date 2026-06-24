@@ -23,12 +23,42 @@ function getRoleFromUser(user) {
   return user.user_metadata?.role ?? 'student'
 }
 
+// Supabase auth-helpers store the session in cookies named
+// `sb-<project-ref>-auth-token` (chunked as `.0`, `.1`, … for large
+// tokens). If none are present the visitor is definitively logged out,
+// so there is no point making a network round-trip to GoTrue — that
+// blocking call on every anonymous request is what took the whole site
+// down with MIDDLEWARE_INVOCATION_TIMEOUT when Supabase was slow to reach.
+function hasAuthCookie(request) {
+  return request.cookies.getAll().some(c => /^sb-.*-auth-token(\.\d+)?$/.test(c.name))
+}
+
+// Fail open: if validating the session takes too long (Supabase
+// unreachable from this region, cold DB, etc.) treat the user as
+// unauthenticated rather than hanging until the platform kills the
+// function. Protected routes then bounce to login instead of 504-ing
+// the entire site.
+async function getUserWithTimeout(supabase, ms = 3000) {
+  try {
+    const result = await Promise.race([
+      supabase.auth.getUser(),
+      new Promise((_, reject) => setTimeout(() => reject(new Error('auth-timeout')), ms)),
+    ])
+    return result?.data?.user ?? null
+  } catch {
+    return null
+  }
+}
+
 export async function middleware(request) {
   const response = NextResponse.next()
   withSecurityHeaders(response)
   const { pathname } = request.nextUrl
-  const supabase = createMiddlewareClient({ req: request, res: response })
-  const { data: { user } } = await supabase.auth.getUser()
+
+  // Skip the auth network call entirely for logged-out visitors.
+  const user = hasAuthCookie(request)
+    ? await getUserWithTimeout(createMiddlewareClient({ req: request, res: response }))
+    : null
   const role = getRoleFromUser(user)
 
   // ── Logged-in users hitting auth pages ─────────────────────────────────────
