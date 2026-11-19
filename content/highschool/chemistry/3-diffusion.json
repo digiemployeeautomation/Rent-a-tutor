@@ -1,0 +1,249 @@
+{
+  "id": "chemistry-states-of-matter-3",
+  "subject": "chemistry",
+  "form": 1,
+  "term": 1,
+  "topic": "States of Matter",
+  "topicSlug": "states-of-matter",
+  "order": 3,
+  "title": "Diffusion: evidence that particles move",
+  "summary": "Explain diffusion in gases and liquids using moving particles, and predict how temperature and particle mass change its rate.",
+  "minutes": 20,
+  "objectives": [
+    "Define diffusion",
+    "Describe diffusion in gases and liquids and explain why it is faster in gases",
+    "Explain how diffusion and Brownian motion are evidence for moving particles",
+    "Predict how temperature and the mass of particles affect the rate of diffusion"
+  ],
+  "sections": [
+    {
+      "type": "explain",
+      "title": "How does a smell travel?",
+      "body": "Your neighbour starts frying kapenta with onions. A minute later you can smell it in your own yard, even though nobody carried the food to you and there is no wind. How did the smell get there?\n\nThe smell is made of tiny particles that escape from the food into the air. These particles spread out through the air until some of them reach your nose. This spreading is called diffusion.\n\nDiffusion is the movement of particles from a region where they are at a high concentration to a region where they are at a low concentration, until they are evenly spread. Concentration means how crowded the particles are in a space."
+    },
+    {
+      "type": "explain",
+      "title": "Why diffusion happens",
+      "body": "Diffusion happens because particles in gases and liquids are always moving in random directions. Nobody pushes them. They keep moving and bumping into other particles, changing direction each time.\n\nWhere particles are crowded, more of them move out of that region than move into it. So, overall, particles spread from high concentration to low concentration. Once they are evenly spread, they keep moving, but there is no further overall change.",
+      "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 480 220\" role=\"img\" aria-label=\"Particles crowded on one side of a box spread out until they are evenly spread\"><rect x=\"20\" y=\"30\" width=\"180\" height=\"130\" fill=\"#FFFFFF\" stroke=\"#64748B\" stroke-width=\"2\"/><rect x=\"280\" y=\"30\" width=\"180\" height=\"130\" fill=\"#FFFFFF\" stroke=\"#64748B\" stroke-width=\"2\"/><circle cx=\"35\" cy=\"45\" r=\"8\" fill=\"#F59E0B\" stroke=\"#0F172A\" stroke-width=\"1.5\"/><circle cx=\"55\" cy=\"62\" r=\"8\" fill=\"#F59E0B\" stroke=\"#0F172A\" stroke-width=\"1.5\"/><circle cx=\"38\" cy=\"85\" r=\"8\" fill=\"#F59E0B\" stroke=\"#0F172A\" stroke-width=\"1.5\"/><circle cx=\"62\" cy=\"95\" r=\"8\" fill=\"#F59E0B\" stroke=\"#0F172A\" stroke-width=\"1.5\"/><circle cx=\"40\" cy=\"120\" r=\"8\" fill=\"#F59E0B\" stroke=\"#0F172A\" stroke-width=\"1.5\"/><circle cx=\"66\" cy=\"130\" r=\"8\" fill=\"#F59E0B\" stroke=\"#0F172A\" stroke-width=\"1.5\"/><circle cx=\"42\" cy=\"148\" r=\"8\" fill=\"#F59E0B\" stroke=\"#0F172A\" stroke-width=\"1.5\"/><circle cx=\"80\" cy=\"48\" r=\"8\" fill=\"#F59E0B\" stroke=\"#0F172A\" stroke-width=\"1.5\"/><circle cx=\"85\" cy=\"75\" r=\"8\" fill=\"#F59E0B\" stroke=\"#0F172A\" stroke-width=\"1.5\"/><circle cx=\"88\" cy=\"112\" r=\"8\" fill=\"#F59E0B\" stroke=\"#0F172A\" stroke-width=\"1.5\"/><circle cx=\"84\" cy=\"145\" r=\"8\" fill=\"#F59E0B\" stroke=\"#0F172A\" stroke-width=\"1.5\"/><circle cx=\"105\" cy=\"95\" r=\"8\" fill=\"#F59E0B\" stroke=\"#0F172A\" stroke-width=\"1.5\"/><circle cx=\"300\" cy=\"50\" r=\"8\" fill=\"#F59E0B\" stroke=\"#0F172A\" stroke-width=\"1.5\"/><circle cx=\"350\" cy=\"45\" r=\"8\" fill=\"#F59E0B\" stroke=\"#0F172A\" stroke-width=\"1.5\"/><circle cx=\"410\" cy=\"52\" r=\"8\" fill=\"#F59E0B\" stroke=\"#0F172A\" stroke-width=\"1.5\"/><circle cx=\"440\" cy=\"90\" r=\"8\" fill=\"#F59E0B\" stroke=\"#0F172A\" stroke-width=\"1.5\"/><circle cx=\"380\" cy=\"95\" r=\"8\" fill=\"#F59E0B\" stroke=\"#0F172A\" stroke-width=\"1.5\"/><circle cx=\"320\" cy=\"98\" r=\"8\" fill=\"#F59E0B\" stroke=\"#0F172A\" stroke-width=\"1.5\"/><circle cx=\"295\" cy=\"140\" r=\"8\" fill=\"#F59E0B\" stroke=\"#0F172A\" stroke-width=\"1.5\"/><circle cx=\"345\" cy=\"140\" r=\"8\" fill=\"#F59E0B\" stroke=\"#0F172A\" stroke-width=\"1.5\"/><circle cx=\"400\" cy=\"135\" r=\"8\" fill=\"#F59E0B\" stroke=\"#0F172A\" stroke-width=\"1.5\"/><circle cx=\"440\" cy=\"145\" r=\"8\" fill=\"#F59E0B\" stroke=\"#0F172A\" stroke-width=\"1.5\"/><circle cx=\"370\" cy=\"62\" r=\"8\" fill=\"#F59E0B\" stroke=\"#0F172A\" stroke-width=\"1.5\"/><circle cx=\"330\" cy=\"70\" r=\"8\" fill=\"#F59E0B\" stroke=\"#0F172A\" stroke-width=\"1.5\"/><line x1=\"212\" y1=\"95\" x2=\"256\" y2=\"95\" stroke=\"#0D9488\" stroke-width=\"4\"/><polygon points=\"268,95 255,86 255,104\" fill=\"#0D9488\"/><text x=\"110\" y=\"186\" text-anchor=\"middle\" font-size=\"14\" font-weight=\"700\" fill=\"#0F172A\" font-family=\"Inter, system-ui, sans-serif\">At the start</text><text x=\"370\" y=\"186\" text-anchor=\"middle\" font-size=\"14\" font-weight=\"700\" fill=\"#0F172A\" font-family=\"Inter, system-ui, sans-serif\">Later</text><text x=\"110\" y=\"206\" text-anchor=\"middle\" font-size=\"13\" fill=\"#64748B\" font-family=\"Inter, system-ui, sans-serif\">crowded on one side</text><text x=\"370\" y=\"206\" text-anchor=\"middle\" font-size=\"13\" fill=\"#64748B\" font-family=\"Inter, system-ui, sans-serif\">spread out evenly</text></svg>"
+    },
+    {
+      "type": "explain",
+      "title": "Diffusion in liquids",
+      "body": "Diffusion also happens in liquids. Drop a tea bag into a cup of hot water and do not stir it. The brown colour slowly spreads through all the water.\n\nIn the laboratory, a crystal of potassium permanganate (potassium manganate(VII)) is placed at the bottom of a beaker of water. The purple colour slowly spreads upwards until all the water is evenly purple. This can take hours.\n\nDiffusion is much slower in liquids than in gases. Liquid particles are close together, so a particle collides with its neighbours very often and cannot travel far in one direction. Gas particles are far apart and move faster, so they spread much more quickly. In solids, particles only vibrate in fixed positions, so diffusion is so slow that we normally do not notice it."
+    },
+    {
+      "type": "check",
+      "question": "Why does diffusion happen faster in a gas than in a liquid?",
+      "options": [
+        "Gas particles are bigger than liquid particles",
+        "Gas particles are far apart and move faster, so they travel further before colliding",
+        "Liquid particles do not move at all",
+        "Gases are always hotter than liquids"
+      ],
+      "answer": 1,
+      "explanation": "Gas particles have large spaces between them and move quickly, so they spread out fast. Liquid particles do move, but they are close together and keep bumping into each other, which slows the spreading. Particle size is not the reason."
+    },
+    {
+      "type": "explain",
+      "title": "Evidence that particles move: Brownian motion",
+      "body": "We cannot see particles of air or water, so how do we know they move? In 1827 a scientist called Robert Brown looked at tiny particles from pollen grains floating in water through a microscope. They moved about in a jerky, random, zigzag way. This is called Brownian motion.\n\nYou can see the same thing with smoke in a small glass box lit from the side. Under a microscope the smoke particles look like bright specks that jiggle about randomly.\n\nThe explanation: the smoke particles are being hit, unevenly, from all sides by air particles that are far too small to see. Each hit pushes the smoke particle in a new direction. This is strong evidence that air and water are made of tiny, fast-moving particles.",
+      "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 480 220\" role=\"img\" aria-label=\"A smoke particle moves in a random zigzag path because it is hit by invisible air particles\"><rect x=\"20\" y=\"20\" width=\"280\" height=\"180\" fill=\"#FFFFFF\" stroke=\"#64748B\" stroke-width=\"2\"/><polyline points=\"60,160 95,120 70,90 130,70 150,120 200,100 180,55 240,80 225,140 265,160\" fill=\"none\" stroke=\"#0D9488\" stroke-width=\"2.5\" stroke-linejoin=\"round\"/><circle cx=\"40\" cy=\"40\" r=\"3\" fill=\"#2563EB\" stroke=\"#2563EB\" stroke-width=\"1\"/><circle cx=\"110\" cy=\"38\" r=\"3\" fill=\"#2563EB\" stroke=\"#2563EB\" stroke-width=\"1\"/><circle cx=\"200\" cy=\"35\" r=\"3\" fill=\"#2563EB\" stroke=\"#2563EB\" stroke-width=\"1\"/><circle cx=\"280\" cy=\"45\" r=\"3\" fill=\"#2563EB\" stroke=\"#2563EB\" stroke-width=\"1\"/><circle cx=\"42\" cy=\"110\" r=\"3\" fill=\"#2563EB\" stroke=\"#2563EB\" stroke-width=\"1\"/><circle cx=\"250\" cy=\"118\" r=\"3\" fill=\"#2563EB\" stroke=\"#2563EB\" stroke-width=\"1\"/><circle cx=\"170\" cy=\"165\" r=\"3\" fill=\"#2563EB\" stroke=\"#2563EB\" stroke-width=\"1\"/><circle cx=\"100\" cy=\"182\" r=\"3\" fill=\"#2563EB\" stroke=\"#2563EB\" stroke-width=\"1\"/><circle cx=\"210\" cy=\"182\" r=\"3\" fill=\"#2563EB\" stroke=\"#2563EB\" stroke-width=\"1\"/><circle cx=\"285\" cy=\"188\" r=\"3\" fill=\"#2563EB\" stroke=\"#2563EB\" stroke-width=\"1\"/><circle cx=\"36\" cy=\"188\" r=\"3\" fill=\"#2563EB\" stroke=\"#2563EB\" stroke-width=\"1\"/><circle cx=\"110\" cy=\"140\" r=\"3\" fill=\"#2563EB\" stroke=\"#2563EB\" stroke-width=\"1\"/><circle cx=\"265\" cy=\"160\" r=\"9\" fill=\"#F59E0B\" stroke=\"#0F172A\" stroke-width=\"1.5\"/><circle cx=\"325\" cy=\"55\" r=\"8\" fill=\"#F59E0B\" stroke=\"#0F172A\" stroke-width=\"1.5\"/><text x=\"342\" y=\"60\" font-size=\"13\" fill=\"#0F172A\" font-family=\"Inter, system-ui, sans-serif\">smoke particle</text><line x1=\"316\" y1=\"88\" x2=\"334\" y2=\"88\" stroke=\"#0D9488\" stroke-width=\"2.5\"/><text x=\"342\" y=\"93\" font-size=\"13\" fill=\"#0F172A\" font-family=\"Inter, system-ui, sans-serif\">its zigzag path</text><circle cx=\"325\" cy=\"122\" r=\"3\" fill=\"#2563EB\"/><text x=\"342\" y=\"127\" font-size=\"13\" fill=\"#0F172A\" font-family=\"Inter, system-ui, sans-serif\">air particle</text><text x=\"342\" y=\"145\" font-size=\"13\" fill=\"#64748B\" font-family=\"Inter, system-ui, sans-serif\">(far too small</text><text x=\"342\" y=\"163\" font-size=\"13\" fill=\"#64748B\" font-family=\"Inter, system-ui, sans-serif\">to see)</text></svg>"
+    },
+    {
+      "type": "explain",
+      "title": "What changes the rate of diffusion?",
+      "body": "The rate of diffusion means how fast the particles spread out. Two main factors affect it.",
+      "bullets": [
+        "Temperature: at a higher temperature particles have more kinetic energy and move faster, so diffusion is faster. Tea colour spreads faster in hot water than in cold water.",
+        "Mass of the particles: lighter particles move faster than heavier particles at the same temperature, so they diffuse faster.",
+        "We compare particle masses using relative molecular mass (Mr), a number that tells us how heavy one particle is compared with others. For example, ammonia has Mr = 17 and hydrogen chloride has Mr = 36.5."
+      ]
+    },
+    {
+      "type": "explain",
+      "title": "The ammonia and hydrogen chloride experiment",
+      "body": "This classic experiment compares how fast two gases diffuse. A long, dry glass tube has cotton wool soaked in ammonia solution at one end and cotton wool soaked in concentrated hydrochloric acid at the other. Both ends are closed. Ammonia gas comes off one end and hydrogen chloride gas comes off the other.\n\nThe two gases diffuse along the tube towards each other. Where they meet, they react to form a white solid called ammonium chloride. After a few minutes a white ring appears inside the tube, nearer the hydrochloric acid end. Safety: both chemicals are corrosive and give off choking fumes, so this is done by the teacher, in a fume cupboard or a well-ventilated room.",
+      "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 480 205\" role=\"img\" aria-label=\"Long glass tube with ammonia at one end and hydrochloric acid at the other; a white ring forms nearer the hydrochloric acid end\"><defs><marker id=\"ab\" viewBox=\"0 0 10 10\" refX=\"9\" refY=\"5\" markerWidth=\"5\" markerHeight=\"5\" orient=\"auto\"><path d=\"M0,0 L10,5 L0,10 z\" fill=\"#2563EB\"/></marker><marker id=\"ar\" viewBox=\"0 0 10 10\" refX=\"9\" refY=\"5\" markerWidth=\"5\" markerHeight=\"5\" orient=\"auto\"><path d=\"M0,0 L10,5 L0,10 z\" fill=\"#E11D48\"/></marker></defs><rect x=\"60\" y=\"80\" width=\"360\" height=\"30\" fill=\"#E2E8F0\" stroke=\"#0F172A\" stroke-width=\"2\"/><rect x=\"60\" y=\"80\" width=\"20\" height=\"30\" fill=\"#64748B\"/><rect x=\"400\" y=\"80\" width=\"20\" height=\"30\" fill=\"#64748B\"/><rect x=\"270\" y=\"78\" width=\"14\" height=\"34\" fill=\"#FFFFFF\" stroke=\"#0F172A\" stroke-width=\"1.5\"/><line x1=\"86\" y1=\"130\" x2=\"262\" y2=\"130\" stroke=\"#2563EB\" stroke-width=\"3\" marker-end=\"url(#ab)\"/><line x1=\"394\" y1=\"130\" x2=\"292\" y2=\"130\" stroke=\"#E11D48\" stroke-width=\"3\" marker-end=\"url(#ar)\"/><text x=\"40\" y=\"45\" font-size=\"13\" fill=\"#0F172A\" font-family=\"Inter, system-ui, sans-serif\">cotton wool soaked in</text><text x=\"40\" y=\"63\" font-size=\"13\" fill=\"#0F172A\" font-family=\"Inter, system-ui, sans-serif\">ammonia solution</text><text x=\"440\" y=\"45\" text-anchor=\"end\" font-size=\"13\" fill=\"#0F172A\" font-family=\"Inter, system-ui, sans-serif\">cotton wool soaked in</text><text x=\"440\" y=\"63\" text-anchor=\"end\" font-size=\"13\" fill=\"#0F172A\" font-family=\"Inter, system-ui, sans-serif\">conc. hydrochloric acid</text><text x=\"277\" y=\"160\" text-anchor=\"middle\" font-size=\"13\" font-weight=\"700\" fill=\"#0F172A\" font-family=\"Inter, system-ui, sans-serif\">white ring forms here</text><text x=\"40\" y=\"190\" font-size=\"13\" fill=\"#2563EB\" font-family=\"Inter, system-ui, sans-serif\">ammonia: lighter, faster</text><text x=\"440\" y=\"190\" text-anchor=\"end\" font-size=\"13\" fill=\"#E11D48\" font-family=\"Inter, system-ui, sans-serif\">hydrogen chloride: heavier</text></svg>"
+    },
+    {
+      "type": "example",
+      "title": "Worked example: explaining the white ring",
+      "problem": "In the experiment above, the white ring forms closer to the hydrochloric acid end of the tube. (a) Name the white solid. (b) Write a word equation for its formation. (c) Explain why the ring forms closer to the hydrochloric acid end.",
+      "steps": [
+        "Step 1: The two gases are ammonia and hydrogen chloride. They react to make ammonium chloride, a white solid.",
+        "Step 2: Word equation: ammonia + hydrogen chloride → ammonium chloride.",
+        "Step 3: Compare the masses of the particles. Ammonia (Mr = 17) is lighter than hydrogen chloride (Mr = 36.5).",
+        "Step 4: Lighter particles move faster, so ammonia diffuses faster and travels further along the tube in the same time.",
+        "Step 5: So the gases meet nearer the end where the slower gas, hydrogen chloride, started."
+      ],
+      "answer": "(a) Ammonium chloride. (b) ammonia + hydrogen chloride → ammonium chloride. (c) Ammonia particles are lighter, so they diffuse faster and travel further than hydrogen chloride particles before the two gases meet."
+    },
+    {
+      "type": "check",
+      "question": "A crystal of potassium permanganate is placed in a beaker of cold water and another in a beaker of hot water. In which beaker does the purple colour spread fastest, and why?",
+      "options": [
+        "Cold water, because the particles are closer together",
+        "Both the same, because diffusion does not depend on temperature",
+        "Hot water, because the particles have more kinetic energy and move faster"
+      ],
+      "answer": 2,
+      "explanation": "At a higher temperature the particles move faster, so they spread out faster. Temperature definitely affects diffusion, so the second option is wrong. Particles being close together in cold water does not speed up spreading."
+    },
+    {
+      "type": "example",
+      "title": "Worked example: which gas wins the race?",
+      "problem": "Four gases are released at the same time and temperature at one end of a long tube. Their relative molecular masses are: hydrogen 2, nitrogen 28, carbon dioxide 44 and chlorine 71. Which gas reaches the other end first, and which arrives last?",
+      "steps": [
+        "Step 1: All the gases are at the same temperature, so the only difference is the mass of their particles.",
+        "Step 2: Lighter particles move faster and diffuse faster.",
+        "Step 3: Put the gases in order of Mr from smallest to largest: hydrogen (2), nitrogen (28), carbon dioxide (44), chlorine (71).",
+        "Step 4: The lightest gas arrives first and the heaviest arrives last."
+      ],
+      "answer": "Hydrogen arrives first because its particles are the lightest. Chlorine arrives last because its particles are the heaviest."
+    },
+    {
+      "type": "mistake",
+      "title": "Common mistake: calling any mixing 'diffusion'",
+      "body": "Diffusion happens on its own, because of the random movement of particles. If you stir sugar into tea, or a fan blows smoke across a room, the mixing is caused by the spoon or the moving air, not by diffusion.\n\nAlso be careful with direction. Particles diffuse from high concentration to low concentration, never the other way. And remember that heavier particles diffuse more slowly, not faster. In exams, always link your answer to particles: say how fast they move and why."
+    },
+    {
+      "type": "explain",
+      "title": "Diffusion around you",
+      "body": "Once you know what to look for, diffusion is everywhere.",
+      "bullets": [
+        "The smell of perfume, roasting maize or a burning mosquito coil spreading through a room.",
+        "A drop of orange squash slowly colouring a glass of still water without stirring.",
+        "Oxygen moving from the air in your lungs into your blood, and carbon dioxide moving out.",
+        "Smoke from a bush fire spreading through still air, so you smell it before you see it."
+      ]
+    },
+    {
+      "type": "summary",
+      "title": "Key points",
+      "bullets": [
+        "Diffusion is the movement of particles from a region of high concentration to a region of low concentration until they are evenly spread.",
+        "It happens because particles in gases and liquids move randomly. It is fast in gases, slower in liquids, and too slow to notice in solids.",
+        "Diffusion and Brownian motion are evidence that matter is made of tiny, moving particles.",
+        "Higher temperature means faster diffusion, because particles have more kinetic energy.",
+        "Lighter particles (smaller Mr) diffuse faster. Ammonia (17) beats hydrogen chloride (36.5), so the white ring forms nearer the acid end."
+      ]
+    }
+  ],
+  "quiz": [
+    {
+      "question": "Which is the best definition of diffusion?",
+      "options": [
+        "The movement of particles from low concentration to high concentration",
+        "The mixing of substances by stirring",
+        "The movement of particles from high concentration to low concentration until evenly spread",
+        "The change of a liquid into a gas"
+      ],
+      "answer": 2,
+      "explanation": "Diffusion is the spreading of particles from where they are crowded (high concentration) to where they are less crowded (low concentration), caused by their random movement. Stirring is mixing by an outside push, and liquid to gas is evaporation."
+    },
+    {
+      "question": "In which state of matter is diffusion fastest?",
+      "options": [
+        "Gas",
+        "Liquid",
+        "Solid",
+        "It is the same in all states"
+      ],
+      "answer": 0,
+      "explanation": "Gas particles are far apart and move fastest, so they spread out quickest. Liquid particles are close together and collide often, so diffusion is slower, and in solids particles only vibrate in fixed positions."
+    },
+    {
+      "question": "Which gas diffuses fastest at the same temperature?",
+      "options": [
+        "Oxygen, Mr = 32",
+        "Carbon dioxide, Mr = 44",
+        "Chlorine, Mr = 71",
+        "Hydrogen, Mr = 2"
+      ],
+      "answer": 3,
+      "explanation": "At the same temperature, lighter particles move faster. Hydrogen has the smallest relative molecular mass (2), so it diffuses fastest. Chlorine, the heaviest, diffuses slowest."
+    },
+    {
+      "question": "What happens to the rate of diffusion when the temperature is increased?",
+      "options": [
+        "It decreases",
+        "It increases, because particles gain kinetic energy and move faster",
+        "It stays the same",
+        "Diffusion stops"
+      ],
+      "answer": 1,
+      "explanation": "Heating gives particles more kinetic energy, so they move faster and spread out more quickly. That is why a tea bag colours hot water faster than cold water."
+    },
+    {
+      "question": "Smoke particles seen under a microscope move in a jerky, random way. What causes this?",
+      "options": [
+        "The smoke particles are alive",
+        "Light from the lamp pushes them",
+        "They are hit unevenly by fast-moving air particles that are too small to see",
+        "They are falling because of gravity"
+      ],
+      "answer": 2,
+      "explanation": "This is Brownian motion. Invisible air particles bombard the smoke particles unevenly from all sides, pushing them in random directions. Gravity would make them fall steadily, not zigzag."
+    },
+    {
+      "question": "In the ammonia and hydrogen chloride tube experiment, why does the white ring form nearer the hydrochloric acid end?",
+      "options": [
+        "Ammonia particles are lighter, so they diffuse faster and travel further",
+        "Hydrogen chloride particles are lighter and move faster",
+        "The ammonia end of the tube is colder",
+        "Ammonia is pushed along by the cotton wool"
+      ],
+      "answer": 0,
+      "explanation": "Ammonia (Mr = 17) is lighter than hydrogen chloride (Mr = 36.5), so it diffuses faster and covers more of the tube before the gases meet. The meeting point is therefore closer to the hydrochloric acid end."
+    },
+    {
+      "question": "Which of these is NOT an example of diffusion?",
+      "options": [
+        "The smell of cooking reaching the next room in still air",
+        "A tea bag colouring unstirred water",
+        "Oxygen passing from the lungs into the blood",
+        "Stirring sugar into tea with a spoon to mix it"
+      ],
+      "answer": 3,
+      "explanation": "Stirring mixes the tea because the spoon moves the liquid around; it is not caused by the random motion of particles. The other three happen on their own because particles spread from high to low concentration."
+    },
+    {
+      "question": "A purple crystal is placed in a beaker of water and left. After two days the water is evenly purple. Which statement best explains this?",
+      "options": [
+        "The water particles were attracted to the colour",
+        "The crystal particles were pushed by the beaker",
+        "The particles moved randomly and spread from high to low concentration until evenly spread",
+        "The crystal melted in the water"
+      ],
+      "answer": 2,
+      "explanation": "Water and crystal particles are always moving randomly, so the coloured particles spread from where they are concentrated (near the crystal) into the rest of the water. The crystal dissolves, but it does not melt; melting needs heat."
+    }
+  ],
+  "glossary": [
+    {
+      "term": "Diffusion",
+      "definition": "The movement of particles from a region of high concentration to a region of low concentration until they are evenly spread."
+    },
+    {
+      "term": "Concentration",
+      "definition": "How crowded the particles of a substance are in a space."
+    },
+    {
+      "term": "Brownian motion",
+      "definition": "The random, zigzag movement of tiny visible particles, such as smoke, caused by collisions with invisible moving particles."
+    },
+    {
+      "term": "Rate of diffusion",
+      "definition": "How fast particles spread out by diffusion."
+    },
+    {
+      "term": "Relative molecular mass (Mr)",
+      "definition": "A number that compares the mass of one particle of a substance with others; a smaller Mr means lighter particles."
+    },
+    {
+      "term": "Ammonium chloride",
+      "definition": "The white solid formed when ammonia gas and hydrogen chloride gas meet and react."
+    }
+  ]
+}

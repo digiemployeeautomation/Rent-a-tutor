@@ -1,0 +1,276 @@
+{
+  "id": "mathematics-fractions-3",
+  "subject": "mathematics",
+  "form": 1,
+  "term": 1,
+  "topic": "Fractions",
+  "topicSlug": "fractions",
+  "order": 3,
+  "title": "Adding and subtracting fractions",
+  "summary": "You will be able to add and subtract fractions and mixed numbers, using the LCM when the denominators are different, and use this to solve word problems.",
+  "minutes": 25,
+  "objectives": [
+    "Add and subtract fractions with the same denominator",
+    "Use the lowest common multiple (LCM) to add and subtract fractions with different denominators",
+    "Add and subtract mixed numbers",
+    "Solve everyday word problems involving fractions"
+  ],
+  "sections": [
+    {
+      "type": "explain",
+      "title": "Planting a field in Mkushi",
+      "body": "Mr Banda farms in Mkushi. This season he plants 1/4 of his field with maize and 1/2 of it with soya beans. What fraction of the field has he planted, and how much is still empty?\n\nTo answer, we need to add fractions. In this lesson you will learn how, starting with the easy case and building up to mixed numbers and word problems. We will come back to Mr Banda's field."
+    },
+    {
+      "type": "explain",
+      "title": "Same denominator: add the tops, keep the bottom",
+      "body": "When fractions have the same denominator, the pieces are already the same size. Just add (or subtract) the numerators and keep the denominator.\n\n2 fifths + 1 fifth = 3 fifths, in the same way that 2 bananas + 1 banana = 3 bananas. The word \"fifths\" does not change, so the denominator does not change. Always simplify the answer if you can.",
+      "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 480 200\" role=\"img\" aria-label=\"A bar of 5 equal parts: 2 parts shaded blue and 1 part shaded amber, showing 2/5 plus 1/5 equals 3/5\"><text x=\"120\" y=\"38\" font-family=\"Inter, system-ui, sans-serif\" font-size=\"16\" font-weight=\"bold\" fill=\"#2563EB\" text-anchor=\"middle\">2/5</text><text x=\"240\" y=\"38\" font-family=\"Inter, system-ui, sans-serif\" font-size=\"16\" font-weight=\"bold\" fill=\"#0F172A\" text-anchor=\"middle\">1/5</text><rect x=\"40\" y=\"50\" width=\"80\" height=\"60\" fill=\"#2563EB\" stroke=\"#0F172A\" stroke-width=\"2\"/><rect x=\"120\" y=\"50\" width=\"80\" height=\"60\" fill=\"#2563EB\" stroke=\"#0F172A\" stroke-width=\"2\"/><rect x=\"200\" y=\"50\" width=\"80\" height=\"60\" fill=\"#F59E0B\" stroke=\"#0F172A\" stroke-width=\"2\"/><rect x=\"280\" y=\"50\" width=\"80\" height=\"60\" fill=\"#E2E8F0\" stroke=\"#0F172A\" stroke-width=\"2\"/><rect x=\"360\" y=\"50\" width=\"80\" height=\"60\" fill=\"#E2E8F0\" stroke=\"#0F172A\" stroke-width=\"2\"/><text x=\"240\" y=\"145\" font-family=\"Inter, system-ui, sans-serif\" font-size=\"17\" font-weight=\"bold\" fill=\"#0F172A\" text-anchor=\"middle\">2/5 + 1/5 = 3/5</text><text x=\"240\" y=\"178\" font-family=\"Inter, system-ui, sans-serif\" font-size=\"14\" font-weight=\"normal\" fill=\"#64748B\" text-anchor=\"middle\">Fifths stay fifths: add the tops, keep the bottom</text></svg>"
+    },
+    {
+      "type": "example",
+      "title": "Worked example: same denominators",
+      "problem": "Work out 5/8 + 1/8.",
+      "steps": [
+        "Step 1: The denominators are both 8, so the pieces are the same size.",
+        "Step 2: Add the numerators: 5 + 1 = 6. Keep the denominator: 6/8.",
+        "Step 3: Simplify. The HCF of 6 and 8 is 2: 6 ÷ 2 = 3 and 8 ÷ 2 = 4."
+      ],
+      "answer": "5/8 + 1/8 = 6/8 = 3/4"
+    },
+    {
+      "type": "check",
+      "question": "Work out 7/9 − 4/9 and simplify your answer.",
+      "options": [
+        "3/18",
+        "11/9",
+        "1/3"
+      ],
+      "answer": 2,
+      "explanation": "Subtract the numerators and keep the denominator: 7 − 4 = 3, so 3/9. The HCF of 3 and 9 is 3, giving 1/3. 3/18 is wrong because the denominators were added; ninths stay ninths. 11/9 adds instead of subtracting."
+    },
+    {
+      "type": "mistake",
+      "title": "Common mistake: adding the denominators",
+      "body": "The most common error is to add the tops and add the bottoms: 1/4 + 1/2 = 2/6. This cannot be right. 2/6 = 1/3, which is smaller than 1/2 on its own. Adding something to 1/2 must give more than 1/2.\n\nThe denominator only tells you the size of the pieces. You never add or subtract denominators. Make the denominators the same first, then add only the numerators."
+    },
+    {
+      "type": "explain",
+      "title": "Different denominators: use the LCM",
+      "body": "When the denominators are different, the pieces are different sizes, so you cannot add them straight away. First change each fraction to an equivalent fraction with a common denominator. The best common denominator is the LCM (lowest common multiple) of the denominators.\n\nBack to Mr Banda: 1/4 + 1/2. The LCM of 4 and 2 is 4, and 1/2 = 2/4. So 1/4 + 2/4 = 3/4 of the field is planted, and 1 − 3/4 = 1/4 is still empty.",
+      "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 480 215\" role=\"img\" aria-label=\"A field divided into 4 equal parts: 1 part maize, 2 parts soya beans, 1 part empty. 1/4 plus 2/4 equals 3/4 planted.\"><text x=\"240\" y=\"28\" font-family=\"Inter, system-ui, sans-serif\" font-size=\"14\" font-weight=\"normal\" fill=\"#64748B\" text-anchor=\"middle\">The field cut into 4 equal parts</text><rect x=\"40\" y=\"40\" width=\"100\" height=\"60\" fill=\"#2563EB\" stroke=\"#0F172A\" stroke-width=\"2\"/><text x=\"90\" y=\"76\" font-family=\"Inter, system-ui, sans-serif\" font-size=\"15\" font-weight=\"bold\" fill=\"#FFFFFF\" text-anchor=\"middle\">Maize</text><rect x=\"140\" y=\"40\" width=\"100\" height=\"60\" fill=\"#0D9488\" stroke=\"#0F172A\" stroke-width=\"2\"/><text x=\"190\" y=\"76\" font-family=\"Inter, system-ui, sans-serif\" font-size=\"15\" font-weight=\"bold\" fill=\"#FFFFFF\" text-anchor=\"middle\">Soya</text><rect x=\"240\" y=\"40\" width=\"100\" height=\"60\" fill=\"#0D9488\" stroke=\"#0F172A\" stroke-width=\"2\"/><text x=\"290\" y=\"76\" font-family=\"Inter, system-ui, sans-serif\" font-size=\"15\" font-weight=\"bold\" fill=\"#FFFFFF\" text-anchor=\"middle\">Soya</text><rect x=\"340\" y=\"40\" width=\"100\" height=\"60\" fill=\"#E2E8F0\" stroke=\"#0F172A\" stroke-width=\"2\"/><text x=\"390\" y=\"76\" font-family=\"Inter, system-ui, sans-serif\" font-size=\"15\" font-weight=\"bold\" fill=\"#0F172A\" text-anchor=\"middle\">Empty</text><text x=\"140\" y=\"135\" font-family=\"Inter, system-ui, sans-serif\" font-size=\"15\" font-weight=\"bold\" fill=\"#2563EB\" text-anchor=\"middle\">Maize = 1/4</text><text x=\"320\" y=\"135\" font-family=\"Inter, system-ui, sans-serif\" font-size=\"15\" font-weight=\"bold\" fill=\"#0D9488\" text-anchor=\"middle\">Soya = 1/2 = 2/4</text><text x=\"240\" y=\"167\" font-family=\"Inter, system-ui, sans-serif\" font-size=\"16\" font-weight=\"bold\" fill=\"#0D9488\" text-anchor=\"middle\">Planted: 1/4 + 2/4 = 3/4</text><text x=\"240\" y=\"197\" font-family=\"Inter, system-ui, sans-serif\" font-size=\"15\" font-weight=\"normal\" fill=\"#0F172A\" text-anchor=\"middle\">Still empty: 1/4</text></svg>"
+    },
+    {
+      "type": "example",
+      "title": "Worked example: adding with different denominators",
+      "problem": "Work out 2/3 + 1/4.",
+      "steps": [
+        "Step 1: Find the LCM of 3 and 4. Multiples of 3: 3, 6, 9, 12. Multiples of 4: 4, 8, 12. The LCM is 12.",
+        "Step 2: Change 2/3 to twelfths: 12 ÷ 3 = 4, so 2/3 = (2 × 4)/12 = 8/12.",
+        "Step 3: Change 1/4 to twelfths: 12 ÷ 4 = 3, so 1/4 = (1 × 3)/12 = 3/12.",
+        "Step 4: Add the numerators: 8/12 + 3/12 = 11/12. 11 and 12 share no factor except 1, so it cannot be simplified."
+      ],
+      "answer": "2/3 + 1/4 = 11/12"
+    },
+    {
+      "type": "example",
+      "title": "Worked example: subtracting with different denominators",
+      "problem": "Work out 5/6 − 3/8.",
+      "steps": [
+        "Step 1: Find the LCM of 6 and 8. Multiples of 6: 6, 12, 18, 24. Multiples of 8: 8, 16, 24. The LCM is 24.",
+        "Step 2: 5/6 = (5 × 4)/24 = 20/24, because 24 ÷ 6 = 4.",
+        "Step 3: 3/8 = (3 × 3)/24 = 9/24, because 24 ÷ 8 = 3.",
+        "Step 4: Subtract the numerators: 20/24 − 9/24 = 11/24. This is already in lowest terms."
+      ],
+      "answer": "5/6 − 3/8 = 11/24"
+    },
+    {
+      "type": "check",
+      "question": "Work out 1/2 + 1/3.",
+      "options": [
+        "2/5",
+        "5/6",
+        "2/6",
+        "1/6"
+      ],
+      "answer": 1,
+      "explanation": "The LCM of 2 and 3 is 6. 1/2 = 3/6 and 1/3 = 2/6, so 3/6 + 2/6 = 5/6. 2/5 adds the tops and the bottoms, and it is even smaller than 1/2, so it cannot be right."
+    },
+    {
+      "type": "explain",
+      "title": "Adding and subtracting mixed numbers",
+      "body": "The safest method for mixed numbers is to change them into improper fractions first. Then add or subtract as normal, and change the answer back to a mixed number.\n\nThis method always works, even when the fraction part you are subtracting is bigger than the fraction part you are taking it from.",
+      "bullets": [
+        "Step 1: Change each mixed number to an improper fraction.",
+        "Step 2: Find the LCM of the denominators and make equivalent fractions.",
+        "Step 3: Add or subtract the numerators.",
+        "Step 4: Change the answer back to a mixed number and simplify."
+      ]
+    },
+    {
+      "type": "example",
+      "title": "Worked example: adding mixed numbers",
+      "problem": "Work out 2 1/3 + 1 3/4.",
+      "steps": [
+        "Step 1: Change to improper fractions: 2 1/3 = (2 × 3 + 1)/3 = 7/3 and 1 3/4 = (1 × 4 + 3)/4 = 7/4.",
+        "Step 2: The LCM of 3 and 4 is 12. 7/3 = 28/12 and 7/4 = 21/12.",
+        "Step 3: Add: 28/12 + 21/12 = 49/12.",
+        "Step 4: Change back: 49 ÷ 12 = 4 remainder 1, so 49/12 = 4 1/12.",
+        "Step 5: Estimate to check: about 2 + 2 = 4. The answer 4 1/12 is sensible."
+      ],
+      "answer": "2 1/3 + 1 3/4 = 4 1/12"
+    },
+    {
+      "type": "example",
+      "title": "Worked example: a word problem",
+      "problem": "Mutinta walks 3 1/4 km from her home in Chingola to school. She has already walked 1 2/3 km. How far does she still have to walk?",
+      "steps": [
+        "Step 1: \"How far still\" means subtract: 3 1/4 − 1 2/3.",
+        "Step 2: Change to improper fractions: 3 1/4 = 13/4 and 1 2/3 = 5/3.",
+        "Step 3: The LCM of 4 and 3 is 12. 13/4 = 39/12 and 5/3 = 20/12.",
+        "Step 4: Subtract: 39/12 − 20/12 = 19/12.",
+        "Step 5: Change back: 19 ÷ 12 = 1 remainder 7, so 19/12 = 1 7/12."
+      ],
+      "answer": "She still has 1 7/12 km to walk."
+    },
+    {
+      "type": "check",
+      "question": "Mrs Phiri buys 2 1/2 kg of kapenta at Soweto Market. She cooks 3/4 kg. How much kapenta is left?",
+      "options": [
+        "1 3/4 kg",
+        "2 1/4 kg",
+        "1 1/4 kg",
+        "3 1/4 kg"
+      ],
+      "answer": 0,
+      "explanation": "2 1/2 = 5/2 = 10/4. Then 10/4 − 3/4 = 7/4 = 1 3/4 kg. 3 1/4 kg comes from adding instead of subtracting. 2 1/4 kg comes from doing 2 1/2 − 1/4, which ignores the numerator 3."
+    },
+    {
+      "type": "summary",
+      "title": "Key points",
+      "bullets": [
+        "Same denominator: add or subtract the numerators and keep the denominator.",
+        "Never add or subtract the denominators.",
+        "Different denominators: change to equivalent fractions using the LCM of the denominators first.",
+        "For mixed numbers, change to improper fractions, work it out, then change back.",
+        "Always simplify your answer and check it makes sense with an estimate."
+      ]
+    }
+  ],
+  "quiz": [
+    {
+      "question": "To add two fractions that have the same denominator, you...",
+      "options": [
+        "add the numerators and add the denominators",
+        "multiply the denominators",
+        "add the denominators only",
+        "add the numerators and keep the denominator"
+      ],
+      "answer": 3,
+      "explanation": "When the denominators match, the pieces are the same size, so you just count how many pieces you have: add the numerators and keep the denominator. Adding the denominators would change the size of the pieces."
+    },
+    {
+      "question": "What is the lowest common multiple (LCM) of 6 and 8?",
+      "options": [
+        "48",
+        "24",
+        "2",
+        "14"
+      ],
+      "answer": 1,
+      "explanation": "Multiples of 6: 6, 12, 18, 24. Multiples of 8: 8, 16, 24. The first number in both lists is 24. 48 is a common multiple but not the lowest. 2 is the HCF, not the LCM."
+    },
+    {
+      "question": "Work out 3/10 + 2/5.",
+      "options": [
+        "7/10",
+        "5/15",
+        "5/10",
+        "7/5"
+      ],
+      "answer": 0,
+      "explanation": "The LCM of 10 and 5 is 10. 2/5 = 4/10, so 3/10 + 4/10 = 7/10. 5/15 adds the tops and bottoms. 5/10 forgets to change the numerator of 2/5 when changing its denominator."
+    },
+    {
+      "question": "Work out 5/6 − 1/4.",
+      "options": [
+        "4/2",
+        "4/12",
+        "7/12",
+        "1/2"
+      ],
+      "answer": 2,
+      "explanation": "The LCM of 6 and 4 is 12. 5/6 = 10/12 and 1/4 = 3/12, so 10/12 − 3/12 = 7/12. 4/2 subtracts both the tops and the bottoms, which gives 2, far more than 5/6, so it cannot be right."
+    },
+    {
+      "question": "Work out 1 1/2 + 2 2/3.",
+      "options": [
+        "3 3/5",
+        "3 1/6",
+        "5 1/6",
+        "4 1/6"
+      ],
+      "answer": 3,
+      "explanation": "Improper fractions: 3/2 + 8/3. LCM 6: 9/6 + 16/6 = 25/6. 25 ÷ 6 = 4 remainder 1, so 4 1/6. 3 1/6 forgets that 1/2 + 2/3 = 7/6 is more than one whole and must carry 1 into the whole numbers."
+    },
+    {
+      "question": "Work out 4 − 1 3/5.",
+      "options": [
+        "2 2/5",
+        "3 2/5",
+        "3 3/5",
+        "2 3/5"
+      ],
+      "answer": 0,
+      "explanation": "4 = 20/5 and 1 3/5 = 8/5, so 20/5 − 8/5 = 12/5 = 2 2/5. Check by adding back: 2 2/5 + 1 3/5 = 3 5/5 = 4. 3 2/5 forgets to take away the whole 1."
+    },
+    {
+      "question": "Chanda spends 1/3 of his salary on rent and 1/4 on food. What fraction of his salary is left?",
+      "options": [
+        "7/12",
+        "5/12",
+        "2/7",
+        "5/7"
+      ],
+      "answer": 1,
+      "explanation": "Spent: 1/3 + 1/4 = 4/12 + 3/12 = 7/12. Left: 1 − 7/12 = 12/12 − 7/12 = 5/12. 7/12 is the fraction spent, not left. 2/7 comes from adding the tops and the bottoms."
+    },
+    {
+      "question": "A water tank in Livingstone holds 400 litres when full. On Monday 3/8 of a full tank is used, and on Tuesday 1/4 of a full tank is used. How many litres are left?",
+      "options": [
+        "250 litres",
+        "200 litres",
+        "150 litres",
+        "100 litres"
+      ],
+      "answer": 2,
+      "explanation": "Used: 3/8 + 1/4 = 3/8 + 2/8 = 5/8. Left: 1 − 5/8 = 3/8. 3/8 of 400 = (400 ÷ 8) × 3 = 50 × 3 = 150 litres. 250 litres is the amount used, not the amount left."
+    }
+  ],
+  "glossary": [
+    {
+      "term": "Common denominator",
+      "definition": "The same denominator shared by two or more fractions. Fractions must have one before you add or subtract them."
+    },
+    {
+      "term": "Multiple",
+      "definition": "The result of multiplying a number by a whole number. Multiples of 4 are 4, 8, 12, 16 and so on."
+    },
+    {
+      "term": "Lowest common multiple (LCM)",
+      "definition": "The smallest number that two or more numbers all divide into exactly. The LCM of 3 and 4 is 12."
+    },
+    {
+      "term": "Improper fraction",
+      "definition": "A fraction whose numerator is equal to or bigger than its denominator, for example 9/4."
+    },
+    {
+      "term": "Mixed number",
+      "definition": "A whole number and a proper fraction written together, for example 2 1/4."
+    },
+    {
+      "term": "Simplify",
+      "definition": "To write a fraction in its lowest terms by dividing the top and bottom by their HCF."
+    }
+  ]
+}

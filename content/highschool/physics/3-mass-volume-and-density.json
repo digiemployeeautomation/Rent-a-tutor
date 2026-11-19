@@ -1,0 +1,266 @@
+{
+  "id": "physics-measurement-3",
+  "subject": "physics",
+  "form": 1,
+  "term": 1,
+  "topic": "Measurement",
+  "topicSlug": "measurement",
+  "order": 3,
+  "title": "Mass, volume and density",
+  "summary": "Tell mass from weight, measure the volume of liquids and irregular solids, and use density to predict whether an object floats or sinks.",
+  "minutes": 22,
+  "objectives": [
+    "Distinguish between mass and weight",
+    "Measure volume with a measuring cylinder and by the displacement method",
+    "Calculate density using density = mass ÷ volume",
+    "Use density to predict whether an object floats or sinks"
+  ],
+  "sections": [
+    {
+      "type": "explain",
+      "title": "Why does a log float but a copper nail sink?",
+      "body": "A big log can float down the Kafue River, yet a tiny copper nail from the Copperbelt sinks straight to the bottom. The log is far heavier, so weight alone cannot explain this.\n\nThe answer is density: how much mass is packed into each cubic centimetre of a material. In this lesson you will learn to measure mass and volume, and then use them to find density."
+    },
+    {
+      "type": "explain",
+      "title": "Mass and weight are not the same",
+      "body": "Mass is the amount of matter in an object. Its SI unit is the kilogram (kg). We measure mass with a beam balance or an electronic balance. Your mass is the same in Lusaka, on top of a mountain, or on the Moon.\n\nWeight is the pull of gravity on an object. Weight is a force, so it is measured in newtons (N) with a spring balance. On Earth, gravity pulls with about 10 N on every 1 kg. On the Moon, gravity is about one-sixth as strong, so your weight there is about one-sixth of your weight on Earth, but your mass does not change.",
+      "bullets": [
+        "Mass: amount of matter, in kg, measured with a balance, the same everywhere",
+        "Weight: pull of gravity, in N, measured with a spring balance, changes from place to place",
+        "On Earth: weight (N) ≈ mass (kg) × 10 N/kg"
+      ]
+    },
+    {
+      "type": "check",
+      "question": "An astronaut with a mass of 70 kg travels to the Moon. What happens to her mass and weight?",
+      "options": [
+        "Her mass becomes about one-sixth",
+        "Her mass stays the same, but her weight becomes smaller",
+        "Her mass and weight both stay the same",
+        "Her mass becomes zero"
+      ],
+      "answer": 1,
+      "explanation": "Mass is the amount of matter, and she has not lost any matter, so her mass stays 70 kg. Weight is the pull of gravity, and the Moon pulls about one-sixth as hard, so her weight falls. It is the weight, not the mass, that becomes about one-sixth."
+    },
+    {
+      "type": "explain",
+      "title": "Measuring volume",
+      "body": "Volume is the amount of space something takes up. The SI unit is the cubic metre (m³), but in the laboratory we usually use cm³. 1 cm³ is the same as 1 millilitre (ml), and 1 litre = 1000 cm³.\n\nFor a regular solid, like a box shape (a cuboid), calculate: volume = length × width × height.\n\nFor a liquid, use a measuring cylinder on a flat bench. The surface of water curves down slightly in the middle. This curve is called the meniscus. Read the bottom of the meniscus, with your eye level with it, to avoid parallax error. (Mercury is different: its meniscus curves up, so you read the top.)",
+      "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 480 260\" role=\"img\" aria-label=\"Measuring cylinder with water: the eye is level with the bottom of the meniscus, which is at 60 cubic centimetres\"><path d=\"M181 118 Q220 130 259 118 L259 229 L181 229 Z\" fill=\"#DBEAFE\"/><path d=\"M181 118 Q220 130 259 118\" fill=\"none\" stroke=\"#2563EB\" stroke-width=\"2\"/><polyline points=\"180,40 180,230 260,230 260,40\" fill=\"none\" stroke=\"#0F172A\" stroke-width=\"2.5\"/><rect x=\"160\" y=\"230\" width=\"120\" height=\"12\" fill=\"#64748B\"/><line x1=\"180\" y1=\"204\" x2=\"190\" y2=\"204\" stroke=\"#0F172A\" stroke-width=\"1.5\"/><line x1=\"180\" y1=\"188\" x2=\"198\" y2=\"188\" stroke=\"#0F172A\" stroke-width=\"1.5\"/><text x=\"172\" y=\"193\" font-family=\"Inter, system-ui, sans-serif\" font-size=\"14\" fill=\"#0F172A\" text-anchor=\"end\" font-size=\"13\">20</text><line x1=\"180\" y1=\"172\" x2=\"190\" y2=\"172\" stroke=\"#0F172A\" stroke-width=\"1.5\"/><line x1=\"180\" y1=\"156\" x2=\"198\" y2=\"156\" stroke=\"#0F172A\" stroke-width=\"1.5\"/><text x=\"172\" y=\"161\" font-family=\"Inter, system-ui, sans-serif\" font-size=\"14\" fill=\"#0F172A\" text-anchor=\"end\" font-size=\"13\">40</text><line x1=\"180\" y1=\"140\" x2=\"190\" y2=\"140\" stroke=\"#0F172A\" stroke-width=\"1.5\"/><line x1=\"180\" y1=\"124\" x2=\"198\" y2=\"124\" stroke=\"#0F172A\" stroke-width=\"1.5\"/><text x=\"172\" y=\"129\" font-family=\"Inter, system-ui, sans-serif\" font-size=\"14\" fill=\"#0F172A\" text-anchor=\"end\" font-size=\"13\">60</text><line x1=\"180\" y1=\"108\" x2=\"190\" y2=\"108\" stroke=\"#0F172A\" stroke-width=\"1.5\"/><line x1=\"180\" y1=\"92\" x2=\"198\" y2=\"92\" stroke=\"#0F172A\" stroke-width=\"1.5\"/><text x=\"172\" y=\"97\" font-family=\"Inter, system-ui, sans-serif\" font-size=\"14\" fill=\"#0F172A\" text-anchor=\"end\" font-size=\"13\">80</text><line x1=\"180\" y1=\"76\" x2=\"190\" y2=\"76\" stroke=\"#0F172A\" stroke-width=\"1.5\"/><line x1=\"180\" y1=\"60\" x2=\"198\" y2=\"60\" stroke=\"#0F172A\" stroke-width=\"1.5\"/><text x=\"172\" y=\"65\" font-family=\"Inter, system-ui, sans-serif\" font-size=\"14\" fill=\"#0F172A\" text-anchor=\"end\" font-size=\"13\">100</text><text x=\"172\" y=\"44\" font-family=\"Inter, system-ui, sans-serif\" font-size=\"14\" fill=\"#0F172A\" text-anchor=\"end\" font-size=\"13\" fill=\"#64748B\">cm³</text><line x1=\"222\" y1=\"124\" x2=\"402\" y2=\"124\" stroke=\"#0D9488\" stroke-width=\"2\" stroke-dasharray=\"6 4\"/><ellipse cx=\"420\" cy=\"124\" rx=\"16\" ry=\"9\" fill=\"#FFFFFF\" stroke=\"#0F172A\" stroke-width=\"2\"/><circle cx=\"420\" cy=\"124\" r=\"4\" fill=\"#0F172A\"/><text x=\"280\" y=\"155\" font-family=\"Inter, system-ui, sans-serif\" font-size=\"14\" fill=\"#0F172A\" fill=\"#0D9488\">Eye level with the</text><text x=\"280\" y=\"174\" font-family=\"Inter, system-ui, sans-serif\" font-size=\"14\" fill=\"#0F172A\" fill=\"#0D9488\">bottom of the meniscus</text><text x=\"280\" y=\"210\" font-family=\"Inter, system-ui, sans-serif\" font-size=\"14\" fill=\"#0F172A\" font-weight=\"700\">Reading = 60 cm³</text></svg>"
+    },
+    {
+      "type": "example",
+      "title": "Worked example: volume of a regular block",
+      "problem": "A wooden block is 5 cm long, 4 cm wide and 2 cm high. Find its volume.",
+      "steps": [
+        "Step 1: The block is a cuboid, so volume = length × width × height.",
+        "Step 2: Volume = 5 cm × 4 cm × 2 cm.",
+        "Step 3: 5 × 4 = 20, and 20 × 2 = 40. The unit is cm × cm × cm = cm³."
+      ],
+      "answer": "The volume of the block is 40 cm³."
+    },
+    {
+      "type": "explain",
+      "title": "Irregular solids: the displacement method",
+      "body": "A stone has no neat length, width or height, so we cannot use a formula. Instead we use the displacement method. When the stone goes under water, it pushes aside (displaces) its own volume of water, so the water level rises.\n\nPour some water into a measuring cylinder and read the level. Tie the stone to a thread and lower it gently until it is fully under water. Read the new level. The volume of the stone is the difference between the two readings.\n\nVolume of solid = final reading − first reading.",
+      "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 480 260\" role=\"img\" aria-label=\"Displacement method: water level rises from 50 to 68 cubic centimetres when a stone is lowered in, so the stone volume is 18 cubic centimetres\"><rect x=\"61\" y=\"135\" width=\"68\" height=\"87\" fill=\"#DBEAFE\"/><line x1=\"60\" y1=\"135\" x2=\"130\" y2=\"135\" stroke=\"#2563EB\" stroke-width=\"2\"/><polyline points=\"60,40 60,222 130,222 130,40\" fill=\"none\" stroke=\"#0F172A\" stroke-width=\"2.5\"/><rect x=\"50\" y=\"222\" width=\"90\" height=\"10\" fill=\"#64748B\"/><line x1=\"60\" y1=\"199\" x2=\"69\" y2=\"199\" stroke=\"#0F172A\" stroke-width=\"1.5\"/><line x1=\"60\" y1=\"183\" x2=\"76\" y2=\"183\" stroke=\"#0F172A\" stroke-width=\"1.5\"/><text x=\"52\" y=\"188\" font-family=\"Inter, system-ui, sans-serif\" font-size=\"14\" fill=\"#0F172A\" text-anchor=\"end\" font-size=\"13\">20</text><line x1=\"60\" y1=\"167\" x2=\"69\" y2=\"167\" stroke=\"#0F172A\" stroke-width=\"1.5\"/><line x1=\"60\" y1=\"151\" x2=\"76\" y2=\"151\" stroke=\"#0F172A\" stroke-width=\"1.5\"/><text x=\"52\" y=\"156\" font-family=\"Inter, system-ui, sans-serif\" font-size=\"14\" fill=\"#0F172A\" text-anchor=\"end\" font-size=\"13\">40</text><line x1=\"60\" y1=\"135\" x2=\"69\" y2=\"135\" stroke=\"#0F172A\" stroke-width=\"1.5\"/><line x1=\"60\" y1=\"119\" x2=\"76\" y2=\"119\" stroke=\"#0F172A\" stroke-width=\"1.5\"/><text x=\"52\" y=\"124\" font-family=\"Inter, system-ui, sans-serif\" font-size=\"14\" fill=\"#0F172A\" text-anchor=\"end\" font-size=\"13\">60</text><line x1=\"60\" y1=\"103\" x2=\"69\" y2=\"103\" stroke=\"#0F172A\" stroke-width=\"1.5\"/><line x1=\"60\" y1=\"87\" x2=\"76\" y2=\"87\" stroke=\"#0F172A\" stroke-width=\"1.5\"/><text x=\"52\" y=\"92\" font-family=\"Inter, system-ui, sans-serif\" font-size=\"14\" fill=\"#0F172A\" text-anchor=\"end\" font-size=\"13\">80</text><line x1=\"60\" y1=\"71\" x2=\"69\" y2=\"71\" stroke=\"#0F172A\" stroke-width=\"1.5\"/><line x1=\"60\" y1=\"55\" x2=\"76\" y2=\"55\" stroke=\"#0F172A\" stroke-width=\"1.5\"/><text x=\"52\" y=\"60\" font-family=\"Inter, system-ui, sans-serif\" font-size=\"14\" fill=\"#0F172A\" text-anchor=\"end\" font-size=\"13\">100</text><rect x=\"251\" y=\"106.2\" width=\"68\" height=\"115.8\" fill=\"#DBEAFE\"/><line x1=\"250\" y1=\"106.2\" x2=\"320\" y2=\"106.2\" stroke=\"#2563EB\" stroke-width=\"2\"/><polyline points=\"250,40 250,222 320,222 320,40\" fill=\"none\" stroke=\"#0F172A\" stroke-width=\"2.5\"/><rect x=\"240\" y=\"222\" width=\"90\" height=\"10\" fill=\"#64748B\"/><line x1=\"250\" y1=\"199\" x2=\"259\" y2=\"199\" stroke=\"#0F172A\" stroke-width=\"1.5\"/><line x1=\"250\" y1=\"183\" x2=\"266\" y2=\"183\" stroke=\"#0F172A\" stroke-width=\"1.5\"/><text x=\"242\" y=\"188\" font-family=\"Inter, system-ui, sans-serif\" font-size=\"14\" fill=\"#0F172A\" text-anchor=\"end\" font-size=\"13\">20</text><line x1=\"250\" y1=\"167\" x2=\"259\" y2=\"167\" stroke=\"#0F172A\" stroke-width=\"1.5\"/><line x1=\"250\" y1=\"151\" x2=\"266\" y2=\"151\" stroke=\"#0F172A\" stroke-width=\"1.5\"/><text x=\"242\" y=\"156\" font-family=\"Inter, system-ui, sans-serif\" font-size=\"14\" fill=\"#0F172A\" text-anchor=\"end\" font-size=\"13\">40</text><line x1=\"250\" y1=\"135\" x2=\"259\" y2=\"135\" stroke=\"#0F172A\" stroke-width=\"1.5\"/><line x1=\"250\" y1=\"119\" x2=\"266\" y2=\"119\" stroke=\"#0F172A\" stroke-width=\"1.5\"/><text x=\"242\" y=\"124\" font-family=\"Inter, system-ui, sans-serif\" font-size=\"14\" fill=\"#0F172A\" text-anchor=\"end\" font-size=\"13\">60</text><line x1=\"250\" y1=\"103\" x2=\"259\" y2=\"103\" stroke=\"#0F172A\" stroke-width=\"1.5\"/><line x1=\"250\" y1=\"87\" x2=\"266\" y2=\"87\" stroke=\"#0F172A\" stroke-width=\"1.5\"/><text x=\"242\" y=\"92\" font-family=\"Inter, system-ui, sans-serif\" font-size=\"14\" fill=\"#0F172A\" text-anchor=\"end\" font-size=\"13\">80</text><line x1=\"250\" y1=\"71\" x2=\"259\" y2=\"71\" stroke=\"#0F172A\" stroke-width=\"1.5\"/><line x1=\"250\" y1=\"55\" x2=\"266\" y2=\"55\" stroke=\"#0F172A\" stroke-width=\"1.5\"/><text x=\"242\" y=\"60\" font-family=\"Inter, system-ui, sans-serif\" font-size=\"14\" fill=\"#0F172A\" text-anchor=\"end\" font-size=\"13\">100</text><line x1=\"288\" y1=\"20\" x2=\"288\" y2=\"194\" stroke=\"#0F172A\" stroke-width=\"1.5\"/><polygon points=\"268,212 280,197 298,193 309,203 305,216 284,219\" fill=\"#F59E0B\" stroke=\"#0F172A\" stroke-width=\"1.5\"/><line x1=\"145\" y1=\"100\" x2=\"190\" y2=\"100\" stroke=\"#0D9488\" stroke-width=\"2.5\"/><polygon points=\"190,93 203,100 190,107\" fill=\"#0D9488\"/><text x=\"95\" y=\"252\" font-family=\"Inter, system-ui, sans-serif\" font-size=\"14\" fill=\"#0F172A\" text-anchor=\"middle\">Before: 50 cm³</text><text x=\"285\" y=\"252\" font-family=\"Inter, system-ui, sans-serif\" font-size=\"14\" fill=\"#0F172A\" text-anchor=\"middle\">After: 68 cm³</text><text x=\"345\" y=\"110\" font-family=\"Inter, system-ui, sans-serif\" font-size=\"14\" fill=\"#0F172A\" fill=\"#0D9488\" font-weight=\"700\">Stone volume</text><text x=\"345\" y=\"132\" font-family=\"Inter, system-ui, sans-serif\" font-size=\"14\" fill=\"#0F172A\" fill=\"#0D9488\">= 68 − 50</text><text x=\"345\" y=\"154\" font-family=\"Inter, system-ui, sans-serif\" font-size=\"14\" fill=\"#0F172A\" fill=\"#0D9488\" font-weight=\"700\">= 18 cm³</text></svg>"
+    },
+    {
+      "type": "check",
+      "question": "A measuring cylinder contains 40 cm³ of water. A key is lowered in and the level rises to 55 cm³. What is the volume of the key?",
+      "options": [
+        "55 cm³",
+        "95 cm³",
+        "15 cm³",
+        "40 cm³"
+      ],
+      "answer": 2,
+      "explanation": "Volume of the key = final reading − first reading = 55 − 40 = 15 cm³. 55 cm³ is the volume of the water and key together, not the key alone. 95 cm³ adds the readings instead of subtracting."
+    },
+    {
+      "type": "explain",
+      "title": "Density = mass ÷ volume",
+      "body": "Density tells us how much mass there is in each unit of volume. Its symbol is ρ, the Greek letter rho.\n\nDensity = mass ÷ volume, or ρ = m ÷ V.\n\nIf mass is in g and volume is in cm³, density is in g/cm³. The SI unit is kg/m³. To change g/cm³ to kg/m³, multiply by 1000. Water has a density of 1.0 g/cm³, which is 1000 kg/m³. Some other values: ice 0.92 g/cm³, aluminium 2.7 g/cm³, copper 8.96 g/cm³, mercury 13.6 g/cm³.\n\nThe triangle helps you rearrange the formula. Cover the quantity you want and read what is left.",
+      "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 480 260\" role=\"img\" aria-label=\"Density triangle: m on top, rho and V on the bottom. Cover the quantity you want to find\"><polygon points=\"240,30 100,230 380,230\" fill=\"#DBEAFE\" stroke=\"#2563EB\" stroke-width=\"2.5\"/><line x1=\"170\" y1=\"130\" x2=\"310\" y2=\"130\" stroke=\"#2563EB\" stroke-width=\"2.5\"/><line x1=\"240\" y1=\"130\" x2=\"240\" y2=\"230\" stroke=\"#2563EB\" stroke-width=\"2.5\"/><text x=\"240\" y=\"112\" font-family=\"Inter, system-ui, sans-serif\" font-size=\"14\" fill=\"#0F172A\" font-size=\"30\" font-weight=\"700\" text-anchor=\"middle\">m</text><text x=\"195\" y=\"197\" font-family=\"Inter, system-ui, sans-serif\" font-size=\"14\" fill=\"#0F172A\" font-size=\"30\" font-weight=\"700\" text-anchor=\"middle\">ρ</text><text x=\"285\" y=\"197\" font-family=\"Inter, system-ui, sans-serif\" font-size=\"14\" fill=\"#0F172A\" font-size=\"30\" font-weight=\"700\" text-anchor=\"middle\">V</text><text x=\"20\" y=\"60\" font-family=\"Inter, system-ui, sans-serif\" font-size=\"14\" fill=\"#0F172A\" fill=\"#64748B\">m = mass</text><text x=\"20\" y=\"84\" font-family=\"Inter, system-ui, sans-serif\" font-size=\"14\" fill=\"#0F172A\" fill=\"#64748B\">V = volume</text><text x=\"20\" y=\"108\" font-family=\"Inter, system-ui, sans-serif\" font-size=\"14\" fill=\"#0F172A\" fill=\"#64748B\">ρ = density</text><text x=\"330\" y=\"60\" font-family=\"Inter, system-ui, sans-serif\" font-size=\"14\" fill=\"#0F172A\" fill=\"#0D9488\" font-weight=\"700\">ρ = m ÷ V</text><text x=\"330\" y=\"84\" font-family=\"Inter, system-ui, sans-serif\" font-size=\"14\" fill=\"#0F172A\" fill=\"#0D9488\" font-weight=\"700\">m = ρ × V</text><text x=\"330\" y=\"108\" font-family=\"Inter, system-ui, sans-serif\" font-size=\"14\" fill=\"#0F172A\" fill=\"#0D9488\" font-weight=\"700\">V = m ÷ ρ</text><text x=\"240\" y=\"252\" font-family=\"Inter, system-ui, sans-serif\" font-size=\"14\" fill=\"#0F172A\" text-anchor=\"middle\">Cover the one you want to find</text></svg>"
+    },
+    {
+      "type": "example",
+      "title": "Worked example: density of a stone",
+      "problem": "The stone in the displacement diagram has a volume of 18 cm³. Its mass, measured on a balance, is 45 g. Find its density in g/cm³ and in kg/m³.",
+      "steps": [
+        "Step 1: Write the formula: density = mass ÷ volume.",
+        "Step 2: Put in the values with units: density = 45 g ÷ 18 cm³.",
+        "Step 3: 45 ÷ 18 = 2.5, so density = 2.5 g/cm³.",
+        "Step 4: To change to kg/m³, multiply by 1000: 2.5 × 1000 = 2500 kg/m³."
+      ],
+      "answer": "The density of the stone is 2.5 g/cm³ (2500 kg/m³)."
+    },
+    {
+      "type": "example",
+      "title": "Worked example: finding mass from density",
+      "problem": "Cooking oil has a density of about 0.92 g/cm³. What is the mass of 500 cm³ of cooking oil?",
+      "steps": [
+        "Step 1: Cover m in the triangle: mass = density × volume.",
+        "Step 2: Mass = 0.92 g/cm³ × 500 cm³.",
+        "Step 3: 0.92 × 500 = 460. The cm³ units cancel, leaving g."
+      ],
+      "answer": "The mass of the oil is 460 g."
+    },
+    {
+      "type": "mistake",
+      "title": "Common mistake: mixing units in the density formula",
+      "body": "A learner writes the mass of the stone as 0.045 kg and its volume as 18 cm³, then works out 0.045 ÷ 18 = 0.0025. This answer has the strange unit kg/cm³ and is easy to misread.\n\nBefore you divide, make the units match. Either use g with cm³ (45 g ÷ 18 cm³ = 2.5 g/cm³) or kg with m³. Also remember that heavy does not mean dense. A large log is heavy, but its density is less than that of water."
+    },
+    {
+      "type": "explain",
+      "title": "Floating and sinking",
+      "body": "Whether an object floats or sinks in a liquid depends on comparing densities, not on size or weight.\n\nThe wooden block from earlier has a volume of 40 cm³. If its mass is 24 g, its density is 24 ÷ 40 = 0.6 g/cm³. This is less than water (1.0 g/cm³), so it floats.",
+      "bullets": [
+        "Object less dense than the liquid: it floats. Ice (0.92 g/cm³) floats on water.",
+        "Object denser than the liquid: it sinks. Copper (8.96 g/cm³) sinks in water.",
+        "Liquids follow the same rule: cooking oil floats on top of water.",
+        "Even iron (about 7.9 g/cm³) floats on mercury (13.6 g/cm³)."
+      ]
+    },
+    {
+      "type": "check",
+      "question": "A block has a mass of 30 g and a volume of 40 cm³. What happens when it is placed in water?",
+      "options": [
+        "It sinks, because its mass is more than 1 g",
+        "It floats, because its density is 0.75 g/cm³, which is less than water",
+        "It sinks, because its density is 1.33 g/cm³",
+        "It floats, because its volume is a bigger number than its mass"
+      ],
+      "answer": 1,
+      "explanation": "Density = 30 g ÷ 40 cm³ = 0.75 g/cm³. This is less than 1.0 g/cm³, so the block floats. 1.33 g/cm³ comes from dividing volume by mass, the wrong way round. Comparing the bare numbers for volume and mass is not a reliable rule; you must work out the density."
+    },
+    {
+      "type": "summary",
+      "title": "Key points",
+      "bullets": [
+        "Mass is the amount of matter (kg, balance) and stays the same everywhere. Weight is the pull of gravity (N, spring balance) and changes.",
+        "1 cm³ = 1 ml and 1 litre = 1000 cm³. Read the bottom of a water meniscus with your eye level with it.",
+        "Volume of an irregular solid = final water level − first water level (displacement method).",
+        "Density = mass ÷ volume. Units: g/cm³ or kg/m³ (multiply g/cm³ by 1000 to get kg/m³).",
+        "An object floats if it is less dense than the liquid and sinks if it is denser."
+      ]
+    }
+  ],
+  "quiz": [
+    {
+      "question": "What is the SI unit of mass?",
+      "options": [
+        "Newton",
+        "Kilogram",
+        "Litre",
+        "Cubic centimetre"
+      ],
+      "answer": 1,
+      "explanation": "Mass is measured in kilograms (kg). The newton is the unit of weight, which is a force. The litre and cubic centimetre are units of volume."
+    },
+    {
+      "question": "Which instrument measures weight?",
+      "options": [
+        "Beam balance",
+        "Measuring cylinder",
+        "Spring balance",
+        "Vernier caliper"
+      ],
+      "answer": 2,
+      "explanation": "Weight is a force, and a spring balance measures force in newtons. A beam balance compares masses, a measuring cylinder measures volume, and a vernier caliper measures small lengths."
+    },
+    {
+      "question": "Which of these is equal to 1 cm³?",
+      "options": [
+        "1 ml",
+        "1 litre",
+        "10 ml",
+        "1000 ml"
+      ],
+      "answer": 0,
+      "explanation": "1 cm³ is exactly the same volume as 1 millilitre. A litre is much bigger: 1 litre = 1000 ml = 1000 cm³."
+    },
+    {
+      "question": "The water in a measuring cylinder is at 35 cm³. When a stone is lowered in, the level rises to 47 cm³. What is the volume of the stone?",
+      "options": [
+        "47 cm³",
+        "82 cm³",
+        "35 cm³",
+        "12 cm³"
+      ],
+      "answer": 3,
+      "explanation": "Volume of stone = final reading − first reading = 47 − 35 = 12 cm³. 47 cm³ is the water and stone together, and 82 cm³ adds the readings instead of subtracting."
+    },
+    {
+      "question": "A metal cube has a mass of 120 g and a volume of 15 cm³. What is its density?",
+      "options": [
+        "8 g/cm³",
+        "1800 g/cm³",
+        "0.125 g/cm³",
+        "105 g/cm³"
+      ],
+      "answer": 0,
+      "explanation": "Density = mass ÷ volume = 120 g ÷ 15 cm³ = 8 g/cm³. 1800 comes from multiplying, and 0.125 comes from dividing volume by mass, the wrong way round."
+    },
+    {
+      "question": "Fresh milk has a density of about 1.03 g/cm³. What is the mass of 2 litres of milk?",
+      "options": [
+        "1.03 g",
+        "2060 g",
+        "1942 g",
+        "2000 g"
+      ],
+      "answer": 1,
+      "explanation": "First change litres to cm³: 2 litres = 2000 cm³. Then mass = density × volume = 1.03 × 2000 = 2060 g. 1942 g comes from dividing by the density instead of multiplying, and 2000 g ignores the density."
+    },
+    {
+      "question": "Why does ice float on water?",
+      "options": [
+        "Ice is always lighter than any amount of water",
+        "Ice has no mass",
+        "The density of ice (0.92 g/cm³) is less than the density of water (1.0 g/cm³)",
+        "Cold things always float"
+      ],
+      "answer": 2,
+      "explanation": "Floating depends on density. Ice is less dense than water, so it floats. A large iceberg is much heavier than a cup of water, so \"lighter\" is not the reason, and ice certainly has mass."
+    },
+    {
+      "question": "A copper block is cut into two equal halves. What is the density of each half?",
+      "options": [
+        "Half of the original density",
+        "Double the original density",
+        "It depends on the shape of each half",
+        "The same as the original density"
+      ],
+      "answer": 3,
+      "explanation": "Each half has half the mass and half the volume. Density = mass ÷ volume, so (m ÷ 2) ÷ (V ÷ 2) = m ÷ V, which is unchanged. Density is a property of the material, not of the size of the piece."
+    }
+  ],
+  "glossary": [
+    {
+      "term": "Mass",
+      "definition": "The amount of matter in an object, measured in kilograms (kg). It is the same everywhere."
+    },
+    {
+      "term": "Weight",
+      "definition": "The pull of gravity on an object. It is a force, measured in newtons (N)."
+    },
+    {
+      "term": "Volume",
+      "definition": "The amount of space an object takes up, measured in m³ or cm³."
+    },
+    {
+      "term": "Meniscus",
+      "definition": "The curved surface of a liquid in a narrow tube, such as a measuring cylinder."
+    },
+    {
+      "term": "Displacement method",
+      "definition": "Finding the volume of an irregular solid by measuring how much the water level rises when it is put under water."
+    },
+    {
+      "term": "Density",
+      "definition": "Mass per unit volume of a material: density = mass ÷ volume, in g/cm³ or kg/m³."
+    }
+  ]
+}

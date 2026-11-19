@@ -1,0 +1,258 @@
+{
+  "id": "english-language-writing-skills-2",
+  "subject": "english-language",
+  "form": 2,
+  "term": 1,
+  "topic": "Writing Skills",
+  "topicSlug": "writing-skills",
+  "order": 2,
+  "title": "Summary writing",
+  "summary": "Pick out the main points of a passage and rewrite them briefly in your own words within a word limit.",
+  "minutes": 25,
+  "objectives": [
+    "Identify the main points of a passage that answer a question",
+    "Leave out examples, repetition and minor details",
+    "Rewrite main points in your own words",
+    "Write a connected summary within a given word limit"
+  ],
+  "sections": [
+    {
+      "type": "explain",
+      "title": "You already summarise every day",
+      "body": "After a big Chipolopolo match, a friend who missed it asks, \"What happened?\" You do not describe all ninety minutes. You say who scored, who won and perhaps one key moment. That is a summary.\n\nA summary is a short version of a longer text that keeps only the main points. Summary questions are a regular part of the O-Level English paper: you read a passage and write its key points on a given topic in a set number of words. They test whether you truly understand what you read, so the skill is worth practising."
+    },
+    {
+      "type": "explain",
+      "title": "The four steps",
+      "body": "Every summary follows the same four steps. Learn them and use them every time.",
+      "bullets": [
+        "Read the passage twice: first for the general meaning, then slowly, looking for points that answer the question.",
+        "Note only the main points that match the question. If the question asks only for advantages, leave out everything else.",
+        "Rewrite each point in your own words, as briefly as you can.",
+        "Join the points into smooth sentences, count your words, and check grammar and spelling."
+      ],
+      "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 480 290\" role=\"img\" aria-label=\"Four steps of summary writing in order: read the passage twice, note only the main points, rewrite in your own words, then join, count and check\"><rect x=\"80\" y=\"12\" width=\"320\" height=\"48\" rx=\"10\" fill=\"#DBEAFE\" stroke=\"#2563EB\" stroke-width=\"2\"/><text x=\"240\" y=\"42\" font-family=\"Inter, system-ui, sans-serif\" font-size=\"16\" font-weight=\"bold\" fill=\"#0F172A\" text-anchor=\"middle\">1. Read the passage twice</text><line x1=\"240\" y1=\"62\" x2=\"240\" y2=\"72\" stroke=\"#64748B\" stroke-width=\"2\"/><polygon points=\"233,71 247,71 240,80\" fill=\"#64748B\"/><rect x=\"80\" y=\"82\" width=\"320\" height=\"48\" rx=\"10\" fill=\"#DBEAFE\" stroke=\"#2563EB\" stroke-width=\"2\"/><text x=\"240\" y=\"112\" font-family=\"Inter, system-ui, sans-serif\" font-size=\"16\" font-weight=\"bold\" fill=\"#0F172A\" text-anchor=\"middle\">2. Note only the main points</text><line x1=\"240\" y1=\"132\" x2=\"240\" y2=\"142\" stroke=\"#64748B\" stroke-width=\"2\"/><polygon points=\"233,141 247,141 240,150\" fill=\"#64748B\"/><rect x=\"80\" y=\"152\" width=\"320\" height=\"48\" rx=\"10\" fill=\"#DBEAFE\" stroke=\"#2563EB\" stroke-width=\"2\"/><text x=\"240\" y=\"182\" font-family=\"Inter, system-ui, sans-serif\" font-size=\"16\" font-weight=\"bold\" fill=\"#0F172A\" text-anchor=\"middle\">3. Rewrite in your own words</text><line x1=\"240\" y1=\"202\" x2=\"240\" y2=\"212\" stroke=\"#64748B\" stroke-width=\"2\"/><polygon points=\"233,211 247,211 240,220\" fill=\"#64748B\"/><rect x=\"80\" y=\"222\" width=\"320\" height=\"48\" rx=\"10\" fill=\"#DBEAFE\" stroke=\"#2563EB\" stroke-width=\"2\"/><text x=\"240\" y=\"252\" font-family=\"Inter, system-ui, sans-serif\" font-size=\"16\" font-weight=\"bold\" fill=\"#0F172A\" text-anchor=\"middle\">4. Join, count and check</text></svg>"
+    },
+    {
+      "type": "explain",
+      "title": "Our practice passage",
+      "body": "Read this passage carefully. We will use it for the rest of the lesson.\n\nSolar power in rural Zambia\n\nMany villages in rural Zambia are far from the national electricity grid. For years, families there have depended on candles, paraffin lamps and firewood for light. These sources are expensive, and paraffin lamps also fill homes with smoke that harms the lungs. Today, small solar panels are changing this picture. A solar panel turns sunlight into electricity, and Zambia receives strong sunshine for most of the year. With a single panel and a battery, a household can light several bulbs at night. Children can then do their homework after dark instead of stopping when the sun sets. For example, in some villages, pupils gather at a neighbour's house each evening to read under a solar lamp. Solar power also helps small businesses. A barber or a shop owner can charge phones for customers and earn extra money. However, the panels are still too costly for many poor families, so some people buy them in small monthly payments. In short, solar power brings cleaner light, better study time and new income to rural homes."
+    },
+    {
+      "type": "check",
+      "question": "In the passage, which of these is a MAIN point rather than an example?",
+      "options": [
+        "In some villages, pupils gather at a neighbour's house to read.",
+        "Children can study after dark because solar power lights their homes.",
+        "A barber can charge phones for customers."
+      ],
+      "answer": 1,
+      "explanation": "The main point is that solar light lets children study after dark. The sentence about pupils at a neighbour's house begins with \"For example\", which is a clear sign that it only illustrates that point. The barber is also just an example of the wider point that small businesses can earn money."
+    },
+    {
+      "type": "explain",
+      "title": "What to leave out",
+      "body": "A summary keeps the skeleton of a passage and throws away the decoration. Leave out:",
+      "bullets": [
+        "Examples and illustrations: watch for \"for example\", \"for instance\" and \"such as\".",
+        "Repetition: the same idea said again in other words, including closing lines that begin \"In short\".",
+        "Minor details: names, numbers and descriptions that do not change the main point.",
+        "Direct speech, questions and figures of speech.",
+        "Your own opinions, or any information that is not in the passage."
+      ]
+    },
+    {
+      "type": "example",
+      "title": "Worked example: finding the main points",
+      "problem": "Using the passage on solar power, note the main points that answer this question: \"Why is solar power useful to rural Zambian families, and what still holds it back?\"",
+      "steps": [
+        "Step 1: Read the question. It has two parts: why solar power is useful, and what holds it back. Every point must answer one of these.",
+        "Step 2: Sentences 1 to 3 explain the old problem: villages far from the grid used candles, paraffin and firewood, which are costly and smoky. This is the background that makes solar useful, so keep it as one point.",
+        "Step 3: Sentences 4 to 6 say that solar panels turn the plentiful sunshine into electricity and can light a home at night. Main point.",
+        "Step 4: Children can study after dark. Main point. The pupils at a neighbour's house are an example of it, so leave them out.",
+        "Step 5: Small businesses can earn money by charging phones. Main point. \"A barber or a shop owner\" are examples, so shrink them to \"small businesses\".",
+        "Step 6: Panels are still too costly for many poor families, though some pay monthly. This answers \"what holds it back\", so keep it.",
+        "Step 7: The last sentence (\"In short...\") only repeats earlier points, so leave it out."
+      ],
+      "answer": "Main points:\n1. Remote villages relied on candles, paraffin and firewood, which are costly and unhealthy.\n2. Solar panels use Zambia's strong sunshine to light homes at night.\n3. Children can study after dark.\n4. Small businesses can earn money by charging phones.\n5. Panels are still too expensive for many poor families, though some pay in instalments."
+    },
+    {
+      "type": "explain",
+      "title": "Using your own words",
+      "body": "Examiners want proof that you understand the passage, so do not copy whole sentences. Putting an idea into your own words is called paraphrasing. You may keep key words that have no simple replacement, such as \"solar panel\" or \"electricity\", but change the rest. Three useful tricks:",
+      "bullets": [
+        "Use a synonym (a word with the same meaning): \"depended on\" becomes \"relied on\"; \"costly\" becomes \"expensive\".",
+        "Use one general phrase for a list: \"candles, paraffin lamps and firewood\" becomes \"traditional lighting\".",
+        "Shorten long sentences: \"A solar panel turns sunlight into electricity, and Zambia receives strong sunshine for most of the year\" becomes \"Solar panels use Zambia's plentiful sunshine to make electricity\"."
+      ]
+    },
+    {
+      "type": "check",
+      "question": "Which is the best own-words version of this sentence?\n\n\"These sources are expensive, and paraffin lamps also fill homes with smoke that harms the lungs.\"",
+      "options": [
+        "These sources are expensive, and paraffin lamps fill homes with smoke.",
+        "Paraffin is a liquid made from oil.",
+        "They are costly and unhealthy.",
+        "Smoke is bad, and I think families should stop using lamps."
+      ],
+      "answer": 2,
+      "explanation": "\"They are costly and unhealthy\" keeps both ideas (cost and harm to health) in new, shorter words. The first option is tempting, but it is copied almost word for word from the passage. The second adds information that is not in the passage, and the last adds the writer's own opinion."
+    },
+    {
+      "type": "example",
+      "title": "Worked example: writing the final summary",
+      "problem": "Turn the five main points into one paragraph of not more than 60 words.",
+      "steps": [
+        "Step 1: Write a first draft that joins the points. A first draft often copies too much. This one has 85 words:\n\"Many villages in rural Zambia are far from the national electricity grid, so families there have depended on candles, paraffin lamps and firewood, which are expensive and fill homes with smoke. Solar panels turn Zambia's strong sunshine into electricity, so a household can light bulbs at night. Children can do their homework after dark, and small businesses such as barbers and shops can charge phones and earn extra money. However, many poor families find the panels too costly, so some pay in small monthly payments.\"",
+        "Step 2: It is 25 words over the limit. Cut the examples that crept back in (\"barbers and shops\"), and replace copied phrases with your own words: \"candles, paraffin lamps and firewood\" becomes \"traditional lighting\". Then shorten wordy phrases: \"far from the national electricity grid\" becomes \"far from the power grid\", and \"so some pay in small monthly payments\" becomes \"though some pay in instalments\".",
+        "Step 3: Join the points with linking words that show how they connect: \"As a result\" for the benefits, and \"However\" for the problem.",
+        "Step 4: Count again. The final version has 58 words, which is within the limit. Read it once more for grammar and spelling."
+      ],
+      "answer": "Many rural Zambian homes, far from the power grid, relied on costly and unhealthy traditional lighting. Solar panels now use the country's plentiful sunshine to light homes at night. As a result, children can study after dark, and small businesses can earn money by charging phones. However, many poor families cannot afford panels, though some pay in instalments.\n\n(58 words)"
+    },
+    {
+      "type": "mistake",
+      "title": "Common mistake: copying and going over the limit",
+      "body": "Many candidates lift whole sentences from the passage, string them together and call it a summary. This does not show the examiner that you understand the ideas, and it nearly always runs over the word limit. Others add their own opinions, such as \"I think every home should have solar power.\" A summary reports only what the passage says.\n\nAlways count your words before you finish. Going over the limit can cost you marks, and points written after the limit may not be counted at all."
+    },
+    {
+      "type": "check",
+      "question": "A question says: \"In not more than 50 words, summarise...\" Which answer is acceptable?",
+      "options": [
+        "A summary of 65 words that includes every detail",
+        "A summary of 20 words that gives only one main point",
+        "A summary of 50 words that includes your own opinion",
+        "A summary of 48 words that covers all the main points"
+      ],
+      "answer": 3,
+      "explanation": "The 48-word summary is within the limit and includes every main point, which is exactly what is asked. The 20-word answer is short, but it misses most of the points, so it would score low. The 50-word answer fits the limit, but opinions do not belong in a summary."
+    },
+    {
+      "type": "summary",
+      "title": "Key points",
+      "bullets": [
+        "A summary is a short version of a text that keeps only the main points.",
+        "Read the question first, and keep only the points that answer it.",
+        "Leave out examples, repetition, minor details and your own opinions.",
+        "Paraphrase: use synonyms and general words, and combine sentences.",
+        "Count your words and stay within the limit."
+      ]
+    }
+  ],
+  "quiz": [
+    {
+      "question": "What is a summary?",
+      "options": [
+        "A copy of the most interesting sentences in a passage",
+        "A short version of a text that keeps only the main points",
+        "A list of the difficult words in a passage",
+        "Your opinion about a passage"
+      ],
+      "answer": 1,
+      "explanation": "A summary shortens a text but keeps its main points. Copying sentences, listing difficult words or giving your opinion are not summarising."
+    },
+    {
+      "question": "Which of these should you usually leave out of a summary?",
+      "options": [
+        "Examples introduced by \"for example\"",
+        "Main points that answer the question",
+        "Linking words that join your points",
+        "Key words such as \"electricity\" that have no simple replacement"
+      ],
+      "answer": 0,
+      "explanation": "Examples only illustrate a main point, so they can be dropped. You must keep the main points, and linking words and unavoidable key words help your summary read clearly."
+    },
+    {
+      "question": "What should you do FIRST when you answer a summary question?",
+      "options": [
+        "Start writing at once to save time",
+        "Count the words in the passage",
+        "Read the question and the passage carefully",
+        "Copy the first sentence of the passage"
+      ],
+      "answer": 2,
+      "explanation": "The question tells you which points to look for. If you skip it, you may summarise the wrong things. Reading the passage carefully, usually twice, comes next."
+    },
+    {
+      "question": "Which general phrase could replace \"mangoes, guavas, bananas and oranges\" in a summary?",
+      "options": [
+        "vegetables",
+        "fruit",
+        "crops from the Copperbelt",
+        "sweet foods from shops"
+      ],
+      "answer": 1,
+      "explanation": "All four are kinds of fruit, so the single word \"fruit\" covers the list and saves words. \"Vegetables\" is the wrong group, and the other options add ideas that are not in the list."
+    },
+    {
+      "question": "A passage contains this sentence: \"For instance, Mrs Phiri of Chipata now sells cold drinks from a solar-powered fridge.\" How should you treat it in a summary?",
+      "options": [
+        "Copy it word for word",
+        "Make it the first sentence of your summary",
+        "Add your own opinion about Mrs Phiri",
+        "Leave it out, or keep only the general idea it supports"
+      ],
+      "answer": 3,
+      "explanation": "\"For instance\" shows that this is an example. In a summary you drop the example and keep only the main point behind it, such as \"solar power helps small businesses earn money\"."
+    },
+    {
+      "question": "Which sentence is the best summary of this passage?\n\"The road from Kitwe to Chingola was full of potholes. Drivers complained every day. Many cars were damaged, and journeys took twice as long as they should.\"",
+      "options": [
+        "The potholed road damaged cars and slowed journeys, so drivers complained.",
+        "The road from Kitwe to Chingola was full of potholes and drivers complained every day.",
+        "Drivers should drive more carefully on bad roads.",
+        "Kitwe and Chingola are towns on the Copperbelt."
+      ],
+      "answer": 0,
+      "explanation": "The first option keeps all three points (potholes, damage and delay, complaints) in fresh, shorter words. The second is mostly copied and leaves out the damage and delay. The third is an opinion, and the fourth is information that is not in the passage."
+    },
+    {
+      "question": "Your summary has 72 words, but the limit is 60. What is the BEST way to fix it?",
+      "options": [
+        "Remove one main point at random",
+        "Leave it as it is, because examiners do not count words",
+        "Cut examples, repeated ideas and wordy phrases, then count again",
+        "Write in smaller handwriting so it looks shorter"
+      ],
+      "answer": 2,
+      "explanation": "Trim what does not carry a main point: examples, repetition and long-winded phrases. Removing a main point loses marks, and examiners can count words, so going over the limit is risky."
+    },
+    {
+      "question": "Why do examiners ask you to use your own words in a summary?",
+      "options": [
+        "To make the summary longer",
+        "To show that you understand the ideas instead of just copying them",
+        "Because the words in the passage are wrong",
+        "So that you can add new facts of your own"
+      ],
+      "answer": 1,
+      "explanation": "Rewriting an idea in your own words is only possible if you understand it, so paraphrasing proves understanding. It should make the summary shorter, not longer, and you must never add facts that are not in the passage."
+    }
+  ],
+  "glossary": [
+    {
+      "term": "Summary",
+      "definition": "A short version of a text that keeps only its main points."
+    },
+    {
+      "term": "Main point",
+      "definition": "An important idea in a passage, as opposed to an example or minor detail."
+    },
+    {
+      "term": "Word limit",
+      "definition": "The largest number of words you are allowed to use, for example \"not more than 60 words\"."
+    },
+    {
+      "term": "Paraphrase",
+      "definition": "To express an idea in your own words without changing its meaning."
+    },
+    {
+      "term": "Synonym",
+      "definition": "A word with the same or nearly the same meaning as another, such as costly and expensive."
+    },
+    {
+      "term": "Repetition",
+      "definition": "Saying the same idea again; in a summary, repeated ideas are written only once."
+    }
+  ]
+}

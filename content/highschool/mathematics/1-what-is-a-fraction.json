@@ -1,0 +1,263 @@
+{
+  "id": "mathematics-fractions-1",
+  "subject": "mathematics",
+  "form": 1,
+  "term": 1,
+  "topic": "Fractions",
+  "topicSlug": "fractions",
+  "order": 1,
+  "title": "What is a fraction?",
+  "summary": "You will be able to read and write fractions, tell proper and improper fractions apart, change between improper fractions and mixed numbers, and find a fraction of an amount.",
+  "minutes": 20,
+  "objectives": [
+    "Identify the numerator and denominator of a fraction",
+    "Read and write fractions in words and in figures",
+    "Convert between improper fractions and mixed numbers",
+    "Calculate a fraction of a quantity such as money or mass"
+  ],
+  "sections": [
+    {
+      "type": "explain",
+      "title": "Sharing a loaf of bread",
+      "body": "Your mother buys one loaf of bread and cuts it into 4 equal pieces for 4 children. Each child gets one piece out of 4. We write this as 1/4 and say \"one quarter\".\n\nA fraction is a number that shows part of a whole. The whole can be a loaf, a bag of mealie meal, a bus full of people or K100 of airtime. We use fractions every day, even when we do not notice: \"half a bag\", \"a quarter of an hour\", \"three quarters full\"."
+    },
+    {
+      "type": "explain",
+      "title": "The two parts of a fraction",
+      "body": "Every fraction has two numbers separated by a line.\n\nThe bottom number is the denominator. It tells you how many equal parts the whole is cut into. The top number is the numerator. It tells you how many of those parts you are talking about.",
+      "bullets": [
+        "In 3/4, the numerator is 3 and the denominator is 4.",
+        "The parts must be equal in size, otherwise it is not a fraction.",
+        "The denominator can never be 0, because you cannot cut a whole into 0 parts."
+      ],
+      "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 480 230\" role=\"img\" aria-label=\"A bar cut into 4 equal parts with 3 parts shaded, showing the fraction 3/4\"><rect x=\"40\" y=\"30\" width=\"100\" height=\"60\" fill=\"#2563EB\" stroke=\"#0F172A\" stroke-width=\"2\"/><rect x=\"140\" y=\"30\" width=\"100\" height=\"60\" fill=\"#2563EB\" stroke=\"#0F172A\" stroke-width=\"2\"/><rect x=\"240\" y=\"30\" width=\"100\" height=\"60\" fill=\"#2563EB\" stroke=\"#0F172A\" stroke-width=\"2\"/><rect x=\"340\" y=\"30\" width=\"100\" height=\"60\" fill=\"#E2E8F0\" stroke=\"#0F172A\" stroke-width=\"2\"/><text x=\"240\" y=\"130\" font-family=\"Inter, system-ui, sans-serif\" font-size=\"16\" font-weight=\"bold\" fill=\"#0F172A\" text-anchor=\"middle\">Shaded: 3 of 4 equal parts = 3/4</text><text x=\"240\" y=\"170\" font-family=\"Inter, system-ui, sans-serif\" font-size=\"15\" font-weight=\"normal\" fill=\"#2563EB\" text-anchor=\"middle\">3 = numerator (the parts we take)</text><text x=\"240\" y=\"200\" font-family=\"Inter, system-ui, sans-serif\" font-size=\"15\" font-weight=\"normal\" fill=\"#64748B\" text-anchor=\"middle\">4 = denominator (equal parts in the whole)</text></svg>"
+    },
+    {
+      "type": "explain",
+      "title": "Reading and writing fractions",
+      "body": "We read the numerator as a normal number and the denominator as a \"position\" word, like third, fifth or tenth. If the numerator is more than 1, we add \"s\" to the end.",
+      "bullets": [
+        "1/2 is \"one half\"",
+        "1/3 is \"one third\"; 2/3 is \"two thirds\"",
+        "1/4 is \"one quarter\"; 3/4 is \"three quarters\"",
+        "3/5 is \"three fifths\"",
+        "7/10 is \"seven tenths\""
+      ]
+    },
+    {
+      "type": "check",
+      "question": "A loaf is cut into 8 equal slices. The family eats 3 slices. What fraction of the loaf is left?",
+      "options": [
+        "3/8",
+        "5/8",
+        "5/3",
+        "8/5"
+      ],
+      "answer": 1,
+      "explanation": "8 − 3 = 5 slices are left, out of 8 equal slices, so 5/8 is left. 3/8 is the part that was eaten, not the part left. 5/3 has the numbers upside down: the denominator must be the total number of equal parts, 8."
+    },
+    {
+      "type": "explain",
+      "title": "Proper fractions, improper fractions and mixed numbers",
+      "body": "A proper fraction has a numerator smaller than its denominator, like 3/4. It is always less than 1 whole.\n\nAn improper fraction has a numerator equal to or bigger than its denominator, like 5/4 or 4/4. It is equal to 1 whole or more. A mixed number is a whole number and a proper fraction written together, like 1 1/4 (read \"one and one quarter\"). The improper fraction 5/4 and the mixed number 1 1/4 are the same amount.",
+      "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 480 240\" role=\"img\" aria-label=\"Number line from 0 to 2 in quarters, with 3/4 marked before 1 and 5/4, which equals 1 and 1/4, marked after 1\"><line x1=\"40\" y1=\"120\" x2=\"440\" y2=\"120\" stroke=\"#0F172A\" stroke-width=\"2\"/><line x1=\"40\" y1=\"108\" x2=\"40\" y2=\"132\" stroke=\"#0F172A\" stroke-width=\"2\"/><line x1=\"90\" y1=\"113\" x2=\"90\" y2=\"127\" stroke=\"#0F172A\" stroke-width=\"2\"/><line x1=\"140\" y1=\"113\" x2=\"140\" y2=\"127\" stroke=\"#0F172A\" stroke-width=\"2\"/><line x1=\"190\" y1=\"113\" x2=\"190\" y2=\"127\" stroke=\"#0F172A\" stroke-width=\"2\"/><line x1=\"240\" y1=\"108\" x2=\"240\" y2=\"132\" stroke=\"#0F172A\" stroke-width=\"2\"/><line x1=\"290\" y1=\"113\" x2=\"290\" y2=\"127\" stroke=\"#0F172A\" stroke-width=\"2\"/><line x1=\"340\" y1=\"113\" x2=\"340\" y2=\"127\" stroke=\"#0F172A\" stroke-width=\"2\"/><line x1=\"390\" y1=\"113\" x2=\"390\" y2=\"127\" stroke=\"#0F172A\" stroke-width=\"2\"/><line x1=\"440\" y1=\"108\" x2=\"440\" y2=\"132\" stroke=\"#0F172A\" stroke-width=\"2\"/><text x=\"40\" y=\"155\" font-family=\"Inter, system-ui, sans-serif\" font-size=\"15\" font-weight=\"normal\" fill=\"#0F172A\" text-anchor=\"middle\">0</text><text x=\"240\" y=\"155\" font-family=\"Inter, system-ui, sans-serif\" font-size=\"15\" font-weight=\"normal\" fill=\"#0F172A\" text-anchor=\"middle\">1</text><text x=\"440\" y=\"155\" font-family=\"Inter, system-ui, sans-serif\" font-size=\"15\" font-weight=\"normal\" fill=\"#0F172A\" text-anchor=\"middle\">2</text><circle cx=\"190\" cy=\"120\" r=\"7\" fill=\"#2563EB\" stroke=\"#0F172A\" stroke-width=\"1.5\"/><text x=\"190\" y=\"95\" font-family=\"Inter, system-ui, sans-serif\" font-size=\"15\" font-weight=\"bold\" fill=\"#2563EB\" text-anchor=\"middle\">3/4</text><circle cx=\"290\" cy=\"120\" r=\"7\" fill=\"#F59E0B\" stroke=\"#0F172A\" stroke-width=\"1.5\"/><text x=\"290\" y=\"95\" font-family=\"Inter, system-ui, sans-serif\" font-size=\"15\" font-weight=\"bold\" fill=\"#0F172A\" text-anchor=\"middle\">5/4 = 1 1/4</text><text x=\"240\" y=\"30\" font-family=\"Inter, system-ui, sans-serif\" font-size=\"14\" font-weight=\"normal\" fill=\"#64748B\" text-anchor=\"middle\">Number line from 0 to 2, marked in quarters</text><text x=\"240\" y=\"195\" font-family=\"Inter, system-ui, sans-serif\" font-size=\"14\" font-weight=\"normal\" fill=\"#0F172A\" text-anchor=\"middle\">3/4 is less than 1, so it is a proper fraction</text><text x=\"240\" y=\"222\" font-family=\"Inter, system-ui, sans-serif\" font-size=\"14\" font-weight=\"normal\" fill=\"#0F172A\" text-anchor=\"middle\">5/4 is more than 1: improper, or the mixed number 1 1/4</text></svg>"
+    },
+    {
+      "type": "example",
+      "title": "Worked example: improper fraction to mixed number",
+      "problem": "Write 11/4 as a mixed number.",
+      "steps": [
+        "Step 1: Divide the numerator by the denominator: 11 ÷ 4 = 2 remainder 3.",
+        "Step 2: The answer 2 is the number of wholes.",
+        "Step 3: The remainder 3 becomes the new numerator. The denominator stays 4.",
+        "Step 4: Check: 2 wholes = 8 quarters, and 8 + 3 = 11 quarters. Correct."
+      ],
+      "answer": "11/4 = 2 3/4"
+    },
+    {
+      "type": "example",
+      "title": "Worked example: mixed number to improper fraction",
+      "problem": "Write 3 2/5 as an improper fraction.",
+      "steps": [
+        "Step 1: Multiply the whole number by the denominator: 3 × 5 = 15. So 3 wholes = 15 fifths.",
+        "Step 2: Add the numerator: 15 + 2 = 17.",
+        "Step 3: Keep the same denominator, 5."
+      ],
+      "answer": "3 2/5 = 17/5"
+    },
+    {
+      "type": "check",
+      "question": "Which of these is an improper fraction?",
+      "options": [
+        "7/9",
+        "9/7",
+        "2 1/3",
+        "1/2"
+      ],
+      "answer": 1,
+      "explanation": "In 9/7 the numerator (9) is bigger than the denominator (7), so it is improper and worth more than 1. 2 1/3 is also more than 1, but it is a mixed number, not an improper fraction. 7/9 and 1/2 are proper fractions."
+    },
+    {
+      "type": "explain",
+      "title": "Finding a fraction of a quantity",
+      "body": "To find a fraction of an amount, first divide by the denominator to find the size of one part. Then multiply by the numerator to take the number of parts you need.\n\nFor example, to find 2/3 of K60: divide K60 into 3 equal parts of K20, then take 2 of them to get K40.",
+      "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 480 230\" role=\"img\" aria-label=\"K60 shown as a bar cut into 3 equal parts of K20; 2 parts are shaded, showing 2/3 of K60 is K40\"><text x=\"240\" y=\"30\" font-family=\"Inter, system-ui, sans-serif\" font-size=\"15\" font-weight=\"bold\" fill=\"#0F172A\" text-anchor=\"middle\">The whole: K60</text><rect x=\"40\" y=\"45\" width=\"133.33\" height=\"60\" fill=\"#0D9488\" stroke=\"#0F172A\" stroke-width=\"2\"/><text x=\"106.67\" y=\"81\" font-family=\"Inter, system-ui, sans-serif\" font-size=\"15\" font-weight=\"bold\" fill=\"#FFFFFF\" text-anchor=\"middle\">K20</text><rect x=\"173.33\" y=\"45\" width=\"133.33\" height=\"60\" fill=\"#0D9488\" stroke=\"#0F172A\" stroke-width=\"2\"/><text x=\"240\" y=\"81\" font-family=\"Inter, system-ui, sans-serif\" font-size=\"15\" font-weight=\"bold\" fill=\"#FFFFFF\" text-anchor=\"middle\">K20</text><rect x=\"306.67\" y=\"45\" width=\"133.33\" height=\"60\" fill=\"#E2E8F0\" stroke=\"#0F172A\" stroke-width=\"2\"/><text x=\"373.33\" y=\"81\" font-family=\"Inter, system-ui, sans-serif\" font-size=\"15\" font-weight=\"bold\" fill=\"#0F172A\" text-anchor=\"middle\">K20</text><text x=\"240\" y=\"140\" font-family=\"Inter, system-ui, sans-serif\" font-size=\"15\" font-weight=\"normal\" fill=\"#0F172A\" text-anchor=\"middle\">Step 1: 60 ÷ 3 = K20 in each part</text><text x=\"240\" y=\"170\" font-family=\"Inter, system-ui, sans-serif\" font-size=\"15\" font-weight=\"normal\" fill=\"#0F172A\" text-anchor=\"middle\">Step 2: 2 parts are shaded, 2 × K20 = K40</text><text x=\"240\" y=\"205\" font-family=\"Inter, system-ui, sans-serif\" font-size=\"16\" font-weight=\"bold\" fill=\"#0D9488\" text-anchor=\"middle\">So 2/3 of K60 = K40</text></svg>"
+    },
+    {
+      "type": "example",
+      "title": "Worked example: spending money",
+      "problem": "Mwila receives K250 by mobile money. She spends 3/5 of it on school shoes. How much do the shoes cost?",
+      "steps": [
+        "Step 1: Divide by the denominator to find one fifth: K250 ÷ 5 = K50.",
+        "Step 2: Multiply by the numerator to find three fifths: 3 × K50 = K150.",
+        "Step 3: Check that it makes sense: 3/5 is a bit more than half, and K150 is a bit more than half of K250."
+      ],
+      "answer": "The shoes cost K150."
+    },
+    {
+      "type": "mistake",
+      "title": "Common mistake: unequal parts and upside-down fractions",
+      "body": "Some learners count shaded pieces without checking that the pieces are equal. If a loaf is cut into one big piece and one small piece, eating the small piece is not 1/2. A fraction only works when every part is the same size.\n\nOthers write the fraction upside down, for example 4/3 instead of 3/4. Always ask: \"How many equal parts in the whole?\" That number goes at the bottom."
+    },
+    {
+      "type": "check",
+      "question": "A farmer in Mumbwa has 45 kg of maize seed. He plants 2/3 of it. How many kilograms does he plant?",
+      "options": [
+        "15 kg",
+        "67.5 kg",
+        "30 kg",
+        "43 kg"
+      ],
+      "answer": 2,
+      "explanation": "One third of 45 kg is 45 ÷ 3 = 15 kg, so two thirds is 2 × 15 = 30 kg. 15 kg is only one third. 67.5 kg comes from dividing by 2 and multiplying by 3, which is upside down and gives more than he had."
+    },
+    {
+      "type": "summary",
+      "title": "Key points",
+      "bullets": [
+        "A fraction shows part of a whole that is cut into equal parts.",
+        "The denominator (bottom) is the number of equal parts; the numerator (top) is the number of parts taken.",
+        "Proper fractions are less than 1; improper fractions are 1 or more.",
+        "To change an improper fraction to a mixed number, divide and use the remainder as the new numerator.",
+        "To change a mixed number to an improper fraction, multiply the whole number by the denominator and add the numerator.",
+        "To find a fraction of a quantity, divide by the denominator, then multiply by the numerator."
+      ]
+    }
+  ],
+  "quiz": [
+    {
+      "question": "In the fraction 5/8, what is the denominator?",
+      "options": [
+        "5",
+        "8",
+        "13",
+        "3"
+      ],
+      "answer": 1,
+      "explanation": "The denominator is the bottom number, 8. It tells us the whole is cut into 8 equal parts. 5 is the numerator: the number of parts taken."
+    },
+    {
+      "question": "Which of these is a proper fraction?",
+      "options": [
+        "9/4",
+        "5/5",
+        "4/9",
+        "2 1/2"
+      ],
+      "answer": 2,
+      "explanation": "In 4/9 the numerator is smaller than the denominator, so it is less than 1 and is proper. 5/5 equals exactly 1 whole, so it is improper. 9/4 is improper and 2 1/2 is a mixed number."
+    },
+    {
+      "question": "How do we read the fraction 3/10?",
+      "options": [
+        "Three tenths",
+        "Ten thirds",
+        "Three tens",
+        "Thirty"
+      ],
+      "answer": 0,
+      "explanation": "We say the numerator as a normal number (three) and the denominator as a position word (tenth), adding \"s\" because there are more than one: three tenths. \"Ten thirds\" would be written 10/3."
+    },
+    {
+      "question": "Write 13/5 as a mixed number.",
+      "options": [
+        "3 2/5",
+        "5 3/13",
+        "2 1/5",
+        "2 3/5"
+      ],
+      "answer": 3,
+      "explanation": "13 ÷ 5 = 2 remainder 3. So there are 2 wholes and 3 fifths left over: 2 3/5. Check: 2 × 5 + 3 = 13. The answer 3 2/5 mixes up the whole number and the remainder."
+    },
+    {
+      "question": "Write 4 1/3 as an improper fraction.",
+      "options": [
+        "5/3",
+        "13/3",
+        "7/3",
+        "12/3"
+      ],
+      "answer": 1,
+      "explanation": "Multiply the whole number by the denominator: 4 × 3 = 12 thirds. Add the numerator: 12 + 1 = 13. So 4 1/3 = 13/3. 12/3 forgets to add the 1, and 5/3 just adds 4 + 1."
+    },
+    {
+      "question": "What is 3/4 of K80?",
+      "options": [
+        "K60",
+        "K20",
+        "K240",
+        "K106"
+      ],
+      "answer": 0,
+      "explanation": "One quarter of K80 is K80 ÷ 4 = K20. Three quarters is 3 × K20 = K60. K20 is only one quarter, and K240 comes from multiplying by 3 without dividing by 4."
+    },
+    {
+      "question": "A Form 1 class at a school in Kitwe has 40 pupils. 3/8 of them are boys. How many girls are in the class?",
+      "options": [
+        "15",
+        "40",
+        "25",
+        "5"
+      ],
+      "answer": 2,
+      "explanation": "One eighth of 40 is 40 ÷ 8 = 5, so the boys are 3 × 5 = 15. The girls are the rest: 40 − 15 = 25. Be careful: 15 is the number of boys, not girls. Read the question to the end."
+    },
+    {
+      "question": "A minibus from Lusaka to Kafue has 18 passenger seats. 2/3 of the seats are filled. How many seats are still empty?",
+      "options": [
+        "12",
+        "9",
+        "3",
+        "6"
+      ],
+      "answer": 3,
+      "explanation": "One third of 18 is 18 ÷ 3 = 6, so 2/3 is 2 × 6 = 12 seats filled. Empty seats: 18 − 12 = 6. Another way: if 2/3 are filled, 1/3 is empty, and 1/3 of 18 is 6. 12 is the number filled, not empty."
+    }
+  ],
+  "glossary": [
+    {
+      "term": "Fraction",
+      "definition": "A number that shows part of a whole that has been cut into equal parts, for example 3/4."
+    },
+    {
+      "term": "Numerator",
+      "definition": "The top number of a fraction. It shows how many equal parts are taken."
+    },
+    {
+      "term": "Denominator",
+      "definition": "The bottom number of a fraction. It shows how many equal parts the whole is cut into."
+    },
+    {
+      "term": "Proper fraction",
+      "definition": "A fraction whose numerator is smaller than its denominator, so it is less than 1, for example 2/5."
+    },
+    {
+      "term": "Improper fraction",
+      "definition": "A fraction whose numerator is equal to or bigger than its denominator, so it is 1 or more, for example 7/4."
+    },
+    {
+      "term": "Mixed number",
+      "definition": "A whole number and a proper fraction written together, for example 1 3/4."
+    }
+  ]
+}

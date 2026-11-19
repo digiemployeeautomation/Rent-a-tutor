@@ -1,0 +1,242 @@
+{
+  "id": "chemistry-states-of-matter-1",
+  "subject": "chemistry",
+  "form": 1,
+  "term": 1,
+  "topic": "States of Matter",
+  "topicSlug": "states-of-matter",
+  "order": 1,
+  "title": "The particle model of matter",
+  "summary": "Use the kinetic particle theory to describe solids, liquids and gases and explain their properties.",
+  "minutes": 18,
+  "objectives": [
+    "Define matter and name its three states",
+    "State the main ideas of the kinetic particle theory",
+    "Describe the arrangement, movement and forces of particles in solids, liquids and gases",
+    "Explain shape, volume, flow and compression using the particle model"
+  ],
+  "sections": [
+    {
+      "type": "explain",
+      "title": "Matter is everywhere",
+      "body": "Think about cooking nshima. The mealie meal is a solid. The water in the pot is a liquid. The steam rising from the pot is a gas. All three are matter.\n\nMatter is anything that has mass and takes up space. Mass is the amount of stuff in something, measured in grams (g) or kilograms (kg). The space it takes up is its volume, measured in cm³ or litres.\n\nMost matter around us exists in one of three states: solid, liquid or gas. In this lesson you will learn why these three states behave so differently."
+    },
+    {
+      "type": "explain",
+      "title": "The kinetic particle theory",
+      "body": "Scientists explain the states of matter with the kinetic particle theory. Kinetic means to do with movement. A particle is a very tiny piece of matter, such as an atom or a molecule. Particles are far too small to see, even with an ordinary microscope.\n\nThe theory has a few simple ideas.",
+      "bullets": [
+        "All matter is made of tiny particles.",
+        "The particles are always moving. They never stop.",
+        "There are spaces between the particles.",
+        "Particles attract each other. These forces of attraction are strongest in solids and weakest in gases.",
+        "When a substance is heated, its particles gain energy and move faster."
+      ]
+    },
+    {
+      "type": "explain",
+      "title": "Particles in solids, liquids and gases",
+      "body": "The three states differ in how their particles are arranged, how they move and how strongly they attract each other.",
+      "bullets": [
+        "Solid: particles are packed tightly in a regular pattern (rows). They cannot move from place to place. They only vibrate (shake) about fixed positions. Forces between them are strong.",
+        "Liquid: particles are still close together, but in a random, jumbled arrangement. They can slide past each other. Forces are weaker than in a solid.",
+        "Gas: particles are far apart and randomly arranged. They move quickly in all directions and in straight lines until they hit something. Forces between them are very weak."
+      ],
+      "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 480 240\" role=\"img\" aria-label=\"Particles in a solid are packed in rows, in a liquid they are close but jumbled, in a gas they are far apart\"><rect x=\"15\" y=\"20\" width=\"140\" height=\"150\" fill=\"#FFFFFF\" stroke=\"#64748B\" stroke-width=\"2\"/><rect x=\"170\" y=\"20\" width=\"140\" height=\"150\" fill=\"#FFFFFF\" stroke=\"#64748B\" stroke-width=\"2\"/><rect x=\"325\" y=\"20\" width=\"140\" height=\"150\" fill=\"#FFFFFF\" stroke=\"#64748B\" stroke-width=\"2\"/><circle cx=\"37\" cy=\"61\" r=\"11\" fill=\"#2563EB\" stroke=\"#0F172A\" stroke-width=\"1.5\"/><circle cx=\"61\" cy=\"61\" r=\"11\" fill=\"#2563EB\" stroke=\"#0F172A\" stroke-width=\"1.5\"/><circle cx=\"85\" cy=\"61\" r=\"11\" fill=\"#2563EB\" stroke=\"#0F172A\" stroke-width=\"1.5\"/><circle cx=\"109\" cy=\"61\" r=\"11\" fill=\"#2563EB\" stroke=\"#0F172A\" stroke-width=\"1.5\"/><circle cx=\"133\" cy=\"61\" r=\"11\" fill=\"#2563EB\" stroke=\"#0F172A\" stroke-width=\"1.5\"/><circle cx=\"37\" cy=\"85\" r=\"11\" fill=\"#2563EB\" stroke=\"#0F172A\" stroke-width=\"1.5\"/><circle cx=\"61\" cy=\"85\" r=\"11\" fill=\"#2563EB\" stroke=\"#0F172A\" stroke-width=\"1.5\"/><circle cx=\"85\" cy=\"85\" r=\"11\" fill=\"#2563EB\" stroke=\"#0F172A\" stroke-width=\"1.5\"/><circle cx=\"109\" cy=\"85\" r=\"11\" fill=\"#2563EB\" stroke=\"#0F172A\" stroke-width=\"1.5\"/><circle cx=\"133\" cy=\"85\" r=\"11\" fill=\"#2563EB\" stroke=\"#0F172A\" stroke-width=\"1.5\"/><circle cx=\"37\" cy=\"109\" r=\"11\" fill=\"#2563EB\" stroke=\"#0F172A\" stroke-width=\"1.5\"/><circle cx=\"61\" cy=\"109\" r=\"11\" fill=\"#2563EB\" stroke=\"#0F172A\" stroke-width=\"1.5\"/><circle cx=\"85\" cy=\"109\" r=\"11\" fill=\"#2563EB\" stroke=\"#0F172A\" stroke-width=\"1.5\"/><circle cx=\"109\" cy=\"109\" r=\"11\" fill=\"#2563EB\" stroke=\"#0F172A\" stroke-width=\"1.5\"/><circle cx=\"133\" cy=\"109\" r=\"11\" fill=\"#2563EB\" stroke=\"#0F172A\" stroke-width=\"1.5\"/><circle cx=\"37\" cy=\"133\" r=\"11\" fill=\"#2563EB\" stroke=\"#0F172A\" stroke-width=\"1.5\"/><circle cx=\"61\" cy=\"133\" r=\"11\" fill=\"#2563EB\" stroke=\"#0F172A\" stroke-width=\"1.5\"/><circle cx=\"85\" cy=\"133\" r=\"11\" fill=\"#2563EB\" stroke=\"#0F172A\" stroke-width=\"1.5\"/><circle cx=\"109\" cy=\"133\" r=\"11\" fill=\"#2563EB\" stroke=\"#0F172A\" stroke-width=\"1.5\"/><circle cx=\"133\" cy=\"133\" r=\"11\" fill=\"#2563EB\" stroke=\"#0F172A\" stroke-width=\"1.5\"/><circle cx=\"37\" cy=\"157\" r=\"11\" fill=\"#2563EB\" stroke=\"#0F172A\" stroke-width=\"1.5\"/><circle cx=\"61\" cy=\"157\" r=\"11\" fill=\"#2563EB\" stroke=\"#0F172A\" stroke-width=\"1.5\"/><circle cx=\"85\" cy=\"157\" r=\"11\" fill=\"#2563EB\" stroke=\"#0F172A\" stroke-width=\"1.5\"/><circle cx=\"109\" cy=\"157\" r=\"11\" fill=\"#2563EB\" stroke=\"#0F172A\" stroke-width=\"1.5\"/><circle cx=\"133\" cy=\"157\" r=\"11\" fill=\"#2563EB\" stroke=\"#0F172A\" stroke-width=\"1.5\"/><circle cx=\"184\" cy=\"157\" r=\"10\" fill=\"#0D9488\" stroke=\"#0F172A\" stroke-width=\"1.5\"/><circle cx=\"207\" cy=\"157\" r=\"10\" fill=\"#0D9488\" stroke=\"#0F172A\" stroke-width=\"1.5\"/><circle cx=\"231\" cy=\"157\" r=\"10\" fill=\"#0D9488\" stroke=\"#0F172A\" stroke-width=\"1.5\"/><circle cx=\"254\" cy=\"157\" r=\"10\" fill=\"#0D9488\" stroke=\"#0F172A\" stroke-width=\"1.5\"/><circle cx=\"278\" cy=\"157\" r=\"10\" fill=\"#0D9488\" stroke=\"#0F172A\" stroke-width=\"1.5\"/><circle cx=\"298\" cy=\"157\" r=\"10\" fill=\"#0D9488\" stroke=\"#0F172A\" stroke-width=\"1.5\"/><circle cx=\"194\" cy=\"136\" r=\"10\" fill=\"#0D9488\" stroke=\"#0F172A\" stroke-width=\"1.5\"/><circle cx=\"219\" cy=\"135\" r=\"10\" fill=\"#0D9488\" stroke=\"#0F172A\" stroke-width=\"1.5\"/><circle cx=\"243\" cy=\"137\" r=\"10\" fill=\"#0D9488\" stroke=\"#0F172A\" stroke-width=\"1.5\"/><circle cx=\"268\" cy=\"135\" r=\"10\" fill=\"#0D9488\" stroke=\"#0F172A\" stroke-width=\"1.5\"/><circle cx=\"291\" cy=\"136\" r=\"10\" fill=\"#0D9488\" stroke=\"#0F172A\" stroke-width=\"1.5\"/><circle cx=\"186\" cy=\"115\" r=\"10\" fill=\"#0D9488\" stroke=\"#0F172A\" stroke-width=\"1.5\"/><circle cx=\"213\" cy=\"114\" r=\"10\" fill=\"#0D9488\" stroke=\"#0F172A\" stroke-width=\"1.5\"/><circle cx=\"247\" cy=\"116\" r=\"10\" fill=\"#0D9488\" stroke=\"#0F172A\" stroke-width=\"1.5\"/><circle cx=\"280\" cy=\"114\" r=\"10\" fill=\"#0D9488\" stroke=\"#0F172A\" stroke-width=\"1.5\"/><circle cx=\"352\" cy=\"52\" r=\"10\" fill=\"#F59E0B\" stroke=\"#0F172A\" stroke-width=\"1.5\"/><circle cx=\"425\" cy=\"48\" r=\"10\" fill=\"#F59E0B\" stroke=\"#0F172A\" stroke-width=\"1.5\"/><circle cx=\"388\" cy=\"96\" r=\"10\" fill=\"#F59E0B\" stroke=\"#0F172A\" stroke-width=\"1.5\"/><circle cx=\"445\" cy=\"120\" r=\"10\" fill=\"#F59E0B\" stroke=\"#0F172A\" stroke-width=\"1.5\"/><circle cx=\"348\" cy=\"142\" r=\"10\" fill=\"#F59E0B\" stroke=\"#0F172A\" stroke-width=\"1.5\"/><circle cx=\"408\" cy=\"155\" r=\"10\" fill=\"#F59E0B\" stroke=\"#0F172A\" stroke-width=\"1.5\"/><text x=\"85\" y=\"196\" text-anchor=\"middle\" font-size=\"15\" font-weight=\"700\" fill=\"#0F172A\" font-family=\"Inter, system-ui, sans-serif\">Solid</text><text x=\"240\" y=\"196\" text-anchor=\"middle\" font-size=\"15\" font-weight=\"700\" fill=\"#0F172A\" font-family=\"Inter, system-ui, sans-serif\">Liquid</text><text x=\"395\" y=\"196\" text-anchor=\"middle\" font-size=\"15\" font-weight=\"700\" fill=\"#0F172A\" font-family=\"Inter, system-ui, sans-serif\">Gas</text><text x=\"85\" y=\"218\" text-anchor=\"middle\" font-size=\"13\" fill=\"#64748B\" font-family=\"Inter, system-ui, sans-serif\">packed in rows</text><text x=\"240\" y=\"218\" text-anchor=\"middle\" font-size=\"13\" fill=\"#64748B\" font-family=\"Inter, system-ui, sans-serif\">close, jumbled</text><text x=\"395\" y=\"218\" text-anchor=\"middle\" font-size=\"13\" fill=\"#64748B\" font-family=\"Inter, system-ui, sans-serif\">far apart</text></svg>"
+    },
+    {
+      "type": "check",
+      "question": "Which statement describes the particles in a liquid?",
+      "options": [
+        "Far apart and moving quickly in all directions",
+        "Close together, jumbled, and able to slide past each other",
+        "Packed in rows and only vibrating about fixed positions",
+        "Not moving at all"
+      ],
+      "answer": 1,
+      "explanation": "Liquid particles are close together (almost touching) but not in a regular pattern, and they can slide past one another. Packed in rows and only vibrating describes a solid, not a liquid. Particles in every state are always moving, so 'not moving at all' is never correct."
+    },
+    {
+      "type": "explain",
+      "title": "Using particles to explain properties",
+      "body": "The particle model explains what we observe. Shape: a solid keeps its own shape because its particles are held in fixed positions. A liquid and a gas take the shape of their container because their particles can move around.\n\nVolume: solids and liquids have a fixed volume because their particles are already close together. A gas spreads out to fill whatever container it is in.\n\nCompression (squashing): there is almost no space between particles in solids and liquids, so they are very hard to compress. A gas has large spaces between its particles, so it is easy to compress. This is why a minibus tyre can hold a lot of air pumped into it.",
+      "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 480 230\" role=\"img\" aria-label=\"Pushing the plunger of a sealed syringe moves the same gas particles closer together\"><rect x=\"20\" y=\"40\" width=\"180\" height=\"110\" fill=\"#DBEAFE\" stroke=\"#0F172A\" stroke-width=\"2\"/><rect x=\"200\" y=\"40\" width=\"10\" height=\"110\" fill=\"#64748B\"/><rect x=\"210\" y=\"88\" width=\"30\" height=\"14\" fill=\"#64748B\"/><rect x=\"300\" y=\"40\" width=\"100\" height=\"110\" fill=\"#DBEAFE\" stroke=\"#0F172A\" stroke-width=\"2\"/><rect x=\"400\" y=\"40\" width=\"10\" height=\"110\" fill=\"#64748B\"/><rect x=\"410\" y=\"88\" width=\"50\" height=\"14\" fill=\"#64748B\"/><circle cx=\"50\" cy=\"70\" r=\"8\" fill=\"#F59E0B\" stroke=\"#0F172A\" stroke-width=\"1.5\"/><circle cx=\"110\" cy=\"62\" r=\"8\" fill=\"#F59E0B\" stroke=\"#0F172A\" stroke-width=\"1.5\"/><circle cx=\"165\" cy=\"85\" r=\"8\" fill=\"#F59E0B\" stroke=\"#0F172A\" stroke-width=\"1.5\"/><circle cx=\"70\" cy=\"125\" r=\"8\" fill=\"#F59E0B\" stroke=\"#0F172A\" stroke-width=\"1.5\"/><circle cx=\"130\" cy=\"115\" r=\"8\" fill=\"#F59E0B\" stroke=\"#0F172A\" stroke-width=\"1.5\"/><circle cx=\"180\" cy=\"128\" r=\"8\" fill=\"#F59E0B\" stroke=\"#0F172A\" stroke-width=\"1.5\"/><circle cx=\"322\" cy=\"70\" r=\"8\" fill=\"#F59E0B\" stroke=\"#0F172A\" stroke-width=\"1.5\"/><circle cx=\"355\" cy=\"62\" r=\"8\" fill=\"#F59E0B\" stroke=\"#0F172A\" stroke-width=\"1.5\"/><circle cx=\"385\" cy=\"86\" r=\"8\" fill=\"#F59E0B\" stroke=\"#0F172A\" stroke-width=\"1.5\"/><circle cx=\"320\" cy=\"122\" r=\"8\" fill=\"#F59E0B\" stroke=\"#0F172A\" stroke-width=\"1.5\"/><circle cx=\"352\" cy=\"108\" r=\"8\" fill=\"#F59E0B\" stroke=\"#0F172A\" stroke-width=\"1.5\"/><circle cx=\"382\" cy=\"128\" r=\"8\" fill=\"#F59E0B\" stroke=\"#0F172A\" stroke-width=\"1.5\"/><line x1=\"250\" y1=\"95\" x2=\"282\" y2=\"95\" stroke=\"#E11D48\" stroke-width=\"4\"/><polygon points=\"292,95 280,87 280,103\" fill=\"#E11D48\"/><text x=\"110\" y=\"178\" text-anchor=\"middle\" font-size=\"14\" font-weight=\"700\" fill=\"#0F172A\" font-family=\"Inter, system-ui, sans-serif\">Before</text><text x=\"370\" y=\"178\" text-anchor=\"middle\" font-size=\"14\" font-weight=\"700\" fill=\"#0F172A\" font-family=\"Inter, system-ui, sans-serif\">After pushing in</text><text x=\"240\" y=\"210\" text-anchor=\"middle\" font-size=\"13\" fill=\"#64748B\" font-family=\"Inter, system-ui, sans-serif\">Same 6 particles, less space: a gas can be squashed</text></svg>"
+    },
+    {
+      "type": "example",
+      "title": "Worked example: the sealed syringe",
+      "problem": "A learner seals the end of a syringe and pushes the plunger. When the syringe is full of air, the plunger moves in easily. When it is full of water, the plunger hardly moves. Explain both results using the particle model.",
+      "steps": [
+        "Step 1: Identify the states. Air is a gas. Water is a liquid.",
+        "Step 2: Describe the spacing. In air the particles are far apart with large spaces between them. In water the particles are close together with very little space between them.",
+        "Step 3: Link spacing to squashing. Pushing the plunger forces the particles closer together. Air particles have room to move closer, so the volume of air gets smaller.",
+        "Step 4: Water particles are already close together. They have almost no room to move closer, so the volume of water hardly changes."
+      ],
+      "answer": "Air (a gas) is easily compressed because there are large spaces between its particles. Water (a liquid) is very hard to compress because its particles are already close together."
+    },
+    {
+      "type": "explain",
+      "title": "Heat makes particles move faster",
+      "body": "Kinetic energy is the energy an object has because it is moving. The faster a particle moves, the more kinetic energy it has.\n\nWhen you heat a substance, its particles gain kinetic energy. In a solid they vibrate more strongly. In a liquid and a gas they move around faster. When a substance cools, its particles lose kinetic energy and slow down.\n\nTemperature is a measure of how hot or cold something is. A higher temperature means the particles are, on average, moving faster."
+    },
+    {
+      "type": "mistake",
+      "title": "Common mistake: thinking the particles themselves change",
+      "body": "Many students write that the particles of a solid are hard, or that particles get bigger when they are heated. This is wrong. The particles of ice, liquid water and steam are the same water particles. They do not melt, grow or become soft.\n\nWhat changes is how the particles are arranged, how far apart they are and how fast they move. When a metal expands on a hot day, its particles vibrate more and take up more space, but each particle stays the same size."
+    },
+    {
+      "type": "example",
+      "title": "Worked example: identify the state",
+      "problem": "Three substances X, Y and Z are tested. X has a fixed shape and a fixed volume. Y has a fixed volume but takes the shape of its container. Z has no fixed shape or volume and is easy to compress. Identify the state of each and describe its particles.",
+      "steps": [
+        "Step 1: Fixed shape and fixed volume means the particles are held in fixed positions. So X is a solid: particles packed in a regular pattern, vibrating, strong forces.",
+        "Step 2: Fixed volume but no fixed shape means the particles are close but can move past each other. So Y is a liquid: particles close, random arrangement, sliding past each other.",
+        "Step 3: No fixed shape or volume and easy to compress means large spaces between the particles. So Z is a gas: particles far apart, moving fast and randomly, very weak forces."
+      ],
+      "answer": "X is a solid, Y is a liquid and Z is a gas."
+    },
+    {
+      "type": "check",
+      "question": "Why does a gas fill the whole of any container it is put in?",
+      "options": [
+        "Its particles get bigger until they fill the space",
+        "Its particles are heavier than those of a liquid",
+        "Its particles move quickly in all directions and the forces between them are very weak"
+      ],
+      "answer": 2,
+      "explanation": "Gas particles move fast and randomly, and the weak forces cannot hold them together, so they spread out until they fill the container. The particles do not get bigger, which is the common mistake in the first option."
+    },
+    {
+      "type": "summary",
+      "title": "Key points",
+      "bullets": [
+        "Matter is anything that has mass and takes up space. It can be solid, liquid or gas.",
+        "Kinetic particle theory: matter is made of tiny particles that are always moving, with spaces and forces of attraction between them.",
+        "Solid: particles packed in a regular pattern, vibrating about fixed positions, strong forces. Fixed shape and volume.",
+        "Liquid: particles close but jumbled, sliding past each other. Fixed volume, takes the shape of its container.",
+        "Gas: particles far apart, moving fast and randomly, very weak forces. No fixed shape or volume, easy to compress.",
+        "Heating gives particles more kinetic energy, so they move faster. The particles themselves do not change size."
+      ]
+    }
+  ],
+  "quiz": [
+    {
+      "question": "What is matter?",
+      "options": [
+        "Anything that can be seen",
+        "Anything that is hot",
+        "Anything that has mass and takes up space",
+        "Only solids and liquids"
+      ],
+      "answer": 2,
+      "explanation": "Matter is anything that has mass and occupies space (has volume). Air cannot be seen, but it is still matter because it has mass and takes up space, so 'anything that can be seen' is wrong."
+    },
+    {
+      "question": "In which state do particles only vibrate about fixed positions?",
+      "options": [
+        "Solid",
+        "Liquid",
+        "Gas",
+        "All three states"
+      ],
+      "answer": 0,
+      "explanation": "In a solid the strong forces hold particles in fixed positions, so they can only vibrate. Liquid particles can slide past each other and gas particles move freely, so they are not fixed."
+    },
+    {
+      "question": "Why can a gas be compressed easily?",
+      "options": [
+        "Its particles are very small",
+        "Its particles do not move",
+        "Its particles are soft",
+        "There are large spaces between its particles"
+      ],
+      "answer": 3,
+      "explanation": "Compressing pushes particles closer together. Gas particles are far apart, so there is room to push them closer. Particles of all states are tiny and always moving, so those options do not explain it."
+    },
+    {
+      "question": "A substance has a fixed volume but takes the shape of the bottom of its container. What state is it in?",
+      "options": [
+        "Solid",
+        "Liquid",
+        "Gas",
+        "It could be any state"
+      ],
+      "answer": 1,
+      "explanation": "Fixed volume plus no fixed shape is the property of a liquid. Its particles are close together (so the volume is fixed) but can slide past each other (so the shape changes). A gas would not have a fixed volume."
+    },
+    {
+      "question": "A copper rod is heated in a flame. What happens to its particles?",
+      "options": [
+        "They melt and become liquid particles",
+        "They get bigger",
+        "They vibrate faster because they gain kinetic energy",
+        "They stop moving"
+      ],
+      "answer": 2,
+      "explanation": "Heat gives the particles more kinetic energy, so they vibrate faster about their fixed positions. Particles do not get bigger or melt; only the substance as a whole can melt if it gets hot enough."
+    },
+    {
+      "question": "Which property of a liquid is explained by its particles being able to slide past each other?",
+      "options": [
+        "A liquid can flow",
+        "A liquid has a fixed volume",
+        "A liquid is hard to compress",
+        "A liquid has mass"
+      ],
+      "answer": 0,
+      "explanation": "Because liquid particles can move past one another, a liquid can flow and be poured, for example cooking oil from a bottle. A fixed volume and being hard to compress are explained by the particles being close together, not by sliding."
+    },
+    {
+      "question": "The outlet of a bicycle pump is blocked and the handle is pushed in. The air inside takes up less space. Which statement best explains this?",
+      "options": [
+        "Some air particles are destroyed",
+        "The air particles become smaller",
+        "The air turns into a liquid immediately",
+        "The same number of particles move closer together into the smaller space"
+      ],
+      "answer": 3,
+      "explanation": "No particles are lost because the outlet is blocked, and particles do not shrink. The particles are simply pushed closer together, reducing the large spaces between them. That is why gases can be compressed."
+    },
+    {
+      "question": "Which list puts the forces of attraction between particles in order from weakest to strongest?",
+      "options": [
+        "solid, liquid, gas",
+        "gas, liquid, solid",
+        "liquid, gas, solid",
+        "gas, solid, liquid"
+      ],
+      "answer": 1,
+      "explanation": "Forces are very weak in a gas (particles fly apart), stronger in a liquid (particles stay close) and strongest in a solid (particles held in fixed positions). So weakest to strongest is gas, liquid, solid."
+    }
+  ],
+  "glossary": [
+    {
+      "term": "Matter",
+      "definition": "Anything that has mass and takes up space."
+    },
+    {
+      "term": "Particle",
+      "definition": "A very tiny piece of matter, such as an atom or a molecule."
+    },
+    {
+      "term": "Kinetic particle theory",
+      "definition": "The idea that all matter is made of tiny particles that are always moving."
+    },
+    {
+      "term": "Kinetic energy",
+      "definition": "The energy something has because it is moving."
+    },
+    {
+      "term": "Vibrate",
+      "definition": "To shake quickly backwards and forwards about one position."
+    },
+    {
+      "term": "Compress",
+      "definition": "To squash something into a smaller volume."
+    },
+    {
+      "term": "Forces of attraction",
+      "definition": "The pulls that hold particles together; strongest in solids and weakest in gases."
+    }
+  ]
+}

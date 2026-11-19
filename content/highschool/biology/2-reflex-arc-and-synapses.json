@@ -1,0 +1,262 @@
+{
+  "id": "biology-nervous-system-2",
+  "subject": "biology",
+  "form": 4,
+  "term": 1,
+  "topic": "The Nervous System",
+  "topicSlug": "nervous-system",
+  "order": 2,
+  "title": "Reflex actions and synapses",
+  "summary": "Trace the reflex arc, explain how impulses cross a synapse, and classify reflexes as spinal, cranial or conditioned.",
+  "minutes": 20,
+  "objectives": [
+    "Define a reflex action and give its main features",
+    "Trace the reflex arc from receptor to effector",
+    "Explain how an impulse crosses a synapse",
+    "Distinguish between spinal, cranial and conditioned reflexes"
+  ],
+  "sections": [
+    {
+      "type": "explain",
+      "title": "Faster than thinking",
+      "body": "You are walking barefoot across a field and step on a sharp thorn. Your foot lifts off the ground before you even feel the pain. You did not decide to move. It just happened.\n\nThis is a reflex action: a rapid, automatic response to a stimulus that happens without conscious thought. Reflexes protect the body from harm, such as burns, cuts or dust in the eye.",
+      "bullets": [
+        "Automatic: no decision is needed",
+        "Rapid: faster than a thought-out response",
+        "Protective: helps prevent injury"
+      ]
+    },
+    {
+      "type": "explain",
+      "title": "The spinal cord",
+      "body": "The spinal cord is part of the CNS. It runs from the base of the brain down the back, protected inside the bones of the vertebral column (backbone).\n\nThe spinal cord has two jobs. It carries impulses up to the brain and down from the brain. It also handles many reflexes by itself, without waiting for the brain."
+    },
+    {
+      "type": "explain",
+      "title": "The reflex arc",
+      "body": "The pathway an impulse follows during a reflex is called the reflex arc. The diagram shows the reflex that pulls your hand away from a hot iron.\n\nNotice that the impulse goes into the spinal cord and straight back out again. It does not have to travel all the way up to the brain and back, and that is why the reflex is so fast. A separate impulse does travel up to the brain, which is why you feel the pain a moment later.",
+      "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 480 290\" role=\"img\" aria-label=\"Reflex arc for pulling the hand away from a hot object: receptor, sensory neurone, relay neurone in the spinal cord, motor neurone, effector muscle\"><rect x=\"70\" y=\"8\" width=\"340\" height=\"38\" rx=\"8\" fill=\"#FFFFFF\" stroke=\"#0D9488\" stroke-width=\"2\"/><rect x=\"70\" y=\"64\" width=\"340\" height=\"38\" rx=\"8\" fill=\"#FFFFFF\" stroke=\"#0D9488\" stroke-width=\"2\"/><rect x=\"70\" y=\"120\" width=\"340\" height=\"38\" rx=\"8\" fill=\"#DBEAFE\" stroke=\"#2563EB\" stroke-width=\"2\"/><rect x=\"70\" y=\"176\" width=\"340\" height=\"38\" rx=\"8\" fill=\"#FFFFFF\" stroke=\"#F59E0B\" stroke-width=\"2\"/><rect x=\"70\" y=\"232\" width=\"340\" height=\"38\" rx=\"8\" fill=\"#FFFFFF\" stroke=\"#F59E0B\" stroke-width=\"2\"/><line x1=\"240\" y1=\"46\" x2=\"240\" y2=\"56\" stroke=\"#64748B\" stroke-width=\"2\"/><polygon points=\"240,64 234,54 246,54\" fill=\"#64748B\"/><line x1=\"240\" y1=\"102\" x2=\"240\" y2=\"112\" stroke=\"#64748B\" stroke-width=\"2\"/><polygon points=\"240,120 234,110 246,110\" fill=\"#64748B\"/><line x1=\"240\" y1=\"158\" x2=\"240\" y2=\"168\" stroke=\"#64748B\" stroke-width=\"2\"/><polygon points=\"240,176 234,166 246,166\" fill=\"#64748B\"/><line x1=\"240\" y1=\"214\" x2=\"240\" y2=\"224\" stroke=\"#64748B\" stroke-width=\"2\"/><polygon points=\"240,232 234,222 246,222\" fill=\"#64748B\"/><g font-family=\"Inter, system-ui, sans-serif\" font-size=\"14\" fill=\"#0F172A\"><text x=\"240\" y=\"32\" text-anchor=\"middle\">1  Receptor: pain receptors in the skin</text><text x=\"240\" y=\"88\" text-anchor=\"middle\">2  Sensory neurone: impulse to spinal cord</text><text x=\"240\" y=\"144\" text-anchor=\"middle\">3  Relay neurone: inside the spinal cord</text><text x=\"240\" y=\"200\" text-anchor=\"middle\">4  Motor neurone: impulse out to the arm</text><text x=\"240\" y=\"256\" text-anchor=\"middle\">5  Effector: arm muscle contracts</text></g></svg>"
+    },
+    {
+      "type": "check",
+      "question": "What is the correct order of a reflex arc?",
+      "options": [
+        "Receptor, motor neurone, relay neurone, sensory neurone, effector",
+        "Receptor, sensory neurone, relay neurone, motor neurone, effector",
+        "Effector, sensory neurone, relay neurone, motor neurone, receptor",
+        "Receptor, relay neurone, motor neurone, sensory neurone, effector"
+      ],
+      "answer": 1,
+      "explanation": "The receptor detects the stimulus first, the sensory neurone carries the impulse into the spinal cord, the relay neurone links to the motor neurone, and the effector responds. Putting the motor neurone before the sensory neurone would mean the response comes before the message arrives."
+    },
+    {
+      "type": "example",
+      "title": "Worked example: tracing a reflex pathway",
+      "problem": "Mwila picks up a hot iron by mistake and drops it at once. Describe the reflex arc involved, naming the stimulus, receptor, each neurone and the effector.",
+      "steps": [
+        "Step 1: Stimulus = heat from the iron.",
+        "Step 2: Receptor = heat and pain receptors in the skin of the hand. They start an impulse.",
+        "Step 3: A sensory neurone carries the impulse to the spinal cord.",
+        "Step 4: In the spinal cord, a relay neurone passes the impulse to a motor neurone.",
+        "Step 5: The motor neurone carries the impulse to the effector, a muscle in the arm.",
+        "Step 6: The muscle contracts and the hand lets go and moves away. This is the response. Only afterwards does the brain receive a message and Mwila feels the pain."
+      ],
+      "answer": "Heat, skin receptors, sensory neurone, relay neurone (spinal cord), motor neurone, arm muscle contracts. The brain is told after the response."
+    },
+    {
+      "type": "explain",
+      "title": "Synapses: crossing the gap",
+      "body": "Neurones do not touch each other. Between the end of one neurone and the next there is a tiny gap. The junction is called a synapse, and the gap is the synaptic gap.\n\nAn electrical impulse cannot jump the gap. Instead, when the impulse reaches the axon ending, small sacs called vesicles release a chemical called a neurotransmitter. It diffuses across the gap and attaches to receptors on the next neurone. This starts a new impulse in that neurone.",
+      "bullets": [
+        "Electrical impulse arrives at the axon ending",
+        "Vesicles release neurotransmitter into the gap",
+        "Neurotransmitter diffuses across and binds to receptors",
+        "A new impulse starts in the next neurone"
+      ],
+      "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 480 235\" role=\"img\" aria-label=\"Synapse: an impulse arrives at the axon ending, vesicles release neurotransmitter into the synaptic gap, and it attaches to receptors on the next neurone\"><line x1=\"10\" y1=\"120\" x2=\"122\" y2=\"120\" stroke=\"#2563EB\" stroke-width=\"6\"/><rect x=\"120\" y=\"60\" width=\"110\" height=\"120\" rx=\"40\" fill=\"#DBEAFE\" stroke=\"#2563EB\" stroke-width=\"2\"/><g fill=\"#FFFFFF\" stroke=\"#0D9488\" stroke-width=\"2\"><circle cx=\"160\" cy=\"95\" r=\"10\"/><circle cx=\"185\" cy=\"122\" r=\"10\"/><circle cx=\"160\" cy=\"148\" r=\"10\"/><circle cx=\"208\" cy=\"100\" r=\"10\"/><circle cx=\"208\" cy=\"142\" r=\"10\"/></g><g fill=\"#0D9488\"><circle cx=\"245\" cy=\"108\" r=\"3.5\"/><circle cx=\"253\" cy=\"123\" r=\"3.5\"/><circle cx=\"244\" cy=\"137\" r=\"3.5\"/><circle cx=\"160\" cy=\"95\" r=\"3\"/><circle cx=\"185\" cy=\"122\" r=\"3\"/><circle cx=\"160\" cy=\"148\" r=\"3\"/><circle cx=\"208\" cy=\"100\" r=\"3\"/><circle cx=\"208\" cy=\"142\" r=\"3\"/></g><rect x=\"265\" y=\"50\" width=\"130\" height=\"140\" rx=\"10\" fill=\"#E2E8F0\" stroke=\"#64748B\" stroke-width=\"2\"/><g fill=\"#F59E0B\"><rect x=\"265\" y=\"95\" width=\"8\" height=\"12\"/><rect x=\"265\" y=\"118\" width=\"8\" height=\"12\"/><rect x=\"265\" y=\"141\" width=\"8\" height=\"12\"/></g><g stroke=\"#64748B\" stroke-width=\"1.2\"><line x1=\"160\" y1=\"85\" x2=\"150\" y2=\"36\"/><line x1=\"246\" y1=\"104\" x2=\"250\" y2=\"36\"/><line x1=\"248\" y1=\"150\" x2=\"248\" y2=\"198\"/><line x1=\"296\" y1=\"146\" x2=\"276\" y2=\"147\"/></g><g font-family=\"Inter, system-ui, sans-serif\" font-size=\"14\" fill=\"#0F172A\"><text x=\"10\" y=\"152\">Impulse arrives</text><text x=\"146\" y=\"30\" text-anchor=\"middle\">Vesicles</text><text x=\"252\" y=\"30\" text-anchor=\"middle\">Neurotransmitter</text><text x=\"248\" y=\"216\" text-anchor=\"middle\">Synaptic gap</text><text x=\"330\" y=\"80\" text-anchor=\"middle\">Next neurone</text><text x=\"300\" y=\"151\">Receptors</text></g></svg>"
+    },
+    {
+      "type": "check",
+      "question": "Why can impulses cross a synapse in one direction only?",
+      "options": [
+        "The gap is too wide on one side",
+        "Only the axon ending releases neurotransmitter, and only the next neurone has receptors for it",
+        "Myelin blocks the impulse going backwards"
+      ],
+      "answer": 1,
+      "explanation": "Vesicles of neurotransmitter are only on the sending side, and receptors are only on the receiving side, so the message can only go forwards. Myelin covers the axon; it has nothing to do with the synapse."
+    },
+    {
+      "type": "explain",
+      "title": "Spinal and cranial reflexes",
+      "body": "Reflexes are grouped by where in the CNS the impulse is processed.\n\nIn a spinal reflex, the spinal cord handles the impulse. Examples are pulling your hand from a hot object and the knee-jerk reflex. The knee-jerk is a very short arc: the sensory neurone connects directly to the motor neurone in the spinal cord.\n\nIn a cranial reflex, the brain handles the impulse, and it travels along cranial nerves (nerves joined to the brain). Examples are blinking, coughing, sneezing and the pupil reflex. These are still automatic: you do not choose to do them."
+    },
+    {
+      "type": "example",
+      "title": "Worked example: the pupil reflex",
+      "problem": "Thandiwe walks out of a dark classroom into bright midday sunshine. Her pupils quickly become smaller. Explain this reflex.",
+      "steps": [
+        "Step 1: Stimulus = a sudden increase in light intensity.",
+        "Step 2: Receptor = light-sensitive cells in the retina of the eye.",
+        "Step 3: A sensory neurone in the optic nerve carries impulses to the brain. This makes it a cranial reflex.",
+        "Step 4: The brain sends impulses along motor neurones to the iris.",
+        "Step 5: Effector = the muscles of the iris. The circular muscles contract and the radial muscles relax.",
+        "Step 6: Response = the pupil gets smaller, so less light enters and the retina is protected from damage."
+      ],
+      "answer": "Bright light is detected by the retina; impulses go to the brain and back to the iris; the circular muscles contract and the pupil narrows, letting in less light."
+    },
+    {
+      "type": "explain",
+      "title": "Conditioned reflexes",
+      "body": "Spinal and cranial reflexes are inborn: you have them from birth. A conditioned reflex is different. It is learned by repeated association.\n\nThe scientist Ivan Pavlov showed this with dogs. Food made the dogs produce saliva (an inborn reflex). Pavlov rang a bell every time just before giving food. After many repeats, the bell alone made the dogs produce saliva. The bell had become a conditioned stimulus, and the saliva was now a conditioned response.\n\nYou have conditioned reflexes too. If your mouth waters when you hear kapenta frying in the kitchen, you have learned to link that sound with food."
+    },
+    {
+      "type": "mistake",
+      "title": "Common mistake: saying the brain controls a spinal reflex",
+      "body": "Students often write that \"the brain sends a message to the muscle\" in a spinal reflex. This is wrong. In a spinal reflex the response comes from the spinal cord, before the brain is involved. The brain is only told afterwards, which is why you feel the pain after you have already moved.\n\nIn exams, always name the spinal cord as the place where the sensory, relay and motor neurones connect."
+    },
+    {
+      "type": "check",
+      "question": "Every day the school bell rings for lunch, and Bupe's mouth starts to water even before she sees any food. What type of reflex is this?",
+      "options": [
+        "Spinal reflex",
+        "Cranial reflex",
+        "Conditioned reflex",
+        "Not a reflex at all"
+      ],
+      "answer": 2,
+      "explanation": "Bupe has learned to link the bell with food through daily repetition, just like Pavlov's dogs. That makes it a conditioned reflex. A cranial reflex such as blinking is inborn, not learned."
+    },
+    {
+      "type": "summary",
+      "title": "Key points",
+      "bullets": [
+        "A reflex action is rapid, automatic and protective, and needs no conscious thought.",
+        "Reflex arc: receptor, sensory neurone, relay neurone, motor neurone, effector.",
+        "At a synapse, neurotransmitter diffuses across the gap, so impulses pass one way only.",
+        "Spinal reflexes are processed in the spinal cord; cranial reflexes (blinking, coughing, pupil reflex) in the brain.",
+        "Conditioned reflexes are learned by repeated association, as in Pavlov's dogs."
+      ]
+    }
+  ],
+  "quiz": [
+    {
+      "question": "In a spinal reflex, where is the impulse passed from the sensory neurone to the motor neurone?",
+      "options": [
+        "In the spinal cord",
+        "In the brain",
+        "In the effector",
+        "In the receptor"
+      ],
+      "answer": 0,
+      "explanation": "In a spinal reflex the connection is made in the spinal cord. The brain receives a message later, but it is not part of the reflex arc itself."
+    },
+    {
+      "question": "Which of these is a cranial reflex?",
+      "options": [
+        "Knee-jerk",
+        "Pulling the hand from a hot pot",
+        "Salivating at the sound of a bell",
+        "The pupil reflex"
+      ],
+      "answer": 3,
+      "explanation": "In the pupil reflex, impulses are processed in the brain, so it is a cranial reflex. The knee-jerk and pulling away from heat are spinal reflexes, and salivating at a bell is a conditioned reflex."
+    },
+    {
+      "question": "In Pavlov's experiment, what was the bell after conditioning was complete?",
+      "options": [
+        "A conditioned stimulus",
+        "An unconditioned stimulus",
+        "A conditioned response",
+        "A neutral stimulus"
+      ],
+      "answer": 0,
+      "explanation": "Before conditioning the bell was a neutral stimulus. After repeated pairing with food, the bell alone caused salivation, so it became a conditioned stimulus. The salivation was the conditioned response."
+    },
+    {
+      "question": "A learner pricks a finger on a pin and pulls the hand back. Which neurone carries the impulse from the skin to the spinal cord?",
+      "options": [
+        "Motor neurone",
+        "Relay neurone",
+        "Effector neurone",
+        "Sensory neurone"
+      ],
+      "answer": 3,
+      "explanation": "Sensory neurones carry impulses from receptors towards the CNS. Motor neurones carry them away from the CNS, and relay neurones work inside the spinal cord."
+    },
+    {
+      "question": "What is the effector in the pupil reflex?",
+      "options": [
+        "The retina",
+        "The muscles of the iris",
+        "The optic nerve",
+        "The lens"
+      ],
+      "answer": 1,
+      "explanation": "The iris muscles carry out the response by changing the size of the pupil. The retina contains the receptors and the optic nerve carries the sensory impulse, so neither is the effector."
+    },
+    {
+      "question": "How does a nerve impulse pass from one neurone to the next across a synapse?",
+      "options": [
+        "The electrical impulse jumps straight across the gap",
+        "The two neurones touch and the impulse flows through",
+        "Myelin carries the impulse across the gap",
+        "A neurotransmitter chemical diffuses across the gap"
+      ],
+      "answer": 3,
+      "explanation": "The impulse makes vesicles release a neurotransmitter, which diffuses across the synaptic gap and binds to receptors on the next neurone, starting a new impulse. The neurones do not touch, and electricity cannot jump the gap."
+    },
+    {
+      "question": "What makes a conditioned reflex different from a spinal or cranial reflex?",
+      "options": [
+        "It is learned through repeated association",
+        "It is always faster",
+        "It does not use the nervous system",
+        "It is processed in the spinal cord only"
+      ],
+      "answer": 0,
+      "explanation": "Conditioned reflexes are learned from experience, while spinal and cranial reflexes are inborn. Conditioned reflexes still use the nervous system, mainly the brain."
+    },
+    {
+      "question": "Why do you usually pull your hand away from a hot object BEFORE you feel the pain?",
+      "options": [
+        "Pain receptors are slower than heat receptors",
+        "The muscles act without any nerve impulse",
+        "The response is sent from the spinal cord before the message reaches the brain",
+        "The brain decides to move first and feel later"
+      ],
+      "answer": 2,
+      "explanation": "The reflex arc runs through the spinal cord, a short route, so the muscle responds quickly. The message about pain has to travel further, up to the brain, so the feeling comes a moment later. The brain does not make the decision in a spinal reflex."
+    }
+  ],
+  "glossary": [
+    {
+      "term": "Reflex action",
+      "definition": "A rapid, automatic response to a stimulus that happens without conscious thought."
+    },
+    {
+      "term": "Reflex arc",
+      "definition": "The pathway of an impulse in a reflex: receptor, sensory neurone, relay neurone, motor neurone, effector."
+    },
+    {
+      "term": "Synapse",
+      "definition": "The junction between two neurones, including the tiny gap between them."
+    },
+    {
+      "term": "Neurotransmitter",
+      "definition": "A chemical released at a synapse that carries the message across the gap."
+    },
+    {
+      "term": "Spinal reflex",
+      "definition": "A reflex in which the impulse is processed in the spinal cord, for example the knee-jerk."
+    },
+    {
+      "term": "Cranial reflex",
+      "definition": "A reflex in which the impulse is processed in the brain, for example blinking."
+    },
+    {
+      "term": "Conditioned reflex",
+      "definition": "A reflex that is learned by repeatedly linking a new stimulus with a natural one."
+    }
+  ]
+}

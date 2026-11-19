@@ -1,0 +1,262 @@
+{
+  "id": "physics-measurement-2",
+  "subject": "physics",
+  "form": 1,
+  "term": 1,
+  "topic": "Measurement",
+  "topicSlug": "measurement",
+  "order": 2,
+  "title": "Measuring length and time",
+  "summary": "Measure length accurately with a ruler and a vernier caliper, avoid parallax error, and time a pendulum in a way that reduces error.",
+  "minutes": 22,
+  "objectives": [
+    "Choose a suitable instrument to measure a length",
+    "Read a ruler and a vernier caliper correctly, avoiding parallax error",
+    "Time a pendulum using many oscillations and repeated readings",
+    "Calculate the period of a pendulum from timing data"
+  ],
+  "sections": [
+    {
+      "type": "explain",
+      "title": "The right tool for the job",
+      "body": "A tailor at Kamwala market uses a soft tape measure to measure your waist. A builder uses a long steel tape to mark out a house. A mechanic uses a vernier caliper to check the thickness of a brake disc. Each person picks a tool that suits the size of the object and how exact the answer must be.\n\nThe smallest division on an instrument tells you its precision. Precision means how finely the instrument can measure.",
+      "bullets": [
+        "Tape measure: long lengths, like a classroom or a football pitch",
+        "Metre rule: lengths up to 1 m, marked in cm and mm",
+        "School ruler: short lengths, to the nearest 1 mm (0.1 cm)",
+        "Vernier caliper: small lengths and diameters, to the nearest 0.1 mm (0.01 cm)"
+      ]
+    },
+    {
+      "type": "explain",
+      "title": "Reading a ruler or metre rule",
+      "body": "The smallest division on a ruler or metre rule is 1 mm, which is 0.1 cm. So you record readings to one decimal place in cm, for example 12.4 cm.\n\nThe end of an old ruler is often worn or damaged, so the zero mark may not be exact. A good habit is to line up one end of the object with a clear mark, such as 1.0 cm, and then subtract.\n\nLength = end reading − start reading."
+    },
+    {
+      "type": "example",
+      "title": "Worked example: using a ruler with a worn end",
+      "problem": "The left end of a pencil is lined up with the 1.0 cm mark. The right end is at the 13.4 cm mark. How long is the pencil?",
+      "steps": [
+        "Step 1: Write down the start reading: 1.0 cm.",
+        "Step 2: Write down the end reading: 13.4 cm.",
+        "Step 3: Length = end reading − start reading = 13.4 cm − 1.0 cm = 12.4 cm.",
+        "Step 4: In millimetres: 12.4 cm × 10 = 124 mm."
+      ],
+      "answer": "The pencil is 12.4 cm (124 mm) long."
+    },
+    {
+      "type": "explain",
+      "title": "Parallax error: where you put your eye matters",
+      "body": "If you look at a scale from the side, the mark seems to move against the object behind it. You then read a value that is too high or too low. This is called parallax error.\n\nTo avoid it, put your eye directly above the mark, so your line of sight is at right angles (90°) to the scale. Keeping the ruler flat against the object also helps.",
+      "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 480 260\" role=\"img\" aria-label=\"Parallax: only the eye directly above the mark, eye B, gives the correct reading; eyes A and C to the side give wrong readings\"><rect x=\"100\" y=\"130\" width=\"140\" height=\"40\" fill=\"#F59E0B\"/><rect x=\"40\" y=\"170\" width=\"400\" height=\"40\" fill=\"#DBEAFE\" stroke=\"#2563EB\" stroke-width=\"2\"/><line x1=\"40\" y1=\"170\" x2=\"40\" y2=\"188\" stroke=\"#0F172A\" stroke-width=\"1.5\"/><line x1=\"60\" y1=\"170\" x2=\"60\" y2=\"180\" stroke=\"#0F172A\" stroke-width=\"1.5\"/><line x1=\"80\" y1=\"170\" x2=\"80\" y2=\"180\" stroke=\"#0F172A\" stroke-width=\"1.5\"/><line x1=\"100\" y1=\"170\" x2=\"100\" y2=\"180\" stroke=\"#0F172A\" stroke-width=\"1.5\"/><line x1=\"120\" y1=\"170\" x2=\"120\" y2=\"180\" stroke=\"#0F172A\" stroke-width=\"1.5\"/><line x1=\"140\" y1=\"170\" x2=\"140\" y2=\"188\" stroke=\"#0F172A\" stroke-width=\"1.5\"/><line x1=\"160\" y1=\"170\" x2=\"160\" y2=\"180\" stroke=\"#0F172A\" stroke-width=\"1.5\"/><line x1=\"180\" y1=\"170\" x2=\"180\" y2=\"180\" stroke=\"#0F172A\" stroke-width=\"1.5\"/><line x1=\"200\" y1=\"170\" x2=\"200\" y2=\"180\" stroke=\"#0F172A\" stroke-width=\"1.5\"/><line x1=\"220\" y1=\"170\" x2=\"220\" y2=\"180\" stroke=\"#0F172A\" stroke-width=\"1.5\"/><line x1=\"240\" y1=\"170\" x2=\"240\" y2=\"188\" stroke=\"#0F172A\" stroke-width=\"1.5\"/><line x1=\"260\" y1=\"170\" x2=\"260\" y2=\"180\" stroke=\"#0F172A\" stroke-width=\"1.5\"/><line x1=\"280\" y1=\"170\" x2=\"280\" y2=\"180\" stroke=\"#0F172A\" stroke-width=\"1.5\"/><line x1=\"300\" y1=\"170\" x2=\"300\" y2=\"180\" stroke=\"#0F172A\" stroke-width=\"1.5\"/><line x1=\"320\" y1=\"170\" x2=\"320\" y2=\"180\" stroke=\"#0F172A\" stroke-width=\"1.5\"/><line x1=\"340\" y1=\"170\" x2=\"340\" y2=\"188\" stroke=\"#0F172A\" stroke-width=\"1.5\"/><line x1=\"360\" y1=\"170\" x2=\"360\" y2=\"180\" stroke=\"#0F172A\" stroke-width=\"1.5\"/><line x1=\"380\" y1=\"170\" x2=\"380\" y2=\"180\" stroke=\"#0F172A\" stroke-width=\"1.5\"/><line x1=\"400\" y1=\"170\" x2=\"400\" y2=\"180\" stroke=\"#0F172A\" stroke-width=\"1.5\"/><line x1=\"420\" y1=\"170\" x2=\"420\" y2=\"180\" stroke=\"#0F172A\" stroke-width=\"1.5\"/><line x1=\"440\" y1=\"170\" x2=\"440\" y2=\"188\" stroke=\"#0F172A\" stroke-width=\"1.5\"/><line x1=\"146\" y1=\"57\" x2=\"240\" y2=\"130\" stroke=\"#E11D48\" stroke-width=\"2\" stroke-dasharray=\"6 5\"/><line x1=\"334\" y1=\"57\" x2=\"240\" y2=\"130\" stroke=\"#E11D48\" stroke-width=\"2\" stroke-dasharray=\"6 5\"/><line x1=\"240\" y1=\"59\" x2=\"240\" y2=\"130\" stroke=\"#0D9488\" stroke-width=\"2.5\"/><ellipse cx=\"130\" cy=\"50\" rx=\"16\" ry=\"9\" fill=\"#FFFFFF\" stroke=\"#0F172A\" stroke-width=\"2\"/><circle cx=\"130\" cy=\"50\" r=\"4\" fill=\"#0F172A\"/><ellipse cx=\"240\" cy=\"50\" rx=\"16\" ry=\"9\" fill=\"#FFFFFF\" stroke=\"#0F172A\" stroke-width=\"2\"/><circle cx=\"240\" cy=\"50\" r=\"4\" fill=\"#0F172A\"/><ellipse cx=\"350\" cy=\"50\" rx=\"16\" ry=\"9\" fill=\"#FFFFFF\" stroke=\"#0F172A\" stroke-width=\"2\"/><circle cx=\"350\" cy=\"50\" r=\"4\" fill=\"#0F172A\"/><text x=\"104\" y=\"55\" font-family=\"Inter, system-ui, sans-serif\" font-size=\"14\" fill=\"#0F172A\" text-anchor=\"end\" fill=\"#E11D48\">Eye A: wrong</text><text x=\"240\" y=\"30\" font-family=\"Inter, system-ui, sans-serif\" font-size=\"14\" fill=\"#0F172A\" text-anchor=\"middle\" fill=\"#0D9488\" font-weight=\"700\">Eye B: correct</text><text x=\"376\" y=\"55\" font-family=\"Inter, system-ui, sans-serif\" font-size=\"14\" fill=\"#0F172A\" fill=\"#E11D48\">Eye C: wrong</text><text x=\"240\" y=\"240\" font-family=\"Inter, system-ui, sans-serif\" font-size=\"14\" fill=\"#0F172A\" text-anchor=\"middle\">Look straight down at the mark, like eye B</text></svg>"
+    },
+    {
+      "type": "check",
+      "question": "Where should your eye be when you read the end of an object against a ruler?",
+      "options": [
+        "A little to the left of the mark, so you can see more of the scale",
+        "Directly above the mark, looking straight down at the scale",
+        "A little to the right of the mark",
+        "It does not matter, as long as the ruler is long enough"
+      ],
+      "answer": 1,
+      "explanation": "Your line of sight must be at 90° to the scale, directly above the mark. Looking from the left or the right makes the mark seem to shift, which is parallax error. The length of the ruler has nothing to do with parallax."
+    },
+    {
+      "type": "explain",
+      "title": "The vernier caliper",
+      "body": "A vernier caliper has two scales. The main scale is marked in cm and mm, like a ruler. The vernier scale slides along it. Its 10 divisions together are 9 mm long, so each one is 0.9 mm. This clever trick lets you read to 0.1 mm, which is 0.01 cm.\n\nTo read it: first, read the main scale at the line just to the left of the vernier zero. Next, find the one vernier line that lines up exactly with any main-scale line. That vernier line number tells you how many 0.01 cm to add.\n\nBefore measuring, close the jaws and check that the vernier zero lines up with the main-scale zero. If it does not, the instrument has a zero error that you must correct for.",
+      "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 480 260\" role=\"img\" aria-label=\"Vernier caliper scales: main scale reads 2.3 cm and vernier line 4 lines up with a main-scale line, so the reading is 2.34 cm\"><rect x=\"40\" y=\"50\" width=\"330\" height=\"70\" fill=\"#FFFFFF\" stroke=\"#0F172A\" stroke-width=\"2\"/><line x1=\"60\" y1=\"120\" x2=\"60\" y2=\"110\" stroke=\"#0F172A\" stroke-width=\"1.5\"/><line x1=\"76\" y1=\"120\" x2=\"76\" y2=\"110\" stroke=\"#0F172A\" stroke-width=\"1.5\"/><line x1=\"92\" y1=\"120\" x2=\"92\" y2=\"96\" stroke=\"#0F172A\" stroke-width=\"1.5\"/><line x1=\"108\" y1=\"120\" x2=\"108\" y2=\"110\" stroke=\"#0F172A\" stroke-width=\"1.5\"/><line x1=\"124\" y1=\"120\" x2=\"124\" y2=\"110\" stroke=\"#0F172A\" stroke-width=\"1.5\"/><line x1=\"140\" y1=\"120\" x2=\"140\" y2=\"110\" stroke=\"#0F172A\" stroke-width=\"1.5\"/><line x1=\"156\" y1=\"120\" x2=\"156\" y2=\"110\" stroke=\"#0F172A\" stroke-width=\"1.5\"/><line x1=\"172\" y1=\"120\" x2=\"172\" y2=\"104\" stroke=\"#0F172A\" stroke-width=\"1.5\"/><line x1=\"188\" y1=\"120\" x2=\"188\" y2=\"110\" stroke=\"#0F172A\" stroke-width=\"1.5\"/><line x1=\"204\" y1=\"120\" x2=\"204\" y2=\"110\" stroke=\"#E11D48\" stroke-width=\"2.5\"/><line x1=\"220\" y1=\"120\" x2=\"220\" y2=\"110\" stroke=\"#0F172A\" stroke-width=\"1.5\"/><line x1=\"236\" y1=\"120\" x2=\"236\" y2=\"110\" stroke=\"#0F172A\" stroke-width=\"1.5\"/><line x1=\"252\" y1=\"120\" x2=\"252\" y2=\"96\" stroke=\"#0F172A\" stroke-width=\"1.5\"/><line x1=\"268\" y1=\"120\" x2=\"268\" y2=\"110\" stroke=\"#0F172A\" stroke-width=\"1.5\"/><line x1=\"284\" y1=\"120\" x2=\"284\" y2=\"110\" stroke=\"#0F172A\" stroke-width=\"1.5\"/><line x1=\"300\" y1=\"120\" x2=\"300\" y2=\"110\" stroke=\"#0F172A\" stroke-width=\"1.5\"/><line x1=\"316\" y1=\"120\" x2=\"316\" y2=\"110\" stroke=\"#0F172A\" stroke-width=\"1.5\"/><line x1=\"332\" y1=\"120\" x2=\"332\" y2=\"104\" stroke=\"#0F172A\" stroke-width=\"1.5\"/><line x1=\"348\" y1=\"120\" x2=\"348\" y2=\"110\" stroke=\"#0F172A\" stroke-width=\"1.5\"/><text x=\"92\" y=\"86\" font-family=\"Inter, system-ui, sans-serif\" font-size=\"14\" fill=\"#0F172A\" text-anchor=\"middle\" font-weight=\"700\">2</text><text x=\"252\" y=\"86\" font-family=\"Inter, system-ui, sans-serif\" font-size=\"14\" fill=\"#0F172A\" text-anchor=\"middle\" font-weight=\"700\">3</text><text x=\"380\" y=\"90\" font-family=\"Inter, system-ui, sans-serif\" font-size=\"14\" fill=\"#0F172A\" fill=\"#64748B\">Main scale</text><rect x=\"120\" y=\"120\" width=\"200\" height=\"55\" fill=\"#DBEAFE\" stroke=\"#2563EB\" stroke-width=\"2\"/><line x1=\"146.4\" y1=\"120\" x2=\"146.4\" y2=\"138\" stroke=\"#0F172A\" stroke-width=\"1.5\"/><text x=\"146.4\" y=\"158\" font-family=\"Inter, system-ui, sans-serif\" font-size=\"14\" fill=\"#0F172A\" text-anchor=\"middle\">0</text><line x1=\"160.8\" y1=\"120\" x2=\"160.8\" y2=\"132\" stroke=\"#0F172A\" stroke-width=\"1.5\"/><line x1=\"175.2\" y1=\"120\" x2=\"175.2\" y2=\"132\" stroke=\"#0F172A\" stroke-width=\"1.5\"/><line x1=\"189.6\" y1=\"120\" x2=\"189.6\" y2=\"132\" stroke=\"#0F172A\" stroke-width=\"1.5\"/><line x1=\"204\" y1=\"120\" x2=\"204\" y2=\"132\" stroke=\"#E11D48\" stroke-width=\"2.5\"/><line x1=\"218.4\" y1=\"120\" x2=\"218.4\" y2=\"138\" stroke=\"#0F172A\" stroke-width=\"1.5\"/><text x=\"218.4\" y=\"158\" font-family=\"Inter, system-ui, sans-serif\" font-size=\"14\" fill=\"#0F172A\" text-anchor=\"middle\">5</text><line x1=\"232.8\" y1=\"120\" x2=\"232.8\" y2=\"132\" stroke=\"#0F172A\" stroke-width=\"1.5\"/><line x1=\"247.2\" y1=\"120\" x2=\"247.2\" y2=\"132\" stroke=\"#0F172A\" stroke-width=\"1.5\"/><line x1=\"261.6\" y1=\"120\" x2=\"261.6\" y2=\"132\" stroke=\"#0F172A\" stroke-width=\"1.5\"/><line x1=\"276\" y1=\"120\" x2=\"276\" y2=\"132\" stroke=\"#0F172A\" stroke-width=\"1.5\"/><line x1=\"290.4\" y1=\"120\" x2=\"290.4\" y2=\"138\" stroke=\"#0F172A\" stroke-width=\"1.5\"/><text x=\"290.4\" y=\"158\" font-family=\"Inter, system-ui, sans-serif\" font-size=\"14\" fill=\"#0F172A\" text-anchor=\"middle\">10</text><text x=\"330\" y=\"152\" font-family=\"Inter, system-ui, sans-serif\" font-size=\"14\" fill=\"#0F172A\" fill=\"#2563EB\">Vernier scale</text><text x=\"204\" y=\"196\" font-family=\"Inter, system-ui, sans-serif\" font-size=\"14\" fill=\"#0F172A\" text-anchor=\"middle\" fill=\"#E11D48\">Line 4 lines up exactly</text><text x=\"240\" y=\"228\" font-family=\"Inter, system-ui, sans-serif\" font-size=\"14\" fill=\"#0F172A\" text-anchor=\"middle\" font-weight=\"700\">Reading = 2.3 cm + 4 × 0.01 cm = 2.34 cm</text></svg>"
+    },
+    {
+      "type": "example",
+      "title": "Worked example: reading a vernier caliper",
+      "problem": "A learner measures the diameter of a marble. The vernier zero is just past the 1.5 cm mark on the main scale, and vernier line 8 lines up exactly with a main-scale line. What is the diameter?",
+      "steps": [
+        "Step 1: Main scale reading (just left of the vernier zero) = 1.5 cm.",
+        "Step 2: Vernier line that lines up = 8, so add 8 × 0.01 cm = 0.08 cm.",
+        "Step 3: Diameter = 1.5 cm + 0.08 cm = 1.58 cm.",
+        "Step 4: In millimetres: 1.58 cm × 10 = 15.8 mm."
+      ],
+      "answer": "The diameter of the marble is 1.58 cm (15.8 mm)."
+    },
+    {
+      "type": "check",
+      "question": "On a vernier caliper the main scale reads 3.5 cm and vernier line 6 lines up exactly. What is the reading?",
+      "options": [
+        "3.56 cm",
+        "3.65 cm",
+        "3.506 cm",
+        "4.1 cm"
+      ],
+      "answer": 0,
+      "explanation": "Reading = main scale + (vernier line × 0.01 cm) = 3.5 + 6 × 0.01 = 3.5 + 0.06 = 3.56 cm. 4.1 cm comes from adding 0.6 instead of 0.06. 3.65 cm mixes up the digits, and 3.506 cm uses 0.001 cm per line, which is too small."
+    },
+    {
+      "type": "explain",
+      "title": "Measuring time with a pendulum",
+      "body": "The SI unit of time is the second (s). In the laboratory we use a stopwatch. A digital stopwatch shows 0.01 s, but your hand is much slower than that. Your reaction time, the delay between seeing something and pressing the button, is about 0.2 s. This adds error at both start and stop.\n\nA simple pendulum is a small heavy ball, called a bob, hanging on a string. One oscillation is one complete swing: from A, through B, to C, and back through B to A. The time for one oscillation is called the period (T).\n\nTo reduce error: time many oscillations (for example 20) and divide by 20. Repeat the timing a few times and take the average. Start and stop the watch as the bob passes the centre B, where it moves fastest and is easiest to judge.",
+      "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 480 260\" role=\"img\" aria-label=\"Simple pendulum: one oscillation is a full swing from A to B to C and back through B to A\"><rect x=\"180\" y=\"25\" width=\"120\" height=\"10\" fill=\"#64748B\"/><text x=\"310\" y=\"38\" font-family=\"Inter, system-ui, sans-serif\" font-size=\"14\" fill=\"#0F172A\" fill=\"#64748B\">pivot</text><line x1=\"240\" y1=\"35\" x2=\"176.6\" y2=\"170.9\" stroke=\"#64748B\" stroke-width=\"1.5\" stroke-dasharray=\"5 4\"/><line x1=\"240\" y1=\"35\" x2=\"303.4\" y2=\"170.9\" stroke=\"#64748B\" stroke-width=\"1.5\" stroke-dasharray=\"5 4\"/><line x1=\"240\" y1=\"35\" x2=\"240\" y2=\"185\" stroke=\"#0F172A\" stroke-width=\"2\"/><circle cx=\"176.6\" cy=\"170.9\" r=\"12\" fill=\"#E2E8F0\" stroke=\"#64748B\" stroke-width=\"2\"/><circle cx=\"303.4\" cy=\"170.9\" r=\"12\" fill=\"#E2E8F0\" stroke=\"#64748B\" stroke-width=\"2\"/><circle cx=\"240\" cy=\"185\" r=\"12\" fill=\"#2563EB\"/><text x=\"154.6\" y=\"175.9\" font-family=\"Inter, system-ui, sans-serif\" font-size=\"14\" fill=\"#0F172A\" text-anchor=\"end\" font-weight=\"700\">A</text><text x=\"325.4\" y=\"175.9\" font-family=\"Inter, system-ui, sans-serif\" font-size=\"14\" fill=\"#0F172A\" font-weight=\"700\">C</text><text x=\"240\" y=\"217\" font-family=\"Inter, system-ui, sans-serif\" font-size=\"14\" fill=\"#0F172A\" text-anchor=\"middle\" font-weight=\"700\">B</text><text x=\"240\" y=\"248\" font-family=\"Inter, system-ui, sans-serif\" font-size=\"14\" fill=\"#0F172A\" text-anchor=\"middle\" fill=\"#0D9488\" font-weight=\"700\">One oscillation: A → B → C → B → A</text></svg>"
+    },
+    {
+      "type": "example",
+      "title": "Worked example: finding the period of a pendulum",
+      "problem": "A learner times 20 oscillations of a pendulum three times. The readings are 32.1 s, 31.8 s and 32.1 s. Find the period.",
+      "steps": [
+        "Step 1: Add the three readings: 32.1 + 31.8 + 32.1 = 96.0 s.",
+        "Step 2: Average time for 20 oscillations = 96.0 s ÷ 3 = 32.0 s.",
+        "Step 3: Period T = time for 20 oscillations ÷ 20 = 32.0 s ÷ 20 = 1.6 s.",
+        "Step 4: Why this helps: a 0.2 s reaction error is shared over 20 swings, so the error in T is only about 0.2 ÷ 20 = 0.01 s."
+      ],
+      "answer": "The period of the pendulum is 1.6 s."
+    },
+    {
+      "type": "mistake",
+      "title": "Common mistake: counting \"one\" when you start the stopwatch",
+      "body": "Many learners say \"one\" as they press start. When they stop at \"twenty\", they have really timed only 19 oscillations, but they still divide by 20. The period comes out too small.\n\nTo avoid it, count \"zero\" as you start the watch, then \"one\" when the bob next passes the same point moving in the same direction. Stop the watch on \"twenty\"."
+    },
+    {
+      "type": "check",
+      "question": "A pendulum makes 10 oscillations in 18.0 s. What is its period?",
+      "options": [
+        "0.56 s",
+        "1.8 s",
+        "180 s",
+        "8.0 s"
+      ],
+      "answer": 1,
+      "explanation": "Period = total time ÷ number of oscillations = 18.0 s ÷ 10 = 1.8 s. 0.56 s comes from dividing the wrong way round (10 ÷ 18). 180 s comes from multiplying, and 8.0 s comes from subtracting."
+    },
+    {
+      "type": "summary",
+      "title": "Key points",
+      "bullets": [
+        "Choose the instrument to suit the length: tape, metre rule, ruler (to 0.1 cm) or vernier caliper (to 0.01 cm).",
+        "Length = end reading − start reading. Do not trust a worn zero end.",
+        "Avoid parallax error: put your eye directly above the mark, at 90° to the scale.",
+        "Vernier reading = main scale reading + (line that lines up × 0.01 cm).",
+        "One oscillation is A → B → C → B → A. Time many oscillations, repeat, average, then divide to find the period."
+      ]
+    }
+  ],
+  "quiz": [
+    {
+      "question": "What is the smallest division on a normal school ruler?",
+      "options": [
+        "1 cm",
+        "1 mm",
+        "0.1 mm",
+        "0.01 mm"
+      ],
+      "answer": 1,
+      "explanation": "A school ruler is marked in millimetres, so its smallest division is 1 mm (0.1 cm). To measure to 0.1 mm you need a vernier caliper."
+    },
+    {
+      "question": "What causes parallax error when reading a scale?",
+      "options": [
+        "The eye is not directly in line with the mark",
+        "The ruler is too long",
+        "The object is too heavy",
+        "The scale is marked in millimetres"
+      ],
+      "answer": 0,
+      "explanation": "Parallax error happens when you look at the scale at an angle, so the mark seems to shift against the object. Keep your eye directly above the mark, at 90° to the scale."
+    },
+    {
+      "question": "To what precision can a vernier caliper measure?",
+      "options": [
+        "1 cm",
+        "1 mm",
+        "0.1 mm, which is 0.01 cm",
+        "1 m"
+      ],
+      "answer": 2,
+      "explanation": "Each vernier division is 0.9 mm, 0.1 mm shorter than a main-scale division. This lets a vernier caliper read to 0.1 mm (0.01 cm), ten times finer than a ruler."
+    },
+    {
+      "question": "One end of a stick is at the 2.0 cm mark of a ruler and the other end is at 9.6 cm. How long is the stick?",
+      "options": [
+        "9.6 cm",
+        "11.6 cm",
+        "7.4 cm",
+        "7.6 cm"
+      ],
+      "answer": 3,
+      "explanation": "Length = end reading − start reading = 9.6 − 2.0 = 7.6 cm. 9.6 cm forgets that the stick did not start at zero, and 11.6 cm adds the readings instead of subtracting."
+    },
+    {
+      "question": "The main scale of a vernier caliper reads 5.2 cm and vernier line 3 lines up exactly. What is the reading?",
+      "options": [
+        "5.23 cm",
+        "5.32 cm",
+        "5.5 cm",
+        "8.2 cm"
+      ],
+      "answer": 0,
+      "explanation": "Reading = 5.2 + 3 × 0.01 = 5.2 + 0.03 = 5.23 cm. 5.5 cm comes from adding 0.3 instead of 0.03, and 8.2 cm comes from adding 3 whole centimetres."
+    },
+    {
+      "question": "A pendulum completes 20 oscillations in 36.0 s. What is its period?",
+      "options": [
+        "720 s",
+        "0.56 s",
+        "1.8 s",
+        "16 s"
+      ],
+      "answer": 2,
+      "explanation": "Period = 36.0 s ÷ 20 = 1.8 s. 720 s comes from multiplying 36 × 20, and 0.56 s comes from dividing 20 ÷ 36, the wrong way round."
+    },
+    {
+      "question": "Why is it better to time 20 oscillations of a pendulum than just one?",
+      "options": [
+        "The pendulum swings faster after many swings",
+        "The reaction-time error is shared over many swings, so the error in each period is much smaller",
+        "One swing is too fast for any stopwatch to record",
+        "Timing more swings makes the string longer"
+      ],
+      "answer": 1,
+      "explanation": "Your reaction time adds roughly the same error (about 0.2 s) however many swings you time. Spread over 20 swings, the error in one period is about 0.2 ÷ 20 = 0.01 s. The period of a pendulum does not change as it keeps swinging."
+    },
+    {
+      "question": "Three learners time 10 oscillations of the same pendulum and get 12.4 s, 12.6 s and 12.5 s. What value should they use for the time of 10 oscillations?",
+      "options": [
+        "12.4 s",
+        "37.5 s",
+        "12.5 s",
+        "12.6 s"
+      ],
+      "answer": 2,
+      "explanation": "Take the average: (12.4 + 12.6 + 12.5) ÷ 3 = 37.5 ÷ 3 = 12.5 s. 37.5 s is only the total. Averaging repeated readings reduces the effect of random errors, giving a more reliable value."
+    }
+  ],
+  "glossary": [
+    {
+      "term": "Precision",
+      "definition": "How finely an instrument can measure, shown by its smallest division."
+    },
+    {
+      "term": "Parallax error",
+      "definition": "A reading error caused by looking at a scale at an angle instead of straight on."
+    },
+    {
+      "term": "Vernier caliper",
+      "definition": "An instrument with a sliding vernier scale that measures small lengths to 0.01 cm (0.1 mm)."
+    },
+    {
+      "term": "Zero error",
+      "definition": "When an instrument does not read zero when it should, for example when the jaws of a caliper are closed."
+    },
+    {
+      "term": "Oscillation",
+      "definition": "One complete to-and-fro swing of a pendulum, from A to C and back to A."
+    },
+    {
+      "term": "Period",
+      "definition": "The time taken for one complete oscillation, measured in seconds."
+    },
+    {
+      "term": "Reaction time",
+      "definition": "The short delay between seeing something happen and responding to it, such as pressing a stopwatch."
+    }
+  ]
+}

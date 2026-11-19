@@ -1,0 +1,267 @@
+{
+  "id": "chemistry-states-of-matter-2",
+  "subject": "chemistry",
+  "form": 1,
+  "term": 1,
+  "topic": "States of Matter",
+  "topicSlug": "states-of-matter",
+  "order": 2,
+  "title": "Changes of state",
+  "summary": "Name the changes of state, explain them using particles and energy, and read melting and boiling points from a heating curve.",
+  "minutes": 22,
+  "objectives": [
+    "Name and describe melting, freezing, evaporation, boiling, condensation and sublimation",
+    "Explain changes of state in terms of energy and particles",
+    "Compare evaporation and boiling",
+    "Interpret a heating curve to find melting and boiling points"
+  ],
+  "sections": [
+    {
+      "type": "explain",
+      "title": "Matter can change its state",
+      "body": "Buy an ice block from a tuck shop in Lusaka on a hot October afternoon and it soon turns to water. Wet clothes on the washing line dry by midday. A kettle of water boils and fills the kitchen with steam. Each of these is a change of state.\n\nA change of state is when a substance changes from one state (solid, liquid or gas) to another. It is a physical change. This means no new substance is made: ice, liquid water and steam are all water. Most changes of state can be reversed by heating or cooling."
+    },
+    {
+      "type": "explain",
+      "title": "The names of the changes",
+      "body": "Learn these names carefully. Examiners expect the exact words.",
+      "bullets": [
+        "Melting: solid to liquid (ice melting to water).",
+        "Freezing (also called solidifying): liquid to solid (water freezing in a fridge).",
+        "Evaporation and boiling: liquid to gas (a puddle drying; water boiling in a pot).",
+        "Condensation: gas to liquid (drops of water forming on a cold bottle of drink).",
+        "Sublimation: solid straight to gas without becoming a liquid (iodine crystals when warmed, dry ice, mothballs slowly shrinking).",
+        "Deposition: gas straight to solid. Some textbooks also call this sublimation."
+      ],
+      "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 480 310\" role=\"img\" aria-label=\"Triangle of changes of state between solid, liquid and gas, with energy taken in or given out\"><defs><marker id=\"mr\" viewBox=\"0 0 10 10\" refX=\"9\" refY=\"5\" markerWidth=\"5\" markerHeight=\"5\" orient=\"auto\"><path d=\"M0,0 L10,5 L0,10 z\" fill=\"#E11D48\"/></marker><marker id=\"mb\" viewBox=\"0 0 10 10\" refX=\"9\" refY=\"5\" markerWidth=\"5\" markerHeight=\"5\" orient=\"auto\"><path d=\"M0,0 L10,5 L0,10 z\" fill=\"#2563EB\"/></marker></defs><rect x=\"190\" y=\"40\" width=\"100\" height=\"40\" rx=\"8\" fill=\"#DBEAFE\" stroke=\"#2563EB\" stroke-width=\"2\"/><text x=\"240\" y=\"65\" text-anchor=\"middle\" font-size=\"15\" font-weight=\"700\" fill=\"#0F172A\" font-family=\"Inter, system-ui, sans-serif\">Gas</text><rect x=\"40\" y=\"220\" width=\"100\" height=\"40\" rx=\"8\" fill=\"#DBEAFE\" stroke=\"#2563EB\" stroke-width=\"2\"/><text x=\"90\" y=\"245\" text-anchor=\"middle\" font-size=\"15\" font-weight=\"700\" fill=\"#0F172A\" font-family=\"Inter, system-ui, sans-serif\">Solid</text><rect x=\"340\" y=\"220\" width=\"100\" height=\"40\" rx=\"8\" fill=\"#DBEAFE\" stroke=\"#2563EB\" stroke-width=\"2\"/><text x=\"390\" y=\"245\" text-anchor=\"middle\" font-size=\"15\" font-weight=\"700\" fill=\"#0F172A\" font-family=\"Inter, system-ui, sans-serif\">Liquid</text><line x1=\"142\" y1=\"232\" x2=\"336\" y2=\"232\" stroke=\"#E11D48\" stroke-width=\"3\" marker-end=\"url(#mr)\"/><line x1=\"338\" y1=\"250\" x2=\"144\" y2=\"250\" stroke=\"#2563EB\" stroke-width=\"3\" marker-end=\"url(#mb)\"/><line x1=\"395\" y1=\"218\" x2=\"287\" y2=\"84\" stroke=\"#E11D48\" stroke-width=\"3\" marker-end=\"url(#mr)\"/><line x1=\"262\" y1=\"82\" x2=\"365\" y2=\"218\" stroke=\"#2563EB\" stroke-width=\"3\" marker-end=\"url(#mb)\"/><line x1=\"85\" y1=\"218\" x2=\"193\" y2=\"84\" stroke=\"#E11D48\" stroke-width=\"3\" marker-end=\"url(#mr)\"/><line x1=\"218\" y1=\"82\" x2=\"115\" y2=\"218\" stroke=\"#2563EB\" stroke-width=\"3\" marker-end=\"url(#mb)\"/><text x=\"240\" y=\"224\" text-anchor=\"middle\" font-size=\"13\" fill=\"#0F172A\" font-family=\"Inter, system-ui, sans-serif\">melting</text><text x=\"240\" y=\"272\" text-anchor=\"middle\" font-size=\"13\" fill=\"#0F172A\" font-family=\"Inter, system-ui, sans-serif\">freezing</text><text x=\"350\" y=\"134\" font-size=\"13\" fill=\"#0F172A\" font-family=\"Inter, system-ui, sans-serif\">evaporation</text><text x=\"350\" y=\"151\" font-size=\"13\" fill=\"#0F172A\" font-family=\"Inter, system-ui, sans-serif\">or boiling</text><text x=\"126\" y=\"142\" text-anchor=\"end\" font-size=\"13\" fill=\"#0F172A\" font-family=\"Inter, system-ui, sans-serif\">sublimation</text><text x=\"312\" y=\"172\" text-anchor=\"end\" font-size=\"13\" fill=\"#0F172A\" font-family=\"Inter, system-ui, sans-serif\">condensation</text><text x=\"152\" y=\"200\" font-size=\"13\" fill=\"#0F172A\" font-family=\"Inter, system-ui, sans-serif\">deposition</text><text x=\"240\" y=\"300\" text-anchor=\"middle\" font-size=\"13\" fill=\"#64748B\" font-family=\"Inter, system-ui, sans-serif\">Red: energy taken in.  Blue: energy given out.</text></svg>"
+    },
+    {
+      "type": "explain",
+      "title": "Energy and particles",
+      "body": "Melting, evaporating, boiling and sublimation need energy to be taken in, usually as heat. The particles gain kinetic energy and move faster. They can then overcome some or all of the forces of attraction holding them together. For example, when ice melts, the particles break free from their fixed positions and start sliding past each other.\n\nFreezing, condensation and deposition give out energy. The particles lose kinetic energy, slow down, and the forces of attraction pull them closer together. For example, when steam condenses, the fast gas particles slow down and come close together as a liquid."
+    },
+    {
+      "type": "check",
+      "question": "Which change of state gives out energy to the surroundings?",
+      "options": [
+        "Melting",
+        "Boiling",
+        "Condensation",
+        "Sublimation"
+      ],
+      "answer": 2,
+      "explanation": "In condensation, gas particles slow down and come closer together, giving out energy. This is why steam from a pot can burn your hand badly. Melting, boiling and sublimation all take in energy, because particles need extra energy to overcome the forces holding them together."
+    },
+    {
+      "type": "explain",
+      "title": "Evaporation and boiling are not the same",
+      "body": "Both turn a liquid into a gas, but they happen in different ways. In any liquid, some particles move faster than others. In evaporation, the fastest particles at the surface escape into the air. Boiling happens when the liquid is hot enough for bubbles of gas to form all through it.",
+      "bullets": [
+        "Evaporation happens at any temperature. Boiling happens only at the boiling point.",
+        "Evaporation happens only at the surface. Boiling happens throughout the liquid, with bubbles.",
+        "Evaporation is slow. Boiling is fast.",
+        "Evaporation cools the liquid left behind, because the fastest particles leave and the slower ones stay. This is why sweating cools your body."
+      ]
+    },
+    {
+      "type": "example",
+      "title": "Worked example: drying a chitenge",
+      "problem": "Mrs Banda washes two identical chitenge cloths. She spreads one out flat on the line on a hot, windy day. She folds the other one and leaves it indoors on a cool, still day. Which dries faster? Explain using particles.",
+      "steps": [
+        "Step 1: Drying is evaporation. Water particles at the surface escape into the air.",
+        "Step 2: Temperature. On a hot day the water particles have more kinetic energy, so more of them are fast enough to escape.",
+        "Step 3: Surface area. Spreading the cloth out exposes more water surface, so more particles can escape at the same time.",
+        "Step 4: Wind. Moving air carries away the water particles that have escaped, so they do not build up near the cloth and go back in."
+      ],
+      "answer": "The cloth spread out on the hot, windy day dries faster: higher temperature, larger surface area and moving air all increase the rate of evaporation."
+    },
+    {
+      "type": "explain",
+      "title": "Heating curves, melting point and boiling point",
+      "body": "A heating curve is a graph of temperature against time as a substance is heated steadily. The graph below is for water, starting as ice below 0 °C.\n\nThe melting point is the fixed temperature at which a pure solid melts. For water it is 0 °C. The boiling point is the fixed temperature at which a pure liquid boils. For water it is 100 °C at normal atmospheric pressure (sea level). On high ground the air pressure is lower, so water boils at a lower temperature. In Lusaka, about 1,300 m above sea level, water boils at about 96 °C.\n\nLook at the flat parts of the curve. The heat is still going in, but the temperature does not rise. The energy is being used to overcome the forces of attraction between particles and change the state, not to make the particles move faster.",
+      "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 480 280\" role=\"img\" aria-label=\"Heating curve of water: temperature rises, stays flat at 0 degrees while melting, rises, stays flat at 100 degrees while boiling, then rises\"><line x1=\"60\" y1=\"240\" x2=\"460\" y2=\"240\" stroke=\"#0F172A\" stroke-width=\"2\"/><line x1=\"60\" y1=\"240\" x2=\"60\" y2=\"20\" stroke=\"#0F172A\" stroke-width=\"2\"/><line x1=\"60\" y1=\"190\" x2=\"100\" y2=\"190\" stroke=\"#64748B\" stroke-width=\"1.5\" stroke-dasharray=\"4 4\"/><line x1=\"60\" y1=\"60\" x2=\"270\" y2=\"60\" stroke=\"#64748B\" stroke-width=\"1.5\" stroke-dasharray=\"4 4\"/><polyline points=\"60,216 100,190 200,190 270,60 390,60 440,34\" fill=\"none\" stroke=\"#2563EB\" stroke-width=\"4\" stroke-linejoin=\"round\"/><text x=\"52\" y=\"195\" text-anchor=\"end\" font-size=\"13\" fill=\"#0F172A\" font-family=\"Inter, system-ui, sans-serif\">0</text><text x=\"52\" y=\"65\" text-anchor=\"end\" font-size=\"13\" fill=\"#0F172A\" font-family=\"Inter, system-ui, sans-serif\">100</text><text x=\"22\" y=\"130\" text-anchor=\"middle\" font-size=\"13\" fill=\"#0F172A\" transform=\"rotate(-90 22 130)\" font-family=\"Inter, system-ui, sans-serif\">Temperature (°C)</text><text x=\"260\" y=\"266\" text-anchor=\"middle\" font-size=\"13\" fill=\"#0F172A\" font-family=\"Inter, system-ui, sans-serif\">Time (heating at a steady rate)</text><text x=\"145\" y=\"178\" text-anchor=\"middle\" font-size=\"13\" font-weight=\"700\" fill=\"#E11D48\" font-family=\"Inter, system-ui, sans-serif\">melting</text><text x=\"330\" y=\"48\" text-anchor=\"middle\" font-size=\"13\" font-weight=\"700\" fill=\"#E11D48\" font-family=\"Inter, system-ui, sans-serif\">boiling</text><text x=\"96\" y=\"178\" text-anchor=\"end\" font-size=\"13\" fill=\"#0F172A\" font-family=\"Inter, system-ui, sans-serif\">solid</text><text x=\"150\" y=\"214\" text-anchor=\"middle\" font-size=\"13\" fill=\"#64748B\" font-family=\"Inter, system-ui, sans-serif\">solid + liquid</text><text x=\"248\" y=\"140\" font-size=\"13\" fill=\"#0F172A\" font-family=\"Inter, system-ui, sans-serif\">liquid</text><text x=\"415\" y=\"80\" font-size=\"13\" fill=\"#0F172A\" font-family=\"Inter, system-ui, sans-serif\">gas</text><text x=\"330\" y=\"82\" text-anchor=\"middle\" font-size=\"13\" fill=\"#64748B\" font-family=\"Inter, system-ui, sans-serif\">liquid + gas</text></svg>"
+    },
+    {
+      "type": "example",
+      "title": "Worked example: reading a heating curve",
+      "problem": "A pure solid X is heated steadily from 20 °C. Its temperature rises to 80 °C and stays at 80 °C for 6 minutes. It then rises to 218 °C and stays there for 10 minutes before rising again. (a) What is the melting point of X? (b) What is its boiling point? (c) What state is X in at 150 °C? (d) Why does the temperature stay at 80 °C for 6 minutes?",
+      "steps": [
+        "Step 1: The first flat section is where the solid melts. It is at 80 °C, so the melting point is 80 °C.",
+        "Step 2: The second flat section is where the liquid boils. It is at 218 °C, so the boiling point is 218 °C.",
+        "Step 3: 150 °C is above the melting point but below the boiling point, so X has melted but not yet boiled. It is a liquid.",
+        "Step 4: During the flat section the heat energy is used to overcome the forces of attraction between the particles, so the solid can turn into a liquid. The energy does not increase the kinetic energy of the particles, so the temperature stays the same until all of X has melted."
+      ],
+      "answer": "(a) 80 °C (b) 218 °C (c) liquid (d) the energy taken in is used to overcome the forces between particles during melting, not to raise the temperature."
+    },
+    {
+      "type": "check",
+      "question": "Pure water is boiling steadily at 100 °C in a pot. The cook turns the stove up higher. What happens?",
+      "options": [
+        "The water heats up to above 100 °C",
+        "The water stays at 100 °C but boils away faster",
+        "The water stops boiling",
+        "The water cools down"
+      ],
+      "answer": 1,
+      "explanation": "While a pure liquid is boiling, its temperature stays at the boiling point. Extra heat only makes it change to gas faster. So the temperature does not rise above 100 °C, which is why turning the stove up does not cook boiled food any faster once the water is already boiling; it just wastes fuel."
+    },
+    {
+      "type": "mistake",
+      "title": "Common mistake: mixing up the flat parts",
+      "body": "Students often think the temperature should keep rising while a substance is being heated, or they read the melting point from a sloping part of the graph. Remember: on a heating curve, the sloping parts are where one state is warming up, and the flat parts are where the state is changing.\n\nThe first flat part (lower temperature) is always melting. The second flat part (higher temperature) is always boiling. Read the temperature straight across to the temperature axis. Also do not call melting 'dissolving'. Dissolving is when a solid such as sugar mixes into a liquid such as tea; melting needs only heat."
+    },
+    {
+      "type": "example",
+      "title": "Worked example: state at room temperature",
+      "problem": "Use the data to decide the state of each substance at a room temperature of 25 °C. P: melting point -218 °C, boiling point -183 °C. Q: melting point -114 °C, boiling point 78 °C. R: melting point 801 °C, boiling point 1413 °C.",
+      "steps": [
+        "Step 1: Rule. Below the melting point a substance is solid. Between the melting and boiling points it is liquid. Above the boiling point it is gas.",
+        "Step 2: P. 25 °C is above its boiling point of -183 °C, so P is a gas.",
+        "Step 3: Q. 25 °C is between -114 °C and 78 °C, so Q is a liquid.",
+        "Step 4: R. 25 °C is below its melting point of 801 °C, so R is a solid."
+      ],
+      "answer": "P is a gas, Q is a liquid and R is a solid at 25 °C."
+    },
+    {
+      "type": "explain",
+      "title": "Melting and boiling points test purity",
+      "body": "A pure substance contains only one substance. It melts and boils at exact, fixed temperatures. For example, pure ice melts at exactly 0 °C.\n\nAn impure substance contains other substances mixed in. Impurities lower the melting point and raise the boiling point. They also make the substance melt or boil over a range of temperatures instead of at one fixed temperature. Water with salt dissolved in it, like the water used to cook rice, boils at slightly above 100 °C at sea level. Chemists use this to check whether a substance they have made is pure."
+    },
+    {
+      "type": "summary",
+      "title": "Key points",
+      "bullets": [
+        "Changes of state are physical changes: melting, freezing, evaporation, boiling, condensation, sublimation and deposition.",
+        "Melting, evaporation, boiling and sublimation take in energy. Freezing, condensation and deposition give out energy.",
+        "Evaporation happens at any temperature, only at the surface. Boiling happens at the boiling point, throughout the liquid.",
+        "On a heating curve the flat parts show changes of state. The temperature stays constant because energy is used to overcome forces between particles.",
+        "Water melts at 0 °C and boils at 100 °C at sea level. Pure substances have sharp, fixed melting and boiling points.",
+        "Impurities lower the melting point and raise the boiling point."
+      ]
+    }
+  ],
+  "quiz": [
+    {
+      "question": "What is the name of the change from a gas to a liquid?",
+      "options": [
+        "Evaporation",
+        "Condensation",
+        "Sublimation",
+        "Melting"
+      ],
+      "answer": 1,
+      "explanation": "Gas to liquid is condensation, for example water drops forming on the outside of a cold bottle. Evaporation is the opposite change, liquid to gas."
+    },
+    {
+      "question": "What does sublimation mean?",
+      "options": [
+        "A liquid changes into a gas",
+        "A gas changes into a liquid",
+        "A solid dissolves in water",
+        "A solid changes straight into a gas"
+      ],
+      "answer": 3,
+      "explanation": "In sublimation a solid turns directly into a gas without becoming a liquid first, as iodine crystals do when warmed. Liquid to gas is evaporation or boiling, and dissolving is not a change of state at all."
+    },
+    {
+      "question": "Which statement is true of evaporation but NOT of boiling?",
+      "options": [
+        "It happens at any temperature, only at the surface of the liquid",
+        "It needs energy to be taken in",
+        "It changes a liquid into a gas",
+        "It is a physical change"
+      ],
+      "answer": 0,
+      "explanation": "Evaporation happens at any temperature and only at the surface. Boiling happens at the boiling point, throughout the liquid. The other three statements are true of both evaporation and boiling."
+    },
+    {
+      "question": "Pure ice at -10 °C is heated steadily. What happens to the temperature while the ice is melting?",
+      "options": [
+        "It keeps rising steadily",
+        "It falls",
+        "It stays at 0 °C until all the ice has melted",
+        "It jumps straight to 100 °C"
+      ],
+      "answer": 2,
+      "explanation": "During melting the energy is used to overcome the forces holding the particles in fixed positions, so the temperature stays at the melting point, 0 °C, until all the ice has melted. Only then does it start to rise again."
+    },
+    {
+      "question": "A substance melts at -7 °C and boils at 59 °C. What is its state at 25 °C?",
+      "options": [
+        "Solid",
+        "Liquid",
+        "Gas",
+        "Both solid and gas"
+      ],
+      "answer": 1,
+      "explanation": "25 °C is above the melting point (-7 °C) and below the boiling point (59 °C), so the substance has melted but not boiled: it is a liquid. To be a solid it would need to be below -7 °C."
+    },
+    {
+      "question": "A heating curve for ethanol has a flat section at 78 °C. What is happening during this flat section?",
+      "options": [
+        "The solid is melting",
+        "The liquid is cooling down",
+        "The gas is condensing",
+        "The liquid is boiling and turning into a gas"
+      ],
+      "answer": 3,
+      "explanation": "Ethanol is already a liquid at room temperature, and 78 °C is its boiling point. The flat section shows the liquid boiling: energy is used to overcome forces between particles, so the temperature stays constant. It is a heating curve, so nothing is cooling or condensing."
+    },
+    {
+      "question": "A sample of water boils at 102 °C at sea level. What does this tell you?",
+      "options": [
+        "The water is pure",
+        "The thermometer must be broken",
+        "The water contains a dissolved impurity, such as salt",
+        "The water is boiling faster than normal"
+      ],
+      "answer": 2,
+      "explanation": "Pure water boils at 100 °C at sea level. Impurities raise the boiling point, so a boiling point of 102 °C suggests something such as salt is dissolved in the water. Boiling faster does not change the boiling temperature."
+    },
+    {
+      "question": "Why does sweating help to cool your body on a hot day?",
+      "options": [
+        "The fastest-moving water particles escape from the sweat, leaving slower ones, so the skin loses heat",
+        "Sweat is colder than the air",
+        "Sweat stops heat reaching the skin",
+        "Sweat boils at body temperature"
+      ],
+      "answer": 0,
+      "explanation": "When sweat evaporates, the particles with the most kinetic energy escape. The particles left behind have less energy on average, so the sweat and your skin cool down. Sweat does not boil at 37 °C; it evaporates."
+    }
+  ],
+  "glossary": [
+    {
+      "term": "Change of state",
+      "definition": "A physical change from one state of matter to another, such as solid to liquid."
+    },
+    {
+      "term": "Melting point",
+      "definition": "The fixed temperature at which a pure solid turns into a liquid."
+    },
+    {
+      "term": "Boiling point",
+      "definition": "The fixed temperature at which a pure liquid boils and turns into a gas throughout."
+    },
+    {
+      "term": "Evaporation",
+      "definition": "The slow change of a liquid into a gas at its surface, at any temperature."
+    },
+    {
+      "term": "Condensation",
+      "definition": "The change of a gas into a liquid when it cools; energy is given out."
+    },
+    {
+      "term": "Sublimation",
+      "definition": "The change of a solid directly into a gas without becoming a liquid."
+    },
+    {
+      "term": "Heating curve",
+      "definition": "A graph of temperature against time as a substance is heated steadily."
+    },
+    {
+      "term": "Pure substance",
+      "definition": "A substance with only one thing in it; it has a sharp, fixed melting and boiling point."
+    }
+  ]
+}

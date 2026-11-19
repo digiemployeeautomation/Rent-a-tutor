@@ -341,7 +341,7 @@ body {
   text-rendering: optimizeLegibility;
 }
 
-h1, h2, h3, h4 { font-family: Georgia, serif; }
+h1, h2, h3, h4 { font-family: var(--font-display), var(--font-sans), system-ui, sans-serif; letter-spacing: -0.015em; }
 
 a, button, input, select, textarea,
 [class*="card"], [class*="badge"], [class*="btn"],
@@ -1329,3 +1329,52 @@ img.loaded {
 .stagger-children > *:nth-child(6) { animation-delay: 300ms; }
 .stagger-children > *:nth-child(7) { animation-delay: 360ms; }
 .stagger-children > *:nth-child(8) { animation-delay: 420ms; }
+
+
+/* ══════════════════════════════════════════════════════════════════
+   Design kit (2026-11) — shared classes. Use these instead of ad-hoc
+   button/card styles so every screen looks like one product.
+   ══════════════════════════════════════════════════════════════════ */
+@layer components {
+  .container-app { @apply mx-auto w-full max-w-6xl px-4 sm:px-6; }
+  .container-read { @apply mx-auto w-full max-w-3xl px-4 sm:px-6; }
+
+  .eyebrow { @apply text-xs font-semibold uppercase tracking-[0.14em] text-blue-600; }
+  .h-display { @apply font-display text-4xl font-bold leading-[1.05] tracking-tight text-ink-900 sm:text-5xl; }
+  .h-page { @apply font-display text-2xl font-bold tracking-tight text-ink-900 sm:text-3xl; }
+  .h-section { @apply font-display text-lg font-semibold tracking-tight text-ink-900 sm:text-xl; }
+  .lead { @apply text-base leading-relaxed text-ink-500 sm:text-lg; }
+  .muted { @apply text-sm text-ink-400; }
+
+  .btn { @apply inline-flex min-h-[44px] items-center justify-center gap-2 rounded-xl px-5 py-2.5 text-sm font-semibold transition-all duration-150 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50; }
+  .btn-primary { @apply btn bg-blue-600 text-white shadow-sm hover:bg-blue-700 active:scale-[0.98]; }
+  .btn-accent { @apply btn bg-sun-400 text-ink-900 shadow-sm hover:bg-sun-300 active:scale-[0.98]; }
+  .btn-dark { @apply btn bg-ink-900 text-white hover:bg-ink-800 active:scale-[0.98]; }
+  .btn-secondary { @apply btn border border-ink-200 bg-white text-ink-800 hover:border-ink-300 hover:bg-ink-50 active:scale-[0.98]; }
+  .btn-ghost { @apply btn text-ink-600 hover:bg-ink-100; }
+  .btn-lg { @apply min-h-[52px] rounded-2xl px-7 text-base; }
+  .btn-sm { @apply min-h-[36px] rounded-lg px-3.5 py-1.5 text-[13px]; }
+
+  .card { @apply rounded-2xl border border-ink-100 bg-white shadow-card; }
+  .card-hover { @apply transition-all duration-200 hover:-translate-y-0.5 hover:border-ink-200 hover:shadow-lift; }
+  .card-pad { @apply p-5 sm:p-6; }
+
+  .chip { @apply inline-flex items-center gap-1.5 rounded-full bg-ink-50 px-2.5 py-1 text-xs font-medium text-ink-600; }
+  .chip-blue { @apply chip bg-blue-50 text-blue-700; }
+  .chip-teal { @apply chip bg-teal-50 text-teal-700; }
+  .chip-sun { @apply chip bg-sun-100 text-sun-600; }
+  .chip-green { @apply chip bg-emerald-50 text-emerald-700; }
+
+  .field { @apply block w-full rounded-xl border border-ink-200 bg-white px-4 py-3 text-[15px] text-ink-900 placeholder:text-ink-300 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-100; }
+  .label { @apply mb-1.5 block text-sm font-medium text-ink-700; }
+
+  .progress-track { @apply h-2 w-full overflow-hidden rounded-full bg-ink-100; }
+  .progress-fill { @apply h-full rounded-full bg-blue-600 transition-[width] duration-500 ease-out; }
+
+  .icon-tile { @apply flex h-11 w-11 shrink-0 items-center justify-center rounded-xl; }
+}
+
+@media print {
+  .no-print { display: none !important; }
+  body { background: #fff !important; }
+}

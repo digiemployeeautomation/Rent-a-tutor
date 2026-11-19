@@ -1,0 +1,269 @@
+{
+  "id": "biology-nervous-system-1",
+  "subject": "biology",
+  "form": 4,
+  "term": 1,
+  "topic": "The Nervous System",
+  "topicSlug": "nervous-system",
+  "order": 1,
+  "title": "Neurones: the body's messengers",
+  "summary": "Describe how the nervous system is organised and how sensory, relay and motor neurones carry impulses.",
+  "minutes": 18,
+  "objectives": [
+    "Name the parts of the central and peripheral nervous systems",
+    "Describe the job of sensory, relay and motor neurones",
+    "Label the main parts of a neurone and state what each does",
+    "Trace the direction of an impulse from a receptor to an effector"
+  ],
+  "sections": [
+    {
+      "type": "explain",
+      "title": "A goat on the road",
+      "body": "A minibus is moving along the Great East Road. Suddenly a goat steps out. The driver's eyes see it, the driver decides to stop, and the foot presses the brake. All of this takes less than a second.\n\nWhat carried the message from the eyes to the foot? The nervous system. It is the body's fast communication network. It detects changes, sends messages and makes the body respond.\n\nTwo words you will use all the time: a stimulus is a change that the body detects (like the goat appearing). A response is what the body does about it (pressing the brake)."
+    },
+    {
+      "type": "explain",
+      "title": "Two parts: CNS and PNS",
+      "body": "The nervous system has two main parts.\n\nThe central nervous system (CNS) is the brain and the spinal cord. This is the control centre. It receives messages, makes sense of them and sends out instructions.\n\nThe peripheral nervous system (PNS) is all the other nerves. They branch out from the brain and spinal cord to every part of the body, such as the skin, eyes, muscles and glands.",
+      "bullets": [
+        "CNS = brain + spinal cord",
+        "PNS = all nerves outside the brain and spinal cord"
+      ]
+    },
+    {
+      "type": "explain",
+      "title": "Neurones and the three types",
+      "body": "Nerves are made of nerve cells called neurones. A neurone carries messages as tiny electrical signals called nerve impulses.\n\nThere are three types of neurone, and each has its own job. Follow the arrows in the diagram: a receptor detects the stimulus, then the impulse passes along three neurones to an effector. An effector is a muscle or gland that carries out the response.",
+      "bullets": [
+        "Sensory neurone: carries impulses FROM a receptor (sense organ) TO the CNS",
+        "Relay neurone: found only inside the CNS; links the sensory neurone to the motor neurone",
+        "Motor neurone: carries impulses FROM the CNS TO an effector (muscle or gland)"
+      ],
+      "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 480 215\" role=\"img\" aria-label=\"Flow diagram: a stimulus is detected by a receptor, the sensory neurone carries the impulse into the CNS, a relay neurone passes it on, and the motor neurone carries it out to an effector\"><rect x=\"300\" y=\"12\" width=\"168\" height=\"170\" rx=\"12\" fill=\"#DBEAFE\" stroke=\"#2563EB\" stroke-width=\"2\"/><rect x=\"20\" y=\"30\" width=\"120\" height=\"44\" rx=\"8\" fill=\"#FFFFFF\" stroke=\"#0D9488\" stroke-width=\"2\"/><rect x=\"330\" y=\"30\" width=\"120\" height=\"44\" rx=\"8\" fill=\"#FFFFFF\" stroke=\"#2563EB\" stroke-width=\"2\"/><rect x=\"20\" y=\"118\" width=\"120\" height=\"44\" rx=\"8\" fill=\"#FFFFFF\" stroke=\"#F59E0B\" stroke-width=\"2\"/><line x1=\"140\" y1=\"52\" x2=\"318\" y2=\"52\" stroke=\"#0D9488\" stroke-width=\"2.5\"/><polygon points=\"330,52 316,45 316,59\" fill=\"#0D9488\"/><polyline points=\"390,74 390,140 154,140\" fill=\"none\" stroke=\"#F59E0B\" stroke-width=\"2.5\"/><polygon points=\"142,140 156,133 156,147\" fill=\"#F59E0B\"/><g font-family=\"Inter, system-ui, sans-serif\" font-size=\"14\" fill=\"#0F172A\"><text x=\"80\" y=\"21\" text-anchor=\"middle\" fill=\"#64748B\">Stimulus</text><text x=\"80\" y=\"57\" text-anchor=\"middle\">Receptor</text><text x=\"390\" y=\"57\" text-anchor=\"middle\">Relay neurone</text><text x=\"80\" y=\"145\" text-anchor=\"middle\">Effector</text><text x=\"222\" y=\"40\" text-anchor=\"middle\">Sensory neurone</text><text x=\"222\" y=\"130\" text-anchor=\"middle\">Motor neurone</text><text x=\"432\" y=\"112\" text-anchor=\"middle\" font-weight=\"bold\" fill=\"#2563EB\">CNS</text><text x=\"240\" y=\"206\" text-anchor=\"middle\" font-size=\"13\" fill=\"#64748B\">CNS = brain and spinal cord</text></g></svg>"
+    },
+    {
+      "type": "check",
+      "question": "Which neurone carries an impulse from the spinal cord to a muscle in your leg?",
+      "options": [
+        "Sensory neurone",
+        "Relay neurone",
+        "Motor neurone",
+        "Receptor"
+      ],
+      "answer": 2,
+      "explanation": "Motor neurones carry impulses away from the CNS to an effector, and a leg muscle is an effector. A sensory neurone goes the other way, towards the CNS, so it is the tempting wrong answer."
+    },
+    {
+      "type": "explain",
+      "title": "Inside a neurone",
+      "body": "All neurones are long, thin cells, but they share the same main parts. The diagram shows a motor neurone.\n\nThe cell body contains the nucleus, which controls the cell. Dendrites are short branches that receive impulses from other neurones. The axon is a long fibre that carries the impulse away from the cell body. At its end are axon endings that pass the message on.",
+      "bullets": [
+        "Cell body: contains the nucleus",
+        "Dendrites: receive impulses",
+        "Axon: carries the impulse away from the cell body",
+        "Myelin sheath: fatty layer around the axon"
+      ],
+      "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 480 225\" role=\"img\" aria-label=\"Labelled motor neurone showing dendrites, cell body with nucleus, axon covered by myelin sheath, and axon endings, with an arrow showing the impulse travelling from dendrites to axon endings\"><g stroke=\"#0F172A\" stroke-width=\"2\" stroke-linecap=\"round\"><line x1=\"58\" y1=\"96\" x2=\"25\" y2=\"70\"/><line x1=\"58\" y1=\"124\" x2=\"25\" y2=\"150\"/><line x1=\"66\" y1=\"86\" x2=\"50\" y2=\"55\"/><line x1=\"66\" y1=\"134\" x2=\"50\" y2=\"165\"/></g><line x1=\"108\" y1=\"110\" x2=\"400\" y2=\"110\" stroke=\"#0F172A\" stroke-width=\"3\"/><g fill=\"#F59E0B\" stroke=\"#0F172A\" stroke-width=\"1.5\"><rect x=\"130\" y=\"101\" width=\"45\" height=\"18\" rx=\"8\"/><rect x=\"190\" y=\"101\" width=\"45\" height=\"18\" rx=\"8\"/><rect x=\"250\" y=\"101\" width=\"45\" height=\"18\" rx=\"8\"/><rect x=\"310\" y=\"101\" width=\"45\" height=\"18\" rx=\"8\"/></g><g stroke=\"#0F172A\" stroke-width=\"2\"><line x1=\"400\" y1=\"110\" x2=\"440\" y2=\"85\"/><line x1=\"400\" y1=\"110\" x2=\"445\" y2=\"110\"/><line x1=\"400\" y1=\"110\" x2=\"440\" y2=\"135\"/></g><g fill=\"#0F172A\"><circle cx=\"440\" cy=\"85\" r=\"4\"/><circle cx=\"445\" cy=\"110\" r=\"4\"/><circle cx=\"440\" cy=\"135\" r=\"4\"/></g><circle cx=\"80\" cy=\"110\" r=\"28\" fill=\"#DBEAFE\" stroke=\"#2563EB\" stroke-width=\"2\"/><circle cx=\"80\" cy=\"110\" r=\"9\" fill=\"#2563EB\"/><g stroke=\"#64748B\" stroke-width=\"1.2\"><line x1=\"86\" y1=\"104\" x2=\"110\" y2=\"72\"/><line x1=\"80\" y1=\"140\" x2=\"80\" y2=\"180\"/><line x1=\"272\" y1=\"99\" x2=\"272\" y2=\"84\"/></g><line x1=\"140\" y1=\"192\" x2=\"352\" y2=\"192\" stroke=\"#E11D48\" stroke-width=\"2.5\"/><polygon points=\"364,192 350,185 350,199\" fill=\"#E11D48\"/><g font-family=\"Inter, system-ui, sans-serif\" font-size=\"14\" fill=\"#0F172A\"><text x=\"10\" y=\"40\">Dendrites</text><text x=\"112\" y=\"68\">Nucleus</text><text x=\"80\" y=\"196\" text-anchor=\"middle\">Cell body</text><text x=\"272\" y=\"78\" text-anchor=\"middle\">Myelin sheath</text><text x=\"378\" y=\"140\" text-anchor=\"middle\">Axon</text><text x=\"475\" y=\"168\" text-anchor=\"end\">Axon endings</text><text x=\"252\" y=\"216\" text-anchor=\"middle\" fill=\"#E11D48\">direction of impulse</text></g></svg>"
+    },
+    {
+      "type": "explain",
+      "title": "One-way and fast",
+      "body": "An impulse moves in one direction only: dendrites, then cell body, then axon, then axon endings.\n\nThe myelin sheath is a fatty layer wrapped around the axon. It insulates the axon, a bit like the plastic covering on an electric wire. Myelin makes impulses travel much faster. In myelinated neurones impulses can travel at up to about 120 metres per second. Without myelin they are far slower. In the disease multiple sclerosis, the myelin sheath is damaged, so messages slow down or fail."
+    },
+    {
+      "type": "example",
+      "title": "Worked example: naming the neurones in order",
+      "problem": "Chanda touches the hot side of a pot of nshima on the mbaula and quickly pulls her hand away. Name, in order, the structures the message passes through, from the skin to her arm muscle.",
+      "steps": [
+        "Step 1: Find the stimulus and the receptor. The stimulus is heat. The receptors are heat and pain receptors in the skin of her hand.",
+        "Step 2: The message must travel TO the CNS, so the next structure is a sensory neurone.",
+        "Step 3: Inside the CNS (here the spinal cord), a relay neurone passes the impulse on.",
+        "Step 4: The message must leave the CNS, so a motor neurone carries it out.",
+        "Step 5: The effector is the muscle in her arm. It contracts and pulls the hand away. That is the response."
+      ],
+      "answer": "Receptor in the skin, sensory neurone, relay neurone (in the spinal cord), motor neurone, arm muscle (effector)."
+    },
+    {
+      "type": "check",
+      "question": "What is the main job of the myelin sheath?",
+      "options": [
+        "It makes the nerve impulse",
+        "It insulates the axon and speeds up the impulse",
+        "It contains the nucleus",
+        "It receives impulses from other neurones"
+      ],
+      "answer": 1,
+      "explanation": "Myelin is a fatty insulating layer, and it makes impulses travel faster. It does not make the impulse. Receiving impulses is the job of the dendrites, and the nucleus is in the cell body."
+    },
+    {
+      "type": "explain",
+      "title": "Telling the three neurones apart",
+      "body": "Exam questions often show a drawing of a neurone and ask you to name it. Look at where the cell body is and how long the fibres are.",
+      "bullets": [
+        "Sensory neurone: cell body on a short side branch, just outside the spinal cord; a long fibre called the dendron brings the impulse in from the receptor",
+        "Motor neurone: cell body at one end, inside the CNS; a long axon runs out to the effector",
+        "Relay neurone: short, with many connections; found only inside the brain and spinal cord"
+      ]
+    },
+    {
+      "type": "example",
+      "title": "Worked example: identify the neurone",
+      "problem": "A neurone has its cell body inside the spinal cord. Its long axon ends on a muscle in the leg. Name the type of neurone and give two reasons.",
+      "steps": [
+        "Step 1: Look at where it ends. It ends on a muscle, and a muscle is an effector.",
+        "Step 2: Neurones that carry impulses to effectors are motor neurones.",
+        "Step 3: Check the structure. A motor neurone has its cell body at one end, inside the CNS, and a long axon. This matches.",
+        "Step 4: It cannot be a relay neurone, because relay neurones stay inside the CNS. It cannot be a sensory neurone, because sensory neurones carry impulses towards the CNS."
+      ],
+      "answer": "A motor neurone: it carries impulses from the CNS to an effector (the leg muscle), and its cell body is inside the CNS at one end of a long axon."
+    },
+    {
+      "type": "mistake",
+      "title": "Common mistake: mixing up the directions",
+      "body": "Many students swap sensory and motor neurones. Remember: Sensory goes to the CNS, Motor goes to the Muscle. Sensory comes in, motor goes out.\n\nAlso, do not mix up the words nerve and neurone. A neurone is one cell. A nerve is a bundle of many neurones held together, like many wires inside one cable."
+    },
+    {
+      "type": "check",
+      "question": "In which order does an impulse travel along a single neurone?",
+      "options": [
+        "Axon, cell body, dendrites",
+        "Dendrites, cell body, axon",
+        "Cell body, dendrites, axon"
+      ],
+      "answer": 1,
+      "explanation": "Dendrites receive the impulse, the cell body passes it on, and the axon carries it away to the axon endings. The first option is the exact reverse, which is a common slip."
+    },
+    {
+      "type": "summary",
+      "title": "Key points",
+      "bullets": [
+        "The CNS is the brain and spinal cord; the PNS is all the other nerves.",
+        "Sensory neurones carry impulses to the CNS; motor neurones carry them from the CNS to effectors.",
+        "Relay neurones are found only in the CNS and link sensory to motor neurones.",
+        "A neurone has a cell body (with nucleus), dendrites, an axon and axon endings.",
+        "The myelin sheath insulates the axon and makes impulses travel faster.",
+        "Pathway: receptor, sensory neurone, relay neurone, motor neurone, effector."
+      ]
+    }
+  ],
+  "quiz": [
+    {
+      "question": "Which two organs make up the central nervous system (CNS)?",
+      "options": [
+        "Brain and nerves",
+        "Brain and spinal cord",
+        "Spinal cord and muscles",
+        "Nerves and glands"
+      ],
+      "answer": 1,
+      "explanation": "The CNS is the brain and the spinal cord. All the other nerves that branch out to the body belong to the peripheral nervous system (PNS)."
+    },
+    {
+      "question": "What is an effector?",
+      "options": [
+        "A sense organ such as the eye",
+        "A neurone inside the spinal cord",
+        "The brain and spinal cord",
+        "A muscle or gland that carries out a response"
+      ],
+      "answer": 3,
+      "explanation": "Effectors are muscles or glands. They receive impulses from motor neurones and carry out the response, for example a muscle contracting. Sense organs contain receptors, which detect stimuli."
+    },
+    {
+      "question": "Where are relay neurones found?",
+      "options": [
+        "Only in the brain and spinal cord",
+        "In muscles and glands",
+        "In the skin",
+        "Only in the peripheral nervous system"
+      ],
+      "answer": 0,
+      "explanation": "Relay neurones are found only in the CNS, where they link sensory neurones to motor neurones. They never leave the brain or spinal cord."
+    },
+    {
+      "question": "Which part of a neurone contains the nucleus?",
+      "options": [
+        "The axon",
+        "The myelin sheath",
+        "The cell body",
+        "The dendrites"
+      ],
+      "answer": 2,
+      "explanation": "The cell body contains the nucleus, which controls the activities of the cell. The axon and dendrites are fibres that carry impulses."
+    },
+    {
+      "question": "Mutale steps on a sharp stone. Which type of neurone first carries the message about the pain?",
+      "options": [
+        "Motor neurone",
+        "Sensory neurone",
+        "Relay neurone",
+        "Effector neurone"
+      ],
+      "answer": 1,
+      "explanation": "Receptors in the skin detect the stone, and a sensory neurone carries the impulse to the CNS. This is always the first neurone in the pathway. \"Effector neurone\" is not a real type of neurone."
+    },
+    {
+      "question": "A neurone has its cell body on a short side branch just outside the spinal cord and a long dendron coming from the skin. What type is it?",
+      "options": [
+        "Motor neurone",
+        "Relay neurone",
+        "It could be any type",
+        "Sensory neurone"
+      ],
+      "answer": 3,
+      "explanation": "A cell body on a side branch with a long dendron from a receptor is the shape of a sensory neurone. A motor neurone has its cell body at one end inside the CNS, and a relay neurone is short and stays inside the CNS."
+    },
+    {
+      "question": "Multiple sclerosis damages the myelin sheath. What is the most likely effect?",
+      "options": [
+        "Impulses travel more slowly or fail to arrive",
+        "Impulses travel faster",
+        "Neurones lose their nucleus",
+        "Muscles stop needing impulses"
+      ],
+      "answer": 0,
+      "explanation": "Myelin insulates the axon and speeds up impulses. If it is damaged, impulses slow down or may not get through, so movements and sensations are affected."
+    },
+    {
+      "question": "Which list shows the correct path of a message from a stimulus to a response?",
+      "options": [
+        "Receptor, motor neurone, relay neurone, sensory neurone, effector",
+        "Effector, sensory neurone, relay neurone, motor neurone, receptor",
+        "Receptor, sensory neurone, relay neurone, motor neurone, effector",
+        "Receptor, relay neurone, sensory neurone, motor neurone, effector"
+      ],
+      "answer": 2,
+      "explanation": "The receptor detects the stimulus, the sensory neurone carries the impulse into the CNS, the relay neurone passes it on, and the motor neurone carries it out to the effector. Sensory always comes before relay, and motor comes last before the effector."
+    }
+  ],
+  "glossary": [
+    {
+      "term": "Stimulus",
+      "definition": "A change inside or outside the body that is detected, such as heat, light or sound."
+    },
+    {
+      "term": "Central nervous system (CNS)",
+      "definition": "The brain and spinal cord; the control centre of the nervous system."
+    },
+    {
+      "term": "Peripheral nervous system (PNS)",
+      "definition": "All the nerves outside the brain and spinal cord."
+    },
+    {
+      "term": "Neurone",
+      "definition": "A nerve cell that carries electrical messages called nerve impulses."
+    },
+    {
+      "term": "Effector",
+      "definition": "A muscle or gland that carries out a response."
+    },
+    {
+      "term": "Axon",
+      "definition": "The long fibre of a neurone that carries impulses away from the cell body."
+    },
+    {
+      "term": "Myelin sheath",
+      "definition": "A fatty layer around the axon that insulates it and speeds up impulses."
+    }
+  ]
+}

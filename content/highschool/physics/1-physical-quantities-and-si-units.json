@@ -1,0 +1,271 @@
+{
+  "id": "physics-measurement-1",
+  "subject": "physics",
+  "form": 1,
+  "term": 1,
+  "topic": "Measurement",
+  "topicSlug": "measurement",
+  "order": 1,
+  "title": "Physical quantities and SI units",
+  "summary": "Name the base SI units, use the prefixes kilo, centi and milli, and convert between units correctly.",
+  "minutes": 18,
+  "objectives": [
+    "Explain what a physical quantity is and why every measurement needs a unit",
+    "State the base SI units for length, mass, time, temperature and electric current",
+    "Use the prefixes kilo, centi and milli",
+    "Convert lengths, masses, areas and times between units"
+  ],
+  "sections": [
+    {
+      "type": "explain",
+      "title": "A number alone means nothing",
+      "body": "Imagine your mother sends you to the shop for \"a bag of mealie meal, size 25\". Is that 25 grams? 25 kilograms? 25 pockets? The number 25 is useless until you add a unit.\n\nIn physics, anything we can measure is called a physical quantity. Length, mass and time are physical quantities. Every measurement has two parts: a number and a unit. For example, 25 kg means \"25 lots of one kilogram\".",
+      "bullets": [
+        "Physical quantity: a property that can be measured, such as length or mass",
+        "Unit: the standard amount we compare against, such as the metre or kilogram",
+        "Measurement = number × unit, for example 25 kg"
+      ]
+    },
+    {
+      "type": "explain",
+      "title": "The SI base units",
+      "body": "Scientists all over the world use one agreed set of units called the SI system (Système International, or International System of Units). This means a measurement taken in Lusaka means the same thing in London or Lagos.\n\nThe SI system is built on a few base quantities. Each has one base unit. There are seven base quantities in total. The five you need now are listed below. The other two (amount of substance and luminous intensity) come later.\n\nOther quantities, called derived quantities, are made by combining base units. Area is length × length, so its unit is m². Speed is length ÷ time, so its unit is m/s.",
+      "bullets": [
+        "Length: metre (m)",
+        "Mass: kilogram (kg)",
+        "Time: second (s). Also 1 minute = 60 s and 1 hour = 60 min = 3600 s",
+        "Temperature: kelvin (K). In everyday life we often use degrees Celsius (°C)",
+        "Electric current: ampere (A)"
+      ]
+    },
+    {
+      "type": "check",
+      "question": "Which of these is the SI base unit of mass?",
+      "options": [
+        "gram (g)",
+        "kilogram (kg)",
+        "newton (N)",
+        "tonne (t)"
+      ],
+      "answer": 1,
+      "explanation": "The SI base unit of mass is the kilogram. It is the only base unit that already has a prefix (kilo) in its name. The gram is a smaller unit (1 kg = 1000 g), so it is tempting, but it is not the base unit. The newton is the unit of force and weight, not mass."
+    },
+    {
+      "type": "explain",
+      "title": "Prefixes: making units bigger or smaller",
+      "body": "A metre is good for measuring a classroom, but too big for a pencil and too small for the road from Ndola to Kitwe. Instead of inventing new units, we put a prefix in front of the unit. A prefix is a short word that multiplies the unit by a fixed number.\n\nThe three prefixes you will use most are kilo, centi and milli. They work with any unit: kilometre, kilogram, centimetre, millimetre, milligram, millilitre.",
+      "bullets": [
+        "kilo (k) means 1000. So 1 km = 1000 m and 1 kg = 1000 g",
+        "centi (c) means one hundredth, 1/100 = 0.01. So 1 cm = 0.01 m, or 100 cm = 1 m",
+        "milli (m) means one thousandth, 1/1000 = 0.001. So 1 mm = 0.001 m, or 1000 mm = 1 m",
+        "Also useful: 1 cm = 10 mm"
+      ]
+    },
+    {
+      "type": "explain",
+      "title": "How to convert: the unit staircase",
+      "body": "Think of the units as steps on a staircase. Going down to a smaller unit, you need more of them, so you multiply. Going up to a bigger unit, you need fewer of them, so you divide.\n\nAlways ask yourself: \"Should my answer be a bigger or smaller number?\" A length in mm is always a bigger number than the same length in m.",
+      "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 480 260\" role=\"img\" aria-label=\"Staircase of length units: km to m multiply by 1000, m to cm multiply by 100, cm to mm multiply by 10\"><rect x=\"30\" y=\"20\" width=\"90\" height=\"40\" rx=\"8\" fill=\"#DBEAFE\" stroke=\"#2563EB\" stroke-width=\"2\"/><text x=\"75\" y=\"47\" font-family=\"Inter, system-ui, sans-serif\" font-size=\"14\" fill=\"#0F172A\" font-size=\"18\" font-weight=\"700\" text-anchor=\"middle\">km</text><rect x=\"140\" y=\"80\" width=\"90\" height=\"40\" rx=\"8\" fill=\"#DBEAFE\" stroke=\"#2563EB\" stroke-width=\"2\"/><text x=\"185\" y=\"107\" font-family=\"Inter, system-ui, sans-serif\" font-size=\"14\" fill=\"#0F172A\" font-size=\"18\" font-weight=\"700\" text-anchor=\"middle\">m</text><rect x=\"250\" y=\"140\" width=\"90\" height=\"40\" rx=\"8\" fill=\"#DBEAFE\" stroke=\"#2563EB\" stroke-width=\"2\"/><text x=\"295\" y=\"167\" font-family=\"Inter, system-ui, sans-serif\" font-size=\"14\" fill=\"#0F172A\" font-size=\"18\" font-weight=\"700\" text-anchor=\"middle\">cm</text><rect x=\"360\" y=\"200\" width=\"90\" height=\"40\" rx=\"8\" fill=\"#DBEAFE\" stroke=\"#2563EB\" stroke-width=\"2\"/><text x=\"405\" y=\"227\" font-family=\"Inter, system-ui, sans-serif\" font-size=\"14\" fill=\"#0F172A\" font-size=\"18\" font-weight=\"700\" text-anchor=\"middle\">mm</text><polyline points=\"120,40 185,40 185,72\" fill=\"none\" stroke=\"#0D9488\" stroke-width=\"2.5\"/><polygon points=\"179,70 191,70 185,80\" fill=\"#0D9488\"/><text x=\"195\" y=\"62\" font-family=\"Inter, system-ui, sans-serif\" font-size=\"14\" fill=\"#0F172A\" fill=\"#0D9488\" font-weight=\"700\">× 1000</text><polyline points=\"230,100 295,100 295,132\" fill=\"none\" stroke=\"#0D9488\" stroke-width=\"2.5\"/><polygon points=\"289,130 301,130 295,140\" fill=\"#0D9488\"/><text x=\"305\" y=\"122\" font-family=\"Inter, system-ui, sans-serif\" font-size=\"14\" fill=\"#0F172A\" fill=\"#0D9488\" font-weight=\"700\">× 100</text><polyline points=\"340,160 405,160 405,192\" fill=\"none\" stroke=\"#0D9488\" stroke-width=\"2.5\"/><polygon points=\"399,190 411,190 405,200\" fill=\"#0D9488\"/><text x=\"415\" y=\"182\" font-family=\"Inter, system-ui, sans-serif\" font-size=\"14\" fill=\"#0F172A\" fill=\"#0D9488\" font-weight=\"700\">× 10</text><text x=\"20\" y=\"200\" font-family=\"Inter, system-ui, sans-serif\" font-size=\"14\" fill=\"#0F172A\" fill=\"#0D9488\">Big unit → small unit: multiply</text><text x=\"20\" y=\"225\" font-family=\"Inter, system-ui, sans-serif\" font-size=\"14\" fill=\"#0F172A\" fill=\"#E11D48\">Small unit → big unit: divide</text></svg>"
+    },
+    {
+      "type": "example",
+      "title": "Worked example: kilometres to metres and centimetres",
+      "problem": "A minibus trip from a bus stop to a market is 3.6 km. Write this distance in metres and in centimetres.",
+      "steps": [
+        "Step 1: km to m is going from a big unit to a small unit, so multiply. 1 km = 1000 m.",
+        "Step 2: 3.6 km × 1000 = 3600 m.",
+        "Step 3: m to cm is again big to small, so multiply. 1 m = 100 cm.",
+        "Step 4: 3600 m × 100 = 360 000 cm.",
+        "Step 5: Check: the numbers got bigger as the units got smaller. That makes sense."
+      ],
+      "answer": "3.6 km = 3600 m = 360 000 cm"
+    },
+    {
+      "type": "check",
+      "question": "A desk is 85 cm wide. What is this in metres?",
+      "options": [
+        "0.085 m",
+        "0.85 m",
+        "8.5 m",
+        "8500 m"
+      ],
+      "answer": 1,
+      "explanation": "cm to m is small to big, so divide by 100: 85 ÷ 100 = 0.85 m. 8500 m comes from multiplying instead of dividing, which would make the desk wider than 8 km. 0.085 m comes from dividing by 1000, which is the rule for mm, not cm."
+    },
+    {
+      "type": "example",
+      "title": "Worked example: going up to a bigger unit",
+      "problem": "A packet of sugar has a mass of 450 g, and a piece of copper wire is 750 mm long. Write the mass in kg and the length in m.",
+      "steps": [
+        "Step 1: g to kg is small to big, so divide. 1 kg = 1000 g.",
+        "Step 2: 450 g ÷ 1000 = 0.45 kg.",
+        "Step 3: mm to m is small to big, so divide. 1 m = 1000 mm.",
+        "Step 4: 750 mm ÷ 1000 = 0.75 m.",
+        "Step 5: Check: the numbers got smaller because the units got bigger. Good."
+      ],
+      "answer": "450 g = 0.45 kg and 750 mm = 0.75 m"
+    },
+    {
+      "type": "mistake",
+      "title": "Common mistake: multiplying when you should divide",
+      "body": "Many learners remember \"1 km = 1000 m\" and then multiply by 1000 every time, even when changing m to km. This gives silly answers, like a 2 m door being 2000 km tall.\n\nTo avoid it, do a quick sense check after every conversion. Bigger unit means smaller number. Smaller unit means bigger number. If your answer breaks this rule, you multiplied when you should have divided, or the other way round."
+    },
+    {
+      "type": "explain",
+      "title": "Converting area units",
+      "body": "Area is a derived quantity: length × length. This makes area conversions different. A square 1 m long and 1 m wide has an area of 1 m². But each side is also 100 cm, so its area is 100 cm × 100 cm = 10 000 cm².\n\nSo to change m² to cm², multiply by 10 000, not by 100. The easiest safe method is to change each length to the new unit first, then multiply.",
+      "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 480 260\" role=\"img\" aria-label=\"A square 1 metre by 1 metre is 100 centimetres by 100 centimetres, so its area is 10 000 square centimetres\"><rect x=\"40\" y=\"30\" width=\"160\" height=\"160\" fill=\"#DBEAFE\" stroke=\"#2563EB\" stroke-width=\"2\"/><text x=\"120\" y=\"117\" font-family=\"Inter, system-ui, sans-serif\" font-size=\"14\" fill=\"#0F172A\" font-size=\"20\" font-weight=\"700\" text-anchor=\"middle\">1 m²</text><text x=\"120\" y=\"215\" font-family=\"Inter, system-ui, sans-serif\" font-size=\"14\" fill=\"#0F172A\" text-anchor=\"middle\" fill=\"#64748B\">1 m = 100 cm</text><text x=\"210\" y=\"115\" font-family=\"Inter, system-ui, sans-serif\" font-size=\"14\" fill=\"#0F172A\" fill=\"#64748B\">1 m</text><text x=\"270\" y=\"80\" font-family=\"Inter, system-ui, sans-serif\" font-size=\"14\" fill=\"#0F172A\" >Area = 1 m × 1 m = 1 m²</text><text x=\"270\" y=\"108\" font-family=\"Inter, system-ui, sans-serif\" font-size=\"14\" fill=\"#0F172A\" >= 100 cm × 100 cm</text><text x=\"270\" y=\"136\" font-family=\"Inter, system-ui, sans-serif\" font-size=\"14\" fill=\"#0F172A\" fill=\"#0D9488\" font-weight=\"700\">= 10 000 cm²</text><text x=\"270\" y=\"180\" font-family=\"Inter, system-ui, sans-serif\" font-size=\"14\" fill=\"#0F172A\" fill=\"#E11D48\" font-weight=\"700\">So 1 m² is NOT 100 cm²</text></svg>"
+    },
+    {
+      "type": "example",
+      "title": "Worked example: area in m² and cm²",
+      "problem": "A table top is 1.2 m long and 0.5 m wide. Find its area in m² and in cm².",
+      "steps": [
+        "Step 1: Area = length × width = 1.2 m × 0.5 m = 0.6 m².",
+        "Step 2: Change each length to cm first: 1.2 m = 120 cm and 0.5 m = 50 cm.",
+        "Step 3: Area = 120 cm × 50 cm = 6000 cm².",
+        "Step 4: Check with the rule 1 m² = 10 000 cm²: 0.6 × 10 000 = 6000 cm². Both methods agree."
+      ],
+      "answer": "Area = 0.6 m² = 6000 cm²"
+    },
+    {
+      "type": "check",
+      "question": "A football match lasts 1.5 hours including the break. How many seconds is this?",
+      "options": [
+        "90 s",
+        "150 s",
+        "5400 s",
+        "900 s"
+      ],
+      "answer": 2,
+      "explanation": "1 hour = 3600 s, so 1.5 h × 3600 = 5400 s. You can also do it in two steps: 1.5 h = 90 min, and 90 min × 60 = 5400 s. The answer 90 is the number of minutes, not seconds. Time does not use 10s and 100s, so always use 60 s in a minute and 60 min in an hour."
+    },
+    {
+      "type": "summary",
+      "title": "Key points",
+      "bullets": [
+        "A physical quantity is anything that can be measured. Every measurement needs a number and a unit.",
+        "SI base units: metre (m), kilogram (kg), second (s), kelvin (K), ampere (A).",
+        "kilo = 1000, centi = 1/100 = 0.01, milli = 1/1000 = 0.001.",
+        "Big unit to small unit: multiply. Small unit to big unit: divide. Always sense-check the answer.",
+        "1 m² = 10 000 cm², not 100 cm². 1 hour = 3600 s."
+      ]
+    }
+  ],
+  "quiz": [
+    {
+      "question": "Which of these is a base quantity in the SI system?",
+      "options": [
+        "Speed",
+        "Area",
+        "Mass",
+        "Volume"
+      ],
+      "answer": 2,
+      "explanation": "Mass is a base quantity with the base unit kilogram. Speed (m/s), area (m²) and volume (m³) are derived quantities because their units are made by combining base units."
+    },
+    {
+      "question": "What does the prefix milli mean?",
+      "options": [
+        "One thousand times",
+        "One hundredth",
+        "One tenth",
+        "One thousandth"
+      ],
+      "answer": 3,
+      "explanation": "Milli means one thousandth, 1/1000 = 0.001. So 1 mm = 0.001 m and 1000 mm = 1 m. One hundredth is centi, and one thousand times is kilo."
+    },
+    {
+      "question": "What is the SI base unit of time?",
+      "options": [
+        "Minute",
+        "Second",
+        "Hour",
+        "Day"
+      ],
+      "answer": 1,
+      "explanation": "The second (s) is the SI base unit of time. Minutes and hours are everyday units: 1 min = 60 s and 1 h = 3600 s."
+    },
+    {
+      "question": "The distance from a school to a clinic is 3.2 km. What is this in metres?",
+      "options": [
+        "3200 m",
+        "320 m",
+        "32 m",
+        "0.0032 m"
+      ],
+      "answer": 0,
+      "explanation": "km to m is big to small, so multiply by 1000: 3.2 × 1000 = 3200 m. The answer 0.0032 m comes from dividing instead of multiplying, which would make the clinic only 3 mm away."
+    },
+    {
+      "question": "A bag of beans has a mass of 2500 g. What is its mass in kilograms?",
+      "options": [
+        "25 kg",
+        "2.5 kg",
+        "250 kg",
+        "0.25 kg"
+      ],
+      "answer": 1,
+      "explanation": "g to kg is small to big, so divide by 1000: 2500 ÷ 1000 = 2.5 kg. A common slip is dividing by 100 to get 25 kg, but there are 1000 g in 1 kg, not 100."
+    },
+    {
+      "question": "A nail is 45 mm long. What is its length in centimetres?",
+      "options": [
+        "450 cm",
+        "0.45 cm",
+        "45 cm",
+        "4.5 cm"
+      ],
+      "answer": 3,
+      "explanation": "There are 10 mm in 1 cm. mm to cm is small to big, so divide by 10: 45 ÷ 10 = 4.5 cm. 450 cm comes from multiplying, which would make the nail longer than a classroom door."
+    },
+    {
+      "question": "A learner records the length of a bench as \"120\". Why is this record not acceptable?",
+      "options": [
+        "There is no unit, so it could mean 120 cm or 120 mm or something else",
+        "Lengths must always be recorded in kilometres",
+        "The number is too large to be a length",
+        "Lengths must be written as fractions"
+      ],
+      "answer": 0,
+      "explanation": "A measurement needs a number and a unit. 120 cm (1.2 m) is a sensible bench, but 120 mm (12 cm) is not. Without the unit, nobody can tell which is meant. Lengths can be in any suitable unit, not only km."
+    },
+    {
+      "question": "A square floor tile measures 50 cm by 50 cm. What is its area in m²?",
+      "options": [
+        "2500 m²",
+        "0.25 m²",
+        "25 m²",
+        "0.025 m²"
+      ],
+      "answer": 1,
+      "explanation": "Change each length to metres first: 50 cm = 0.5 m. Area = 0.5 m × 0.5 m = 0.25 m². Check: the area is 2500 cm², and 2500 ÷ 10 000 = 0.25 m². 2500 m² is the cm² number with the wrong unit."
+    }
+  ],
+  "glossary": [
+    {
+      "term": "Physical quantity",
+      "definition": "A property of an object or event that can be measured, such as length, mass or time."
+    },
+    {
+      "term": "Unit",
+      "definition": "A fixed, agreed amount used to measure a quantity, such as the metre or the second."
+    },
+    {
+      "term": "SI system",
+      "definition": "The International System of Units, the set of units used by scientists all over the world."
+    },
+    {
+      "term": "Base quantity",
+      "definition": "One of the seven basic quantities of the SI system, such as length, mass and time."
+    },
+    {
+      "term": "Derived quantity",
+      "definition": "A quantity whose unit is made by combining base units, such as area (m²) or speed (m/s)."
+    },
+    {
+      "term": "Prefix",
+      "definition": "A word placed in front of a unit to multiply it by a fixed number, such as kilo (1000) or milli (1/1000)."
+    }
+  ]
+}

@@ -1,0 +1,266 @@
+{
+  "id": "english-language-writing-skills-1",
+  "subject": "english-language",
+  "form": 2,
+  "term": 1,
+  "topic": "Writing Skills",
+  "topicSlug": "writing-skills",
+  "order": 1,
+  "title": "Building strong paragraphs",
+  "summary": "Write clear paragraphs with a topic sentence, supporting sentences, a concluding sentence and good linking words.",
+  "minutes": 20,
+  "objectives": [
+    "Identify and write a clear topic sentence",
+    "Develop the main idea with supporting sentences",
+    "End a paragraph with a suitable concluding sentence",
+    "Use linking words and keep every sentence on one main idea"
+  ],
+  "sections": [
+    {
+      "type": "explain",
+      "title": "Why paragraphs matter",
+      "body": "Imagine a minibus conductor at Kulima Tower shouting every destination at once: \"Matero, Chilenje, Kabwata, Chelstone!\" Nobody would know which bus to board. Writing without paragraphs feels the same to a reader. The ideas crowd together and the meaning gets lost.\n\nA paragraph is a group of sentences about one main idea. Good paragraphs help your reader follow your thinking one step at a time. In the ECZ English paper, compositions are marked partly on how well they are organised, and strong paragraphs are where good organisation begins."
+    },
+    {
+      "type": "explain",
+      "title": "The paragraph hamburger",
+      "body": "A strong paragraph has three parts, a bit like a hamburger.\n\nThe topic sentence is the top bun. It states the main idea, usually at the start of the paragraph. The supporting sentences are the filling. They give reasons, facts, examples and explanations that prove the main idea. The concluding sentence is the bottom bun. It closes the paragraph by restating the main idea in new words or showing why it matters.",
+      "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 480 260\" role=\"img\" aria-label=\"A paragraph drawn as a hamburger: the topic sentence is the top bun, three supporting sentences are the filling, and the concluding sentence is the bottom bun\"><rect x=\"60\" y=\"14\" width=\"360\" height=\"56\" rx=\"28\" fill=\"#F59E0B\" stroke=\"#0F172A\" stroke-width=\"2\"/><text x=\"240\" y=\"47\" font-family=\"Inter, system-ui, sans-serif\" font-size=\"15\" font-weight=\"bold\" fill=\"#0F172A\" text-anchor=\"middle\">Topic sentence: the main idea</text><rect x=\"80\" y=\"80\" width=\"320\" height=\"32\" rx=\"6\" fill=\"#0D9488\"/><text x=\"240\" y=\"101\" font-family=\"Inter, system-ui, sans-serif\" font-size=\"14\" fill=\"#FFFFFF\" text-anchor=\"middle\">Supporting sentence: a reason</text><rect x=\"80\" y=\"120\" width=\"320\" height=\"32\" rx=\"6\" fill=\"#0D9488\"/><text x=\"240\" y=\"141\" font-family=\"Inter, system-ui, sans-serif\" font-size=\"14\" fill=\"#FFFFFF\" text-anchor=\"middle\">Supporting sentence: an example</text><rect x=\"80\" y=\"160\" width=\"320\" height=\"32\" rx=\"6\" fill=\"#0D9488\"/><text x=\"240\" y=\"181\" font-family=\"Inter, system-ui, sans-serif\" font-size=\"14\" fill=\"#FFFFFF\" text-anchor=\"middle\">Supporting sentence: an explanation</text><rect x=\"60\" y=\"202\" width=\"360\" height=\"50\" rx=\"25\" fill=\"#F59E0B\" stroke=\"#0F172A\" stroke-width=\"2\"/><text x=\"240\" y=\"232\" font-family=\"Inter, system-ui, sans-serif\" font-size=\"15\" font-weight=\"bold\" fill=\"#0F172A\" text-anchor=\"middle\">Concluding sentence: sums up</text></svg>"
+    },
+    {
+      "type": "explain",
+      "title": "The topic sentence",
+      "body": "The topic sentence tells the reader what the whole paragraph is about. A good topic sentence makes one clear point. It should not be too broad (so wide that it could cover a whole book) or too narrow (a small fact with nothing more to say).",
+      "bullets": [
+        "Too broad: \"Zambia has many things.\" Which things? The reader cannot tell.",
+        "Too narrow: \"Our school garden is ten metres long.\" This is just a fact; there is nothing to develop.",
+        "Just right: \"A school garden teaches pupils useful skills.\" It is clear, and you can support it with reasons and examples."
+      ]
+    },
+    {
+      "type": "check",
+      "question": "Which sentence would make the best topic sentence for a paragraph?",
+      "options": [
+        "I sent K50 to my aunt yesterday.",
+        "There are many things in the world.",
+        "Mobile money has made life easier for many Zambian families.",
+        "Airtel and MTN have offices in Lusaka."
+      ],
+      "answer": 2,
+      "explanation": "\"Mobile money has made life easier for many Zambian families\" states one clear idea that you can support with reasons and examples (sending money quickly, paying bills, saving trips to the bank). \"I sent K50 to my aunt yesterday\" is tempting because it is about mobile money, but it is a single event: it could be a supporting example, not the main idea. \"There are many things in the world\" is far too broad."
+    },
+    {
+      "type": "explain",
+      "title": "Supporting sentences",
+      "body": "Supporting sentences develop the main idea. Each one should answer a question the reader might ask, such as \"Why?\", \"How?\" or \"Can you give an example?\"\n\nFor a school composition, three or four supporting sentences are usually enough. Each should add something new. These are the main kinds:",
+      "bullets": [
+        "Reason: explains why the main idea is true",
+        "Fact: gives information that can be checked",
+        "Example: shows the idea in a real situation",
+        "Explanation: makes a point clearer or shows its result"
+      ]
+    },
+    {
+      "type": "example",
+      "title": "Worked example: building a paragraph step by step",
+      "problem": "Write one paragraph of about 80 words on the topic: \"A school garden teaches pupils useful skills.\"",
+      "steps": [
+        "Step 1: Write the topic sentence. It states one clear main idea: \"A school garden teaches pupils useful skills.\"",
+        "Step 2: List supporting points by asking \"Why?\" and \"How?\". Pupils learn to plant and water crops. They learn to work in teams. They learn to sell vegetables and keep money records.",
+        "Step 3: Turn each point into a full sentence, and add an example where it helps, such as growing cabbages and tomatoes.",
+        "Step 4: Join the sentences with linking words that show you are adding ideas: Firstly, In addition, Furthermore.",
+        "Step 5: Write a concluding sentence that restates the main idea in new words: the garden is \"a classroom for life\"."
+      ],
+      "answer": "A school garden teaches pupils useful skills. Firstly, pupils learn how to prepare the soil, plant seeds and water crops such as cabbages and tomatoes. In addition, working in the garden teaches teamwork, because each group must share tools and take turns to water the beds. Furthermore, when the vegetables are sold at the school gate, pupils learn to keep records of money and profit. Clearly, a garden is more than a patch of vegetables; it is a classroom for life."
+    },
+    {
+      "type": "explain",
+      "title": "The concluding sentence and unity",
+      "body": "The concluding sentence closes the paragraph. It can restate the main idea in different words, give a result or make a final comment. It often begins with a phrase such as \"Clearly,\" \"For these reasons,\" or \"In short,\". Keep \"In conclusion\" for the last paragraph of a whole composition.\n\nUnity means that every sentence in a paragraph is about the same main idea. A sentence that wanders to a different topic breaks the unity and confuses the reader. Remove it, or move it to another paragraph where it belongs."
+    },
+    {
+      "type": "check",
+      "question": "Read this paragraph. Which sentence breaks the unity?\n\n(1) Kafue National Park is a wonderful place for a school trip. (2) Visitors can see elephants, lions and many kinds of antelope. (3) Guides teach pupils how to protect wildlife. (4) My cousin lives in Mazabuka and grows sugar cane. (5) For these reasons, every pupil should visit the park at least once.",
+      "options": [
+        "Sentence 1",
+        "Sentence 2",
+        "Sentence 4",
+        "Sentence 5"
+      ],
+      "answer": 2,
+      "explanation": "The main idea is that Kafue National Park is good for a school trip. Sentence 4 is about a cousin's sugar cane farm, which has nothing to do with the park, so it breaks the unity. Sentence 5 may look different because it starts with \"For these reasons\", but it is the concluding sentence and it returns to the main idea."
+    },
+    {
+      "type": "explain",
+      "title": "Linking words",
+      "body": "Linking words (also called connectives) join ideas and show how they are related. They work like road signs, telling the reader where the paragraph is going next. Choose the one whose meaning fits. Do not scatter them about just to sound clever.",
+      "bullets": [
+        "Adding an idea: also, in addition, furthermore, moreover",
+        "Showing contrast: however, on the other hand, although",
+        "Giving an example: for example, for instance, such as",
+        "Showing a result: therefore, as a result, consequently, so",
+        "Showing order: firstly, secondly, next, finally",
+        "Concluding: in short, for these reasons, in conclusion"
+      ]
+    },
+    {
+      "type": "example",
+      "title": "Worked example: repairing a weak paragraph",
+      "problem": "Improve this weak paragraph.\n\n\"Walking to school is good. It is good for your health. My friend has a bicycle. You save money. You do not pay for a minibus. You see your friends on the way. Walking is good.\"",
+      "steps": [
+        "Step 1: Find the main idea. Almost every sentence is about the benefits of walking to school.",
+        "Step 2: Check unity. \"My friend has a bicycle\" is off the topic, so remove it.",
+        "Step 3: Make the topic sentence clearer and more specific: \"Walking to school has several benefits.\"",
+        "Step 4: Combine the short, choppy sentences and join them with linking words: Firstly, In addition, also.",
+        "Step 5: Add detail to each point: how walking helps your health, and what the saved money can buy.",
+        "Step 6: Replace the flat ending \"Walking is good.\" with a concluding sentence that sums up all three benefits."
+      ],
+      "answer": "Walking to school has several benefits. Firstly, it is good for your health, because walking every morning strengthens your heart and legs. In addition, it saves money, as you do not have to pay minibus fares; the money saved can buy books instead. Walking also gives you time to chat with friends on the way. For these reasons, walking is a healthy, cheap and enjoyable way to get to school."
+    },
+    {
+      "type": "mistake",
+      "title": "Common mistake: announcing instead of stating",
+      "body": "Many pupils begin a paragraph with \"In this paragraph I am going to talk about rain\" or \"This paragraph is about rain.\" This announces the topic but does not state a main idea about it. Instead, make your point directly: \"The rainy season brings both blessings and problems to farmers.\"\n\nA second common mistake is writing a whole composition as one long block. Start a new paragraph each time you move to a new main idea, and show it clearly by indenting the first line or leaving a line space."
+    },
+    {
+      "type": "check",
+      "question": "Choose the best linking word for the gap.\n\n\"Maize prices rose sharply this year. ______, many families bought less mealie meal.\"",
+      "options": [
+        "For example",
+        "As a result",
+        "Furthermore",
+        "On the other hand"
+      ],
+      "answer": 1,
+      "explanation": "The second sentence is a result of the first: prices went up, so families bought less. \"As a result\" shows that link. \"On the other hand\" is tempting because it is a common linking phrase, but it shows contrast, and there is no contrast here. \"For example\" would need an example of rising prices, which this is not."
+    },
+    {
+      "type": "summary",
+      "title": "Key points",
+      "bullets": [
+        "A paragraph is a group of sentences about one main idea.",
+        "The topic sentence states the main idea clearly; it should be neither too broad nor too narrow.",
+        "Supporting sentences give reasons, facts, examples and explanations.",
+        "The concluding sentence restates the main idea or shows why it matters.",
+        "Unity: every sentence must stay on the main idea; remove any that wander.",
+        "Linking words show how ideas connect; choose one whose meaning fits."
+      ]
+    }
+  ],
+  "quiz": [
+    {
+      "question": "What is the main job of a topic sentence?",
+      "options": [
+        "To give an example",
+        "To state the main idea of the paragraph",
+        "To end the paragraph",
+        "To list the linking words"
+      ],
+      "answer": 1,
+      "explanation": "The topic sentence tells the reader what the whole paragraph is about. Examples belong in the supporting sentences, and the ending is the job of the concluding sentence."
+    },
+    {
+      "question": "Which part of a paragraph gives reasons, facts and examples?",
+      "options": [
+        "The concluding sentence",
+        "The title",
+        "The supporting sentences",
+        "The topic sentence"
+      ],
+      "answer": 2,
+      "explanation": "Supporting sentences are the \"filling\" of the paragraph. They prove and develop the main idea with reasons, facts, examples and explanations."
+    },
+    {
+      "question": "Which linking word shows contrast?",
+      "options": [
+        "However",
+        "Furthermore",
+        "For example",
+        "Firstly"
+      ],
+      "answer": 0,
+      "explanation": "\"However\" introduces an idea that differs from or goes against the one before it. \"Furthermore\" adds an idea, \"For example\" introduces an example, and \"Firstly\" shows order."
+    },
+    {
+      "question": "The topic sentence of a paragraph is \"Reading every day improves a pupil's English.\" Which is the best concluding sentence?",
+      "options": [
+        "My favourite book is about a lion.",
+        "In short, reading a few pages a day can make a real difference to your English.",
+        "Reading is done with the eyes.",
+        "The library in our town opens at eight o'clock."
+      ],
+      "answer": 1,
+      "explanation": "A concluding sentence restates the main idea in new words. \"In short, reading a few pages a day...\" returns to the link between daily reading and better English. The other options drift away from the main idea, so they would break the unity."
+    },
+    {
+      "question": "A paragraph is about the dangers of burning bush in the dry season. Which sentence would break its unity?",
+      "options": [
+        "Fires destroy the grass that animals need for food.",
+        "Smoke from the fires can harm people's lungs.",
+        "Fires can spread quickly and destroy homes and crops.",
+        "Football is the most popular sport in Zambia."
+      ],
+      "answer": 3,
+      "explanation": "The first three sentences each describe a danger of bush fires, so they support the main idea. The sentence about football has nothing to do with bush fires, so it breaks the unity and should be removed."
+    },
+    {
+      "question": "Choose the linking word that best completes the sentence: \"Chanda studied hard for his tests. ______, he passed all of them with good marks.\"",
+      "options": [
+        "Although",
+        "For instance",
+        "Consequently",
+        "On the other hand"
+      ],
+      "answer": 2,
+      "explanation": "Passing the tests was the result of studying hard, so we need a result word: \"Consequently\" (which means \"as a result\"). \"On the other hand\" would suggest a contrast, but passing after studying is not a contrast."
+    },
+    {
+      "question": "A pupil begins a paragraph with \"In this paragraph I will talk about Lake Kariba.\" Why is this a weak topic sentence?",
+      "options": [
+        "It is too short.",
+        "It uses a capital letter for Kariba.",
+        "It should be the last sentence of the paragraph.",
+        "It announces the topic but does not state a clear main idea about it."
+      ],
+      "answer": 3,
+      "explanation": "A topic sentence should make a point, not just announce a subject. A stronger version would be \"Lake Kariba is important to Zambia for fishing, tourism and electricity.\" Kariba is a proper noun, so the capital letter is correct."
+    },
+    {
+      "question": "Which order turns these sentences into a well-organised paragraph?\n(1) As a result, fewer children fall sick with diarrhoea.\n(2) Clean water is vital for a healthy community.\n(3) For example, when a village gets a protected borehole, people stop drinking from rivers and shallow wells.\n(4) Therefore, every village deserves a safe source of water.",
+      "options": [
+        "2, 3, 1, 4",
+        "1, 2, 3, 4",
+        "3, 1, 4, 2",
+        "2, 4, 1, 3"
+      ],
+      "answer": 0,
+      "explanation": "Sentence 2 states the main idea, so it is the topic sentence. Sentence 3 gives an example, sentence 1 shows the result of that example (\"As a result\"), and sentence 4 concludes (\"Therefore\"). The linking words are clues to the order."
+    }
+  ],
+  "glossary": [
+    {
+      "term": "Paragraph",
+      "definition": "A group of sentences that develop one main idea."
+    },
+    {
+      "term": "Topic sentence",
+      "definition": "The sentence, usually first, that states the main idea of a paragraph."
+    },
+    {
+      "term": "Supporting sentence",
+      "definition": "A sentence that gives a reason, fact, example or explanation for the main idea."
+    },
+    {
+      "term": "Concluding sentence",
+      "definition": "The last sentence of a paragraph, which restates the main idea or shows why it matters."
+    },
+    {
+      "term": "Unity",
+      "definition": "The quality of a paragraph in which every sentence is about the same main idea."
+    },
+    {
+      "term": "Linking word",
+      "definition": "A word or phrase such as however, therefore or for example that shows how ideas are connected. Also called a connective."
+    }
+  ]
+}

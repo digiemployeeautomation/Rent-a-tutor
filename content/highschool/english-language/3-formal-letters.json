@@ -1,0 +1,269 @@
+{
+  "id": "english-language-writing-skills-3",
+  "subject": "english-language",
+  "form": 2,
+  "term": 1,
+  "topic": "Writing Skills",
+  "topicSlug": "writing-skills",
+  "order": 3,
+  "title": "Writing formal letters",
+  "summary": "Lay out and write a formal letter with the correct addresses, date, salutation, subject line, body and closing, in a polite formal tone.",
+  "minutes": 25,
+  "objectives": [
+    "Arrange the parts of a formal letter in the correct order",
+    "Match the salutation with the correct closing",
+    "Write in a polite, formal tone",
+    "Write a complete letter of complaint"
+  ],
+  "sections": [
+    {
+      "type": "explain",
+      "title": "Who are you writing to?",
+      "body": "Suppose the borehole at your school has been broken for three weeks. You might send a friend a quick WhatsApp message: \"Eh, the borehole is finished again!\" But to get it repaired, you would write to the headteacher or the council, and that letter must sound very different.\n\nA formal letter is a letter to a person in an official position, or to someone you do not know personally, about a serious matter. It follows a fixed layout and uses a polite, businesslike tone. Formal letters often appear among the composition choices in the ECZ English paper, and a correct layout earns marks that are easy to win."
+    },
+    {
+      "type": "explain",
+      "title": "When do we write formal letters?",
+      "body": "We write formal letters for official business. The most common types are:",
+      "bullets": [
+        "Application: asking for a job, a place at college or a scholarship",
+        "Complaint: reporting a problem and asking for it to be solved",
+        "Request: asking for permission, information or help",
+        "Letter to the editor: giving your view on a public issue in a newspaper"
+      ]
+    },
+    {
+      "type": "explain",
+      "title": "The layout of a formal letter",
+      "body": "A formal letter has seven parts, always in the same order. Study the sketch and the list below.",
+      "bullets": [
+        "Writer's address: in the top right corner. Do not write your name above it.",
+        "Date: under your address, written in full, for example 14th January 2026.",
+        "Recipient's address: on the left, below the date. The recipient is the person who receives the letter. Begin with their title, for example The Headteacher.",
+        "Salutation (the greeting): Dear Sir/Madam, or Dear Mrs Mwale,",
+        "Subject line: a short heading in capitals that says what the letter is about, often beginning with RE:",
+        "Body: usually three or four paragraphs.",
+        "Closing: Yours faithfully, or Yours sincerely, then your signature and your full name."
+      ],
+      "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 480 370\" role=\"img\" aria-label=\"Layout of a formal letter: writer's address and date at the top right, recipient's address on the left, then the salutation, a subject line in capitals, the body, and the closing with signature and full name\"><rect x=\"50\" y=\"8\" width=\"380\" height=\"354\" rx=\"6\" fill=\"#FFFFFF\" stroke=\"#64748B\" stroke-width=\"2\"/><rect x=\"266\" y=\"22\" width=\"148\" height=\"48\" rx=\"6\" fill=\"#DBEAFE\" stroke=\"#2563EB\" stroke-width=\"1.5\"/><text x=\"340\" y=\"51\" font-family=\"Inter, system-ui, sans-serif\" font-size=\"14\" fill=\"#0F172A\" text-anchor=\"middle\">Writer's address</text><rect x=\"266\" y=\"78\" width=\"148\" height=\"28\" rx=\"6\" fill=\"#DBEAFE\" stroke=\"#2563EB\" stroke-width=\"1.5\"/><text x=\"340\" y=\"97\" font-family=\"Inter, system-ui, sans-serif\" font-size=\"14\" fill=\"#0F172A\" text-anchor=\"middle\">Date</text><rect x=\"66\" y=\"116\" width=\"172\" height=\"48\" rx=\"6\" fill=\"#E2E8F0\" stroke=\"#64748B\" stroke-width=\"1.5\"/><text x=\"152\" y=\"145\" font-family=\"Inter, system-ui, sans-serif\" font-size=\"14\" fill=\"#0F172A\" text-anchor=\"middle\">Recipient's address</text><text x=\"66\" y=\"190\" font-family=\"Inter, system-ui, sans-serif\" font-size=\"14\" fill=\"#0F172A\" font-weight=\"bold\">Dear Sir/Madam,</text><rect x=\"66\" y=\"202\" width=\"348\" height=\"30\" rx=\"6\" fill=\"#FFFFFF\" stroke=\"#F59E0B\" stroke-width=\"2\"/><text x=\"240\" y=\"222\" font-family=\"Inter, system-ui, sans-serif\" font-size=\"14\" fill=\"#0F172A\" text-anchor=\"middle\" font-weight=\"bold\">RE: SUBJECT LINE IN CAPITALS</text><rect x=\"66\" y=\"242\" width=\"348\" height=\"40\" rx=\"6\" fill=\"#DBEAFE\" stroke=\"#2563EB\" stroke-width=\"1.5\"/><text x=\"240\" y=\"267\" font-family=\"Inter, system-ui, sans-serif\" font-size=\"14\" fill=\"#0F172A\" text-anchor=\"middle\">Body: reason, details, request</text><text x=\"66\" y=\"306\" font-family=\"Inter, system-ui, sans-serif\" font-size=\"14\" fill=\"#0F172A\" font-weight=\"bold\">Yours faithfully,</text><text x=\"66\" y=\"328\" font-family=\"Inter, system-ui, sans-serif\" font-size=\"14\" fill=\"#64748B\" font-style=\"italic\">signature</text><text x=\"66\" y=\"350\" font-family=\"Inter, system-ui, sans-serif\" font-size=\"14\" fill=\"#0F172A\" >Full name</text></svg>"
+    },
+    {
+      "type": "check",
+      "question": "Where does the writer's address go in a formal letter?",
+      "options": [
+        "At the top left, above the recipient's address",
+        "In the top right corner",
+        "At the bottom, under the signature",
+        "Inside the subject line"
+      ],
+      "answer": 1,
+      "explanation": "The writer's address goes in the top right corner, with the date just below it. The top left is tempting, but the left side is used for the recipient's address, which comes lower down. Your name, not your address, appears under the signature."
+    },
+    {
+      "type": "explain",
+      "title": "Matching the greeting and the closing",
+      "body": "The salutation and the closing must match. If you do not know the person's name, begin with Dear Sir, Dear Madam or Dear Sir/Madam, and end with Yours faithfully. If you use the person's name, such as Dear Mrs Mwale, end with Yours sincerely.\n\nWatch the small details. Only the first word of the closing has a capital letter (Yours faithfully, not Yours Faithfully), \"Yours\" has no apostrophe, and the closing is followed by a comma. Under it, sign, then write your full name clearly.",
+      "bullets": [
+        "Dear Sir/Madam → Yours faithfully,",
+        "Dear Mr Phiri → Yours sincerely,"
+      ]
+    },
+    {
+      "type": "example",
+      "title": "Worked example: making the tone formal",
+      "problem": "Rewrite these informal sentences so that they suit a formal letter to the Town Clerk.\n\n1. Hi there! How are you?\n2. The rubbish at Chelstone market is a total mess and it stinks big time.\n3. Pls sort it out ASAP coz we're fed up.",
+      "steps": [
+        "Step 1: Remove the friendly chat. A formal letter does not ask about the reader's health; it goes straight to the reason for writing.",
+        "Step 2: Replace slang (\"a total mess\", \"stinks big time\", \"fed up\") with plain, polite words.",
+        "Step 3: Write every word in full: no SMS spelling (\"pls\", \"coz\", \"ASAP\") and no contractions, which are shortened forms such as \"we're\" for \"we are\".",
+        "Step 4: Make the request politely but firmly, and give a reason for it."
+      ],
+      "answer": "1. I am writing to report a serious problem at Chelstone Market.\n2. Rubbish has not been collected for several weeks, and it now gives off a very unpleasant smell.\n3. I kindly ask the council to remove the rubbish as soon as possible, as residents are worried about their health."
+    },
+    {
+      "type": "explain",
+      "title": "Formal tone and the body",
+      "body": "Tone is the attitude that your writing shows. A formal tone is polite, serious and clear, even when you are complaining. Never insult the reader; a respectful letter is far more likely to get action.\n\nThe body is usually organised like this:",
+      "bullets": [
+        "First paragraph: state why you are writing.",
+        "Middle paragraph or paragraphs: give the details, facts and reasons.",
+        "Last paragraph: say what action you want, and thank the reader.",
+        "Throughout: use full words, with no contractions, slang or SMS spelling."
+      ]
+    },
+    {
+      "type": "check",
+      "question": "Which sentence is most suitable for a letter of application?",
+      "options": [
+        "I'm the best guy for this job, trust me!",
+        "Hey, saw your advert. Got any jobs?",
+        "I would like to apply for the post of shop assistant advertised in the Times of Zambia on 3rd March.",
+        "Please give me the job because I really need the money."
+      ],
+      "answer": 2,
+      "explanation": "The correct sentence is polite, uses full words and states exactly which post the writer is applying for and where it was advertised. \"Please give me the job because I really need the money\" is polite, but it begs instead of showing why the writer is suitable. The other two use slang and contractions."
+    },
+    {
+      "type": "example",
+      "title": "Worked example: a letter of complaint",
+      "problem": "You live in Chelstone, Lusaka. Rubbish at the local market has not been collected for a month. Write a letter to the Town Clerk of Lusaka City Council, complaining about the problem and asking for action.",
+      "steps": [
+        "Step 1: Plan the addresses. Your address goes in the top right corner with the date below it; the Town Clerk's address goes on the left. (On this screen everything is shown on the left, but on paper your address and the date go on the right.)",
+        "Step 2: Choose the salutation. You do not know the Town Clerk's name, so use Dear Sir/Madam. That means the closing must be Yours faithfully.",
+        "Step 3: Write a short subject line in capitals: RE: UNCOLLECTED RUBBISH AT CHELSTONE MARKET.",
+        "Step 4: Plan three paragraphs: (1) the reason for writing; (2) the details of the problem and its effects; (3) the action you want, and a polite thank you.",
+        "Step 5: Check the tone: polite and firm, with no slang and no contractions."
+      ],
+      "answer": "House No. 25\nMuchinga Road\nChelstone\nLusaka\n14th January 2026\n\nThe Town Clerk\nLusaka City Council\nCivic Centre\nLusaka\n\nDear Sir/Madam,\n\nRE: UNCOLLECTED RUBBISH AT CHELSTONE MARKET\n\nI am writing to complain about the rubbish that has piled up at Chelstone Market. It has not been collected for about a month.\n\nThe heaps of waste now block the main path, and some traders have had to move their stalls. The smell is very unpleasant, and flies are settling on food that is sold nearby. Now that the rains have started, residents fear an outbreak of cholera and other diseases.\n\nI kindly ask the council to collect the rubbish as soon as possible and to place proper bins at the market. Thank you for your attention to this matter.\n\nYours faithfully,\n\n(signature)\n\nMwila Chanda"
+    },
+    {
+      "type": "mistake",
+      "title": "Common mistake: a mismatched greeting and closing",
+      "body": "A very common error is to begin with Dear Sir/Madam and end with Yours sincerely, or to write Yours Faithfully with a capital F. Other pupils write \"Yours faithful\" or \"Your's faithfully\". Remember: Sir or Madam goes with faithfully, a name goes with sincerely, and \"Yours\" never has an apostrophe.\n\nAnother mistake is writing your name above your address at the top of the page. In a formal letter, your name appears only at the end, under your signature."
+    },
+    {
+      "type": "check",
+      "question": "A letter begins \"Dear Mrs Mutale,\". Which closing is correct?",
+      "options": [
+        "Yours faithfully,",
+        "Your's sincerely,",
+        "Yours Sincerely,",
+        "Yours sincerely,"
+      ],
+      "answer": 3,
+      "explanation": "The letter uses the reader's name, so it must end with \"Yours sincerely,\" with a small s and no apostrophe. \"Yours faithfully\" is correct only after Dear Sir or Dear Madam. \"Yours Sincerely\" looks almost right, but the second word should not have a capital letter."
+    },
+    {
+      "type": "summary",
+      "title": "Key points",
+      "bullets": [
+        "Order: writer's address and date (top right), recipient's address (left), salutation, subject line, body, closing.",
+        "Dear Sir/Madam goes with Yours faithfully; a name, such as Dear Mr Banda, goes with Yours sincerely.",
+        "The subject line is a short heading in capitals that tells the reader what the letter is about.",
+        "In the body, state your reason first, then give details, then say what action you want.",
+        "Keep the tone polite and formal: no slang, no contractions and no SMS spelling.",
+        "Your name appears only at the end, under your signature."
+      ]
+    }
+  ],
+  "quiz": [
+    {
+      "question": "Which closing goes with \"Dear Sir/Madam\"?",
+      "options": [
+        "Yours sincerely",
+        "Yours faithfully",
+        "Your friend",
+        "Best wishes"
+      ],
+      "answer": 1,
+      "explanation": "When you do not know the reader's name, the letter ends with \"Yours faithfully\". \"Yours sincerely\" is used when you greet the reader by name, and \"Your friend\" and \"Best wishes\" belong in informal letters."
+    },
+    {
+      "question": "In a formal letter, where is the date written?",
+      "options": [
+        "Under the writer's address",
+        "At the very bottom of the page",
+        "After the subject line",
+        "Inside the recipient's address"
+      ],
+      "answer": 0,
+      "explanation": "The date goes directly under the writer's address in the top right corner, written in full, for example 14th January 2026. Putting it anywhere else breaks the standard layout."
+    },
+    {
+      "question": "What is the purpose of the subject line?",
+      "options": [
+        "To greet the reader",
+        "To give the writer's phone number",
+        "To end the letter politely",
+        "To tell the reader in a few words what the letter is about"
+      ],
+      "answer": 3,
+      "explanation": "The subject line, often beginning with RE:, lets a busy official see at once what the letter is about. Greeting is the job of the salutation, and ending politely is the job of the closing."
+    },
+    {
+      "question": "You are writing to your headteacher, Mr Zulu, and you use his name. Which pair is correct?",
+      "options": [
+        "Dear Mr Zulu, ... Yours faithfully,",
+        "Dear Sir, ... Yours sincerely,",
+        "Dear Mr Zulu, ... Yours sincerely,",
+        "Hi Mr Zulu, ... Regards,"
+      ],
+      "answer": 2,
+      "explanation": "A greeting with the person's name goes with \"Yours sincerely\". The first two options mix the rules, and \"Hi\" and \"Regards\" are too casual for a formal letter."
+    },
+    {
+      "question": "Which sentence has a suitable formal tone?",
+      "options": [
+        "Your workers are lazy and useless.",
+        "I would be grateful if you could repair the bridge before the rains.",
+        "Fix the bridge now, or else!",
+        "We're all super annoyed about the bridge, guys."
+      ],
+      "answer": 1,
+      "explanation": "\"I would be grateful if you could...\" is polite and clear, and it still makes a firm request. The other sentences insult or threaten the reader, or use slang and contractions."
+    },
+    {
+      "question": "Which is the best subject line for a letter asking a company for a holiday job?",
+      "options": [
+        "RE: APPLICATION FOR A HOLIDAY JOB",
+        "RE: HELLO FROM CHIPATA",
+        "RE: MY LIFE STORY",
+        "RE: MONEY"
+      ],
+      "answer": 0,
+      "explanation": "A good subject line is short and states the exact purpose of the letter. \"APPLICATION FOR A HOLIDAY JOB\" does this; the other options are vague and do not tell the reader what is being asked."
+    },
+    {
+      "question": "A pupil writes her name, Bwalya Tembo, above her address at the top right of a formal letter. What should she change?",
+      "options": [
+        "Nothing, because that is correct",
+        "Move her address to the left side",
+        "Remove her name from the top, because it belongs only under the signature",
+        "Put her name in the subject line instead"
+      ],
+      "answer": 2,
+      "explanation": "In a formal letter, the writer's name appears only at the end, under the signature. The address itself is in the right place, so it should not be moved."
+    },
+    {
+      "question": "Which is the best opening paragraph for a letter complaining about late buses?",
+      "options": [
+        "I hope you and your family are well and enjoying the season.",
+        "I am writing to complain about the buses on the Kabwe route, which have arrived more than an hour late every morning this month.",
+        "Buses are vehicles that carry passengers from one place to another.",
+        "Yours faithfully, a worried passenger."
+      ],
+      "answer": 1,
+      "explanation": "The first paragraph of a formal letter should state the reason for writing clearly and directly, with a key detail. Asking about the reader's family belongs in an informal letter, and \"Yours faithfully\" is a closing, not an opening."
+    }
+  ],
+  "glossary": [
+    {
+      "term": "Formal letter",
+      "definition": "A letter to an official or a stranger about a serious matter, written with a fixed layout and a polite tone."
+    },
+    {
+      "term": "Recipient",
+      "definition": "The person who receives the letter."
+    },
+    {
+      "term": "Salutation",
+      "definition": "The greeting at the start of a letter, such as Dear Sir/Madam."
+    },
+    {
+      "term": "Subject line",
+      "definition": "A short heading in capitals, often starting with RE:, that says what the letter is about."
+    },
+    {
+      "term": "Closing",
+      "definition": "The polite ending before the signature, such as Yours faithfully or Yours sincerely."
+    },
+    {
+      "term": "Tone",
+      "definition": "The attitude a piece of writing shows, for example formal, friendly or angry."
+    },
+    {
+      "term": "Contraction",
+      "definition": "A shortened form of words, such as we're for we are; avoid contractions in formal letters."
+    }
+  ]
+}

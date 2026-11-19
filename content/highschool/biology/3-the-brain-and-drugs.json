@@ -1,0 +1,270 @@
+{
+  "id": "biology-nervous-system-3",
+  "subject": "biology",
+  "form": 4,
+  "term": 1,
+  "topic": "The Nervous System",
+  "topicSlug": "nervous-system",
+  "order": 3,
+  "title": "The brain, drugs and coordination",
+  "summary": "Name the main parts of the brain and their functions, explain how drugs and tetanus affect the nervous system, and compare nervous and hormonal control.",
+  "minutes": 22,
+  "objectives": [
+    "Identify five parts of the brain and state the function of each",
+    "Classify drugs as depressants, stimulants or hallucinogens and describe their effects",
+    "Describe how tetanus affects the nervous system",
+    "Compare the nervous system with the endocrine system"
+  ],
+  "sections": [
+    {
+      "type": "explain",
+      "title": "A footballer's brain at work",
+      "body": "Watch a Chipolopolo striker running with the ball. One part of the brain decides where to pass. Another part keeps the player balanced at full speed. Another keeps the heart beating and the lungs breathing without the player ever thinking about it.\n\nThe brain is the main part of the CNS. Different regions do different jobs. In this lesson you will learn five key parts, then see how drugs and disease can upset them."
+    },
+    {
+      "type": "explain",
+      "title": "Five parts of the brain",
+      "body": "The brain can be divided into the forebrain (front and top) and the hindbrain (back and bottom). You need to know these five structures by name and position.",
+      "bullets": [
+        "Forebrain: cerebrum (the cerebral hemispheres), hypothalamus, pituitary gland",
+        "Hindbrain: cerebellum, medulla oblongata",
+        "The medulla oblongata joins the brain to the spinal cord"
+      ],
+      "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 480 280\" role=\"img\" aria-label=\"Simplified side view of the brain labelling the cerebrum, cerebellum, hypothalamus, pituitary gland, medulla oblongata and spinal cord\"><rect x=\"250\" y=\"226\" width=\"18\" height=\"34\" fill=\"#FFFFFF\" stroke=\"#64748B\" stroke-width=\"2\"/><rect x=\"245\" y=\"172\" width=\"28\" height=\"56\" rx=\"6\" fill=\"#FFFFFF\" stroke=\"#0D9488\" stroke-width=\"2\"/><ellipse cx=\"200\" cy=\"100\" rx=\"150\" ry=\"80\" fill=\"#DBEAFE\" stroke=\"#2563EB\" stroke-width=\"2\"/><ellipse cx=\"335\" cy=\"178\" rx=\"58\" ry=\"32\" fill=\"#E2E8F0\" stroke=\"#F59E0B\" stroke-width=\"2.5\"/><circle cx=\"205\" cy=\"166\" r=\"10\" fill=\"#E11D48\"/><line x1=\"204\" y1=\"176\" x2=\"201\" y2=\"187\" stroke=\"#0F172A\" stroke-width=\"2\"/><circle cx=\"200\" cy=\"195\" r=\"8\" fill=\"#F59E0B\" stroke=\"#0F172A\" stroke-width=\"1\"/><g stroke=\"#64748B\" stroke-width=\"1.2\"><line x1=\"195\" y1=\"168\" x2=\"112\" y2=\"200\"/><line x1=\"192\" y1=\"198\" x2=\"130\" y2=\"230\"/><line x1=\"273\" y1=\"214\" x2=\"290\" y2=\"240\"/><line x1=\"250\" y1=\"250\" x2=\"152\" y2=\"262\"/></g><g font-family=\"Inter, system-ui, sans-serif\" font-size=\"14\" fill=\"#0F172A\"><text x=\"20\" y=\"30\" fill=\"#64748B\">Front</text><text x=\"460\" y=\"30\" text-anchor=\"end\" fill=\"#64748B\">Back</text><text x=\"190\" y=\"92\" text-anchor=\"middle\" font-weight=\"bold\">Cerebrum</text><text x=\"190\" y=\"112\" text-anchor=\"middle\" font-size=\"13\">(cerebral hemispheres)</text><text x=\"337\" y=\"183\" text-anchor=\"middle\">Cerebellum</text><text x=\"20\" y=\"206\">Hypothalamus</text><text x=\"20\" y=\"236\">Pituitary gland</text><text x=\"292\" y=\"252\">Medulla oblongata</text><text x=\"150\" y=\"268\" text-anchor=\"end\">Spinal cord</text></g></svg>"
+    },
+    {
+      "type": "explain",
+      "title": "Cerebrum and cerebellum",
+      "body": "The cerebrum is the largest part of the brain. It is made of two halves called the cerebral hemispheres. It controls everything you do consciously: thinking, memory, language, decisions, voluntary movement, and making sense of what you see, hear and feel.\n\nThe cerebellum sits at the back, under the cerebrum. It controls balance and coordinates muscles so that movements are smooth and accurate. It is busy when you walk, write, ride a bicycle or kick a ball."
+    },
+    {
+      "type": "check",
+      "question": "Which part of the brain keeps you balanced when you ride a bicycle?",
+      "options": [
+        "Cerebrum",
+        "Cerebellum",
+        "Hypothalamus",
+        "Pituitary gland"
+      ],
+      "answer": 1,
+      "explanation": "The cerebellum controls balance and muscle coordination. The cerebrum decides where to ride, but it is the cerebellum that keeps the movement smooth and balanced."
+    },
+    {
+      "type": "explain",
+      "title": "Hypothalamus, pituitary and medulla",
+      "body": "The hypothalamus is a small region at the base of the forebrain. It keeps the inside of the body steady by controlling body temperature, hunger, thirst and sleep.\n\nThe pituitary gland is about the size of a pea and hangs just below the hypothalamus. It releases hormones that control growth, reproduction and several other glands.\n\nThe medulla oblongata is at the base of the brain, where it joins the spinal cord. It controls vital automatic activities: breathing rate, heart rate and blood pressure, plus reflexes such as swallowing, coughing and sneezing. That is why you keep breathing while you sleep."
+    },
+    {
+      "type": "example",
+      "title": "Worked example: matching symptoms to brain parts",
+      "problem": "After a road accident, three patients have different brain injuries. Patient A walks unsteadily and cannot touch his nose with his eyes closed. Patient B cannot breathe without a machine. Patient C cannot remember new information. Which part of the brain is most likely damaged in each patient?",
+      "steps": [
+        "Step 1: Patient A has problems with balance and smooth, accurate movement. Balance and coordination are controlled by the cerebellum.",
+        "Step 2: Patient B has lost automatic breathing. Breathing and heart rate are controlled by the medulla oblongata.",
+        "Step 3: Patient C has a problem with memory. Memory is a conscious activity of the cerebrum.",
+        "Step 4: Check the logic. Each symptom matches only one of the five parts, so the answers are consistent."
+      ],
+      "answer": "A: cerebellum. B: medulla oblongata. C: cerebrum (cerebral hemispheres)."
+    },
+    {
+      "type": "explain",
+      "title": "How drugs affect the nervous system",
+      "body": "A drug is a chemical that changes how the body works. Many drugs act on the nervous system, often at the synapses. The syllabus puts them in three groups.",
+      "bullets": [
+        "Depressants slow down the nervous system. Examples: alcohol, heroin. They increase reaction time and harm coordination and judgement.",
+        "Stimulants speed up the nervous system. Examples: caffeine (in tea and coffee), nicotine (in tobacco), cocaine. They raise heart rate and activity and make a person feel more alert for a while.",
+        "Hallucinogens change how the brain understands information, so the user sees, hears or judges things wrongly. Examples: LSD and, in the syllabus, marijuana (cannabis)."
+      ]
+    },
+    {
+      "type": "check",
+      "question": "Alcohol increases reaction time. What does this mean?",
+      "options": [
+        "The person reacts more quickly",
+        "The person takes longer to react",
+        "The person's heart beats faster",
+        "The person feels more alert"
+      ],
+      "answer": 1,
+      "explanation": "Reaction time is the time between a stimulus and the response. If it increases, the person is slower. Many students read \"increase\" as \"better\", which is the trap here."
+    },
+    {
+      "type": "example",
+      "title": "Worked example: alcohol and driving",
+      "problem": "Explain why a minibus driver who has been drinking alcohol is more likely to cause an accident.",
+      "steps": [
+        "Step 1: Classify the drug. Alcohol is a depressant, so it slows down the nervous system.",
+        "Step 2: Link it to the pathway. Impulses from the eyes to the brain, and from the brain to the leg muscles, are passed on more slowly.",
+        "Step 3: State the effect. Reaction time increases, so the driver takes longer to see danger and press the brake. The minibus travels further before it stops.",
+        "Step 4: Add judgement. Alcohol also harms coordination and judgement, so the driver may misjudge speed and distance or take risks."
+      ],
+      "answer": "Alcohol is a depressant: it slows nerve impulses, increases reaction time and impairs coordination and judgement, so the driver brakes later and makes poorer decisions."
+    },
+    {
+      "type": "explain",
+      "title": "Tetanus",
+      "body": "Tetanus is a disease caused by bacteria that live in soil and animal dung. They enter the body through wounds, for example a cut from a rusty nail or a dirty farm tool.\n\nThe bacteria make a poison (toxin) that attacks nerve tissue in the spinal cord and brain. Normally some neurones tell muscles to relax. The toxin stops them working, so muscles stay tight. This causes stiff muscles and painful spasms, often starting in the jaw, which is why tetanus is also called lockjaw. It can kill. Tetanus is prevented by vaccination and by cleaning wounds well."
+    },
+    {
+      "type": "explain",
+      "title": "Nervous system or hormones?",
+      "body": "The body has two systems that coordinate its activities. The nervous system uses electrical impulses along neurones. The endocrine system uses hormones: chemicals made by glands and carried in the blood to target organs.\n\nThe hypothalamus and pituitary gland link the two systems. The hypothalamus is part of the brain, and it controls the pituitary gland, which releases hormones.",
+      "bullets": [
+        "Nervous: electrical impulses, very fast, short-lived, sent to one precise place",
+        "Endocrine: hormones in the blood, slower, longer-lasting, can affect many organs"
+      ],
+      "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 480 225\" role=\"img\" aria-label=\"Comparison: the nervous system sends electrical impulses along neurones from the CNS to an effector, fast and short-lived; the endocrine system sends hormones in the blood from a gland to a target organ, slower and longer-lasting\"><rect x=\"20\" y=\"40\" width=\"90\" height=\"40\" rx=\"8\" fill=\"#DBEAFE\" stroke=\"#2563EB\" stroke-width=\"2\"/><rect x=\"370\" y=\"40\" width=\"100\" height=\"40\" rx=\"8\" fill=\"#FFFFFF\" stroke=\"#2563EB\" stroke-width=\"2\"/><line x1=\"110\" y1=\"60\" x2=\"356\" y2=\"60\" stroke=\"#2563EB\" stroke-width=\"3\"/><polygon points=\"368,60 354,53 354,67\" fill=\"#2563EB\"/><rect x=\"20\" y=\"152\" width=\"90\" height=\"40\" rx=\"8\" fill=\"#FFFFFF\" stroke=\"#E11D48\" stroke-width=\"2\"/><rect x=\"370\" y=\"152\" width=\"100\" height=\"40\" rx=\"8\" fill=\"#FFFFFF\" stroke=\"#E11D48\" stroke-width=\"2\"/><rect x=\"110\" y=\"164\" width=\"260\" height=\"16\" rx=\"8\" fill=\"#FFFFFF\" stroke=\"#E11D48\" stroke-width=\"2\"/><g fill=\"#F59E0B\"><circle cx=\"150\" cy=\"172\" r=\"4.5\"/><circle cx=\"200\" cy=\"172\" r=\"4.5\"/><circle cx=\"250\" cy=\"172\" r=\"4.5\"/><circle cx=\"300\" cy=\"172\" r=\"4.5\"/><circle cx=\"345\" cy=\"172\" r=\"4.5\"/></g><g font-family=\"Inter, system-ui, sans-serif\" font-size=\"14\" fill=\"#0F172A\"><text x=\"20\" y=\"28\" font-weight=\"bold\" fill=\"#2563EB\">Nervous system</text><text x=\"65\" y=\"65\" text-anchor=\"middle\">CNS</text><text x=\"420\" y=\"65\" text-anchor=\"middle\">Effector</text><text x=\"240\" y=\"104\" text-anchor=\"middle\" font-size=\"13\">Electrical impulses along neurones: fast, short-lived</text><text x=\"20\" y=\"140\" font-weight=\"bold\" fill=\"#E11D48\">Endocrine system</text><text x=\"65\" y=\"177\" text-anchor=\"middle\">Gland</text><text x=\"420\" y=\"177\" text-anchor=\"middle\">Target organ</text><text x=\"240\" y=\"214\" text-anchor=\"middle\" font-size=\"13\">Hormones carried in the blood: slower, longer-lasting</text></g></svg>"
+    },
+    {
+      "type": "mistake",
+      "title": "Common mistake: cerebrum or cerebellum?",
+      "body": "The names cerebrum and cerebellum look alike, and students often swap them. The cerebrum is the big one that does the thinking. The cerebellum is the smaller one at the back that does balance.\n\nA memory trick: cerebELLum keeps you wELL balanced. When you label a diagram, the cerebellum is always at the back, below the cerebrum."
+    },
+    {
+      "type": "check",
+      "question": "Which statement describes control by the nervous system rather than by hormones?",
+      "options": [
+        "Messages are carried in the blood",
+        "Effects are slow to start but last a long time",
+        "Messages are electrical impulses that act quickly and briefly"
+      ],
+      "answer": 2,
+      "explanation": "The nervous system uses fast electrical impulses with short-lived effects. Messages carried in the blood with slow, long-lasting effects describe the endocrine system."
+    },
+    {
+      "type": "summary",
+      "title": "Key points",
+      "bullets": [
+        "Cerebrum: thinking, memory, voluntary movement. Cerebellum: balance and coordination.",
+        "Hypothalamus: temperature, hunger, thirst. Pituitary gland: releases hormones. Medulla oblongata: breathing and heart rate.",
+        "Depressants (alcohol) slow the nervous system and increase reaction time; stimulants (caffeine, nicotine) speed it up; hallucinogens distort perception.",
+        "Tetanus toxin attacks nerve tissue, causing muscle stiffness and spasms; vaccination prevents it.",
+        "Nervous control is fast and short-lived; hormonal control is slower and longer-lasting."
+      ]
+    }
+  ],
+  "quiz": [
+    {
+      "question": "Which part of the brain controls balance and coordination?",
+      "options": [
+        "Cerebrum",
+        "Medulla oblongata",
+        "Hypothalamus",
+        "Cerebellum"
+      ],
+      "answer": 3,
+      "explanation": "The cerebellum, at the back of the brain, controls balance and makes movements smooth and accurate. The cerebrum handles conscious thought and the medulla handles breathing and heart rate."
+    },
+    {
+      "question": "Which brain structure controls body temperature, hunger and thirst?",
+      "options": [
+        "Hypothalamus",
+        "Cerebellum",
+        "Pituitary gland",
+        "Medulla oblongata"
+      ],
+      "answer": 0,
+      "explanation": "The hypothalamus keeps conditions inside the body steady, including temperature, hunger and thirst. The pituitary gland sits just below it and releases hormones."
+    },
+    {
+      "question": "Damage to the medulla oblongata is often fatal. Why?",
+      "options": [
+        "It stores all memories",
+        "It controls breathing and heart rate",
+        "It produces all the body's hormones",
+        "It controls balance"
+      ],
+      "answer": 1,
+      "explanation": "The medulla controls vital automatic activities such as breathing and heart rate. Without them the body cannot survive. Memory is a cerebrum function and balance is a cerebellum function."
+    },
+    {
+      "question": "Which drug is a depressant?",
+      "options": [
+        "Caffeine",
+        "Nicotine",
+        "Alcohol",
+        "Cocaine"
+      ],
+      "answer": 2,
+      "explanation": "Alcohol is a depressant: it slows down the nervous system and increases reaction time. Caffeine, nicotine and cocaine are all stimulants, which speed it up."
+    },
+    {
+      "question": "A student drinks several cups of strong coffee to stay awake while studying. Which effects are most likely?",
+      "options": [
+        "Faster heart rate and feeling more alert",
+        "Slower heart rate and feeling sleepy",
+        "Seeing things that are not there",
+        "Longer reaction time and poor coordination"
+      ],
+      "answer": 0,
+      "explanation": "Coffee contains caffeine, a stimulant. Stimulants speed up the nervous system, raising heart rate and alertness for a while. Longer reaction time is an effect of depressants, and seeing things that are not there is an effect of hallucinogens."
+    },
+    {
+      "question": "In the syllabus, which group of drugs does marijuana (cannabis) belong to?",
+      "options": [
+        "Stimulants",
+        "Depressants",
+        "Painkillers",
+        "Hallucinogens"
+      ],
+      "answer": 3,
+      "explanation": "The syllabus classifies marijuana as a hallucinogen. Hallucinogens change how the brain processes information, so the user's perception and judgement become unreliable."
+    },
+    {
+      "question": "A farmer cuts his foot on a rusty tool and later develops a stiff jaw and painful muscle spasms. What is the most likely cause?",
+      "options": [
+        "Alcohol poisoning",
+        "Tetanus toxin acting on nerve tissue",
+        "A damaged cerebellum",
+        "Too much caffeine"
+      ],
+      "answer": 1,
+      "explanation": "Tetanus bacteria from soil enter through wounds and make a toxin that attacks nerve tissue. Muscles cannot relax, causing stiffness and spasms, often starting in the jaw (lockjaw). It is prevented by vaccination."
+    },
+    {
+      "question": "Which is a correct difference between the nervous system and the endocrine system?",
+      "options": [
+        "Nervous messages travel in the blood; hormones travel along neurones",
+        "Both systems use electrical impulses",
+        "Nervous responses are fast and short-lived; hormonal responses are slower and longer-lasting",
+        "Hormonal responses are always faster"
+      ],
+      "answer": 2,
+      "explanation": "Nerve impulses are electrical and travel quickly along neurones, with brief effects. Hormones are chemicals carried in the blood, so they act more slowly but their effects last longer. The first option swaps the two systems."
+    }
+  ],
+  "glossary": [
+    {
+      "term": "Cerebrum",
+      "definition": "The largest part of the brain, made of two cerebral hemispheres; controls thinking, memory and voluntary movement."
+    },
+    {
+      "term": "Cerebellum",
+      "definition": "The part of the brain at the back that controls balance and coordination."
+    },
+    {
+      "term": "Hypothalamus",
+      "definition": "A small part of the forebrain that controls body temperature, hunger, thirst and sleep."
+    },
+    {
+      "term": "Pituitary gland",
+      "definition": "A pea-sized gland below the hypothalamus that releases hormones."
+    },
+    {
+      "term": "Medulla oblongata",
+      "definition": "The base of the brain, joined to the spinal cord; controls breathing, heart rate and blood pressure."
+    },
+    {
+      "term": "Depressant",
+      "definition": "A drug that slows down the nervous system, such as alcohol."
+    },
+    {
+      "term": "Stimulant",
+      "definition": "A drug that speeds up the nervous system, such as caffeine or nicotine."
+    },
+    {
+      "term": "Hormone",
+      "definition": "A chemical messenger made by a gland and carried in the blood to a target organ."
+    }
+  ]
+}
