@@ -1,37 +1,41 @@
 // components/ielts/Passage.js
 //
-// Readable IELTS reading passage. Paragraphs are split on blank lines; a
-// leading paragraph letter ("A. ...") is shown as a badge, as in the real test.
+// An IELTS reading passage set like a printed page: a paper sheet, book
+// typography at a reading measure. Paragraphs are split on blank lines; a
+// leading paragraph letter ("A. ...") is set in the margin, as in the real test.
+// On large screens the sheet scrolls inside itself when its parent limits its
+// height (the question runner pins it beside the questions).
 export default function Passage({ title, text }) {
   const paragraphs = String(text ?? '')
     .split(/\n\s*\n+/)
     .map((p) => p.trim())
     .filter(Boolean)
+    .map((p) => {
+      const m = p.match(/^([A-H])\.\s+([\s\S]*)$/)
+      return m ? { letter: m[1], body: m[2] } : { letter: null, body: p }
+    })
+  const lettered = paragraphs.some((p) => p.letter)
 
   return (
-    <article className="card card-pad">
-      <p className="text-xs font-bold uppercase tracking-wider text-ink-400">Reading passage</p>
-      {title ? <h2 className="mt-1 font-display text-xl font-bold text-ink-900 sm:text-2xl">{title}</h2> : null}
-      <div className="mt-4 space-y-4">
-        {paragraphs.map((p, i) => {
-          const m = p.match(/^([A-H])\.\s+([\s\S]*)$/)
-          if (!m) {
-            return (
-              <p key={i} className="whitespace-pre-line text-[16px] leading-[1.75] text-ink-800 sm:text-[17px]">{p}</p>
-            )
-          }
-          return (
-            <div key={i} className="flex gap-3">
+    <article className="sheet px-5 py-6 sm:px-8 sm:py-8 lg:min-h-0 lg:overflow-y-auto lg:overscroll-contain">
+      <p className="text-[13px] font-bold leading-5 text-copper-700">Reading passage</p>
+      {title ? (
+        <h2 className="mt-1 font-display text-[1.5rem] font-semibold leading-tight text-ink-900 sm:text-[1.75rem]">{title}</h2>
+      ) : null}
+      <div className="mt-4 max-w-[65ch] space-y-5">
+        {paragraphs.map((p, i) => (
+          <div key={i} className={lettered ? 'grid grid-cols-[1.25rem_minmax(0,1fr)] gap-x-3' : ''}>
+            {lettered ? (
               <span
-                className="mt-1 flex h-6 w-6 shrink-0 items-center justify-center rounded-md bg-teal-50 text-xs font-bold text-teal-700"
-                aria-label={`Paragraph ${m[1]}`}
+                className="font-display text-[1.125rem] font-semibold leading-[1.75rem] text-copper-600"
+                aria-label={p.letter ? `Paragraph ${p.letter}` : undefined}
               >
-                {m[1]}
+                {p.letter}
               </span>
-              <p className="whitespace-pre-line text-[16px] leading-[1.75] text-ink-800 sm:text-[17px]">{m[2]}</p>
-            </div>
-          )
-        })}
+            ) : null}
+            <p className="whitespace-pre-line text-[17px] leading-[1.65] text-ink-800">{p.body}</p>
+          </div>
+        ))}
       </div>
     </article>
   )

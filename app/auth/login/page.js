@@ -1,10 +1,10 @@
 'use client'
 import { useState, Suspense } from 'react'
 import Link from 'next/link'
-import { ArrowRight, Loader2, PlayCircle } from 'lucide-react'
+import { Loader2 } from 'lucide-react'
 import { supabase } from '@/lib/supabase'
 import { useRouter, useSearchParams } from 'next/navigation'
-import AuthShell, { FormError } from '@/components/marketing/AuthShell'
+import AuthShell, { DemoRoute, FormError } from '@/components/marketing/AuthShell'
 
 // Ensures the redirectTo path actually belongs to the role that just logged in.
 // Prevents a student from being sent to an unauthorized path via a crafted URL.
@@ -26,7 +26,7 @@ function getSafeRedirect(redirectTo, role) {
 
 function friendlyError(message) {
   if (/invalid login credentials/i.test(message)) return 'That email and password do not match. Check them and try again.'
-  if (/email not confirmed/i.test(message)) return 'Please confirm your email first — we sent you a link when you signed up.'
+  if (/email not confirmed/i.test(message)) return 'Please confirm your email first. We sent you a link when you signed up.'
   return message
 }
 
@@ -90,23 +90,12 @@ function LoginForm() {
     <AuthShell
       title="Welcome back"
       subtitle="Log in to carry on where you left off."
-      footer={
-        <Link
-          href="/demo"
-          className="group flex items-center gap-4 rounded-2xl border border-sun-200 bg-sun-50 p-4 transition-colors hover:border-sun-300 hover:bg-sun-100"
-        >
-          <span className="icon-tile bg-sun-400 text-ink-900"><PlayCircle className="h-5 w-5" aria-hidden="true" /></span>
-          <span className="flex-1">
-            <span className="block text-[15px] font-semibold text-ink-900">Just exploring? Try the demo</span>
-            <span className="block text-sm text-ink-500">No sign-up — opens a ready-made student account.</span>
-          </span>
-          <ArrowRight className="h-5 w-5 text-ink-500 transition-transform group-hover:translate-x-1" aria-hidden="true" />
-        </Link>
-      }
+      boardLine={<>Pick up where you <span className="text-sun-300">left off.</span></>}
+      footer={<DemoRoute />}
     >
       <FormError>{error}</FormError>
 
-      <form onSubmit={handleLogin} className="mt-6 space-y-4">
+      <form onSubmit={handleLogin} className="mt-7 space-y-5">
         <div>
           <label htmlFor="email" className="label">Email address</label>
           <input
@@ -139,9 +128,9 @@ function LoginForm() {
         </button>
       </form>
 
-      <p className="mt-6 text-center text-sm text-ink-500">
+      <p className="mt-5 text-[15px] text-ink-600">
         New here?{' '}
-        <Link href={registerHref} className="font-semibold text-blue-700 hover:underline">Create an account</Link>
+        <Link href={registerHref} className="link">Create a free account</Link>
       </p>
     </AuthShell>
   )

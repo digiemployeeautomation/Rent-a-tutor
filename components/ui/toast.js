@@ -21,7 +21,7 @@ export function ToastProvider({ children }) {
   return (
     <ToastContext.Provider value={toast}>
       {children}
-      <div className="fixed bottom-6 right-6 z-50 flex flex-col gap-2 pointer-events-none" style={{ maxWidth: 360 }}>
+      <div className="pointer-events-none fixed inset-x-4 bottom-20 z-50 flex flex-col gap-2 sm:inset-x-auto sm:bottom-6 sm:right-6" style={{ maxWidth: 360 }}>
         {toasts.map(t => (
           <Toast key={t.id} message={t.message} type={t.type} onDismiss={() => setToasts(prev => prev.filter(x => x.id !== t.id))} />
         ))}
@@ -52,21 +52,21 @@ function Toast({ message, type, onDismiss }) {
 
   return (
     <div
-      className="pointer-events-auto flex items-center gap-3 px-4 py-3 rounded-xl shadow-lg transition-all duration-300"
+      role="status"
+      className="pointer-events-auto flex items-center gap-3 rounded-xl px-4 py-3 shadow-lg transition-all duration-300 ease-out"
       style={{
         backgroundColor: c.bg,
         border: `1px solid ${c.border}`,
         color: c.text,
-        transform: visible ? 'translateX(0)' : 'translateX(120%)',
+        transform: visible ? 'translateY(0)' : 'translateY(12px)',
         opacity: visible ? 1 : 0,
       }}
     >
-      <span className="w-5 h-5 rounded-full flex items-center justify-center text-xs font-bold flex-shrink-0"
-        style={{ backgroundColor: c.text, color: c.bg }}>
+      <span className="flex h-5 w-5 flex-shrink-0 items-center justify-center rounded-full text-xs font-bold" style={{ backgroundColor: c.text, color: c.bg }} aria-hidden="true">
         {c.icon}
       </span>
-      <span className="text-sm flex-1">{message}</span>
-      <button onClick={onDismiss} className="text-sm opacity-50 hover:opacity-100 flex-shrink-0 ml-2">✕</button>
+      <span className="flex-1 text-sm font-semibold">{message}</span>
+      <button type="button" onClick={onDismiss} aria-label="Dismiss" className="ml-2 flex-shrink-0 text-sm opacity-60 hover:opacity-100">✕</button>
     </div>
   )
 }

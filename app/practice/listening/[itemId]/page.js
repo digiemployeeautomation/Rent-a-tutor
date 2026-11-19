@@ -7,7 +7,7 @@
 // unsignable audio file shows a friendly notice; the questions still work.
 import Link from 'next/link'
 import { redirect } from 'next/navigation'
-import { ArrowLeft, Headphones, ListChecks, Zap } from 'lucide-react'
+import { ArrowLeft } from 'lucide-react'
 import {
   createServerComponentClientFor,
   createServiceRoleClient,
@@ -35,9 +35,10 @@ export default async function ListeningPracticePage({ params }) {
 
   if (error || !item || item.status !== 'published' || item.type !== 'listening_set') {
     return (
-      <div className="container-read py-12">
-        <h1 className="h-page">Practice set not found</h1>
-        <p className="lead mt-2">This listening set does not exist or is not available right now.</p>
+      <div className="container-read py-12 sm:py-16">
+        <p className="eyebrow !text-copper-700">IELTS Listening</p>
+        <h1 className="h-page mt-2">Practice set not found</h1>
+        <p className="lead mt-3">This listening set does not exist or is not available right now.</p>
         <Link href="/practice" className="btn-primary mt-6">
           <ArrowLeft className="h-4 w-4" aria-hidden="true" /> Back to IELTS
         </Link>
@@ -69,30 +70,32 @@ export default async function ListeningPracticePage({ params }) {
     }
   }
 
-  const chips = [
-    payload.section ? { label: `Part ${payload.section}`, icon: Headphones, tone: 'chip-teal' } : null,
-    { label: `${qs.length} question${qs.length === 1 ? '' : 's'}`, icon: ListChecks },
-    { label: 'Marked instantly', icon: Zap, tone: 'chip-green' },
+  const facts = [
+    payload.section ? `Part ${payload.section}` : null,
+    `${qs.length} question${qs.length === 1 ? '' : 's'}`,
+    'Marked instantly',
   ]
 
   return (
-    <div className="container-app py-6 sm:py-8">
+    <div className="container-app pb-6 pt-4 sm:pt-6">
       <SetHeader
         eyebrow="IELTS Listening"
         title={payload.title || 'Listening set'}
-        chips={chips}
+        chips={facts}
       >
-        <p className="mt-3 max-w-2xl text-[15px] text-ink-500">
+        <p className="mt-3 max-w-[62ch] text-[15px] leading-relaxed text-ink-600">
           Play the recording and answer the questions as you listen. When you finish, press “Check answers”.
+          <span className="lg:hidden"> In the real test you hear each recording once. Here you can pause and replay while you practise.</span>
         </p>
       </SetHeader>
 
-      <div className="mt-6">
+      <div className="mt-5 sm:mt-8">
         <QuestionSetRunner
           item={{ ...item, payload: { ...payload, transcript: undefined } }}
           questions={qs}
           resultBase={`/practice/listening/${item.id}/result`}
           asideTitle="Recording"
+          asideKind="audio"
           aside={<AudioPlayer src={audioSrc} title={payload.title ? `Recording: ${payload.title}` : undefined} />}
         />
       </div>

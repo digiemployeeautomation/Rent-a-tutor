@@ -46,33 +46,30 @@ export default function Navbar() {
   const links = user ? APP_NAV : PUBLIC_NAV
 
   return (
-    <header className="no-print sticky top-0 z-40 border-b border-ink-100 bg-white/90 backdrop-blur-md">
-      <div className="container-app flex h-16 items-center justify-between gap-4">
+    <header className="no-print sticky top-0 z-40 border-b border-ink-200 bg-paper">
+      <div className="container-app flex h-[60px] items-center gap-8">
         <Brand href={user ? '/dashboard/student' : '/'} />
 
-        <nav className="hidden items-center gap-1 md:flex" aria-label="Main">
+        <nav className="hidden h-full items-stretch gap-7 md:flex" aria-label="Main">
           {links.map((link) => {
             const active = isActive(pathname, link)
-            const Icon = link.icon
             return (
               <Link
                 key={link.href}
                 href={link.href}
                 aria-current={active ? 'page' : undefined}
-                className={`inline-flex items-center gap-2 rounded-xl px-3.5 py-2 text-sm font-medium transition-colors ${
-                  active ? 'bg-blue-50 text-blue-700' : 'text-ink-500 hover:bg-ink-50 hover:text-ink-900'
-                }`}
+                className={`relative inline-flex items-center text-[15px] font-semibold ${active ? 'text-ink-900' : 'text-ink-500 hover:text-ink-900'}`}
               >
-                {Icon ? <Icon className="h-4 w-4" aria-hidden="true" /> : null}
                 {link.label}
+                <span className={`absolute inset-x-0 -bottom-px h-[3px] rounded-t-sm bg-board-700 transition-opacity duration-200 ${active ? 'opacity-100' : 'opacity-0'}`} aria-hidden="true" />
               </Link>
             )
           })}
         </nav>
 
-        <div className="flex items-center gap-2">
+        <div className="ml-auto flex items-center gap-2">
           {!ready ? (
-            <div className="h-9 w-24 animate-pulse rounded-xl bg-ink-100" />
+            <div className="h-9 w-24 rounded-md bg-ink-100" />
           ) : user ? (
             <div className="relative" ref={menuRef}>
               <button
@@ -80,17 +77,18 @@ export default function Navbar() {
                 onClick={() => setMenuOpen((v) => !v)}
                 aria-haspopup="menu"
                 aria-expanded={menuOpen}
-                className="flex h-10 w-10 items-center justify-center rounded-full bg-ink-900 text-sm font-semibold text-white ring-2 ring-white transition hover:bg-ink-700"
+                aria-label="Account menu"
+                className="flex h-10 w-10 items-center justify-center rounded-full border border-ink-300 bg-white font-display text-[15px] font-semibold text-ink-900 hover:border-ink-900"
               >
                 {initialOf(user)}
               </button>
               {menuOpen ? (
-                <div role="menu" className="absolute right-0 mt-2 w-60 overflow-hidden rounded-2xl border border-ink-100 bg-white shadow-lift">
-                  <div className="border-b border-ink-100 px-4 py-3">
-                    <p className="truncate text-sm font-semibold text-ink-900">{user.user_metadata?.full_name || 'Student'}</p>
-                    <p className="truncate text-xs text-ink-400">{user.user_metadata?.is_demo ? 'Demo account' : user.email}</p>
+                <div role="menu" className="absolute right-0 mt-2 w-60 animate-fade-in overflow-hidden rounded-xl border border-ink-200 bg-white shadow-lg">
+                  <div className="border-b border-ink-200 px-4 py-3">
+                    <p className="truncate text-sm font-bold text-ink-900">{user.user_metadata?.full_name || 'Student'}</p>
+                    <p className="truncate text-[13px] text-ink-500">{user.user_metadata?.is_demo ? 'Demo account' : user.email}</p>
                   </div>
-                  <button type="button" role="menuitem" onClick={signOut} className="flex w-full items-center gap-2.5 px-4 py-3 text-left text-sm text-ink-700 hover:bg-ink-50">
+                  <button type="button" role="menuitem" onClick={signOut} className="flex min-h-[44px] w-full items-center gap-2.5 px-4 py-3 text-left text-sm font-semibold text-ink-700 hover:bg-ink-50 hover:text-ink-900">
                     <LogOut className="h-4 w-4" aria-hidden="true" /> Sign out
                   </button>
                 </div>
@@ -100,8 +98,8 @@ export default function Navbar() {
             <>
               <Link href="/auth/login" className="btn-ghost btn-sm hidden sm:inline-flex">Log in</Link>
               <Link href="/demo" className="btn-primary btn-sm">Try the demo</Link>
-              <button type="button" className="btn-ghost btn-sm !px-2 md:hidden" aria-label="Menu" onClick={() => setMobileOpen((v) => !v)}>
-                {mobileOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+              <button type="button" className="btn-ghost btn-sm !px-2 md:hidden" aria-label="Menu" aria-expanded={mobileOpen} onClick={() => setMobileOpen((v) => !v)}>
+                {mobileOpen ? <X className="h-5 w-5" aria-hidden="true" /> : <Menu className="h-5 w-5" aria-hidden="true" />}
               </button>
             </>
           )}
@@ -109,11 +107,13 @@ export default function Navbar() {
       </div>
 
       {!user && mobileOpen ? (
-        <nav className="border-t border-ink-100 bg-white px-4 py-3 md:hidden" aria-label="Mobile">
-          {PUBLIC_NAV.map((l) => (
-            <Link key={l.href} href={l.href} className="block rounded-xl px-3 py-3 text-[15px] font-medium text-ink-700 hover:bg-ink-50">{l.label}</Link>
-          ))}
-          <Link href="/auth/login" className="block rounded-xl px-3 py-3 text-[15px] font-medium text-ink-700 hover:bg-ink-50">Log in</Link>
+        <nav className="border-t border-ink-200 bg-paper px-5 py-2 md:hidden" aria-label="Mobile">
+          <div className="divide-y divide-ink-200">
+            {PUBLIC_NAV.map((l) => (
+              <Link key={l.href} href={l.href} className="flex min-h-[48px] items-center text-base font-semibold text-ink-800">{l.label}</Link>
+            ))}
+            <Link href="/auth/login" className="flex min-h-[48px] items-center text-base font-semibold text-ink-800">Log in</Link>
+          </div>
         </nav>
       ) : null}
     </header>

@@ -6,7 +6,7 @@
 // client-readable columns only.
 import Link from 'next/link'
 import { redirect } from 'next/navigation'
-import { ArrowLeft, Clock, ListChecks, Timer, Zap } from 'lucide-react'
+import { ArrowLeft } from 'lucide-react'
 import { createServerComponentClientFor } from '@/lib/supabaseServer'
 import QuestionSetRunner from '@/components/practice/QuestionSetRunner'
 import Passage from '@/components/ielts/Passage'
@@ -32,9 +32,10 @@ export default async function ReadingPracticePage({ params }) {
 
   if (error || !item || item.status !== 'published' || item.type !== 'reading_set') {
     return (
-      <div className="container-read py-12">
-        <h1 className="h-page">Practice set not found</h1>
-        <p className="lead mt-2">This reading set does not exist or is not available right now.</p>
+      <div className="container-read py-12 sm:py-16">
+        <p className="eyebrow !text-copper-700">IELTS Reading</p>
+        <h1 className="h-page mt-2">Practice set not found</h1>
+        <p className="lead mt-3">This reading set does not exist or is not available right now.</p>
         <Link href="/practice" className="btn-primary mt-6">
           <ArrowLeft className="h-4 w-4" aria-hidden="true" /> Back to IELTS
         </Link>
@@ -62,39 +63,39 @@ export default async function ReadingPracticePage({ params }) {
     (payload.is_mock ? proportionalLimit(qs.length) : null)
   const lesson = moduleForDrill(modules ?? [], item.id)
 
-  const chips = [
-    { label: `${qs.length} question${qs.length === 1 ? '' : 's'}`, icon: ListChecks },
+  const facts = [
+    `${qs.length} question${qs.length === 1 ? '' : 's'}`,
     timeLimitSeconds
-      ? { label: `${Math.round(timeLimitSeconds / 60)} min timed`, icon: Timer, tone: 'chip-teal' }
+      ? `${Math.round(timeLimitSeconds / 60)} min timed`
       : payload.minimum_reading_minutes
-        ? { label: `About ${payload.minimum_reading_minutes} min`, icon: Clock }
+        ? `About ${payload.minimum_reading_minutes} min`
         : null,
-    { label: 'Marked instantly', icon: Zap, tone: 'chip-green' },
+    'Marked instantly',
   ]
 
   return (
-    <div className="container-app py-6 sm:py-8">
+    <div className="container-app pb-6 pt-4 sm:pt-6">
       <SetHeader
         backHref={lesson ? `/learn/reading/${lesson.slug}` : '/practice'}
         backLabel={lesson ? `Lesson: ${lesson.title}` : 'IELTS'}
         eyebrow={payload.is_mock ? 'IELTS Reading · Mock exam' : `IELTS Reading · ${variantLabel(item.variant)}`}
         title={payload.title || 'Reading set'}
-        chips={chips}
+        chips={facts}
       >
-        <p className="mt-3 max-w-2xl text-[15px] text-ink-500">
+        <p className="mt-3 max-w-[62ch] text-[15px] leading-relaxed text-ink-600">
           {timeLimitSeconds
             ? 'The clock starts now. Read the passage, answer every question, then press “Check answers”. When time runs out your answers lock.'
             : 'Read the passage, answer the questions, then press “Check answers” to see your score and the reason for each answer.'}
         </p>
       </SetHeader>
 
-      <div className="mt-6">
+      <div className="mt-6 sm:mt-8">
         <QuestionSetRunner
           item={item}
           questions={qs}
           resultBase={`/practice/reading/${item.id}/result`}
           timeLimitSeconds={timeLimitSeconds}
-          asideTitle="Reading passage"
+          asideTitle="Passage"
           aside={payload.passage ? <Passage text={payload.passage} /> : null}
         />
       </div>

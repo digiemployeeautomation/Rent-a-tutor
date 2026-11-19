@@ -12,11 +12,15 @@
 // Props: { itemId, maxSeconds = 120, prepSeconds = 0 }
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { useRouter } from 'next/navigation'
-import {
-  AlertCircle, Hourglass, Loader2, Mic, MicOff, RotateCcw, Send, Square,
-} from 'lucide-react'
+import { ArrowRight, Loader2, Mic, MicOff, RotateCcw, Square } from 'lucide-react'
+import Segments from '@/components/kit/Segments'
+import ClipPlayer from '@/components/practice/ClipPlayer'
 
 const MIN_SECONDS = 2
+// The live meter draws the last METER_BARS loudness samples, one every
+// METER_EVERY animation frames.
+const METER_BARS = 48
+const METER_EVERY = 5
 
 function fmt(seconds) {
   const s = Math.max(0, Math.floor(seconds))
@@ -29,7 +33,7 @@ function pickMimeType() {
   return options.find((t) => MediaRecorder.isTypeSupported(t)) || ''
 }
 
-// Each problem gets a title and a "what to do" line.
+// Each problem gets a title and a "what to do": one line, or numbered steps.
 const PROBLEMS = {
   unsupported: {
     title: 'This browser cannot record audio',
@@ -41,7 +45,12 @@ const PROBLEMS = {
   },
   denied: {
     title: 'Microphone access is blocked',
-    body: 'Tap the lock or settings icon next to the web address, set Microphone to “Allow”, then reload this page. On a phone, also check that your browser is allowed to use the microphone in your phone settings.',
+    steps: [
+      'Tap the lock or settings icon next to the web address.',
+      'Set Microphone to “Allow”.',
+      'Reload this page.',
+    ],
+    body: 'On a phone, also check that your browser is allowed to use the microphone in your phone settings.',
   },
   nomic: {
     title: 'No microphone found',
@@ -49,7 +58,7 @@ const PROBLEMS = {
   },
   busy: {
     title: 'Your microphone is being used by another app',
-    body: 'Close other apps or tabs that might be using it — calls, voice notes, video meetings — then try again.',
+    body: 'Close other apps or tabs that might be using it (calls, voice notes, video meetings), then try again.',
   },
   generic: {
     title: 'We could not start the microphone',
@@ -74,21 +83,28 @@ function friendlySendError(status, step) {
   return 'Something went wrong while sending. Please try again.'
 }
 
-function LevelBars({ level, active }) {
-  // 5 bars that light up with the input level (0..1).
-  const bars = [0.08, 0.2, 0.35, 0.5, 0.7]
+// Live level meter: the recent loudness as a row of bars, newest on the right.
+// Green while there is sound, a flat grey line while it is quiet.
+function LevelMeter({ history }) {
+  const pad = Math.max(0, METER_BARS - history.length)
   return (
-    <div className="flex h-6 items-end gap-1" aria-hidden="true">
-      {bars.map((t, i) => (
-        <span
-          key={i}
-          className={`w-1.5 rounded-full transition-all duration-75 ${active && level > t ? 'bg-emerald-500' : 'bg-ink-200'}`}
-          style={{ height: `${8 + i * 4}px` }}
-        />
-      ))}
+    <div className="flex h-12 items-center justify-between" aria-hidden="true">
+      {Array.from({ length: METER_BARS }, (_, i) => {
+        const lvl = i < pad ? null : history[i - pad]
+        const loud = lvl !== null && lvl > 0.06
+        return (
+          <span
+            key={i}
+            className={`w-[3px] shrink-0 sm:w-1 ${loud ? 'bg-board-600' : lvl === null ? 'bg-ink-200' : 'bg-ink-300'}`}
+            style={{ height: loud ? `${Math.max(10, Math.min(100, lvl * 130))}%` : 3 }}
+          />
+        )
+      })}
     </div>
   )
 }
+
+const SEND_STEPS = { create: 1, upload: 2, grade: 3 }
 
 export default function Recorder({ itemId, maxSeconds = 120, prepSeconds = 0 }) {
   const router = useRouter()
@@ -100,7 +116,7 @@ export default function Recorder({ itemId, maxSeconds = 120, prepSeconds = 0 }) 
   const [error, setError] = useState(null)
   const [elapsed, setElapsed] = useState(0)
   const [prepLeft, setPrepLeft] = useState(prepSeconds)
-  const [level, setLevel] = useState(0)
+  const [history, setHistory] = useState([])
   const [heardSound, setHeardSound] = useState(false)
   const [audioUrl, setAudioUrl] = useState(null)
   const [duration, setDuration] = useState(0)
@@ -130,7 +146,6 @@ export default function Recorder({ itemId, maxSeconds = 120, prepSeconds = 0 }) 
       audioCtxRef.current.close().catch(() => {})
       audioCtxRef.current = null
     }
-    setLevel(0)
   }, [])
 
   const stopStream = useCallback(() => {
@@ -174,14 +189,25 @@ export default function Recorder({ itemId, maxSeconds = 120, prepSeconds = 0 }) 
       source.connect(analyser)
       audioCtxRef.current = ctx
       const buf = new Uint8Array(analyser.fftSize)
+      // For the drawn meter: keep the loudest level of each small batch of frames.
+      let frames = 0
+      let peak = 0
+      let samples = []
       const tick = () => {
         analyser.getByteTimeDomainData(buf)
         let sum = 0
         for (let i = 0; i < buf.length; i++) { const v = (buf[i] - 128) / 128; sum += v * v }
         const rms = Math.sqrt(sum / buf.length)
         const lvl = Math.min(1, rms * 4)
-        setLevel(lvl)
         if (lvl > 0.12) setHeardSound(true)
+        peak = Math.max(peak, lvl)
+        frames += 1
+        if (frames >= METER_EVERY) {
+          samples = [...samples.slice(-(METER_BARS - 1)), peak]
+          setHistory(samples)
+          frames = 0
+          peak = 0
+        }
         rafRef.current = requestAnimationFrame(tick)
       }
       tick()
@@ -205,6 +231,7 @@ export default function Recorder({ itemId, maxSeconds = 120, prepSeconds = 0 }) 
     chunksRef.current = []
     pendingRef.current = null
     setHeardSound(false)
+    setHistory([])
 
     if (!navigator.mediaDevices?.getUserMedia || typeof MediaRecorder === 'undefined') {
       setProblem('unsupported')
@@ -328,151 +355,216 @@ export default function Recorder({ itemId, maxSeconds = 120, prepSeconds = 0 }) 
 
   const blocked = problem === 'unsupported' || problem === 'insecure'
   const recording = phase === 'recording'
+  const requesting = phase === 'requesting'
+  const sending = phase === 'sending'
   const pct = Math.min(100, (elapsed / maxSeconds) * 100)
   const tooShort = phase === 'recorded' && duration < MIN_SECONDS
   const sendLabel = sendStep === 'grade' ? 'Listening to your answer…' : 'Sending your recording…'
+  const info = problem ? PROBLEMS[problem] : null
 
   return (
-    <div className="card overflow-hidden">
-      <div className="card-pad">
-        {/* Status line */}
-        <div className="flex items-center justify-between gap-3">
-          <p className="text-xs font-semibold uppercase tracking-wider text-ink-400">
-            {phase === 'prep' ? 'Preparation time'
-              : recording ? 'Recording'
-              : phase === 'recorded' || phase === 'sending' ? 'Your recording'
-              : 'Recorder'}
+    <div className="card p-5 sm:p-8">
+      {phase === 'prep' ? (
+        /* ── Preparation countdown (Part 2) ── */
+        <div role="timer" aria-live="off">
+          <p className="text-[13px] font-bold text-copper-700">Preparation time</p>
+          <p className="numeral mt-1 text-[4.5rem] leading-none text-ink-900">{fmt(prepLeft)}</p>
+          <div className="progress-track mt-4 max-w-xs" aria-hidden="true">
+            <div className="h-full rounded-full bg-copper-500" style={{ width: `${prepSeconds ? ((prepSeconds - prepLeft) / prepSeconds) * 100 : 0}%` }} />
+          </div>
+          <p className="mt-4 max-w-[52ch] text-[15px] leading-relaxed text-ink-600">
+            Think about what you will say for each point on the card. You can make short notes on paper. Recording does not start by itself.
           </p>
-          {recording ? (
-            <span className="inline-flex items-center gap-2 text-sm font-semibold text-rose-600">
-              <span className="relative flex h-2.5 w-2.5" aria-hidden="true">
-                <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-rose-400 opacity-75" />
-                <span className="relative inline-flex h-2.5 w-2.5 rounded-full bg-rose-600" />
-              </span>
-              Recording
-            </span>
-          ) : null}
-        </div>
-
-        {/* Main control area */}
-        {phase === 'prep' ? (
-          <div className="mt-4 flex flex-col items-center text-center" role="timer" aria-live="off">
-            <Hourglass className="h-6 w-6 text-sun-500" aria-hidden="true" />
-            <p className="mt-2 font-display text-5xl font-bold tabular-nums text-ink-900">{fmt(prepLeft)}</p>
-            <p className="mt-2 max-w-xs text-sm text-ink-500">Think about what you will say for each point on the card. You can make short notes on paper.</p>
-            <button type="button" className="btn-primary btn-lg mt-5" onClick={() => { setPhase('idle'); startRecording() }}>
-              <Mic className="h-5 w-5" aria-hidden="true" /> I’m ready — start recording
+          <div className="mt-5 flex flex-col gap-3 sm:flex-row">
+            <button type="button" className="btn-primary btn-lg" onClick={() => { setPhase('idle'); startRecording() }}>
+              <Mic className="h-5 w-5" aria-hidden="true" /> I’m ready, start recording
             </button>
+            <button type="button" className="btn-ghost btn-lg" onClick={() => setPhase('idle')}>Stop the timer</button>
           </div>
-        ) : phase === 'recorded' || phase === 'sending' ? (
-          <div className="mt-4">
-            {audioUrl ? (
-              <audio controls src={audioUrl} className="w-full" preload="metadata">
-                Your browser cannot play the recording back, but you can still send it.
-              </audio>
-            ) : null}
-            <p className="mt-2 text-sm text-ink-500">
-              Length {fmt(duration)}. Listen back — if you are happy, send it. If not, record again.
+        </div>
+      ) : phase === 'recorded' || sending ? (
+        /* ── Recorded: listen back, then send or record again ── */
+        <div>
+          {audioUrl ? (
+            <ClipPlayer
+              src={audioUrl}
+              duration={duration}
+              disabled={sending}
+              failedText="Your browser cannot play the recording back, but you can still send it."
+            />
+          ) : null}
+
+          {tooShort ? (
+            <p className="mt-5 rounded-lg bg-sun-100 px-4 py-3 text-[15px] leading-relaxed text-ink-800">
+              <strong className="font-bold text-ink-900">Too short to mark.</strong>{' '}
+              That recording is under {MIN_SECONDS} seconds. Record again and speak for longer to get useful feedback.
             </p>
-            {tooShort ? (
-              <p className="mt-3 rounded-xl bg-sun-50 px-4 py-3 text-sm text-ink-700">
-                That recording is very short. Record again and speak for longer to get useful feedback.
+          ) : !heardSound && phase === 'recorded' ? (
+            <p className="mt-5 rounded-lg bg-sun-100 px-4 py-3 text-[15px] leading-relaxed text-ink-800">
+              <strong className="font-bold text-ink-900">Very quiet.</strong>{' '}
+              We did not hear much sound. Play it back to check your microphone picked you up.
+            </p>
+          ) : null}
+
+          {error ? (
+            <p role="alert" className="mt-5 rounded-lg bg-rose-50 px-4 py-3 text-[15px] leading-relaxed text-ink-800">
+              <strong className="font-bold text-rose-700">Not sent.</strong> {error}
+            </p>
+          ) : null}
+
+          {sending ? (
+            <div role="status" className="mt-6 border-t border-ink-200 pt-5">
+              <p className="flex items-center gap-2.5 text-[17px] font-bold text-ink-900">
+                <Loader2 className="h-5 w-5 shrink-0 animate-spin text-board-700" aria-hidden="true" /> {sendLabel}
               </p>
-            ) : !heardSound && phase === 'recorded' ? (
-              <p className="mt-3 rounded-xl bg-sun-50 px-4 py-3 text-sm text-ink-700">
-                We did not hear much sound. Play it back to check your microphone picked you up.
-              </p>
-            ) : null}
-            <div className="mt-5 flex flex-col-reverse gap-3 sm:flex-row sm:justify-end">
-              <button type="button" className="btn-secondary btn-lg" onClick={reRecord} disabled={phase === 'sending'}>
-                <RotateCcw className="h-5 w-5" aria-hidden="true" /> Record again
-              </button>
-              <button type="button" className="btn-primary btn-lg" onClick={send} disabled={phase === 'sending' || tooShort}>
-                {phase === 'sending'
-                  ? <><Loader2 className="h-5 w-5 animate-spin" aria-hidden="true" /> {sendLabel}</>
-                  : <><Send className="h-5 w-5" aria-hidden="true" /> Send for feedback</>}
-              </button>
+              <Segments total={3} done={SEND_STEPS[sendStep] || 1} className="mt-3 max-w-[200px]" label={`Step ${SEND_STEPS[sendStep] || 1} of 3`} />
+              <p className="mt-3 text-[15px] leading-relaxed text-ink-600">This usually takes a few seconds. Please keep this page open.</p>
             </div>
-            {phase === 'sending' ? (
-              <p role="status" className="mt-3 text-center text-sm text-ink-500 sm:text-right">This usually takes a few seconds. Please keep this page open.</p>
-            ) : null}
-          </div>
-        ) : (
-          <div className="mt-4 flex flex-col items-center text-center">
+          ) : (
+            <div className="mt-6 border-t border-ink-200 pt-5">
+              <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
+                {tooShort ? (
+                  <button type="button" className="btn-primary btn-lg" onClick={reRecord}>
+                    <RotateCcw className="h-5 w-5" aria-hidden="true" /> Record again
+                  </button>
+                ) : (
+                  <>
+                    <button type="button" className="btn-primary btn-lg group" onClick={send}>
+                      Send for feedback <ArrowRight className="nudge h-5 w-5" aria-hidden="true" />
+                    </button>
+                    <button type="button" className="btn-secondary btn-lg" onClick={reRecord}>
+                      <RotateCcw className="h-5 w-5" aria-hidden="true" /> Record again
+                    </button>
+                  </>
+                )}
+              </div>
+              {tooShort ? null : (
+                <p className="mt-3 text-[15px] leading-relaxed text-ink-600">
+                  Listen back first. If you are happy with it, send it. If not, record again: the old recording is replaced.
+                </p>
+              )}
+            </div>
+          )}
+        </div>
+      ) : (
+        /* ── Idle, asking for the microphone, recording ── */
+        <div>
+          <div className="flex items-center gap-4 sm:gap-5">
             <button
               type="button"
               onClick={recording ? stopRecording : startRecording}
-              disabled={blocked || phase === 'requesting'}
+              disabled={blocked || requesting}
               aria-label={recording ? 'Stop recording' : 'Start recording'}
-              className={`relative flex h-24 w-24 items-center justify-center rounded-full text-white shadow-lift transition-all focus:outline-none focus-visible:ring-4 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 ${
-                recording ? 'bg-rose-600 hover:bg-rose-700 focus-visible:ring-rose-300' : 'bg-blue-600 hover:bg-blue-700 focus-visible:ring-blue-300'
+              className={`flex h-[72px] w-[72px] shrink-0 items-center justify-center rounded-full text-chalk shadow-[inset_0_-3px_0_rgba(5,30,18,0.3)] transition-colors duration-150 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 active:translate-y-px active:shadow-none disabled:cursor-not-allowed ${
+                recording ? 'bg-rose-600 hover:bg-rose-700 focus-visible:ring-rose-600'
+                  : blocked ? 'bg-ink-300 shadow-none'
+                  : requesting ? 'bg-board-500'
+                  : 'bg-board-700 hover:bg-board-800 focus-visible:ring-board-600'
               }`}
             >
-              {recording ? (
-                <span
-                  className="pointer-events-none absolute inset-0 rounded-full ring-rose-300 transition-all duration-75"
-                  style={{ boxShadow: `0 0 0 ${Math.round(level * 18)}px rgba(244,63,94,0.18)` }}
-                  aria-hidden="true"
-                />
-              ) : null}
-              {phase === 'requesting'
-                ? <Loader2 className="h-9 w-9 animate-spin" aria-hidden="true" />
-                : recording ? <Square className="h-8 w-8 fill-current" aria-hidden="true" />
-                : blocked ? <MicOff className="h-9 w-9" aria-hidden="true" />
-                : <Mic className="h-9 w-9" aria-hidden="true" />}
+              {requesting ? <Loader2 className="h-7 w-7 animate-spin" aria-hidden="true" />
+                : recording ? <Square className="h-6 w-6 fill-current" aria-hidden="true" />
+                : blocked ? <MicOff className="h-7 w-7" aria-hidden="true" />
+                : <Mic className="h-7 w-7" aria-hidden="true" />}
             </button>
 
-            <p className="mt-4 font-display text-4xl font-bold tabular-nums text-ink-900" aria-live="off">
-              {fmt(elapsed)}
-              <span className="ml-1 text-lg font-medium text-ink-300">/ {fmt(maxSeconds)}</span>
-            </p>
-
             {recording ? (
-              <>
-                <div className="mt-3 flex items-center gap-3">
-                  <LevelBars level={level} active />
-                  <span className="text-sm text-ink-500">{heardSound ? 'We can hear you' : 'Start speaking…'}</span>
-                </div>
-                <div className="progress-track mt-4 h-1.5 max-w-xs" aria-hidden="true">
-                  <div className="h-full rounded-full bg-rose-500" style={{ width: `${pct}%` }} />
-                </div>
-                <p className="mt-3 text-sm text-ink-500">Press the square to stop. Recording stops by itself at {fmt(maxSeconds)}.</p>
-              </>
-            ) : phase === 'requesting' ? (
-              <p className="mt-2 text-sm text-ink-500" role="status">Your browser is asking to use the microphone. Choose <strong className="font-semibold text-ink-700">Allow</strong>.</p>
-            ) : blocked ? null : (
-              <>
-                <p className="mt-2 text-sm text-ink-500">Press the microphone to start. Your browser will ask to use it — choose <strong className="font-semibold text-ink-700">Allow</strong>.</p>
-                {prepSeconds > 0 ? (
-                  <button type="button" className="btn-secondary btn-sm mt-4" onClick={() => { setPrepLeft(prepSeconds); setPhase('prep') }}>
-                    <Hourglass className="h-4 w-4" aria-hidden="true" /> Start {fmt(prepSeconds)} preparation first
-                  </button>
-                ) : null}
-              </>
+              <div className="min-w-0">
+                <p className="flex items-center gap-2 text-[13px] font-bold text-rose-700">
+                  <span className="relative flex h-2.5 w-2.5" aria-hidden="true">
+                    <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-rose-400 opacity-75" />
+                    <span className="relative inline-flex h-2.5 w-2.5 rounded-full bg-rose-600" />
+                  </span>
+                  Recording
+                </p>
+                <p className="mt-1 text-[17px] font-semibold text-ink-500 tabular" aria-live="off">
+                  <span className="numeral text-[2.75rem] leading-none text-ink-900">{fmt(elapsed)}</span>
+                  {' '}/ {fmt(maxSeconds)}
+                </p>
+              </div>
+            ) : requesting ? (
+              <div className="min-w-0" role="status">
+                <p className="text-[17px] font-bold leading-snug text-ink-900">Waiting for the microphone</p>
+                <p className="mt-1 text-[15px] leading-snug text-ink-600">
+                  Your browser is asking to use it. Choose <strong className="font-bold text-ink-900">Allow</strong>.
+                </p>
+              </div>
+            ) : blocked ? (
+              <div className="min-w-0">
+                <p className="text-[17px] font-bold leading-snug text-ink-900">Recording is not available</p>
+                <p className="mt-1 text-[15px] leading-snug text-ink-600">See how to fix it below.</p>
+              </div>
+            ) : (
+              <div className="min-w-0">
+                <p className="text-[17px] font-bold leading-snug text-ink-900">{problem ? 'Recording did not start' : 'Start recording'}</p>
+                <p className="mt-1 text-[15px] leading-snug text-ink-600">
+                  {problem ? 'See how to fix it below, then press the button to try again.' : (
+                    <>Speak for up to <span className="font-semibold text-ink-900 tabular">{fmt(maxSeconds)}</span>. Press the button again to stop.</>
+                  )}
+                </p>
+              </div>
             )}
           </div>
-        )}
 
-        {problem ? (
-          <div role="alert" className="mt-5 flex gap-3 rounded-xl border border-rose-200 bg-rose-50 p-4">
-            <MicOff className="mt-0.5 h-5 w-5 shrink-0 text-rose-600" aria-hidden="true" />
-            <div>
-              <p className="font-semibold text-rose-800">{PROBLEMS[problem].title}</p>
-              <p className="mt-1 text-sm leading-relaxed text-ink-700">{PROBLEMS[problem].body}</p>
+          {recording ? (
+            <div className="mt-6">
+              <LevelMeter history={history} />
+              <div className="progress-track mt-3 h-1" aria-hidden="true">
+                <div className="h-full rounded-full bg-ink-900" style={{ width: `${pct}%` }} />
+              </div>
+              <p className="mt-3 text-[15px] leading-relaxed text-ink-600">
+                <strong className={`font-bold ${heardSound ? 'text-board-700' : 'text-ink-900'}`}>{heardSound ? 'We can hear you.' : 'Start speaking.'}</strong>{' '}
+                Press the red button to stop. Recording stops by itself at {fmt(maxSeconds)}.
+              </p>
+            </div>
+          ) : null}
+
+          {info ? (
+            <div role="alert" className="mt-6 rounded-lg bg-rose-50 px-4 py-4 sm:px-5">
+              <p className="text-[17px] font-bold leading-snug text-rose-700">{info.title}</p>
+              {info.steps ? (
+                <ol className="mt-3 space-y-1.5">
+                  {info.steps.map((s, i) => (
+                    <li key={s} className="flex items-baseline gap-3 text-[15px] leading-relaxed text-ink-800">
+                      <span className="numeral w-4 shrink-0 text-lg leading-none text-ink-900" aria-hidden="true">{i + 1}</span>
+                      <span>{s}</span>
+                    </li>
+                  ))}
+                </ol>
+              ) : null}
+              <p className={`${info.steps ? 'mt-3' : 'mt-1.5'} text-[15px] leading-relaxed text-ink-800`}>{info.body}</p>
               {!blocked ? (
-                <button type="button" className="btn-secondary btn-sm mt-3" onClick={startRecording}>Try again</button>
+                <button type="button" className="btn-secondary btn-sm mt-4" onClick={startRecording}>Try again</button>
               ) : null}
             </div>
-          </div>
-        ) : null}
+          ) : null}
 
-        {error ? (
-          <div role="alert" className="mt-4 flex gap-2.5 rounded-xl border border-rose-200 bg-rose-50 px-4 py-3 text-sm text-rose-800">
-            <AlertCircle className="mt-0.5 h-4 w-4 shrink-0" aria-hidden="true" />
-            <p>{error}</p>
-          </div>
-        ) : null}
-      </div>
+          {!recording && !requesting && !blocked && !problem ? (
+            <div className="mt-6 border-t border-ink-200 pt-4">
+              {prepSeconds > 0 ? (
+                <div className="flex flex-col gap-x-4 gap-y-3 sm:flex-row sm:items-center sm:justify-between">
+                  <p className="text-[15px] leading-relaxed text-ink-600">
+                    Want exam conditions? Take <span className="font-semibold text-ink-900 tabular">{fmt(prepSeconds)}</span> to prepare first.
+                  </p>
+                  <button type="button" className="btn-secondary shrink-0" onClick={() => { setPrepLeft(prepSeconds); setPhase('prep') }}>
+                    Start preparation timer
+                  </button>
+                </div>
+              ) : (
+                <p className="text-[15px] leading-relaxed text-ink-600">
+                  The first time, your browser asks to use the microphone. Choose <strong className="font-bold text-ink-900">Allow</strong>.
+                </p>
+              )}
+            </div>
+          ) : null}
+
+          {error ? (
+            <p role="alert" className="mt-5 rounded-lg bg-rose-50 px-4 py-3 text-[15px] leading-relaxed text-ink-800">
+              <strong className="font-bold text-rose-700">Something went wrong.</strong> {error}
+            </p>
+          ) : null}
+        </div>
+      )}
     </div>
   )
 }

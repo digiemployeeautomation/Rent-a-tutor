@@ -1,16 +1,18 @@
 // app/practice/speaking/[itemId]/result/[submissionId]/page.js
 //
-// A graded Speaking submission: honesty notice (demo stub vs AI examiner),
-// overall band, the four criteria with feedback, the student's recording
+// A graded Speaking submission: overall band, honesty notice (demo sample vs
+// AI examiner), the four criteria with feedback, the student's recording
 // (service-role signed URL — private bucket) and the transcript the grade was
 // based on. Auth-gated; RLS ensures users only ever see their own grades.
 import Link from 'next/link'
 import { redirect } from 'next/navigation'
-import { ArrowLeft, ArrowRight, Mic } from 'lucide-react'
+import { ArrowLeft } from 'lucide-react'
 import { createServerComponentClientFor, createServiceRoleClient } from '@/lib/supabaseServer'
 import { signedAudioUrl, SUBMISSION_AUDIO_BUCKET } from '@/lib/storage/audio'
+import SubjectArt from '@/components/art/SubjectArt'
+import ClipPlayer from '@/components/practice/ClipPlayer'
 import {
-  BandHighlights, CriteriaBands, GradeFailed, GradeNotice, GradePending, OverallBand,
+  BandHighlights, CriteriaBands, GradeFailed, GradeNotice, GradePending, ResultHeader, ResultScale,
   SPEAKING_CRITERIA, isStubGrade,
 } from '@/components/ielts/BandCriteria'
 
@@ -19,6 +21,8 @@ export const metadata = { title: 'Your Speaking feedback' }
 // Per-user, per-submission — never cacheable. Forcing dynamic prevents a
 // stale "grading in progress" view if a user lands before the grade commits.
 export const dynamic = 'force-dynamic'
+
+const EYEBROW = 'IELTS Speaking · Your result'
 
 export default async function SpeakingResultPage({ params }) {
   const supabase = createServerComponentClientFor()
@@ -45,13 +49,11 @@ export default async function SpeakingResultPage({ params }) {
 
   if (!submission || submission.user_id !== user.id) {
     return (
-      <div className="container-read py-10">
-        <div className="card card-pad text-center">
-          <span className="icon-tile mx-auto bg-ink-50 text-ink-500"><Mic className="h-5 w-5" aria-hidden="true" /></span>
-          <h1 className="h-section mt-4">We could not find this result</h1>
-          <p className="mt-1 text-ink-500">It may belong to another account, or the link is wrong.</p>
-          <Link href="/practice" className="btn-primary mt-5">Back to IELTS</Link>
-        </div>
+      <div className="container-read py-16 text-center sm:py-24">
+        <SubjectArt name="speaking" tone="copper" className="mx-auto h-24 w-24" />
+        <h1 className="h-section mt-6">We could not find this result</h1>
+        <p className="mx-auto mt-2 max-w-sm text-[17px] leading-relaxed text-ink-600">It may belong to another account, or the link is wrong.</p>
+        <Link href="/practice" className="btn-primary mt-6">Back to IELTS</Link>
       </div>
     )
   }
@@ -84,76 +86,87 @@ export default async function SpeakingResultPage({ params }) {
     : null
 
   return (
-    <div className="container-read py-6 sm:py-10">
-      <Link href="/practice" className="inline-flex min-h-[44px] items-center gap-1.5 text-sm font-medium text-ink-400 hover:text-ink-700">
+    <div className="container-read pb-16 pt-6 sm:pt-10">
+      <Link href="/practice" className="inline-flex min-h-[44px] items-center gap-1.5 text-sm font-semibold text-ink-500 hover:text-ink-900">
         <ArrowLeft className="h-4 w-4" aria-hidden="true" /> IELTS practice
       </Link>
+      <h1 className="sr-only">Speaking result: {title}</h1>
 
-      <p className="mt-2 text-xs font-semibold uppercase tracking-[0.14em] text-teal-700">Speaking feedback</p>
-      <h1 className="h-page mt-1">{title}</h1>
-      {submittedAt ? <p className="mt-1 text-sm text-ink-400">Recorded {submittedAt}</p> : null}
-
-      <div className="mt-6 space-y-6">
+      <div className="mt-3 sm:mt-5">
         {!grade ? (
-          <GradePending href={`${taskHref}/result/${params.submissionId}`} />
+          <GradePending href={`${taskHref}/result/${params.submissionId}`} eyebrow={EYEBROW} what="recording" />
         ) : !graded ? (
-          <GradeFailed retryHref={taskHref} retryLabel="Record again" />
+          <GradeFailed retryHref={taskHref} retryLabel="Record again" eyebrow={EYEBROW} />
         ) : (
           <>
+            <ResultHeader eyebrow={EYEBROW} band={grade.band_overall} sample={stub} meta={title} />
             <GradeNotice gradedBy={grade.graded_by} skill="speaking" />
-            <OverallBand band={grade.band_overall} sample={stub} />
-            {/* Strongest / weakest is a diagnosis — only show it for a real assessment. */}
-            {stub ? null : <BandHighlights bands={grade.band_per_criterion} criteria={SPEAKING_CRITERIA} />}
+            <ResultScale band={grade.band_overall} />
 
-            <section aria-labelledby="criteria-heading">
-              <h2 id="criteria-heading" className="h-section">Your four scores</h2>
-              <p className="mt-1 text-sm text-ink-500">Examiners mark every speaking test on these four things. Your overall band is their average.</p>
-              <div className="mt-3">
-                <CriteriaBands bands={grade.band_per_criterion} feedback={grade.feedback?.per_criterion} criteria={SPEAKING_CRITERIA} />
+            <section aria-labelledby="criteria-heading" className="mt-14 sm:mt-16">
+              <div className="rule-head">
+                <h2 id="criteria-heading" className="h-section">Your four scores</h2>
+                <p className="shrink-0 text-[13px] font-semibold text-ink-500">Band, on the 4 to 9 scale</p>
               </div>
+              <CriteriaBands bands={grade.band_per_criterion} feedback={grade.feedback?.per_criterion} criteria={SPEAKING_CRITERIA} />
+              <p className="mt-4 text-[15px] leading-relaxed text-ink-600">
+                Examiners mark every speaking test on these four things. Your overall band is their average.
+              </p>
             </section>
+
+            {/* Strongest / weakest is a diagnosis: only show it for a real assessment. */}
+            {stub ? null : (
+              <section aria-label="Summary" className="mt-12">
+                <BandHighlights bands={grade.band_per_criterion} criteria={SPEAKING_CRITERIA} />
+              </section>
+            )}
           </>
         )}
 
-        <section aria-labelledby="recording-heading">
-          <h2 id="recording-heading" className="h-section">Your recording</h2>
+        <section aria-labelledby="recording-heading" className="mt-14 sm:mt-16">
+          <div className="rule-head">
+            <h2 id="recording-heading" className="h-section">Your recording</h2>
+            {submittedAt ? <p className="shrink-0 text-[13px] font-semibold text-ink-500 tabular">Recorded {submittedAt}</p> : null}
+          </div>
           {playbackUrl ? (
-            <div className="card card-pad mt-3">
-              <audio controls preload="metadata" src={playbackUrl} className="w-full">
-                Your browser cannot play this recording.
-              </audio>
-              <p className="mt-2 text-xs text-ink-400">Listen again and compare it with the feedback above.</p>
-            </div>
+            <>
+              <ClipPlayer src={playbackUrl} label={title} className="mt-6" />
+              <p className="mt-3 text-[15px] leading-relaxed text-ink-600">Listen again and compare it with the feedback above.</p>
+            </>
           ) : (
-            <p className="card card-pad mt-3 text-sm text-ink-400">
+            <p className="mt-4 text-[17px] leading-relaxed text-ink-600">
               {audioPath ? 'Your recording could not be loaded right now. Refresh the page to try again.' : 'No recording was saved for this attempt.'}
             </p>
           )}
         </section>
 
         {graded && transcript ? (
-          <section aria-labelledby="transcript-heading">
-            <h2 id="transcript-heading" className="h-section">{stub ? 'Sample transcript' : 'What we heard'}</h2>
-            <p className="mt-1 text-sm text-ink-500">
+          <section aria-labelledby="transcript-heading" className="mt-14 sm:mt-16">
+            <div className="rule-head">
+              <h2 id="transcript-heading" className="h-section">{stub ? 'Sample transcript' : 'What we heard'}</h2>
+            </div>
+            <p className="mt-3 max-w-[62ch] text-[15px] leading-relaxed text-ink-600">
               {stub
                 ? 'Demo mode: this is a fixed example sentence, not a transcript of your recording.'
                 : 'An automatic transcript of your recording. The scores above are based on it, so unclear words can affect them.'}
             </p>
-            <blockquote className={`card card-pad mt-3 whitespace-pre-wrap text-[15px] leading-relaxed ${stub ? 'border-dashed text-ink-500' : 'text-ink-700'}`}>
+            <blockquote className="sheet mt-5 whitespace-pre-wrap break-words p-6 text-[17px] leading-[1.7] text-ink-800 sm:p-9">
               {transcript}
             </blockquote>
           </section>
         ) : null}
 
-        <div className="flex flex-col gap-3 pt-2 sm:flex-row">
-          <Link href="/practice" className="btn-primary btn-lg">
-            <Mic className="h-5 w-5" aria-hidden="true" /> Try another task
-          </Link>
-          <Link href={taskHref} className="btn-secondary btn-lg">Record this one again</Link>
-          <Link href="/practice" className="btn-ghost btn-lg sm:ml-auto">
-            Back to IELTS <ArrowRight className="h-4 w-4" aria-hidden="true" />
-          </Link>
-        </div>
+        {/* A failed grade shows its own actions; while marking, "Check again" is the main one. */}
+        {graded ? (
+          <div className="mt-10 flex flex-col gap-3 sm:flex-row">
+            <Link href={taskHref} className="btn-primary btn-lg">Record this one again</Link>
+            <Link href="/practice" className="btn-secondary btn-lg">Back to IELTS</Link>
+          </div>
+        ) : !grade ? (
+          <div className="mt-10">
+            <Link href="/practice" className="btn-secondary btn-lg">Back to IELTS</Link>
+          </div>
+        ) : null}
       </div>
     </div>
   )

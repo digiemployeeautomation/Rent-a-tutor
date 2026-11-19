@@ -7,7 +7,7 @@
 //     31-45:  2010 = 2.5,  2020 = 2.9
 //
 // splitTaskData() pulls that block out of the prompt so it can be drawn as a
-// readable table + bar chart instead of monospace-looking text. If the prompt
+// flat bar chart and a ruled table instead of monospace-looking text. If the prompt
 // has no such block, the prompt is returned untouched and data is null.
 // Server-safe (no hooks).
 
@@ -50,41 +50,46 @@ export function splitTaskData(prompt) {
   return { promptText: text, data: null }
 }
 
-const SERIES_COLOURS = ['bg-teal-600', 'bg-sun-400', 'bg-blue-600', 'bg-ink-400']
+// Flat series colours: chalkboard green, then copper. More than two series is
+// rare in Task 1; the later ones stay in the palette.
+const SERIES_COLOURS = ['bg-board-600', 'bg-copper-500', 'bg-ink-700', 'bg-sun-400']
 
 export function TaskDataView({ data }) {
   if (!data) return null
   const max = Math.max(...data.rows.flatMap((r) => r.values.map((v) => v.value)), 0) || 1
   const valueOf = (row, s) => row.values.find((v) => v.series === s)?.value
+  const unit = data.unit ? data.unit.charAt(0).toUpperCase() + data.unit.slice(1) : ''
 
   return (
-    <figure className="rounded-2xl border border-ink-100 bg-paper p-4 sm:p-5">
-      <figcaption className="text-xs font-semibold uppercase tracking-wider text-ink-500">{data.title}</figcaption>
+    <figure>
+      <figcaption className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
+        <span className="h-sub">{unit || data.title}</span>
+        {/* Key: which colour is which series */}
+        <span className="flex flex-wrap gap-x-4 gap-y-1" aria-hidden="true">
+          {data.series.map((s, i) => (
+            <span key={s} className="inline-flex items-center gap-1.5 text-[13px] font-semibold text-ink-700 tabular">
+              <span className={`h-2.5 w-2.5 ${SERIES_COLOURS[i % SERIES_COLOURS.length]}`} /> {s}
+            </span>
+          ))}
+        </span>
+      </figcaption>
 
-      {/* Legend */}
-      <div className="mt-3 flex flex-wrap gap-x-4 gap-y-1" aria-hidden="true">
-        {data.series.map((s, i) => (
-          <span key={s} className="inline-flex items-center gap-1.5 text-xs font-medium text-ink-600">
-            <span className={`h-2.5 w-2.5 rounded-sm ${SERIES_COLOURS[i % SERIES_COLOURS.length]}`} /> {s}
-          </span>
-        ))}
-      </div>
-
-      {/* Bar chart (visual) */}
-      <div className="mt-3 space-y-3" aria-hidden="true">
+      {/* Chart: flat bars from one axis line, each labelled with its value */}
+      <div className="mt-4 grid grid-cols-[auto_minmax(0,1fr)]" aria-hidden="true">
         {data.rows.map((row) => (
-          <div key={row.label}>
-            <p className="text-sm font-semibold text-ink-800">{row.label}</p>
-            <div className="mt-1 space-y-1">
+          <div key={row.label} className="contents">
+            <p className="flex max-w-[8rem] items-center pr-3 text-[15px] font-bold leading-tight text-ink-900 tabular">{row.label}</p>
+            <div className="space-y-[3px] border-l border-ink-900 py-2">
               {data.series.map((s, i) => {
                 const v = valueOf(row, s)
                 if (v == null) return null
                 return (
                   <div key={s} className="flex items-center gap-2">
-                    <div className="h-3 flex-1 overflow-hidden rounded-full bg-white">
-                      <div className={`h-full rounded-full ${SERIES_COLOURS[i % SERIES_COLOURS.length]}`} style={{ width: `${(v / max) * 100}%` }} />
-                    </div>
-                    <span className="w-9 shrink-0 text-right text-xs font-semibold tabular-nums text-ink-700">{v}</span>
+                    <span
+                      className={`h-3.5 min-w-[2px] ${SERIES_COLOURS[i % SERIES_COLOURS.length]}`}
+                      style={{ width: `calc((100% - 2.75rem) * ${Math.max(0, v) / max})` }}
+                    />
+                    <span className="text-[13px] font-bold leading-none text-ink-800 tabular">{v}</span>
                   </div>
                 )
               })}
@@ -93,29 +98,26 @@ export function TaskDataView({ data }) {
         ))}
       </div>
 
-      {/* Table: the screen-reader version of the chart (the bars show the same numbers) */}
-      <div className="sr-only">
-        <table className="w-full text-left text-sm">
-          <caption className="sr-only">{data.title}</caption>
-          <thead>
-            <tr className="border-b border-ink-100 text-xs uppercase tracking-wider text-ink-400">
-              <th scope="col" className="px-3 py-2 font-semibold">Group</th>
-              {data.series.map((s) => <th key={s} scope="col" className="px-3 py-2 text-right font-semibold">{s}</th>)}
+      {/* Table: the exact figures (and the screen-reader version of the chart) */}
+      <table className="mt-5 w-full border-collapse text-left text-[15px]">
+        <caption className="sr-only">{data.title}{data.unit ? ` (${data.unit})` : ''}</caption>
+        <thead>
+          <tr className="border-b-2 border-ink-900">
+            <th scope="col" className="py-2 pr-3 text-[13px] font-bold text-ink-600">{data.title}</th>
+            {data.series.map((s) => <th key={s} scope="col" className="py-2 pl-3 text-right text-[13px] font-bold text-ink-900 tabular">{s}</th>)}
+          </tr>
+        </thead>
+        <tbody>
+          {data.rows.map((row) => (
+            <tr key={row.label} className="border-b border-ink-200">
+              <th scope="row" className="py-2 pr-3 font-semibold text-ink-900 tabular">{row.label}</th>
+              {data.series.map((s) => (
+                <td key={s} className="py-2 pl-3 text-right text-ink-800 tabular">{valueOf(row, s) ?? '–'}</td>
+              ))}
             </tr>
-          </thead>
-          <tbody>
-            {data.rows.map((row) => (
-              <tr key={row.label} className="border-b border-ink-50 last:border-0">
-                <th scope="row" className="px-3 py-2 font-medium text-ink-800">{row.label}</th>
-                {data.series.map((s) => (
-                  <td key={s} className="px-3 py-2 text-right tabular-nums text-ink-700">{valueOf(row, s) ?? '–'}</td>
-                ))}
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
-      {data.unit ? <p className="mt-3 text-xs text-ink-400">All figures are {data.unit}.</p> : null}
+          ))}
+        </tbody>
+      </table>
     </figure>
   )
 }

@@ -2,9 +2,10 @@
 // A real quick-check from "What is a fraction?" (Mathematics, Form 1) that a
 // visitor can answer right on the landing page. Text copied from
 // content/highschool/mathematics/1-what-is-a-fraction.json.
+// Drawn as a paper sheet: it lies on the chalkboard in the hero.
 import Link from 'next/link'
 import { useState } from 'react'
-import { ArrowRight, Check, CheckCircle2, Lightbulb, RotateCcw, X } from 'lucide-react'
+import { ArrowRight, Check, RotateCcw, X } from 'lucide-react'
 
 const ITEM = {
   question: 'A farmer in Mumbwa has 45 kg of maize seed. He plants 2/3 of it. How many kilograms does he plant?',
@@ -16,7 +17,7 @@ const ITEM = {
 const LETTERS = ['A', 'B', 'C', 'D']
 const LESSON_HREF = '/learn/high-school/mathematics/1-what-is-a-fraction'
 
-export default function SampleQuestion() {
+export default function SampleQuestion({ className = '' }) {
   const [picked, setPicked] = useState(null)
   const [checked, setChecked] = useState(false)
   const correct = checked && picked === ITEM.answer
@@ -27,82 +28,81 @@ export default function SampleQuestion() {
   }
 
   return (
-    <div className="card overflow-hidden">
-      <div className="flex items-center justify-between gap-3 border-b border-ink-100 px-5 py-3.5 sm:px-6">
-        <span className="chip-blue">Mathematics · Form 1</span>
-        <span className="text-xs font-medium text-ink-400">Quick check</span>
+    <div className={`sheet p-5 sm:p-6 ${className}`}>
+      <p className="flex items-baseline justify-between gap-3 text-[13px] font-semibold text-ink-500">
+        <span>Mathematics · Form 1</span>
+        <span>Quick check</span>
+      </p>
+
+      <p id="sample-q" className="mt-3 font-display text-[1.1875rem] font-semibold leading-snug text-ink-900 sm:text-[1.3125rem]" style={{ letterSpacing: '-0.015em' }}>
+        {ITEM.question}
+      </p>
+
+      <div className="mt-5 grid gap-2.5 sm:grid-cols-2" role="radiogroup" aria-labelledby="sample-q">
+        {ITEM.options.map((opt, i) => {
+          const isPicked = picked === i
+          const isRight = i === ITEM.answer
+          let row = 'border-ink-300 bg-white hover:border-ink-900'
+          let letter = ''
+          if (checked && isRight) { row = 'border-board-700 bg-board-50 ring-1 ring-inset ring-board-700'; letter = 'border-board-700 bg-board-700 text-chalk' }
+          else if (checked && isPicked) { row = 'border-rose-600 bg-rose-50 ring-1 ring-inset ring-rose-600'; letter = 'border-rose-600 bg-rose-600 text-white' }
+          else if (checked) { row = 'border-ink-200 bg-white opacity-55' }
+          else if (isPicked) { row = 'border-board-700 bg-board-50 ring-1 ring-inset ring-board-700'; letter = 'border-board-700 bg-board-700 text-chalk' }
+          return (
+            <button
+              key={opt}
+              type="button"
+              role="radio"
+              aria-checked={isPicked}
+              disabled={checked}
+              onClick={() => setPicked(i)}
+              className={`flex min-h-[52px] w-full items-center gap-3 rounded-lg border px-3.5 py-2.5 text-left disabled:cursor-default ${row}`}
+            >
+              <span className={`opt-letter ${letter}`}>
+                {checked && isRight
+                  ? <Check className="h-4 w-4" strokeWidth={3} aria-hidden="true" />
+                  : checked && isPicked
+                    ? <X className="h-4 w-4" strokeWidth={3} aria-hidden="true" />
+                    : LETTERS[i]}
+              </span>
+              <span className="text-base font-semibold text-ink-900 tabular">{opt}</span>
+              {checked && isRight ? <span className="ml-auto text-[13px] font-bold text-board-700">Correct</span> : null}
+              {checked && isPicked && !isRight ? <span className="ml-auto text-[13px] font-bold text-rose-700">Your answer</span> : null}
+            </button>
+          )
+        })}
       </div>
 
-      <div className="p-5 sm:p-6">
-        <p id="sample-q" className="font-display text-lg font-semibold leading-snug text-ink-900 sm:text-xl">
-          {ITEM.question}
-        </p>
-
-        <div className="mt-5 grid gap-3 sm:grid-cols-2" role="radiogroup" aria-labelledby="sample-q">
-          {ITEM.options.map((opt, i) => {
-            const isPicked = picked === i
-            const isRight = i === ITEM.answer
-            let tone = 'border-ink-200 bg-white hover:border-blue-400 hover:bg-blue-50/40'
-            let badge = 'bg-ink-100 text-ink-600'
-            if (checked && isRight) { tone = 'border-emerald-500 bg-emerald-50'; badge = 'bg-emerald-600 text-white' }
-            else if (checked && isPicked) { tone = 'border-rose-400 bg-rose-50'; badge = 'bg-rose-500 text-white' }
-            else if (checked) { tone = 'border-ink-100 bg-white opacity-60' }
-            else if (isPicked) { tone = 'border-blue-600 bg-blue-50 ring-2 ring-blue-100'; badge = 'bg-blue-600 text-white' }
-            return (
-              <button
-                key={opt}
-                type="button"
-                role="radio"
-                aria-checked={isPicked}
-                disabled={checked}
-                onClick={() => setPicked(i)}
-                className={`flex min-h-[56px] w-full items-center gap-3.5 rounded-2xl border-2 px-4 py-3 text-left text-[16px] text-ink-800 transition-all disabled:cursor-default disabled:opacity-100 ${tone}`}
-              >
-                <span className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-lg text-sm font-bold ${badge}`}>
-                  {checked && isRight ? <Check className="h-4 w-4" aria-hidden="true" /> : checked && isPicked ? <X className="h-4 w-4" aria-hidden="true" /> : LETTERS[i]}
-                </span>
-                <span className="font-medium">{opt}</span>
-              </button>
-            )
-          })}
+      {checked ? (
+        <div
+          role="status"
+          className={`mt-4 animate-fade-in-up rounded-lg border px-4 py-3.5 ${correct ? 'border-board-200 bg-board-50' : 'border-sun-300 bg-sun-50'}`}
+        >
+          <p className={`text-[15px] font-bold ${correct ? 'text-board-800' : 'text-ink-900'}`}>
+            {correct ? 'Correct. Well done.' : 'Not quite. The answer is 30 kg.'}
+          </p>
+          <p className="mt-1 text-[15px] leading-relaxed text-ink-700">{ITEM.explanation}</p>
         </div>
+      ) : null}
 
+      <div className="mt-5 flex flex-wrap items-center gap-x-4 gap-y-3">
         {checked ? (
-          <div
-            role="status"
-            className={`mt-5 flex gap-3 rounded-2xl border p-4 animate-fade-in-up ${correct ? 'border-emerald-200 bg-emerald-50' : 'border-sun-200 bg-sun-50'}`}
-          >
-            {correct
-              ? <CheckCircle2 className="mt-0.5 h-5 w-5 shrink-0 text-emerald-600" aria-hidden="true" />
-              : <Lightbulb className="mt-0.5 h-5 w-5 shrink-0 text-sun-600" aria-hidden="true" />}
-            <div>
-              <p className={`text-sm font-bold ${correct ? 'text-emerald-800' : 'text-ink-900'}`}>
-                {correct ? 'Correct — well done.' : 'Not quite. The answer is 30 kg.'}
-              </p>
-              <p className="mt-1 text-[15px] leading-relaxed text-ink-700">{ITEM.explanation}</p>
-            </div>
-          </div>
-        ) : null}
-
-        <div className="mt-5 flex flex-col gap-3 sm:flex-row sm:items-center">
-          {checked ? (
-            <>
-              <Link href={LESSON_HREF} className="btn-primary">
-                Open the full lesson <ArrowRight className="h-4 w-4" aria-hidden="true" />
-              </Link>
-              <button type="button" onClick={reset} className="btn-ghost">
-                <RotateCcw className="h-4 w-4" aria-hidden="true" /> Try again
-              </button>
-            </>
-          ) : (
-            <>
-              <button type="button" onClick={() => setChecked(true)} disabled={picked === null} className="btn-primary">
-                Check answer
-              </button>
-              <p className="muted">{picked === null ? 'Pick an answer first.' : 'You will see why straight away.'}</p>
-            </>
-          )}
-        </div>
+          <>
+            <Link href={LESSON_HREF} className="btn-secondary group">
+              Open the full lesson <ArrowRight className="nudge h-4 w-4" aria-hidden="true" />
+            </Link>
+            <button type="button" onClick={reset} className="btn-ghost">
+              <RotateCcw className="h-4 w-4" aria-hidden="true" /> Try again
+            </button>
+          </>
+        ) : (
+          <>
+            <button type="button" onClick={() => setChecked(true)} disabled={picked === null} className="btn-dark">
+              Check answer
+            </button>
+            <p className="muted">{picked === null ? 'Pick an answer first.' : 'You will see why straight away.'}</p>
+          </>
+        )}
       </div>
     </div>
   )

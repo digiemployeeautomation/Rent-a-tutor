@@ -3,29 +3,36 @@
 // Shared result pieces for IELTS Writing and Speaking, so both result pages
 // look and read the same. Server-safe (no hooks, no 'use client').
 //
-//   <GradeNotice gradedBy skill />        honesty notice: stub vs AI examiner
-//   <OverallBand band skill />            the big overall band
-//   <BandHighlights bands labels />       strongest area + what to work on next
-//   <CriteriaBands bands feedback criteria />  four labelled bars + feedback
-//   <GradePending /> / <GradeFailed />    states before / instead of a grade
+//   <ResultHeader eyebrow band sample />   overall band, stamp (shared IELTS result header)
+//   <GradeNotice gradedBy skill />         honesty notice: demo sample vs AI examiner
+//   <CriteriaBands bands feedback criteria />  ruled list: one row per criterion
+//   <BandHighlights bands criteria />      strongest area + what to work on next
+//   <GradePending /> / <GradeFailed />     states before / instead of a grade
 import Link from 'next/link'
-import {
-  AlertTriangle, Bot, Clock, FlaskConical, RefreshCw, Target, TrendingUp,
-} from 'lucide-react'
+import { ArrowRight, Check, RefreshCw } from 'lucide-react'
+import BandScale from '@/components/kit/BandScale'
+import Stamp from '@/components/kit/Stamp'
 
 export const WRITING_CRITERIA = [
-  { key: 'task_response', label: 'Task Achievement / Response', hint: 'Did you answer every part of the task, with clear, supported ideas?' },
-  { key: 'coherence', label: 'Coherence & Cohesion', hint: 'Is your writing well organised, with clear paragraphs and linking words?' },
-  { key: 'lexical', label: 'Lexical Resource', hint: 'How wide and accurate is your vocabulary?' },
-  { key: 'grammar', label: 'Grammatical Range & Accuracy', hint: 'Do you use a mix of sentence types, with few mistakes?' },
+  { key: 'task_response', label: 'Task achievement / response', hint: 'Did you answer every part of the task, with clear, supported ideas?' },
+  { key: 'coherence', label: 'Coherence and cohesion', hint: 'Is your writing well organised, with clear paragraphs and linking words?' },
+  { key: 'lexical', label: 'Lexical resource', hint: 'How wide and accurate is your vocabulary?' },
+  { key: 'grammar', label: 'Grammatical range and accuracy', hint: 'Do you use a mix of sentence types, with few mistakes?' },
 ]
 
 export const SPEAKING_CRITERIA = [
-  { key: 'fluency', label: 'Fluency & Coherence', hint: 'Do you speak smoothly, with few long pauses, and link your ideas?' },
-  { key: 'lexical', label: 'Lexical Resource', hint: 'How wide and accurate is your vocabulary?' },
-  { key: 'grammar', label: 'Grammatical Range & Accuracy', hint: 'Do you use a mix of sentence types, with few mistakes?' },
+  { key: 'fluency', label: 'Fluency and coherence', hint: 'Do you speak smoothly, with few long pauses, and link your ideas?' },
+  { key: 'lexical', label: 'Lexical resource', hint: 'How wide and accurate is your vocabulary?' },
+  { key: 'grammar', label: 'Grammatical range and accuracy', hint: 'Do you use a mix of sentence types, with few mistakes?' },
   { key: 'pronunciation', label: 'Pronunciation', hint: 'Is your speech easy to understand, with clear stress and intonation?' },
 ]
+
+// Task 1 is marked on "Task achievement", Task 2 on "Task response".
+export function writingCriteriaFor(subSkill) {
+  const label = subSkill === 'writing-task-2' ? 'Task response' : String(subSkill || '').startsWith('writing-task-1') ? 'Task achievement' : null
+  if (!label) return WRITING_CRITERIA
+  return WRITING_CRITERIA.map((c) => (c.key === 'task_response' ? { ...c, label } : c))
+}
 
 // Official IELTS band score descriptions (the "user" labels on the 0-9 scale).
 const BAND_WORDS = {
@@ -48,60 +55,100 @@ function bandWord(n) {
   return BAND_WORDS[Math.max(0, Math.min(9, v))] ?? ''
 }
 
+// ── Result header ─────────────────────────────────────────────────────────
+// The same header the Reading and Listening results use: eyebrow, the band as
+// a large numeral, a stamp, then the 4-9 ruler. `sample` (demo grader) changes
+// the stamp and the label so nobody mistakes the number for a real assessment.
+export function ResultHeader({ eyebrow, band, sample = false, meta }) {
+  const shown = formatBand(band)
+  const word = bandWord(band)
+  return (
+    <header className="flex items-start justify-between gap-6 border-b-2 border-ink-900 pb-6">
+      <div className="min-w-0">
+        <p className="eyebrow !text-copper-700">{eyebrow}</p>
+        <p className="numeral mt-2 text-[4.5rem] leading-none text-ink-900 sm:text-[6rem]">{shown}</p>
+        <p className="mt-2 text-[15px] font-semibold text-ink-600">
+          {sample ? 'Sample overall band' : `Overall band${word ? ` · ${word}` : ''}`}
+        </p>
+        {meta ? <p className="mt-1 text-[13px] font-semibold text-ink-500">{meta}</p> : null}
+      </div>
+      <Stamp word={sample ? 'Demo' : `Band ${shown}`} tone="copper" ring="IELTS practice" className="h-24 w-24 sm:h-32 sm:w-32" />
+    </header>
+  )
+}
+
+// The 4-9 ruler under the header (and under the notice, when there is one).
+export function ResultScale({ band, target }) {
+  return <BandScale band={band} target={target} className="mt-8 max-w-md" />
+}
+
 // ── Honesty notice ────────────────────────────────────────────────────────
 // skill: 'writing' | 'speaking'
 export function GradeNotice({ gradedBy, skill = 'writing' }) {
   if (gradedBy === 'stub') {
+    const speaking = skill === 'speaking'
     return (
-      <div role="note" className="flex gap-3 rounded-2xl border border-sun-200 bg-sun-50 p-4 sm:p-5">
-        <FlaskConical className="mt-0.5 h-5 w-5 shrink-0 text-sun-600" aria-hidden="true" />
-        <div>
-          <p className="font-semibold text-ink-900">Sample feedback — demo mode</p>
-          <p className="mt-1 text-sm leading-relaxed text-ink-700">
-            The AI examiner is not connected in this environment, so these scores are
-            illustrative and are not based on your {skill === 'speaking' ? 'recording' : 'answer'}
-            {skill === 'speaking' ? '.' : ' (only its length changes them).'}
-            {skill === 'speaking'
-              ? ' The transcript shown is a fixed example sentence, not what you said.'
-              : ' The feedback text is a fixed example.'}
-            {' '}With the AI examiner switched on, you get a real band estimate and comments on what you actually {skill === 'speaking' ? 'said' : 'wrote'}.
-          </p>
-        </div>
+      <div role="note" className="rounded-b-lg bg-sun-100 px-4 py-3.5 text-[15px] leading-relaxed text-ink-800 sm:px-5">
+        <p>
+          <strong className="font-bold text-ink-900">Sample feedback: demo mode.</strong>{' '}
+          The AI examiner is not switched on here, so this band and the comments below are examples.{' '}
+          {speaking
+            ? 'They are not based on your recording, and the transcript shown is a fixed example sentence, not what you said.'
+            : 'They are not based on what you wrote. Only the length of your answer changes the band, and the comments are fixed text.'}
+          {' '}With the AI examiner switched on, you get a real band estimate and comments on what you actually {speaking ? 'said' : 'wrote'}.
+        </p>
       </div>
     )
   }
   return (
-    <div role="note" className="flex items-start gap-2.5 rounded-xl bg-teal-50 px-4 py-3 text-sm text-ink-700">
-      <Bot className="mt-0.5 h-4 w-4 shrink-0 text-teal-700" aria-hidden="true" />
-      <p>
-        <span className="font-semibold text-teal-800">Marked by AI examiner.</span>{' '}
-        This is an estimate to guide your practice, not an official IELTS score.
-      </p>
-    </div>
+    <p role="note" className="mt-4 text-[15px] leading-relaxed text-ink-600">
+      <strong className="font-bold text-ink-900">Marked by the AI examiner.</strong>{' '}
+      This is an estimate to guide your practice, not an official IELTS score.
+    </p>
   )
 }
 
-// ── Overall band ──────────────────────────────────────────────────────────
-export function OverallBand({ band, label = 'Estimated overall band', sample = false }) {
+// ── Four criteria: a ruled list, one row each ─────────────────────────────
+// Position of a band on the 4-9 scale, as a percentage (same scale as BandScale).
+function scalePos(v) {
+  return ((Math.max(4, Math.min(9, v)) - 4) / 5) * 100
+}
+
+export function CriteriaBands({ bands = {}, feedback = {}, criteria }) {
   return (
-    <div className="card overflow-hidden">
-      <div className="flex flex-col items-center gap-1 bg-ink-900 px-6 py-8 text-center text-white sm:flex-row sm:items-center sm:gap-6 sm:px-8 sm:text-left">
-        <div className="font-display text-7xl font-bold leading-none tracking-tight tabular-nums text-sun-400 sm:text-8xl">
-          {formatBand(band)}
-        </div>
-        <div className="mt-2 sm:mt-0">
-          <p className="text-xs font-semibold uppercase tracking-[0.14em] text-ink-300">{label}</p>
-          <p className="mt-1 font-display text-xl font-semibold">{bandWord(band)}</p>
-          <p className="mt-1 text-sm text-ink-300">
-            {sample ? 'Sample score for the demo — not a real assessment.' : 'IELTS bands go from 0 to 9, in half-band steps.'}
-          </p>
-        </div>
-      </div>
-    </div>
+    <ol className="rows">
+      {criteria.map((c) => {
+        const v = Number(bands?.[c.key])
+        const has = Number.isFinite(v)
+        const text = feedback?.[c.key]
+        return (
+          <li key={c.key} className="py-5 sm:py-6">
+            <div className="flex items-start justify-between gap-5">
+              <div className="min-w-0">
+                <h3 className="text-[17px] font-bold leading-snug text-ink-900">{c.label}</h3>
+                <p className="mt-1 text-[15px] leading-snug text-ink-500">{c.hint}</p>
+              </div>
+              <div className="flex shrink-0 items-center gap-3">
+                {has ? (
+                  <span className="relative hidden h-[3px] w-16 bg-ink-200 min-[420px]:block" aria-hidden="true">
+                    <span className="absolute inset-y-0 left-0 bg-copper-500" style={{ width: `${scalePos(v)}%` }} />
+                  </span>
+                ) : null}
+                <span className="numeral w-[2.6rem] text-right text-[1.75rem] leading-none text-copper-700" aria-label={has ? `Band ${formatBand(v)}` : 'No band'}>
+                  {has ? formatBand(v) : '–'}
+                </span>
+              </div>
+            </div>
+            {text ? <p className="mt-3 max-w-[62ch] text-[17px] leading-[1.6] text-ink-800">{text}</p> : null}
+          </li>
+        )
+      })}
+    </ol>
   )
 }
 
-// ── Strongest area + next focus ───────────────────────────────────────────
+// ── Strongest area + next focus: two plain lists ──────────────────────────
+// A diagnosis, so the pages only show it for a real assessment (not a sample).
 export function BandHighlights({ bands = {}, criteria }) {
   const scored = criteria
     .map((c) => ({ ...c, band: Number(bands?.[c.key]) }))
@@ -114,95 +161,82 @@ export function BandHighlights({ bands = {}, criteria }) {
   const best = scored.filter((c) => c.band === max)
   const weak = scored.filter((c) => c.band === min)
 
-  return (
-    <div className="grid gap-3 sm:grid-cols-2">
-      <div className="card card-pad flex gap-3">
-        <span className="icon-tile bg-emerald-50 text-emerald-700"><TrendingUp className="h-5 w-5" aria-hidden="true" /></span>
-        <div>
-          <p className="text-xs font-semibold uppercase tracking-wider text-ink-400">Strongest area</p>
-          <p className="mt-1 font-semibold text-ink-900">
-            {even ? 'Your four scores are level' : best.map((c) => c.label).join(', ')}
-          </p>
-          <p className="mt-0.5 text-sm text-ink-500">{even ? `All at band ${formatBand(max)}.` : `Band ${formatBand(max)} — keep doing what you did here.`}</p>
-        </div>
+  if (even) {
+    return (
+      <div>
+        <h3 className="h-sub">Your four scores are level</h3>
+        <p className="mt-2 max-w-[62ch] text-[17px] leading-[1.6] text-ink-800">
+          All four are at band {formatBand(max)}. Pick any one criterion above: raising one of them lifts your overall band.
+        </p>
       </div>
-      <div className="card card-pad flex gap-3">
-        <span className="icon-tile bg-blue-50 text-blue-700"><Target className="h-5 w-5" aria-hidden="true" /></span>
-        <div>
-          <p className="text-xs font-semibold uppercase tracking-wider text-ink-400">Work on next</p>
-          <p className="mt-1 font-semibold text-ink-900">
-            {even ? 'Pick any one criterion below' : weak.map((c) => c.label).join(', ')}
-          </p>
-          <p className="mt-0.5 text-sm text-ink-500">
-            {even ? 'Raising any one of them lifts your overall band.' : `Band ${formatBand(min)} — read the tip for it below.`}
-          </p>
-        </div>
+    )
+  }
+
+  return (
+    <div className="grid gap-8 sm:grid-cols-2 sm:gap-10">
+      <div>
+        <h3 className="h-sub">What went well</h3>
+        <ul className="mt-3 space-y-2.5">
+          {best.map((c) => (
+            <li key={c.key} className="flex gap-2.5 text-[17px] leading-snug text-ink-800">
+              <Check className="mt-1 h-4 w-4 shrink-0 text-board-700" strokeWidth={3} aria-hidden="true" />
+              <span><span className="font-semibold text-ink-900">{c.label}</span>, band {formatBand(c.band)}. Keep doing what you did here.</span>
+            </li>
+          ))}
+        </ul>
+      </div>
+      <div>
+        <h3 className="h-sub">Work on next</h3>
+        <ul className="mt-3 space-y-2.5">
+          {weak.map((c) => (
+            <li key={c.key} className="flex gap-2.5 text-[17px] leading-snug text-ink-800">
+              <ArrowRight className="mt-1 h-4 w-4 shrink-0 text-copper-700" strokeWidth={2.5} aria-hidden="true" />
+              <span><span className="font-semibold text-ink-900">{c.label}</span>, band {formatBand(c.band)}. Read the comment for it above.</span>
+            </li>
+          ))}
+        </ul>
       </div>
     </div>
-  )
-}
-
-// ── Four criteria with bars and feedback ──────────────────────────────────
-export function CriteriaBands({ bands = {}, feedback = {}, criteria }) {
-  return (
-    <ul className="card divide-y divide-ink-100">
-      {criteria.map((c) => {
-        const v = Number(bands?.[c.key])
-        const has = Number.isFinite(v)
-        const pct = has ? Math.max(0, Math.min(100, (v / 9) * 100)) : 0
-        const text = feedback?.[c.key]
-        return (
-          <li key={c.key} className="px-5 py-5 sm:px-6">
-            <div className="flex items-baseline justify-between gap-4">
-              <h3 className="font-display text-base font-semibold text-ink-900 sm:text-lg">{c.label}</h3>
-              <span className="shrink-0 font-display text-2xl font-bold tabular-nums text-teal-700">{has ? formatBand(v) : '–'}</span>
-            </div>
-            <p className="mt-0.5 text-sm text-ink-400">{c.hint}</p>
-            <div
-              className="progress-track mt-3"
-              role="meter"
-              aria-label={`${c.label} band`}
-              aria-valuemin={0}
-              aria-valuemax={9}
-              aria-valuenow={has ? v : 0}
-            >
-              <div className="progress-fill bg-teal-600" style={{ width: `${pct}%` }} />
-            </div>
-            <div className="mt-1 flex justify-between text-[11px] font-medium text-ink-300" aria-hidden="true">
-              <span>0</span><span>9</span>
-            </div>
-            {text ? (
-              <p className="mt-3 text-[15px] leading-relaxed text-ink-700">{text}</p>
-            ) : null}
-          </li>
-        )
-      })}
-    </ul>
   )
 }
 
 // ── States without a usable grade ─────────────────────────────────────────
-export function GradePending({ href }) {
+// Both keep the shape of the result header, so the page does not jump when
+// the band arrives.
+export function GradePending({ href, eyebrow = 'IELTS · Your result', what = 'answer' }) {
   return (
-    <div className="card card-pad flex gap-3" role="status">
-      <span className="icon-tile bg-sun-100 text-sun-600"><Clock className="h-5 w-5" aria-hidden="true" /></span>
-      <div>
-        <p className="font-semibold text-ink-900">Still marking your answer…</p>
-        <p className="mt-1 text-sm text-ink-500">This usually takes a few seconds. Refresh the page to see your band and feedback.</p>
-        <Link href={href} className="btn-secondary btn-sm mt-4"><RefreshCw className="h-4 w-4" aria-hidden="true" /> Refresh</Link>
-      </div>
+    <div role="status">
+      <header className="border-b-2 border-ink-900 pb-6">
+        <p className="eyebrow !text-copper-700">{eyebrow}</p>
+        {/* A quiet block where the band will be */}
+        <div className="mt-2 h-[4.5rem] w-36 rounded-lg bg-ink-100 sm:h-[6rem] sm:w-48" aria-hidden="true" />
+        <p className="mt-2 text-[15px] font-semibold text-ink-600">Overall band · marking in progress</p>
+      </header>
+      <h2 className="h-section mt-6">Still marking your {what}</h2>
+      <p className="mt-2 max-w-[62ch] text-[17px] leading-[1.6] text-ink-700">
+        This usually takes a few seconds. Your {what} is saved. Check again to see your band and feedback.
+      </p>
+      <Link href={href} className="btn-primary mt-5">
+        <RefreshCw className="h-4 w-4" aria-hidden="true" /> Check again
+      </Link>
     </div>
   )
 }
 
-export function GradeFailed({ retryHref, retryLabel = 'Try again' }) {
+export function GradeFailed({ retryHref, retryLabel = 'Try again', eyebrow = 'IELTS · Your result' }) {
   return (
-    <div className="card card-pad flex gap-3" role="alert">
-      <span className="icon-tile bg-rose-50 text-rose-600"><AlertTriangle className="h-5 w-5" aria-hidden="true" /></span>
-      <div>
-        <p className="font-semibold text-ink-900">We could not mark this answer</p>
-        <p className="mt-1 text-sm text-ink-500">Something went wrong on our side while marking. Nothing is wrong with your answer — please try again.</p>
-        <Link href={retryHref} className="btn-primary btn-sm mt-4">{retryLabel}</Link>
+    <div role="alert">
+      <header className="border-b-2 border-ink-900 pb-6">
+        <p className="eyebrow !text-copper-700">{eyebrow}</p>
+        <h2 className="h-page mt-2">We could not mark this answer</h2>
+      </header>
+      <p className="rounded-b-lg bg-rose-50 px-4 py-3.5 text-[15px] leading-relaxed text-ink-800 sm:px-5">
+        <strong className="font-bold text-rose-700">Not marked.</strong>{' '}
+        Something went wrong on our side while marking. Nothing is wrong with your answer. Please try again.
+      </p>
+      <div className="mt-6 flex flex-col gap-3 sm:flex-row">
+        <Link href={retryHref} className="btn-primary">{retryLabel}</Link>
+        <Link href="/practice" className="btn-secondary">Back to IELTS</Link>
       </div>
     </div>
   )

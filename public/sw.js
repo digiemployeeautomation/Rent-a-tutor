@@ -20,7 +20,7 @@
  * when the URL has ?sw=1).
  */
 
-const VERSION = 'v1'
+const VERSION = 'v2'
 const PAGES = `rat-pages-${VERSION}`
 const STATIC = `rat-static-${VERSION}`
 
@@ -240,7 +240,7 @@ function timeout(ms) {
   return new Promise((_, reject) => setTimeout(() => reject(new Error('timeout')), ms))
 }
 
-const OFFLINE_PAGE = `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>You are offline · Rent a Tutor</title><style>body{margin:0;min-height:100vh;display:flex;align-items:center;justify-content:center;background:#F6F7FB;color:#0B1730;font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif;padding:24px}main{max-width:26rem;text-align:center}h1{font-size:1.5rem;margin:0 0 .5rem}p{color:#475570;line-height:1.6;margin:0 0 1.25rem}a{display:inline-block;background:#2563EB;color:#fff;text-decoration:none;font-weight:600;padding:.75rem 1.25rem;border-radius:.75rem}</style></head><body><main><h1>You are offline</h1><p>This page needs an internet connection. Lessons you saved for offline use are in your Downloads once the app has been opened online at least one time.</p><a href="/downloads">Open Downloads</a></main></body></html>`
+const OFFLINE_PAGE = `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>You are offline · Rent a Tutor</title><style>body{margin:0;min-height:100vh;display:flex;align-items:center;justify-content:center;background:#F9F9F7;color:#0F1713;font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif;padding:24px}main{max-width:26rem;text-align:center}h1{font-size:1.5rem;margin:0 0 .5rem}p{color:#45504A;line-height:1.6;margin:0 0 1.25rem}a{display:inline-block;background:#0F5337;color:#F8F7EE;text-decoration:none;font-weight:600;padding:.75rem 1.25rem;border-radius:.5rem}</style></head><body><main><h1>You are offline</h1><p>This page needs an internet connection. Lessons you saved for offline use are in your Downloads once the app has been opened online at least one time.</p><a href="/downloads">Open Downloads</a></main></body></html>`
 
 // ── lifecycle ────────────────────────────────────────────────────────────────
 

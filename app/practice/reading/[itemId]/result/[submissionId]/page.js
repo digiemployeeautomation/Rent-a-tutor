@@ -8,7 +8,6 @@ import { redirect } from 'next/navigation'
 import { ArrowLeft } from 'lucide-react'
 import { createServerComponentClientFor } from '@/lib/supabaseServer'
 import SetResult from '@/components/practice/SetResult'
-import SetHeader from '@/components/ielts/SetHeader'
 import { optionLabelsFor } from '@/components/ielts/option-labels'
 import { nextModule, moduleForDrill } from '@/lib/ielts/reading-modules'
 
@@ -56,9 +55,10 @@ export default async function ReadingResultPage({ params }) {
 
   if (!submission || submission.user_id !== user.id || submission.practice_item_id !== params.itemId) {
     return (
-      <div className="container-read py-12">
-        <h1 className="h-page">Result not found</h1>
-        <p className="lead mt-2">This result does not exist or is not available right now.</p>
+      <div className="container-read py-12 sm:py-16">
+        <p className="eyebrow !text-copper-700">IELTS Reading</p>
+        <h1 className="h-page mt-2">Result not found</h1>
+        <p className="lead mt-3">This result does not exist or is not available right now.</p>
         <Link href="/practice" className="btn-primary mt-6">
           <ArrowLeft className="h-4 w-4" aria-hidden="true" /> Back to IELTS
         </Link>
@@ -74,26 +74,30 @@ export default async function ReadingResultPage({ params }) {
   const isMock = item?.payload?.is_mock === true
 
   return (
-    <div className="container-read py-6 sm:py-8">
-      <SetHeader
-        backHref={isDrill ? '/learn/reading' : '/practice'}
-        backLabel={isDrill ? 'Reading path' : 'IELTS'}
-        eyebrow={isMock ? 'IELTS Reading · Mock exam result' : 'IELTS Reading · Your result'}
-        title={title}
-      />
+    <div className="container-read overflow-x-clip pb-16 pt-4 sm:pt-6">
+      <Link
+        href={isDrill ? '/learn/reading' : '/practice'}
+        className="inline-flex min-h-[44px] items-center gap-1.5 text-sm font-semibold text-ink-500 hover:text-ink-900"
+      >
+        <ArrowLeft className="h-4 w-4" aria-hidden="true" /> {isDrill ? 'Reading path' : 'IELTS'}
+      </Link>
 
-      <SetResult
-        grade={grade}
-        retryHref={retryHref}
-        pathHref={isDrill ? '/learn/reading' : undefined}
-        nextHref={next ? `/learn/reading/${next.slug}` : undefined}
-        nextLabel={next ? next.title : undefined}
-        band={grade?.band_overall ?? null}
-        bandVariant={grade?.feedback?.band_variant ?? null}
-        timeTakenSeconds={submission.payload?.time_taken_seconds ?? null}
-        timedOut={submission.payload?.timed_out ?? false}
-        optionLabels={optionLabelsFor(questions)}
-      />
+      <div className="mt-3 sm:mt-5">
+        <SetResult
+          grade={grade}
+          eyebrow={isMock ? 'IELTS Reading · Mock exam result' : 'IELTS Reading · Your result'}
+          title={title}
+          retryHref={retryHref}
+          pathHref={isDrill ? '/learn/reading' : undefined}
+          nextHref={next ? `/learn/reading/${next.slug}` : undefined}
+          nextLabel={next ? next.title : undefined}
+          band={grade?.band_overall ?? null}
+          bandVariant={grade?.feedback?.band_variant ?? null}
+          timeTakenSeconds={submission.payload?.time_taken_seconds ?? null}
+          timedOut={submission.payload?.timed_out ?? false}
+          optionLabels={optionLabelsFor(questions)}
+        />
+      </div>
     </div>
   )
 }

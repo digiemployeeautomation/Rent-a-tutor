@@ -48,8 +48,8 @@ export default function OnboardingPage() {
 
   if (checking) {
     return (
-      <div className="flex items-center justify-center gap-2 py-24 text-sm text-ink-400" role="status">
-        <Loader2 className="h-5 w-5 animate-spin" aria-hidden="true" /> Loading…
+      <div className="flex items-center gap-2.5 py-20 text-[15px] font-semibold text-ink-500" role="status">
+        <Loader2 className="h-5 w-5 animate-spin" aria-hidden="true" /> Loading your account
       </div>
     )
   }

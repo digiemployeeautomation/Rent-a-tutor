@@ -1,6 +1,5 @@
 // Shown after sign-up when the account still needs its email confirmed.
 import Link from 'next/link'
-import { MailCheck } from 'lucide-react'
 import AuthShell from '@/components/marketing/AuthShell'
 
 export const metadata = { title: 'Check your email' }
@@ -16,34 +15,32 @@ export default function PendingPage({ searchParams }) {
 
   return (
     <AuthShell
+      boardLine={<>One more step, then <span className="text-sun-300">you are in.</span></>}
       footer={
-        <p className="text-center text-sm text-ink-500">
+        <p className="text-[15px] leading-relaxed text-ink-600">
           No email after a few minutes? Check your spam folder, or{' '}
-          <Link href="/auth/register" className="font-semibold text-blue-700 hover:underline">sign up again</Link>.
+          <Link href="/auth/register" className="link">sign up again</Link>.
         </p>
       }
     >
-      <span className="icon-tile h-14 w-14 rounded-2xl bg-blue-50 text-blue-600">
-        <MailCheck className="h-7 w-7" aria-hidden="true" />
-      </span>
-      <h1 className="h-page mt-5">Check your email</h1>
-      <p className="mt-2 text-[15px] leading-relaxed text-ink-500">
+      <h1 className="h-page">Check your email</h1>
+      <p className="mt-2.5 text-[17px] leading-[1.5] text-ink-600">
         Your account is almost ready. We sent a confirmation link to{' '}
-        {email ? <span className="font-semibold text-ink-900 break-all">{email}</span> : 'your email address'}.
+        {email ? <span className="break-all font-bold text-ink-900">{email}</span> : 'your email address'}.
       </p>
 
-      <ol className="mt-6 space-y-3">
+      <ol className="mt-7 border-t-2 border-ink-900">
         {STEPS.map((s, i) => (
-          <li key={s} className="flex items-center gap-3 text-[15px] text-ink-700">
-            <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-blue-600 text-xs font-bold text-white">{i + 1}</span>
+          <li key={s} className="flex items-center gap-4 border-b border-ink-200 py-3.5 text-base font-semibold text-ink-800">
+            <span className="numeral w-6 shrink-0 text-[1.75rem] leading-none text-copper-600" aria-hidden="true">{i + 1}</span>
             {s}
           </li>
         ))}
       </ol>
 
-      <div className="mt-7 grid gap-3 sm:grid-cols-2">
-        <Link href="/auth/login" className="btn-primary">Go to log in</Link>
-        <Link href="/learn/high-school" className="btn-secondary">Browse lessons</Link>
+      <div className="mt-7 flex flex-col gap-3 sm:flex-row">
+        <Link href="/auth/login" className="btn-primary btn-lg">Go to log in</Link>
+        <Link href="/learn/high-school" className="btn-secondary btn-lg">Browse lessons</Link>
       </div>
     </AuthShell>
   )

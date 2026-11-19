@@ -1,18 +1,18 @@
 'use client'
 // components/offline/LessonDownload.js
 //
-// The offline actions for one lesson, shown on the lesson intro and result
-// screens:
+// The offline actions for one lesson, as one quiet ruled row on the lesson
+// intro and result screens:
 //   Save for offline  -> keeps the lesson in the in-app Downloads library
 //   Download file     -> one self-contained .html file (works with no app)
-//   Print / PDF       -> the same document, sent to the printer
+//   Print             -> the same document, sent to the printer (or saved as PDF)
 //
 // Props:
 //   lesson     the full lesson object (high school or IELTS reading)
 //   inLibrary  true when shown inside /downloads (hides the "find it in Downloads" hint)
 import Link from 'next/link'
 import { useEffect, useState } from 'react'
-import { CheckCircle2, Download, FileDown, Loader2, Printer, WifiOff } from 'lucide-react'
+import { Check, Download, FileDown, Loader2, Printer, RotateCcw } from 'lucide-react'
 import { useToast } from '@/components/ui/toast'
 import { getSavedLesson, lessonId, removeLesson, saveLesson, subscribe } from '@/lib/offline/store'
 import { ensureOfflineShell } from '@/lib/offline/sw-client'
@@ -34,6 +34,7 @@ export default function LessonDownload({ lesson, inLibrary = false }) {
   const id = lessonId(lesson)
   const [saved, setSaved] = useState(null) // null = still checking
   const [busy, setBusy] = useState(false)
+  const [failed, setFailed] = useState(false)
   const [confirmRemove, setConfirmRemove] = useState(false)
 
   useEffect(() => {
@@ -56,6 +57,7 @@ export default function LessonDownload({ lesson, inLibrary = false }) {
   async function save() {
     if (busy) return
     setBusy(true)
+    setFailed(false)
     try {
       await saveLesson(lesson)
       setSaved(true)
@@ -63,6 +65,7 @@ export default function LessonDownload({ lesson, inLibrary = false }) {
       const message = savedMessage(shell)
       toast[message.type](message.text)
     } catch (err) {
+      setFailed(true)
       toast.error(err?.name === 'OfflineStorageError' ? err.message : 'The lesson could not be saved. Please try again.')
     } finally {
       setBusy(false)
@@ -132,54 +135,53 @@ export default function LessonDownload({ lesson, inLibrary = false }) {
     }
   }
 
+  const note = failed
+    ? 'This lesson could not be saved. Free some space on your device, then try again.'
+    : saved
+      ? (inLibrary ? 'Saved on this device. It opens without internet or data.' : null)
+      : 'Save it on this device, or take a file you can share with a classmate.'
+
   return (
-    <section className="card card-pad no-print" aria-label="Use this lesson offline">
-      <div className="flex items-start gap-3.5">
-        <span className="icon-tile bg-blue-50 text-blue-700"><WifiOff className="h-5 w-5" aria-hidden="true" /></span>
-        <div className="min-w-0">
-          <h2 className="font-display text-[17px] font-semibold leading-snug text-ink-900">Study this lesson without data</h2>
-          <p className="mt-0.5 text-sm leading-relaxed text-ink-500">
-            {saved
-              ? 'This lesson is saved on this device. You can also download it as a file to share with a classmate.'
-              : 'Save it on this device, or download a file you can open and share with no internet.'}
-          </p>
-        </div>
+    <section className="no-print border-y border-ink-200 py-5 sm:flex sm:items-center sm:justify-between sm:gap-6" aria-label="Use this lesson offline">
+      <div className="min-w-0">
+        <h2 className="h-sub">Study without data</h2>
+        <p className={`mt-0.5 text-sm leading-snug ${failed ? 'font-semibold text-rose-700' : 'text-ink-600'}`} role="status">
+          {note || (
+            <>Saved on this device. Find it in <Link href="/downloads" className="link">Downloads</Link>.</>
+          )}
+        </p>
       </div>
 
-      <div className="mt-4 flex flex-wrap items-center gap-2">
+      <div className="mt-3 flex flex-wrap items-center gap-x-1 gap-y-1 sm:mt-0 sm:shrink-0 sm:flex-nowrap">
         {saved ? (
-          <div className="inline-flex min-h-[44px] items-stretch overflow-hidden rounded-xl border border-emerald-200 bg-emerald-50 text-sm font-semibold">
-            <span className="inline-flex items-center gap-2 px-4 text-emerald-800">
-              <CheckCircle2 className="h-4 w-4" aria-hidden="true" /> Saved
+          <div className="flex w-full items-center justify-between gap-1 sm:w-auto sm:justify-start">
+            <span className="inline-flex min-h-[44px] items-center gap-1.5 pr-2 text-[15px] font-bold text-board-700">
+              <Check className="h-[18px] w-[18px]" strokeWidth={3} aria-hidden="true" /> Saved
             </span>
             <button
               type="button"
               onClick={remove}
-              className={`border-l border-emerald-200 px-4 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-blue-500 ${confirmRemove ? 'bg-rose-50 text-rose-700' : 'text-ink-500 hover:bg-white hover:text-ink-800'}`}
+              className={`btn -mr-3 !px-3 sm:mr-0 ${confirmRemove ? 'bg-rose-50 text-rose-700' : 'text-ink-600 hover:bg-ink-100 hover:text-ink-900'}`}
             >
               {confirmRemove ? 'Tap again to remove' : 'Remove'}
             </button>
           </div>
         ) : (
-          <button type="button" className="btn-dark" onClick={save} disabled={busy || saved === null}>
+          <button type="button" className="btn-secondary w-full !px-4 sm:w-auto" onClick={save} disabled={busy || saved === null}>
             {busy
               ? <><Loader2 className="h-4 w-4 animate-spin" aria-hidden="true" /> Saving…</>
-              : <><Download className="h-4 w-4" aria-hidden="true" /> Save for offline</>}
+              : failed
+                ? <><RotateCcw className="h-4 w-4" aria-hidden="true" /> Try again</>
+                : <><Download className="h-4 w-4" aria-hidden="true" /> Save for offline</>}
           </button>
         )}
-        <button type="button" className="btn-secondary" onClick={downloadFile}>
-          <FileDown className="h-4 w-4" aria-hidden="true" /> Download file
+        <button type="button" className="btn-ghost -ml-3 !px-3 sm:ml-0" onClick={downloadFile}>
+          <FileDown className="h-4 w-4 text-ink-400" aria-hidden="true" /> Download file
         </button>
-        <button type="button" className="btn-ghost" onClick={printLesson}>
-          <Printer className="h-4 w-4" aria-hidden="true" /> Print / PDF
+        <button type="button" className="btn-ghost !px-3" onClick={printLesson}>
+          <Printer className="h-4 w-4 text-ink-400" aria-hidden="true" /> Print
         </button>
       </div>
-
-      {saved && !inLibrary ? (
-        <p className="mt-3 text-sm text-ink-500" role="status">
-          Open it any time from <Link href="/downloads" className="font-semibold text-blue-700 underline-offset-2 hover:underline">Downloads</Link> — no data needed.
-        </p>
-      ) : null}
     </section>
   )
 }

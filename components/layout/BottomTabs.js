@@ -19,8 +19,8 @@ export default function BottomTabs() {
   if (!authed) return null
 
   return (
-    <nav className="no-print fixed inset-x-0 bottom-0 z-40 border-t border-ink-100 bg-white/95 pb-[env(safe-area-inset-bottom)] backdrop-blur-md md:hidden" aria-label="Main">
-      <div className="mx-auto flex h-16 max-w-md items-stretch justify-around px-1">
+    <nav className="no-print fixed inset-x-0 bottom-0 z-40 border-t border-ink-200 bg-white pb-[env(safe-area-inset-bottom)] md:hidden" aria-label="Main">
+      <div className="mx-auto flex h-16 max-w-md items-stretch justify-around">
         {APP_NAV.map((tab) => {
           const active = isActive(pathname, tab)
           const Icon = tab.icon
@@ -29,11 +29,10 @@ export default function BottomTabs() {
               key={tab.href}
               href={tab.href}
               aria-current={active ? 'page' : undefined}
-              className={`flex flex-1 flex-col items-center justify-center gap-1 rounded-xl text-[11px] font-medium transition-colors ${active ? 'text-blue-700' : 'text-ink-400'}`}
+              className={`relative flex flex-1 flex-col items-center justify-center gap-1 text-[11px] font-bold ${active ? 'text-board-800' : 'text-ink-500'}`}
             >
-              <span className={`flex h-7 w-12 items-center justify-center rounded-full transition-colors ${active ? 'bg-blue-50' : ''}`}>
-                <Icon className="h-5 w-5" strokeWidth={active ? 2.4 : 1.8} aria-hidden="true" />
-              </span>
+              <span className={`absolute inset-x-5 top-[-1px] h-[3px] rounded-b-sm bg-board-700 transition-opacity duration-200 ${active ? 'opacity-100' : 'opacity-0'}`} aria-hidden="true" />
+              <Icon className="h-[22px] w-[22px]" strokeWidth={active ? 2.2 : 1.7} aria-hidden="true" />
               {tab.label}
             </Link>
           )

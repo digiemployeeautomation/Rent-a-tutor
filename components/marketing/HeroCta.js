@@ -3,7 +3,7 @@
 // get a shortcut back to their dashboard.
 import Link from 'next/link'
 import { useEffect, useState } from 'react'
-import { ArrowRight, Play } from 'lucide-react'
+import { ArrowRight } from 'lucide-react'
 import { supabase } from '@/lib/supabase'
 
 export default function HeroCta() {
@@ -20,20 +20,15 @@ export default function HeroCta() {
   return (
     <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
       {signedIn ? (
-        <Link href="/dashboard/student" className="btn-accent btn-lg">
-          Go to my dashboard <ArrowRight className="h-5 w-5" aria-hidden="true" />
+        <Link href="/dashboard/student" className="btn-primary btn-lg group">
+          Go to my dashboard <ArrowRight className="nudge h-5 w-5" aria-hidden="true" />
         </Link>
       ) : (
-        <Link href="/demo" className="btn-accent btn-lg">
-          <Play className="h-5 w-5 fill-current" aria-hidden="true" /> Try the live demo
+        <Link href="/demo" className="btn-primary btn-lg group">
+          Try the demo <ArrowRight className="nudge h-5 w-5" aria-hidden="true" />
         </Link>
       )}
-      <Link
-        href="/learn/high-school"
-        className="btn btn-lg border border-white/20 bg-white/5 text-white hover:border-white/40 hover:bg-white/10"
-      >
-        Browse lessons
-      </Link>
+      <Link href="/learn/high-school" className="btn-secondary btn-lg">Browse lessons</Link>
     </div>
   )
 }

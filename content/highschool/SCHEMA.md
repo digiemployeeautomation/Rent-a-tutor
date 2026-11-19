@@ -47,11 +47,11 @@ explanation teaches — never just "B is correct". Do NOT prefix options with "A
 2-3 per lesson where a picture genuinely helps. Requirements:
 `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 260" role="img" aria-label="...">`
 (height may differ), no scripts, no external images/fonts, no `width`/`height`
-attributes on the root, text `font-family="Inter, system-ui, sans-serif"` at
+attributes on the root, text `font-family="system-ui, sans-serif"` (the page swaps in the app font) at
 font-size >= 13, labels must not overlap shapes or each other and must stay
-inside the viewBox. Palette only: ink `#0F172A`, grey `#64748B`, light `#E2E8F0`,
-blue `#2563EB`, pale blue `#DBEAFE`, teal `#0D9488`, amber `#F59E0B`, rose
-`#E11D48`, white `#FFFFFF`. Keep them simple and correct — a clean labelled
+inside the viewBox. Palette only: ink `#0F1713`, grey `#58635D`, light `#D8DEDA`,
+green `#1A6B48`, pale green `#DFF3E7`, copper `#B05C1F`, yellow `#E5B30B`, red
+`#CC2E2C`, white `#FFFFFF`. Keep them simple and correct — a clean labelled
 diagram beats an ambitious messy one.
 
 ## Writing style

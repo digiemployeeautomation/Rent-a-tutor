@@ -3,7 +3,7 @@ import fs from 'node:fs'
 import path from 'node:path'
 
 const root = path.join(process.cwd(), 'content', 'highschool')
-const PALETTE = ['#0f172a', '#64748b', '#e2e8f0', '#2563eb', '#dbeafe', '#0d9488', '#f59e0b', '#e11d48', '#ffffff', '#fff']
+const PALETTE = ['#0f1713', '#58635d', '#d8deda', '#1a6b48', '#dff3e7', '#b05c1f', '#e5b30b', '#cc2e2c', '#ffffff', '#fff']
 let bad = 0
 const ids = new Set()
 

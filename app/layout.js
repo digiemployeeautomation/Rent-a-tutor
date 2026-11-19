@@ -7,8 +7,15 @@ import OfflineRegistrar from '@/components/offline/OfflineRegistrar'
 
 // Fonts are bundled with the app (no request to Google at run time), so
 // they also work in offline lessons.
-const sans = localFont({ src: './fonts/inter-latin.woff2', variable: '--font-sans', weight: '400 700', display: 'swap' })
-const display = localFont({ src: './fonts/bricolage-latin.woff2', variable: '--font-display', weight: '400 800', display: 'swap' })
+const sans = localFont({
+  src: [
+    { path: './fonts/hanken-latin.woff2', weight: '100 900', style: 'normal' },
+    { path: './fonts/hanken-italic-latin.woff2', weight: '100 900', style: 'italic' },
+  ],
+  variable: '--font-sans',
+  display: 'swap',
+})
+const display = localFont({ src: './fonts/besley-latin.woff2', variable: '--font-display', weight: '400 900', display: 'swap' })
 
 export const metadata = {
   title: { default: 'Rent a Tutor — High school & IELTS, taught step by step', template: '%s · Rent a Tutor' },
@@ -19,7 +26,7 @@ export const metadata = {
 }
 
 export const viewport = {
-  themeColor: '#0B1730',
+  themeColor: '#082D1C',
   width: 'device-width',
   initialScale: 1,
 }

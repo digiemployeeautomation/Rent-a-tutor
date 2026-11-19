@@ -1,7 +1,7 @@
 """Generate the PWA icons in public/icons from the brand mark.
 
-The mark matches components/layout/Brand.js: a blue (#2563EB) rounded square
-with an open book — left page white, right page amber (#FBBF24).
+The mark matches components/layout/Brand.js: a chalkboard-green (#0F5337)
+rounded square with a chalk-white tick and a small copper full stop.
 
 Run from the repo root:  python scripts/make-icons.py   (needs Pillow)
 """
@@ -9,37 +9,16 @@ from pathlib import Path
 
 from PIL import Image, ImageDraw
 
-BLUE = (37, 99, 235, 255)
-WHITE = (255, 255, 255, 255)
-AMBER = (251, 191, 36, 255)
+GREEN = (15, 83, 55, 255)
+CHALK = (248, 247, 238, 255)
+COPPER = (231, 143, 86, 255)
 OUT = Path(__file__).resolve().parent.parent / "public" / "icons"
 SS = 4  # supersampling factor for smooth edges
 
-
-def cubic(p0, p1, p2, p3, n=24):
-    """Points along a cubic Bezier curve (excluding the start point)."""
-    pts = []
-    for i in range(1, n + 1):
-        t = i / n
-        a, b, c, d = (1 - t) ** 3, 3 * (1 - t) ** 2 * t, 3 * (1 - t) * t ** 2, t ** 3
-        pts.append((a * p0[0] + b * p1[0] + c * p2[0] + d * p3[0],
-                    a * p0[1] + b * p1[1] + c * p2[1] + d * p3[1]))
-    return pts
-
-
-def left_page():
-    """The left page, traced from the SVG path in Brand.js (24-unit viewBox):
-    M4 6.5C4 5.67 4.67 5 5.5 5H10c1.1 0 2 .9 2 2v12c0-1.1-.9-2-2-2H5.5C4.67 17 4 16.33 4 15.5v-9Z
-    """
-    pts = [(4, 6.5)]
-    pts += cubic((4, 6.5), (4, 5.67), (4.67, 5), (5.5, 5))
-    pts += [(10, 5)]
-    pts += cubic((10, 5), (11.1, 5), (12, 5.9), (12, 7))
-    pts += [(12, 19)]
-    pts += cubic((12, 19), (12, 17.9), (11.1, 17), (10, 17))
-    pts += [(5.5, 17)]
-    pts += cubic((5.5, 17), (4.67, 17), (4, 16.33), (4, 15.5))
-    return pts
+# Geometry on the 36-unit grid used by the SVG mark.
+TICK = [(9.5, 19.5), (15.5, 25.5), (26.5, 10.5)]
+STROKE = 3.6
+DOT = (26.5, 25.5, 2.4)
 
 
 def make(size, maskable=False):
@@ -49,21 +28,25 @@ def make(size, maskable=False):
 
     if maskable:
         # Full-bleed background; artwork stays inside the central safe zone.
-        draw.rectangle((0, 0, s, s), fill=BLUE)
-        book = 0.46
+        draw.rectangle((0, 0, s, s), fill=GREEN)
+        scale = 0.66
     else:
-        draw.rounded_rectangle((0, 0, s - 1, s - 1), radius=int(s * 0.225), fill=BLUE)
-        book = 0.58
+        draw.rounded_rectangle((0, 0, s - 1, s - 1), radius=int(s * 8 / 36), fill=GREEN)
+        scale = 1.0
 
-    # The book spans x 4..20 and y 5..19 in the SVG; centre it in the icon.
-    unit = s * book / 16.0
-    left = (s - 16 * unit) / 2
-    top = (s - 14 * unit) / 2
-    place = lambda x, y: (left + (x - 4) * unit, top + (y - 5) * unit)
+    unit = s * scale / 36.0
+    off = (s - 36 * unit) / 2
+    place = lambda x, y: (off + x * unit, off + y * unit)
 
-    page = left_page()
-    draw.polygon([place(x, y) for x, y in page], fill=WHITE)
-    draw.polygon([place(24 - x, y) for x, y in page], fill=AMBER)  # mirrored right page
+    w = STROKE * unit
+    pts = [place(x, y) for x, y in TICK]
+    draw.line(pts, fill=CHALK, width=int(round(w)), joint="curve")
+    for x, y in pts:  # round caps and join
+        draw.ellipse((x - w / 2, y - w / 2, x + w / 2, y + w / 2), fill=CHALK)
+
+    cx, cy = place(DOT[0], DOT[1])
+    r = DOT[2] * unit
+    draw.ellipse((cx - r, cy - r, cx + r, cy + r), fill=COPPER)
 
     return img.resize((size, size), Image.LANCZOS)
 
@@ -81,7 +64,7 @@ def main():
         print("wrote", OUT / name)
 
     # iOS home-screen icon: opaque, square (iOS rounds the corners itself).
-    apple = Image.new("RGBA", (180, 180), BLUE)
+    apple = Image.new("RGBA", (180, 180), GREEN)
     apple.alpha_composite(make(180, maskable=True))
     apple.convert("RGB").save(OUT / "apple-touch-icon.png", optimize=True)
     print("wrote", OUT / "apple-touch-icon.png")

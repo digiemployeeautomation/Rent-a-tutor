@@ -1,20 +1,20 @@
 // app/dashboard/student/page.js
 //
-// Student home. Serves both courses: a "Continue learning" hero for the next
-// high-school lesson, a panel per course, recent activity and an offline
-// nudge. Every number comes from the database or the lesson catalog.
+// Student home. Serves both courses: the "continue" chalkboard for the next
+// high-school lesson, a ruled section per course, recent activity and an
+// offline note. Every number comes from the database or the lesson catalog.
 // IELTS onboarding is optional — never forced from here.
 import { redirect } from 'next/navigation'
 import { createServerComponentClientFor } from '@/lib/supabaseServer'
 import { getAllLessons, getSubjects, toSummary } from '@/lib/highschool/catalog'
 import { lessonHref } from '@/lib/highschool/subjects'
 import { sectionForType, labelForType, subSkillLabel } from '@/lib/ielts/sections'
-import DemoBanner from '@/components/dashboard/DemoBanner'
-import ContinueCard from '@/components/dashboard/ContinueCard'
+import DemoNotice from '@/components/dashboard/DemoNotice'
+import ContinueBoard from '@/components/dashboard/ContinueBoard'
 import HighSchoolPanel from '@/components/dashboard/HighSchoolPanel'
 import IeltsPanel from '@/components/dashboard/IeltsPanel'
 import RecentActivity from '@/components/dashboard/RecentActivity'
-import OfflineCard from '@/components/dashboard/OfflineCard'
+import OfflineNote from '@/components/dashboard/OfflineNote'
 
 export const metadata = { title: 'Home' }
 export const dynamic = 'force-dynamic'
@@ -85,6 +85,7 @@ export default async function StudentDashboardPage() {
       meta: metaBySlug[nextLesson.subject],
       position: inSubject.findIndex((l) => l.id === nextLesson.id) + 1,
       count: inSubject.length,
+      done: inSubject.filter((l) => isDone(l.id)).length,
       href: lessonHref(nextLesson),
       last,
     }
@@ -138,33 +139,38 @@ export default async function StudentDashboardPage() {
         key: `hs-${r.lesson_id}`,
         kind: 'hs',
         title: lesson.title,
-        context: `${meta.name} · ${r.passed ? 'Quiz passed' : 'Quiz not passed yet'}`,
+        course: meta.name,
+        status: r.passed ? 'Passed' : 'Not passed yet',
         href: lessonHref(lesson),
         at: r.completed_at,
-        icon: meta.icon,
-        tile: meta.tile,
-        result: { label: `${r.score}/${r.total}`, tone: r.passed ? 'green' : 'sun' },
+        score: { value: `${r.score}/${r.total}`, label: `${r.score} out of ${r.total}`, tone: r.passed ? 'passed' : 'notyet' },
       }
     })
 
   const ieltsActivity = subs.map((s) => {
     const item = itemById.get(s.practice_item_id)
     const g = gradeBySub.get(s.id)
-    let result
-    if (s.status === 'graded' && g?.band_overall != null) result = { label: `Band ${Number(g.band_overall).toFixed(1)}`, tone: 'teal' }
-    else if (s.status === 'graded' && g?.raw_score != null) result = { label: `${g.raw_score}/${g.total} correct`, tone: 'teal' }
-    else if (s.status === 'pending_grade') result = { label: s.submitted_at ? 'Marking…' : 'Not finished', tone: 'plain' }
-    else if (s.status === 'error') result = { label: 'Not marked', tone: 'plain' }
+    // `status` is the words on the meta line; `score` is the figure at the right.
+    let status = null
+    let score = null
+    if (s.status === 'graded' && g?.band_overall != null) {
+      const b = Number(g.band_overall).toFixed(1)
+      status = 'Band score'
+      score = { value: b, label: `Band ${b}`, tone: 'band' }
+    } else if (s.status === 'graded' && g?.raw_score != null) {
+      status = 'Answers correct'
+      score = { value: `${g.raw_score}/${g.total}`, label: `${g.raw_score} out of ${g.total} correct`, tone: 'band' }
+    } else if (s.status === 'pending_grade') status = s.submitted_at ? 'Marking…' : 'Not finished'
+    else if (s.status === 'error') status = 'Not marked'
     return {
       key: `ielts-${s.id}`,
       kind: 'ielts',
       title: item?.title || (item ? subSkillLabel(item.sub_skill) : 'IELTS practice'),
-      context: `IELTS ${item ? labelForType(item.type) : 'practice'}`,
+      course: `IELTS ${item ? labelForType(item.type) : 'practice'}`,
+      status,
       href: resultHref(s, item),
       at: s.submitted_at || s.started_at,
-      itemType: item?.type,
-      tile: 'bg-teal-50 text-teal-700',
-      result,
+      score,
     }
   })
 
@@ -178,29 +184,39 @@ export default async function StudentDashboardPage() {
   const heading = firstName ? `${returning ? 'Welcome back' : 'Welcome'}, ${firstName}` : returning ? 'Welcome back' : 'Welcome'
 
   return (
-    <div className="container-app space-y-6 py-6 sm:space-y-8 sm:py-10">
-      {user.user_metadata?.is_demo ? <DemoBanner /> : null}
+    <>
+      {user.user_metadata?.is_demo ? <DemoNotice /> : null}
 
-      <header>
-        <h1 className="h-page">{heading}</h1>
-        <p className="mt-1 text-[15px] text-ink-500">
-          {returning ? 'Here is where you are in your courses.' : 'Pick a lesson to begin. Your progress will show up here.'}
-        </p>
-      </header>
+      <div className="container-app stagger pb-16 pt-8 sm:pb-24 sm:pt-12">
+        <header className="animate-fade-in-up">
+          <h1 className="h-page">{heading}</h1>
+          <p className="mt-2 text-[15px] text-ink-600 sm:text-[17px]">
+            {returning ? 'Here is where you are in your courses.' : 'Pick a lesson to begin. Your progress will show up here.'}
+          </p>
+        </header>
 
-      <ContinueCard next={next} mode={mode} />
-
-      <div className="grid gap-6 lg:grid-cols-2">
-        <HighSchoolPanel subjects={subjectRows} done={hsDone} total={hsTotal} forms={formsLabel} />
-        <IeltsPanel profile={profile} reading={reading} latest={latest} />
-      </div>
-
-      <div className="grid gap-6 lg:grid-cols-3">
-        <div className="min-w-0 lg:col-span-2">
-          <RecentActivity items={activity} startHref={next?.href || '/learn/high-school'} />
+        <div className="mt-6 animate-fade-in-up sm:mt-8">
+          <ContinueBoard next={next} mode={mode} />
         </div>
-        <OfflineCard />
+
+        {/* Phones: one column in reading order. Desktop: the two courses side by
+            side, the offline note under the shorter High School column, then
+            recent activity across the full width. */}
+        <div className="mt-12 grid animate-fade-in-up gap-x-16 gap-y-14 sm:mt-16 lg:grid-cols-2">
+          <div className="min-w-0 lg:col-start-1 lg:row-start-1">
+            <HighSchoolPanel subjects={subjectRows} done={hsDone} total={hsTotal} forms={formsLabel} />
+          </div>
+          <div className="min-w-0 lg:col-start-2 lg:row-span-2 lg:row-start-1">
+            <IeltsPanel profile={profile} reading={reading} latest={latest} />
+          </div>
+          <div className="min-w-0 lg:col-span-2 lg:row-start-3 lg:mt-6">
+            <RecentActivity items={activity} startHref={next?.href || '/learn/high-school'} />
+          </div>
+          <div className="min-w-0 lg:col-start-1 lg:row-start-2">
+            <OfflineNote />
+          </div>
+        </div>
       </div>
-    </div>
+    </>
   )
 }

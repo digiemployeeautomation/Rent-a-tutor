@@ -1,15 +1,27 @@
 'use client'
 // app/practice/writing/[itemId]/SubmissionForm.js
 //
-// The Writing editor: large textarea, live word count against the task
-// minimum, optional count-up timer, draft autosave to localStorage (per item),
-// and a fixed action bar with "Get feedback". On submit it creates a
+// The Writing answer sheet: a large ruled textarea, live word count against
+// the task minimum, optional count-up timer, draft autosave to localStorage
+// (per item), and one action: "Get feedback". On submit it creates a
 // submission, asks the server to grade it, then opens the result page.
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useRouter } from 'next/navigation'
-import { AlertCircle, CheckCircle2, Loader2, Pause, Play, RotateCcw, Send, Timer } from 'lucide-react'
+import { ArrowRight, Check, Loader2, Pause, Play, RotateCcw } from 'lucide-react'
 
 const draftKey = (itemId) => `rat:writing-draft:${itemId}`
+
+// Faint ruled lines, one per line of text (line-height 1.7em), that scroll
+// with the writing like a page in an exercise book. The first layer is a
+// white strip that hides the stray rule above the first line.
+const RULED = {
+  lineHeight: 1.7,
+  backgroundImage: 'linear-gradient(#FEFEFC, #FEFEFC), linear-gradient(to bottom, transparent calc(1.7em - 1px), #EAEEEB calc(1.7em - 1px))',
+  backgroundSize: '100% 1em, 100% 1.7em',
+  backgroundPosition: '0 0, 0 calc(1rem - 0.3em)',
+  backgroundRepeat: 'no-repeat, repeat',
+  backgroundAttachment: 'local, local',
+}
 
 function countWords(text) {
   return text.trim().split(/\s+/).filter(Boolean).length
@@ -48,11 +60,11 @@ function clearDraft(itemId) {
 
 // Turn API / network failures into plain words. The draft is always kept.
 function friendlyError(status, step) {
-  if (status === 401) return 'You have been signed out. Sign in again — your essay is saved on this device.'
+  if (status === 401) return 'You have been signed out. Sign in again. Your essay is saved on this device.'
   if (status === 404) return 'This task is no longer available. Your essay is saved on this device.'
-  if (status === 0) return 'No internet connection. Check your data or Wi-Fi and try again — your essay is saved on this device.'
-  if (step === 'grade') return 'We could not mark your essay just now. Your essay is saved — please try again in a minute.'
-  return 'We could not send your essay just now. Your essay is saved — please try again in a minute.'
+  if (status === 0) return 'No internet connection. Check your data or Wi-Fi and try again. Your essay is saved on this device.'
+  if (step === 'grade') return 'We could not mark your essay just now. Your essay is saved. Please try again in a minute.'
+  return 'We could not send your essay just now. Your essay is saved. Please try again in a minute.'
 }
 
 export default function SubmissionForm({ itemId, minimumWords = 250, suggestedMinutes = 40 }) {
@@ -160,10 +172,8 @@ export default function SubmissionForm({ itemId, minimumWords = 250, suggestedMi
   // Word-count status
   const reached = words >= minimumWords
   const veryShort = words > 0 && words < Math.ceil(minimumWords * 0.5)
-  const pct = Math.min(100, Math.round((words / minimumWords) * 100))
-  const countTone = words === 0 ? 'text-ink-400' : reached ? 'text-emerald-700' : 'text-sun-600'
-  const barTone = reached ? 'bg-emerald-500' : 'bg-sun-400'
   const overTime = elapsed > suggestedMinutes * 60
+  const timerUsed = running || elapsed > 0
 
   let countHint = `Aim for at least ${minimumWords} words.`
   if (words > 0 && !reached) countHint = `${minimumWords - words} more word${minimumWords - words === 1 ? '' : 's'} to reach the minimum.`
@@ -174,117 +184,114 @@ export default function SubmissionForm({ itemId, minimumWords = 250, suggestedMi
 
   return (
     <section aria-labelledby="answer-heading" className="min-w-0">
-      <div className="card">
-        {/* Toolbar */}
-        <div className="flex flex-wrap items-center justify-between gap-2 border-b border-ink-100 px-4 py-3 sm:px-5">
-          <h2 id="answer-heading" className="font-display text-base font-semibold text-ink-900">Your answer</h2>
-          <div className="flex items-center gap-1.5">
-            <span
-              className={`inline-flex min-h-[36px] items-center gap-1.5 rounded-lg px-2.5 text-sm font-semibold tabular-nums ${overTime ? 'bg-sun-100 text-sun-600' : 'text-ink-600'}`}
+      {/* Heading + optional timer */}
+      <div className="rule-head items-center">
+        <h2 id="answer-heading" className="h-section">Your answer</h2>
+        <div className="flex items-center gap-1">
+          {timerUsed ? (
+            <p
+              className="text-[15px] font-semibold tabular text-ink-500"
               aria-label={`Time spent ${fmt(elapsed)} of ${suggestedMinutes} minutes suggested`}
             >
-              <Timer className="h-4 w-4" aria-hidden="true" />
-              {fmt(elapsed)}<span className="font-normal text-ink-400">/ {suggestedMinutes}:00</span>
-            </span>
-            <button
-              type="button"
-              onClick={() => setRunning((r) => !r)}
-              disabled={busy}
-              className="btn-ghost btn-sm"
-              aria-pressed={running}
-            >
-              {running ? <><Pause className="h-4 w-4" aria-hidden="true" /> Pause</> : <><Play className="h-4 w-4" aria-hidden="true" /> {elapsed ? 'Resume' : 'Start timer'}</>}
+              <span className={`numeral text-[1.375rem] leading-none ${overTime ? 'text-sun-700' : 'text-ink-900'}`}>{fmt(elapsed)}</span>
+              {' '}/ {suggestedMinutes}:00
+            </p>
+          ) : null}
+          <button
+            type="button"
+            onClick={() => setRunning((r) => !r)}
+            disabled={busy}
+            className="btn-ghost btn-sm -mr-2"
+            aria-pressed={running}
+          >
+            {running
+              ? <><Pause className="h-4 w-4" aria-hidden="true" /> Pause</>
+              : <><Play className="h-4 w-4" aria-hidden="true" /> {elapsed ? 'Resume' : `Start ${suggestedMinutes} min timer`}</>}
+          </button>
+        </div>
+      </div>
+      {overTime ? (
+        <p className="rounded-b-lg bg-sun-100 px-4 py-2.5 text-[15px] leading-relaxed text-ink-800">
+          You have passed the suggested {suggestedMinutes} minutes. Finish your last point and check your work.
+        </p>
+      ) : null}
+
+      <textarea
+        id="essay"
+        ref={textareaRef}
+        value={text}
+        onChange={(e) => setText(e.target.value)}
+        readOnly={busy}
+        rows={12}
+        spellCheck={false}
+        autoCapitalize="sentences"
+        placeholder={loaded ? 'Start writing here. Your work is saved on this device as you type.' : ''}
+        aria-labelledby="answer-heading"
+        aria-describedby="word-status"
+        style={RULED}
+        className={`field mt-4 min-h-[320px] resize-y px-4 py-4 text-[17px] sm:px-5 lg:min-h-[440px] ${busy ? '!text-ink-600' : ''}`}
+      />
+
+      {/* Status line: words against the minimum, suggested time, draft */}
+      <div id="word-status" className="mt-3 flex flex-col gap-x-6 gap-y-2 sm:flex-row sm:items-start sm:justify-between">
+        <div className="min-w-0">
+          <p className={`text-[15px] font-semibold tabular ${reached ? 'text-board-700' : 'text-ink-600'}`} aria-live="polite">
+            <span className={`numeral text-[1.75rem] leading-none ${reached ? 'text-board-700' : words ? 'text-ink-900' : 'text-ink-400'}`}>{words}</span>
+            {' '}/ {minimumWords} words
+            {reached ? <Check className="mb-1 ml-1.5 inline h-4 w-4" strokeWidth={3} aria-hidden="true" /> : null}
+          </p>
+          <p className="mt-1 text-[15px] text-ink-600">{countHint}</p>
+        </div>
+        <div className="shrink-0 text-[13px] font-semibold text-ink-500 sm:pt-2 sm:text-right">
+          <p>Suggested time: about {suggestedMinutes} minutes</p>
+          <p className="mt-1">
+            {saveState === 'unavailable' ? 'Your draft cannot be saved in this browser'
+              : saveState === 'restored' ? 'Your saved draft was restored'
+              : saveState === 'saved' ? 'Draft saved on this device'
+              : null}
+          </p>
+          {text.trim() && !busy ? (
+            <button type="button" onClick={startOver} className="-mx-1 mt-0.5 inline-flex min-h-[36px] items-center gap-1.5 rounded px-1 font-bold text-ink-700 underline decoration-ink-300 underline-offset-4 hover:text-ink-900 hover:decoration-ink-900">
+              <RotateCcw className="h-3.5 w-3.5" aria-hidden="true" /> Start over
             </button>
-          </div>
-        </div>
-
-        <div className="p-3 sm:p-4">
-          <textarea
-            id="essay"
-            ref={textareaRef}
-            value={text}
-            onChange={(e) => setText(e.target.value)}
-            readOnly={busy}
-            rows={16}
-            spellCheck={false}
-            autoCapitalize="sentences"
-            placeholder={loaded ? 'Start writing here. Your work is saved on this device as you type.' : ''}
-            aria-labelledby="answer-heading"
-            aria-describedby="word-status"
-            className="field min-h-[50vh] resize-y border-transparent px-2 text-[16px] leading-[1.75] focus:border-blue-500 sm:px-3 lg:min-h-[480px]"
-          />
-        </div>
-
-        {/* Word count + draft status */}
-        <div className="border-t border-ink-100 px-4 py-3 sm:px-5" id="word-status">
-          <div className="flex items-center justify-between gap-3">
-            <p className={`text-sm font-semibold tabular-nums ${countTone}`} aria-live="polite">
-              {words} / {minimumWords} words
-            </p>
-            <p className="flex items-center gap-1.5 text-xs text-ink-400">
-              {saveState === 'unavailable' ? (
-                <>Draft can’t be saved in this browser</>
-              ) : saveState === 'restored' ? (
-                <><CheckCircle2 className="h-3.5 w-3.5 text-emerald-600" aria-hidden="true" /> Your saved draft was restored</>
-              ) : saveState === 'saved' ? (
-                <><CheckCircle2 className="h-3.5 w-3.5 text-emerald-600" aria-hidden="true" /> Saved on this device</>
-              ) : null}
-            </p>
-          </div>
-          <div className="progress-track mt-2 h-1.5" aria-hidden="true">
-            <div className={`h-full rounded-full transition-[width] duration-300 ${words ? barTone : ''}`} style={{ width: `${pct}%` }} />
-          </div>
-          <div className="mt-2 flex items-start justify-between gap-3">
-            <p className="text-sm text-ink-500">{countHint}</p>
-            {text.trim() && !busy ? (
-              <button type="button" onClick={startOver} className="btn-ghost btn-sm shrink-0 text-ink-400">
-                <RotateCcw className="h-3.5 w-3.5" aria-hidden="true" /> Start over
-              </button>
-            ) : null}
-          </div>
+          ) : null}
         </div>
       </div>
 
       {veryShort && !busy ? (
-        <p className="mt-3 rounded-xl bg-sun-50 px-4 py-3 text-sm text-ink-700">
-          Your answer is very short. In the exam, answers under {minimumWords} words lose marks — you can still get feedback now.
+        <p className="mt-4 rounded-lg bg-sun-100 px-4 py-3 text-[15px] leading-relaxed text-ink-800">
+          <strong className="font-bold text-ink-900">Very short.</strong>{' '}
+          In the exam, answers under {minimumWords} words lose marks. You can still get feedback now.
         </p>
       ) : null}
 
       {error ? (
-        <div role="alert" className="mt-3 flex gap-2.5 rounded-xl border border-rose-200 bg-rose-50 px-4 py-3 text-sm text-rose-800">
-          <AlertCircle className="mt-0.5 h-4 w-4 shrink-0" aria-hidden="true" />
-          <p>{error}</p>
-        </div>
+        <p role="alert" className="mt-4 rounded-lg bg-rose-50 px-4 py-3 text-[15px] leading-relaxed text-ink-800">
+          <strong className="font-bold text-rose-700">Not sent.</strong> {error}
+        </p>
       ) : null}
 
-      {busy ? (
-        <div role="status" className="mt-3 flex items-center gap-3 rounded-xl bg-blue-50 px-4 py-3 text-sm text-blue-800 animate-fade-in">
-          <Loader2 className="h-4 w-4 shrink-0 animate-spin" aria-hidden="true" />
-          <p><span className="font-semibold">{pendingLabel}</span> This usually takes a few seconds. Please keep this page open.</p>
-        </div>
-      ) : null}
-
-      {/* Fixed action bar */}
-      <div className="no-print fixed inset-x-0 bottom-16 z-30 border-t border-ink-100 bg-white/95 backdrop-blur-md md:bottom-0">
-        <div className="container-app flex items-center justify-between gap-3 py-3">
-          <p className={`text-sm font-semibold tabular-nums ${countTone}`}>
-            {words} word{words === 1 ? '' : 's'}
-            <span className="hidden font-normal text-ink-400 sm:inline"> · minimum {minimumWords}</span>
-          </p>
-          <button
-            type="button"
-            onClick={submit}
-            disabled={!text.trim() || busy}
-            className="btn-primary btn-lg"
-          >
-            {busy ? (
-              <><Loader2 className="h-5 w-5 animate-spin" aria-hidden="true" /> {pendingLabel}</>
-            ) : (
-              <><Send className="h-5 w-5" aria-hidden="true" /> Get feedback</>
-            )}
-          </button>
-        </div>
+      {/* The one action */}
+      <div className="mt-6 flex flex-col gap-x-5 gap-y-3 border-t border-ink-200 pt-6 sm:flex-row sm:items-center">
+        <button
+          type="button"
+          onClick={submit}
+          disabled={!text.trim() || busy}
+          className="btn-primary btn-lg group shrink-0"
+        >
+          {busy ? (
+            <><Loader2 className="h-5 w-5 animate-spin" aria-hidden="true" /> {pendingLabel}</>
+          ) : (
+            <>{error ? 'Try again' : 'Get feedback'} <ArrowRight className="nudge h-5 w-5" aria-hidden="true" /></>
+          )}
+        </button>
+        {busy ? (
+          <p role="status" className="text-[15px] leading-snug text-ink-600">This usually takes a few seconds. Please keep this page open.</p>
+        ) : !text.trim() ? (
+          <p className="text-[15px] leading-snug text-ink-600">Write your answer first. The button works as soon as you start typing.</p>
+        ) : (
+          <p className="text-[15px] leading-snug text-ink-600">You get a band for each of the four marking criteria, with comments.</p>
+        )}
       </div>
     </section>
   )

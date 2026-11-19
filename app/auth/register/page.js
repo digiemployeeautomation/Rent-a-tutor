@@ -4,7 +4,7 @@ import Link from 'next/link'
 import { Loader2 } from 'lucide-react'
 import { supabase } from '@/lib/supabase'
 import { useRouter, useSearchParams } from 'next/navigation'
-import AuthShell, { FormError } from '@/components/marketing/AuthShell'
+import AuthShell, { DemoRoute, FormError } from '@/components/marketing/AuthShell'
 
 // Only send new students on to their own learning pages.
 function safeNext(path) {
@@ -60,16 +60,13 @@ function RegisterForm() {
     <AuthShell
       title="Create your free account"
       subtitle="Save your progress across High School lessons and IELTS practice."
-      footer={
-        <p className="text-center text-sm text-ink-500">
-          Just want to look around?{' '}
-          <Link href="/demo" className="font-semibold text-blue-700 hover:underline">Try the demo — no sign-up</Link>
-        </p>
-      }
+      boardLine={<>Start with <span className="text-sun-300">one lesson</span> today.</>}
+      boardNote="Completely free. No payments."
+      footer={<DemoRoute />}
     >
       <FormError>{error}</FormError>
 
-      <form onSubmit={handleRegister} className="mt-6 space-y-4">
+      <form onSubmit={handleRegister} className="mt-7 space-y-5">
         <div>
           <label htmlFor="fullName" className="label">Full name</label>
           <input
@@ -120,9 +117,9 @@ function RegisterForm() {
         </button>
       </form>
 
-      <p className="mt-6 text-center text-sm text-ink-500">
+      <p className="mt-5 text-[15px] text-ink-600">
         Already have an account?{' '}
-        <Link href={loginHref} className="font-semibold text-blue-700 hover:underline">Log in</Link>
+        <Link href={loginHref} className="link">Log in</Link>
       </p>
     </AuthShell>
   )

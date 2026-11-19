@@ -5,6 +5,9 @@
 // weakest_section, hours_per_week, first_language }) via onSubmit.
 import { useState } from 'react'
 import { ArrowLeft, ArrowRight, Check, Loader2 } from 'lucide-react'
+import SubjectArt from '@/components/art/SubjectArt'
+import Segments from '@/components/kit/Segments'
+import BandScale from '@/components/kit/BandScale'
 
 const VARIANT_OPTIONS = [
   { value: 'academic', title: 'Academic', desc: 'For studying at a university or college abroad.' },
@@ -20,6 +23,8 @@ const SECTION_OPTIONS = [
 
 const BAND_OPTIONS = [4.0, 4.5, 5.0, 5.5, 6.0, 6.5, 7.0, 7.5, 8.0, 8.5, 9.0]
 const HOUR_OPTIONS = [2, 5, 10, 15]
+// Roughly what each weekly total means per day, so the choice is concrete.
+const HOUR_NOTES = { 2: 'About 20 minutes a day', 5: 'About 45 minutes a day', 10: 'About an hour and a half a day', 15: 'About 2 hours a day' }
 
 const STEPS = [
   { key: 'variant', title: 'Which IELTS are you preparing for?', hint: 'Listening and Speaking are the same in both. Reading and Writing are different.' },
@@ -27,19 +32,22 @@ const STEPS = [
   { key: 'date', title: 'When is your test?', hint: 'If you have not booked it yet, skip this step.', optional: true },
   { key: 'current', title: 'What is your level today?', hint: 'Your best guess is fine. Choose "Not sure" if you have never taken IELTS.', optional: true },
   { key: 'weakest', title: 'Which part feels hardest?', hint: 'We will point you to practice for it first.', optional: true },
-  { key: 'hours', title: 'How many hours a week can you study?', hint: 'Be honest — a little every week works better than a lot once.' },
+  { key: 'hours', title: 'How many hours a week can you study?', hint: 'Be honest. A little every week works better than a lot once.' },
   { key: 'language', title: 'What is your first language?', hint: 'This helps us spot mistakes that are common for speakers of your language.', optional: true },
   { key: 'review', title: 'Check your answers', hint: 'You can change any of these later.' },
 ]
 
+// One tappable answer. Selected = chalkboard-green border on a pale green fill.
 function Choice({ selected, onClick, children, className = '' }) {
   return (
     <button
       type="button"
       onClick={onClick}
       aria-pressed={selected}
-      className={`relative rounded-2xl border-2 text-left transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 active:scale-[0.99] ${
-        selected ? 'border-blue-600 bg-blue-50 text-blue-800' : 'border-ink-100 bg-white text-ink-800 hover:border-ink-200 hover:bg-ink-50'
+      className={`rounded-lg border text-left focus:outline-none focus-visible:ring-2 focus-visible:ring-board-600 focus-visible:ring-offset-2 focus-visible:ring-offset-paper ${
+        selected
+          ? 'border-board-700 bg-board-50 text-ink-900 ring-1 ring-inset ring-board-700'
+          : 'border-ink-300 bg-white text-ink-900 hover:border-ink-900'
       } ${className}`}
     >
       {children}
@@ -63,7 +71,6 @@ export default function IELTSQuestionnaire({ onSubmit }) {
 
   const step = STEPS[index]
   const isLast = index === STEPS.length - 1
-  const progress = Math.round(((index + 1) / STEPS.length) * 100)
 
   function update(key, value) {
     setAnswers((prev) => ({ ...prev, [key]: value }))
@@ -113,40 +120,48 @@ export default function IELTSQuestionnaire({ onSubmit }) {
     <div className="animate-fade-in">
       {/* Progress */}
       <div>
-        <div className="mb-2 flex items-center justify-between text-xs font-semibold text-ink-400">
-          <span>Step {index + 1} of {STEPS.length}</span>
-          {step.optional ? <span className="chip">Optional</span> : null}
+        <div className="mb-2.5 flex items-baseline justify-between gap-4 text-[13px] font-semibold text-ink-500">
+          <span><span className="font-bold text-copper-700">IELTS goal</span> · Step <span className="tabular text-ink-900">{index + 1}</span> of {STEPS.length}</span>
+          {step.optional ? <span>Optional</span> : null}
         </div>
-        <div className="progress-track" role="progressbar" aria-valuemin={1} aria-valuemax={STEPS.length} aria-valuenow={index + 1} aria-label="Questionnaire progress">
-          <div className="progress-fill" style={{ width: `${progress}%` }} />
-        </div>
+        <Segments total={STEPS.length} done={index + 1} tone="copper" label={`Step ${index + 1} of ${STEPS.length}`} />
       </div>
 
-      <div key={step.key} className="mt-8 animate-fade-in-up">
-        <h1 className="h-page">{step.title}</h1>
-        <p className="mt-2 text-[15px] leading-relaxed text-ink-500">{step.hint}</p>
+      <div key={step.key} className="mt-9 animate-fade-in-up sm:mt-12">
+        <h1 className="h-page text-balance">{step.title}</h1>
+        <p className="mt-2.5 max-w-[52ch] text-[17px] leading-[1.5] text-ink-600">{step.hint}</p>
 
-        <div className="mt-6">
+        <div className="mt-7">
           {step.key === 'variant' && (
             <div className="space-y-3">
               {VARIANT_OPTIONS.map((opt) => (
-                <Choice key={opt.value} selected={answers.variant === opt.value} onClick={() => update('variant', opt.value)} className="flex w-full items-center gap-4 px-5 py-4">
+                <Choice key={opt.value} selected={answers.variant === opt.value} onClick={() => update('variant', opt.value)} className="flex min-h-[72px] w-full items-center gap-4 px-4 py-3.5 sm:px-5">
+                  <Dot on={answers.variant === opt.value} />
                   <span className="flex-1">
-                    <span className="block text-base font-semibold">{opt.title}</span>
-                    <span className="mt-0.5 block text-sm text-ink-500">{opt.desc}</span>
+                    <span className="block text-[17px] font-bold leading-snug">{opt.title}</span>
+                    <span className="mt-0.5 block text-[15px] leading-snug text-ink-600">{opt.desc}</span>
                   </span>
-                  <Tick on={answers.variant === opt.value} />
                 </Choice>
               ))}
             </div>
           )}
 
           {step.key === 'target' && (
-            <BandGrid value={answers.target_band} onChange={(b) => update('target_band', b)} bands={BAND_OPTIONS} />
+            <>
+              <BandGrid value={answers.target_band} onChange={(b) => update('target_band', b)} bands={BAND_OPTIONS} />
+              <div className="mt-8 border-t border-ink-200 pt-5">
+                <p className="text-[13px] font-semibold text-ink-500">
+                  {answers.target_band
+                    ? <>Your target on the IELTS scale: <span className="font-bold text-copper-700">band {answers.target_band.toFixed(1)}</span></>
+                    : 'The IELTS scale. Your target will be marked here.'}
+                </p>
+                <BandScale band={null} target={answers.target_band} className="mt-1 max-w-md" />
+              </div>
+            </>
           )}
 
           {step.key === 'date' && (
-            <div>
+            <div className="max-w-sm">
               <label htmlFor="test-date" className="label">Test date</label>
               <input
                 id="test-date"
@@ -159,42 +174,45 @@ export default function IELTSQuestionnaire({ onSubmit }) {
           )}
 
           {step.key === 'current' && (
-            <div className="grid grid-cols-3 gap-2.5 sm:grid-cols-5">
-              <Choice selected={answers.current_band_self == null} onClick={() => update('current_band_self', null)} className="col-span-3 flex min-h-[52px] items-center justify-center px-3 text-sm font-semibold sm:col-span-5">
-                Not sure
+            <div>
+              <Choice selected={answers.current_band_self == null} onClick={() => update('current_band_self', null)} className="flex min-h-[56px] w-full items-center gap-4 px-4 sm:px-5">
+                <Dot on={answers.current_band_self == null} />
+                <span className="text-[17px] font-bold">Not sure</span>
               </Choice>
-              {BAND_OPTIONS.slice(0, 9).map((b) => (
-                <Choice key={b} selected={answers.current_band_self === b} onClick={() => update('current_band_self', b)} className="flex min-h-[52px] items-center justify-center font-display text-lg font-bold">
-                  {b.toFixed(1)}
-                </Choice>
-              ))}
+              <p className="mb-2.5 mt-6 text-[13px] font-semibold text-ink-500">Or pick a band</p>
+              <BandGrid value={answers.current_band_self} onChange={(b) => update('current_band_self', b)} bands={BAND_OPTIONS.slice(0, 9)} />
             </div>
           )}
 
           {step.key === 'weakest' && (
-            <div className="grid grid-cols-2 gap-3">
+            <div className="space-y-3">
               {SECTION_OPTIONS.map((s) => (
-                <Choice key={s.value} selected={answers.weakest_section === s.value} onClick={() => update('weakest_section', answers.weakest_section === s.value ? null : s.value)} className="flex min-h-[64px] items-center justify-between px-4 text-base font-semibold">
-                  {s.label}
-                  <Tick on={answers.weakest_section === s.value} />
+                <Choice key={s.value} selected={answers.weakest_section === s.value} onClick={() => update('weakest_section', answers.weakest_section === s.value ? null : s.value)} className="flex min-h-[68px] w-full items-center gap-4 px-4 py-2.5 sm:px-5">
+                  <SubjectArt name={s.value} tone="copper" className="h-11 w-11" />
+                  <span className="flex-1 text-[17px] font-bold">{s.label}</span>
+                  <Dot on={answers.weakest_section === s.value} />
                 </Choice>
               ))}
             </div>
           )}
 
           {step.key === 'hours' && (
-            <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
+            <div className="space-y-3">
               {HOUR_OPTIONS.map((h) => (
-                <Choice key={h} selected={answers.hours_per_week === h} onClick={() => update('hours_per_week', h)} className="flex min-h-[72px] flex-col items-center justify-center">
-                  <span className="font-display text-2xl font-bold">{h}</span>
-                  <span className="text-xs font-medium text-ink-500">hours a week</span>
+                <Choice key={h} selected={answers.hours_per_week === h} onClick={() => update('hours_per_week', h)} className="flex min-h-[68px] w-full items-center gap-4 px-4 py-2.5 sm:px-5">
+                  <span className="numeral w-11 shrink-0 text-center text-[2rem] leading-none text-copper-600">{h}</span>
+                  <span className="flex-1">
+                    <span className="block text-[17px] font-bold leading-snug">hours a week</span>
+                    <span className="mt-0.5 block text-[15px] leading-snug text-ink-600">{HOUR_NOTES[h]}</span>
+                  </span>
+                  <Dot on={answers.hours_per_week === h} />
                 </Choice>
               ))}
             </div>
           )}
 
           {step.key === 'language' && (
-            <div>
+            <div className="max-w-sm">
               <label htmlFor="first-language" className="label">First language</label>
               <input
                 id="first-language"
@@ -210,7 +228,7 @@ export default function IELTSQuestionnaire({ onSubmit }) {
           )}
 
           {step.key === 'review' && (
-            <dl className="card divide-y divide-ink-100">
+            <dl className="border-t-2 border-ink-900">
               <ReviewRow label="IELTS type" value={answers.variant === 'general' ? 'General Training' : 'Academic'} onEdit={() => setIndex(0)} />
               <ReviewRow label="Target band" value={answers.target_band?.toFixed(1) ?? '—'} onEdit={() => setIndex(1)} />
               <ReviewRow label="Test date" value={answers.test_date || 'Not booked'} onEdit={() => setIndex(2)} />
@@ -223,20 +241,20 @@ export default function IELTSQuestionnaire({ onSubmit }) {
         </div>
 
         {error ? (
-          <p role="alert" className="mt-5 rounded-xl border border-rose-200 bg-rose-50 px-4 py-3 text-sm text-rose-700">{error}</p>
+          <p role="alert" className="mt-5 rounded-lg border border-rose-200 bg-rose-50 px-4 py-3 text-[15px] font-semibold leading-snug text-rose-800">{error}</p>
         ) : null}
       </div>
 
       {/* Back / Next */}
       <div className="mt-10 flex items-center gap-3">
         {index > 0 ? (
-          <button type="button" onClick={back} disabled={saving} className="btn-secondary btn-lg px-5">
+          <button type="button" onClick={back} disabled={saving} className="btn-secondary btn-lg !px-5">
             <ArrowLeft className="h-5 w-5" aria-hidden="true" /> Back
           </button>
         ) : null}
         {isLast ? (
           <button type="button" onClick={handleSubmit} disabled={saving} className="btn-primary btn-lg flex-1 sm:flex-none">
-            {saving ? <><Loader2 className="h-5 w-5 animate-spin" aria-hidden="true" /> Saving…</> : <>Save my goal <Check className="h-5 w-5" aria-hidden="true" /></>}
+            {saving ? <><Loader2 className="h-5 w-5 animate-spin" aria-hidden="true" /> Saving…</> : <>Save my goal <Check className="h-5 w-5" strokeWidth={3} aria-hidden="true" /></>}
           </button>
         ) : (
           <button type="button" onClick={next} disabled={!canContinue()} className="btn-primary btn-lg flex-1 sm:flex-none">
@@ -250,9 +268,9 @@ export default function IELTSQuestionnaire({ onSubmit }) {
 
 function BandGrid({ value, onChange, bands }) {
   return (
-    <div className="grid grid-cols-3 gap-2.5 sm:grid-cols-4">
+    <div className="grid grid-cols-4 gap-2.5 sm:grid-cols-6">
       {bands.map((b) => (
-        <Choice key={b} selected={value === b} onClick={() => onChange(b)} className="flex min-h-[56px] items-center justify-center font-display text-lg font-bold">
+        <Choice key={b} selected={value === b} onClick={() => onChange(b)} className="numeral flex min-h-[56px] items-center justify-center text-[1.375rem]">
           {b.toFixed(1)}
         </Choice>
       ))}
@@ -260,21 +278,22 @@ function BandGrid({ value, onChange, bands }) {
   )
 }
 
-function Tick({ on }) {
+// Radio dot for a row choice.
+function Dot({ on }) {
   return (
-    <span className={`flex h-6 w-6 shrink-0 items-center justify-center rounded-full border-2 transition-colors ${on ? 'border-blue-600 bg-blue-600 text-white' : 'border-ink-200 bg-white'}`} aria-hidden="true">
-      {on ? <Check className="h-3.5 w-3.5" /> : null}
+    <span className={`flex h-[22px] w-[22px] shrink-0 items-center justify-center rounded-full border-2 bg-white ${on ? 'border-board-700' : 'border-ink-300'}`} aria-hidden="true">
+      <span className={`h-2.5 w-2.5 rounded-full bg-board-700 transition-transform duration-150 ease-out ${on ? 'scale-100' : 'scale-0'}`} />
     </span>
   )
 }
 
 function ReviewRow({ label, value, onEdit }) {
   return (
-    <div className="flex min-h-[56px] items-center gap-3 py-2 pl-4 pr-2 sm:pl-5">
-      <dt className="w-28 shrink-0 text-sm text-ink-500 sm:w-36">{label}</dt>
+    <div className="flex min-h-[56px] items-center gap-3 border-b border-ink-200 py-1.5">
+      <dt className="w-28 shrink-0 text-[15px] text-ink-600 sm:w-40">{label}</dt>
       <dd className="flex min-w-0 flex-1 items-center gap-2">
-        <span className="min-w-0 flex-1 truncate text-sm font-semibold text-ink-900">{value}</span>
-        <button type="button" onClick={onEdit} className="btn-ghost btn-sm min-h-[44px] shrink-0 text-blue-700" aria-label={`Change ${label.toLowerCase()}`}>Change</button>
+        <span className="min-w-0 flex-1 truncate text-base font-bold text-ink-900">{value}</span>
+        <button type="button" onClick={onEdit} className="inline-flex min-h-[44px] shrink-0 items-center px-1 text-sm font-semibold text-ink-900 underline decoration-ink-300 underline-offset-4 hover:decoration-ink-900" aria-label={`Change ${label.toLowerCase()}`}>Change</button>
       </dd>
     </div>
   )

@@ -4,7 +4,7 @@
 // then a CTA to the linked drill (the "Test"). Auth-gated.
 import Link from 'next/link'
 import { redirect } from 'next/navigation'
-import { ArrowLeft, ArrowRight, Clock, Layers, Target } from 'lucide-react'
+import { ArrowLeft, ArrowRight } from 'lucide-react'
 import { createServerComponentClientFor } from '@/lib/supabaseServer'
 import SlideViewer from '@/components/lesson/SlideViewer'
 import LessonDownload from '@/components/offline/LessonDownload'
@@ -24,9 +24,10 @@ export default async function ReadingLessonPage({ params }) {
 
   if (!lesson || lesson.status !== 'published') {
     return (
-      <div className="container-read py-12">
-        <h1 className="h-page">Lesson not found</h1>
-        <p className="lead mt-2">This lesson does not exist or is not available yet.</p>
+      <div className="container-read py-12 sm:py-16">
+        <p className="eyebrow !text-copper-700">IELTS Reading</p>
+        <h1 className="h-page mt-2">Lesson not found</h1>
+        <p className="lead mt-3">This lesson does not exist or is not available yet.</p>
         <Link href="/learn/reading" className="btn-primary mt-6">
           <ArrowLeft className="h-4 w-4" aria-hidden="true" /> Back to the Reading path
         </Link>
@@ -37,48 +38,48 @@ export default async function ReadingLessonPage({ params }) {
   const blocks = lesson.slides_data?.blocks ?? []
   const offlineLesson = toOfflineLesson(lesson)
   const practiceHref = lesson.drill_item_id ? `/practice/reading/${lesson.drill_item_id}` : null
+  const facts = [
+    `About ${offlineLesson.minutes} min`,
+    `${blocks.length} short slide${blocks.length === 1 ? '' : 's'}`,
+    practiceHref ? 'Practice set at the end' : null,
+  ].filter(Boolean)
 
   return (
-    <div className="container-read py-6 sm:py-10">
-      <Link href="/learn/reading" className="inline-flex min-h-[44px] items-center gap-1.5 text-sm font-medium text-ink-400 hover:text-ink-700">
+    <div className="container-read pb-16 pt-4 sm:pt-6">
+      <Link href="/learn/reading" className="inline-flex min-h-[44px] items-center gap-1.5 text-sm font-semibold text-ink-500 hover:text-ink-900">
         <ArrowLeft className="h-4 w-4" aria-hidden="true" /> Reading path
       </Link>
 
-      <p className="eyebrow mt-3 !text-teal-700">
-        IELTS Reading{lesson.position ? ` · Lesson ${lesson.position}` : ''}
-      </p>
-      <h1 className="h-page mt-2">{lesson.title}</h1>
-      {lesson.summary ? <p className="lead mt-2">{lesson.summary}</p> : null}
+      <header className="mt-3 sm:mt-5">
+        <p className="eyebrow !text-copper-700">
+          IELTS Reading{lesson.position ? ` · Lesson ${lesson.position}` : ''}
+        </p>
+        <h1 className="h-page mt-1.5 text-balance">{lesson.title}</h1>
+        {lesson.summary ? <p className="lead mt-3">{lesson.summary}</p> : null}
+        <p className="mt-3 text-[13px] font-semibold leading-5 text-ink-500 tabular">{facts.join(' · ')}</p>
+      </header>
 
-      <div className="mt-4 flex flex-wrap gap-2">
-        <span className="chip"><Clock className="h-3.5 w-3.5" aria-hidden="true" /> About {offlineLesson.minutes} min</span>
-        <span className="chip"><Layers className="h-3.5 w-3.5" aria-hidden="true" /> {blocks.length} short slides</span>
-        {practiceHref ? (
-          <span className="chip-teal"><Target className="h-3.5 w-3.5" aria-hidden="true" /> Practice set at the end</span>
-        ) : null}
-      </div>
-
-      <div className="mt-6">
+      <div className="mt-8 sm:mt-10">
         <SlideViewer slidesData={blocks} practiceHref={practiceHref} />
       </div>
 
-      <div className="mt-6 card card-pad flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+      <section className="mt-12 flex flex-col gap-4 border-t-2 border-ink-900 pt-5 sm:mt-16 sm:flex-row sm:items-center sm:justify-between sm:gap-6" aria-labelledby="practice-title">
         <div>
-          <p className="font-semibold text-ink-900">Ready to try it?</p>
-          <p className="mt-0.5 text-sm text-ink-500">
+          <h2 id="practice-title" className="h-section">Ready to try it?</h2>
+          <p className="mt-1 text-[15px] leading-snug text-ink-600">
             {practiceHref
               ? 'A short practice set, marked instantly, with the reason for every answer.'
               : 'Practice for this lesson is coming soon.'}
           </p>
         </div>
         {practiceHref ? (
-          <Link href={practiceHref} className="btn-primary w-full sm:w-auto">
-            Practise this now <ArrowRight className="h-4 w-4" aria-hidden="true" />
+          <Link href={practiceHref} className="btn-secondary group w-full shrink-0 sm:w-auto">
+            Practise this now <ArrowRight className="nudge h-4 w-4" aria-hidden="true" />
           </Link>
         ) : null}
-      </div>
+      </section>
 
-      <div className="mt-4">
+      <div className="mt-8">
         <LessonDownload lesson={offlineLesson} />
       </div>
     </div>
