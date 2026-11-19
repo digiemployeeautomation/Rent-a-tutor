@@ -373,16 +373,18 @@ export default function LessonPlayer({ lesson, meta, backHref = '/learn/high-sch
               {hasQuiz ? <span className="inline-flex items-center gap-2"><Trophy className="h-4 w-4 text-ink-300" /> {quiz.length}-question quiz</span> : null}
             </div>
 
-            <div className="card card-pad mt-8">
-              <p className="text-xs font-bold uppercase tracking-wider text-ink-400">By the end you will be able to</p>
-              <ul className="mt-3 space-y-2.5">
-                {(lesson.objectives || []).map((o, i) => (
-                  <li key={i} className="flex gap-3 text-[16px] leading-relaxed text-ink-700">
-                    <Target className="mt-1 h-4 w-4 shrink-0 text-blue-600" /> {o}
-                  </li>
-                ))}
-              </ul>
-            </div>
+            {lesson.objectives?.length ? (
+              <div className="card card-pad mt-8">
+                <p className="text-xs font-bold uppercase tracking-wider text-ink-400">By the end you will be able to</p>
+                <ul className="mt-3 space-y-2.5">
+                  {(lesson.objectives || []).map((o, i) => (
+                    <li key={i} className="flex gap-3 text-[16px] leading-relaxed text-ink-700">
+                      <Target className="mt-1 h-4 w-4 shrink-0 text-blue-600" /> {o}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ) : null}
 
             {actions ? <div className="mt-6">{actions}</div> : null}
           </div>

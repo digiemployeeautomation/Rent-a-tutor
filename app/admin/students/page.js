@@ -4,20 +4,6 @@ import { useEffect, useState } from 'react'
 import { supabase } from '@/lib/supabase'
 
 // ── Helpers ───────────────────────────────────────────────────────────────────
-function StatusBadge({ status }) {
-  const styles = {
-    active:    'bg-green-100 text-green-700',
-    expired:   'bg-gray-100 text-gray-600',
-    cancelled: 'bg-red-100 text-red-600',
-    pending:   'bg-yellow-100 text-yellow-700',
-  }
-  return (
-    <span className={`inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium capitalize ${styles[status] ?? 'bg-gray-100 text-gray-600'}`}>
-      {status ?? 'none'}
-    </span>
-  )
-}
-
 function SkeletonRow({ cols }) {
   return (
     <tr>
@@ -31,13 +17,8 @@ function SkeletonRow({ cols }) {
 }
 
 function TierBadge({ tier }) {
-  const styles = {
-    free:    'bg-gray-100 text-gray-600',
-    basic:   'bg-blue-100 text-blue-700',
-    premium: 'bg-purple-100 text-purple-700',
-  }
   return tier ? (
-    <span className={`inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium capitalize ${styles[tier] ?? 'bg-gray-100 text-gray-600'}`}>
+    <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium capitalize bg-gray-100 text-gray-600">
       {tier}
     </span>
   ) : <span className="text-gray-400">—</span>
@@ -52,17 +33,10 @@ function StudentDetail({ userId }) {
     if (!userId) return
     async function load() {
       try {
-        const [quizRes, subRes] = await Promise.all([
-          supabase
-            .from('quiz_attempts')
-            .select('score, max_score, passed')
-            .eq('student_id', userId),
-          supabase
-            .from('subscriptions')
-            .select('id, plan_type, status, price_paid, starts_at, expires_at, created_at')
-            .eq('student_id', userId)
-            .order('created_at', { ascending: false }),
-        ])
+        const quizRes = await supabase
+          .from('quiz_attempts')
+          .select('score, max_score, passed')
+          .eq('student_id', userId)
 
         const attempts = quizRes.data ?? []
         const totalAttempts = attempts.length
@@ -75,7 +49,6 @@ function StudentDetail({ userId }) {
 
         setDetail({
           quiz: { totalAttempts, avgScore, passRate },
-          subscriptions: subRes.data ?? [],
         })
       } catch (err) {
         console.error('StudentDetail fetch error:', err)
@@ -89,7 +62,7 @@ function StudentDetail({ userId }) {
   if (loading) {
     return (
       <tr>
-        <td colSpan={9} className="px-6 py-4 bg-gray-50">
+        <td colSpan={7} className="px-6 py-4 bg-gray-50">
           <div className="h-4 bg-gray-200 rounded animate-pulse w-1/2" />
         </td>
       </tr>
@@ -100,10 +73,10 @@ function StudentDetail({ userId }) {
 
   return (
     <tr>
-      <td colSpan={9} className="bg-gray-50 px-6 py-4">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <td colSpan={7} className="bg-gray-50 px-6 py-4">
+        <div>
           {/* Quiz summary */}
-          <div>
+          <div className="max-w-md">
             <h4 className="text-xs font-semibold uppercase tracking-wide text-gray-500 mb-2">Quiz Summary</h4>
             <div className="grid grid-cols-3 gap-3">
               <div className="bg-white rounded-lg border border-gray-100 px-3 py-2 text-center">
@@ -119,29 +92,6 @@ function StudentDetail({ userId }) {
                 <p className="text-lg font-bold text-gray-800 tabular-nums">{detail.quiz.passRate.toFixed(1)}%</p>
               </div>
             </div>
-          </div>
-
-          {/* Subscription history */}
-          <div>
-            <h4 className="text-xs font-semibold uppercase tracking-wide text-gray-500 mb-2">Subscription History</h4>
-            {detail.subscriptions.length === 0 ? (
-              <p className="text-sm text-gray-400 italic">No subscriptions</p>
-            ) : (
-              <div className="space-y-1 max-h-40 overflow-y-auto">
-                {detail.subscriptions.map(sub => (
-                  <div key={sub.id} className="bg-white rounded border border-gray-100 px-3 py-2 flex items-center justify-between text-xs">
-                    <span className="font-medium capitalize text-gray-700">{sub.plan_type ?? '—'}</span>
-                    <StatusBadge status={sub.status} />
-                    <span className="text-gray-500 tabular-nums">
-                      {sub.price_paid != null ? `$${Number(sub.price_paid).toFixed(2)}` : '—'}
-                    </span>
-                    <span className="text-gray-400">
-                      {sub.expires_at ? new Date(sub.expires_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) : '—'}
-                    </span>
-                  </div>
-                ))}
-              </div>
-            )}
           </div>
         </div>
       </td>
@@ -188,24 +138,9 @@ export default function AdminStudentsPage() {
         const { data: spData, error: spError } = await query
         if (spError) throw spError
 
-        // For each student fetch their active subscription status
-        const userIds = (spData ?? []).map(s => s.user_id)
-        let subsMap = {}
-        if (userIds.length > 0) {
-          const { data: subsData } = await supabase
-            .from('subscriptions')
-            .select('student_id, status')
-            .in('student_id', userIds)
-            .eq('status', 'active')
-          for (const s of (subsData ?? [])) {
-            subsMap[s.student_id] = s.status
-          }
-        }
-
         const merged = (spData ?? []).map(s => ({
           ...s,
           full_name: s.profiles?.full_name ?? null,
-          subscription_status: subsMap[s.user_id] ?? null,
         }))
 
         setStudents(merged)
@@ -271,17 +206,16 @@ export default function AdminStudentsPage() {
                 <th className="px-4 py-3 font-medium text-gray-500 text-xs uppercase tracking-wide text-center">XP</th>
                 <th className="px-4 py-3 font-medium text-gray-500 text-xs uppercase tracking-wide text-center">Level</th>
                 <th className="px-4 py-3 font-medium text-gray-500 text-xs uppercase tracking-wide text-center">Streak</th>
-                <th className="px-4 py-3 font-medium text-gray-500 text-xs uppercase tracking-wide">Subscription</th>
                 <th className="px-4 py-3 font-medium text-gray-500 text-xs uppercase tracking-wide">Onboarded</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-50">
               {loading
-                ? Array.from({ length: 8 }).map((_, i) => <SkeletonRow key={i} cols={8} />)
+                ? Array.from({ length: 8 }).map((_, i) => <SkeletonRow key={i} cols={7} />)
                 : filtered.length === 0
                   ? (
                     <tr>
-                      <td colSpan={8} className="px-4 py-10 text-center text-gray-400 text-sm">
+                      <td colSpan={7} className="px-4 py-10 text-center text-gray-400 text-sm">
                         No students found.
                       </td>
                     </tr>
@@ -316,9 +250,6 @@ export default function AdminStudentsPage() {
                           <span className="inline-flex items-center gap-1 text-orange-600 font-semibold tabular-nums text-sm">
                             🔥 {s.current_streak ?? 0}
                           </span>
-                        </td>
-                        <td className="px-4 py-3">
-                          <StatusBadge status={s.subscription_status} />
                         </td>
                         <td className="px-4 py-3">
                           {s.onboarding_complete

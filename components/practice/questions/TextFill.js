@@ -6,29 +6,35 @@
 // `wordLimit` is shown as guidance (the grader enforces it).
 //
 // Contract: { question, value, wordLimit, onChange }
+import QuestionPrompt from '@/components/practice/questions/QuestionPrompt'
 
 export default function TextFill({ question, value = '', wordLimit, onChange }) {
-  const words = String(value).trim() ? String(value).trim().split(/\s+/).length : 0
+  const text = String(value ?? '')
+  const words = text.trim() ? text.trim().split(/\s+/).length : 0
   const over = wordLimit != null && words > wordLimit
+  const id = `q-${question.id}`
 
   return (
-    <div className="space-y-1">
-      <label htmlFor={`q-${question.id}`} className="block text-sm font-medium text-gray-800">
-        {question.position}. {question.prompt}
+    <div>
+      <label htmlFor={id} className="block">
+        <QuestionPrompt question={question} answered={text.trim() !== ''} />
       </label>
       <input
-        id={`q-${question.id}`}
+        id={id}
         type="text"
-        value={value}
+        value={text}
         onChange={(e) => onChange(e.target.value)}
-        className={`w-full rounded-lg border px-3 py-2 text-sm focus:outline-none focus:ring-2 ${
-          over ? 'border-red-400 focus:ring-red-200' : 'border-gray-300 focus:ring-blue-200'
-        }`}
-        placeholder="Your answer"
+        autoComplete="off"
+        autoCapitalize="off"
+        spellCheck={false}
+        aria-describedby={wordLimit != null ? `${id}-limit` : undefined}
+        aria-invalid={over || undefined}
+        className={`field mt-3 ${over ? '!border-rose-400 focus:!ring-rose-100' : ''}`}
+        placeholder="Type your answer"
       />
       {wordLimit != null ? (
-        <p className={`text-xs ${over ? 'text-red-500' : 'text-gray-400'}`}>
-          No more than {wordLimit} word{wordLimit === 1 ? '' : 's'}
+        <p id={`${id}-limit`} className={`mt-1.5 text-sm ${over ? 'font-medium text-rose-600' : 'text-ink-400'}`}>
+          No more than {wordLimit === 1 ? 'one word' : `${wordLimit} words`}
           {over ? ` — you have ${words}` : ''}
         </p>
       ) : null}

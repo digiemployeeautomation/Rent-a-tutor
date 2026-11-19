@@ -6,41 +6,79 @@
 // grade.feedback.per_question. Handles grading-in-progress and error states so
 // both section result pages stay tiny.
 //
-// Props: { grade, backHref, retryHref, dashboardHref, pathHref, nextHref, nextLabel, title,
-//          band, bandVariant, timeTakenSeconds, timedOut }
-//   - band/bandVariant/timeTakenSeconds/timedOut are optional (mock results only);
-//     when band is null the component renders exactly as before.
+// Props: { grade, retryHref, homeHref, pathHref, pathLabel, nextHref, nextLabel,
+//          band, bandVariant, timeTakenSeconds, timedOut, optionLabels }
+//   - band/bandVariant/timeTakenSeconds/timedOut are optional (mock results only)
+//   - optionLabels: { [questionId]: { [value]: label } } so "i" reads as
+//     "i. A wider choice of food" in the review (optional)
 import Link from 'next/link'
+import {
+  ArrowRight, CheckCircle2, Clock, Info, Loader2, Quote, RotateCcw, TriangleAlert, XCircle,
+} from 'lucide-react'
 import { formatClock } from '@/lib/ielts/exam-timer'
 
-function formatAnswer(value) {
-  if (value == null) return '—'
-  if (Array.isArray(value)) return value.length ? value.join(', ') : '—'
+function formatAnswer(value, labels) {
+  if (value == null) return null
+  const one = (v) => (labels && labels[v] != null ? labels[v] : String(v))
+  if (Array.isArray(value)) return value.length ? value.map(one).join(', ') : null
   const s = String(value)
-  return s.trim() === '' ? '—' : s
+  return s.trim() === '' ? null : one(s)
+}
+
+function verdict(pct) {
+  if (pct >= 80) return { title: 'Excellent work', line: 'You are handling this question type well.' }
+  if (pct >= 60) return { title: 'Good work', line: 'A solid score. Read the explanations for the ones you missed.' }
+  if (pct >= 40) return { title: 'Getting there', line: 'Read why each answer is right, then try the set again.' }
+  return { title: 'Keep practising', line: 'Every mistake below comes with the reason. Read them, then try again.' }
+}
+
+function ScoreRing({ score, total, pct }) {
+  const r = 52
+  const c = 2 * Math.PI * r
+  const good = pct >= 60
+  return (
+    <div className="relative h-32 w-32 shrink-0">
+      <svg viewBox="0 0 120 120" className="h-full w-full -rotate-90" aria-hidden="true">
+        <circle cx="60" cy="60" r={r} fill="none" strokeWidth="10" className="stroke-ink-100" />
+        <circle
+          cx="60" cy="60" r={r} fill="none" strokeWidth="10" strokeLinecap="round"
+          strokeDasharray={c} strokeDashoffset={c * (1 - (total ? score / total : 0))}
+          className={good ? 'stroke-emerald-500' : 'stroke-sun-400'}
+        />
+      </svg>
+      <div className="absolute inset-0 flex flex-col items-center justify-center">
+        <span className="font-display text-4xl font-bold text-ink-900">
+          {score}<span className="text-xl text-ink-300">/{total}</span>
+        </span>
+        <span className="text-xs font-medium text-ink-400">{pct}%</span>
+      </div>
+    </div>
+  )
 }
 
 export default function SetResult({
   grade,
-  backHref,
   retryHref,
-  dashboardHref = '/dashboard/student',
+  homeHref = '/practice',
   pathHref,
+  pathLabel = 'Reading path',
   nextHref,
   nextLabel,
-  title = 'Your score',
   band = null,
   bandVariant = null,
   timeTakenSeconds = null,
   timedOut = false,
+  optionLabels = {},
 }) {
   if (!grade) {
     return (
-      <div className="mt-8 rounded-2xl bg-yellow-50 px-6 py-8 text-yellow-900">
-        <p className="font-semibold">Grading in progress…</p>
-        <p className="mt-2 text-sm text-yellow-700">
-          Refresh in a moment to see your score and answer review.
-        </p>
+      <div className="card card-pad mt-6 flex items-start gap-4" role="status">
+        <span className="icon-tile bg-blue-50 text-blue-600"><Loader2 className="h-5 w-5 animate-spin" aria-hidden="true" /></span>
+        <div>
+          <p className="font-semibold text-ink-900">Marking your answers…</p>
+          <p className="mt-1 text-[15px] text-ink-600">This usually takes a few seconds. Refresh the page to see your score.</p>
+          <a href="" className="btn-secondary btn-sm mt-3">Refresh</a>
+        </div>
       </div>
     )
   }
@@ -50,145 +88,158 @@ export default function SetResult({
 
   if (!perQuestion) {
     return (
-      <div className="mt-8 rounded-2xl bg-red-50 px-6 py-8 text-red-900">
-        <p className="font-semibold">Grading failed</p>
-        <p className="mt-2 text-sm text-red-700">
-          {feedback.error ?? 'Please try submitting again.'}
-        </p>
+      <div className="card card-pad mt-6 flex items-start gap-4" role="alert">
+        <span className="icon-tile bg-rose-50 text-rose-600"><TriangleAlert className="h-5 w-5" aria-hidden="true" /></span>
+        <div>
+          <p className="font-semibold text-ink-900">We could not mark this attempt</p>
+          <p className="mt-1 text-[15px] text-ink-600">Something went wrong on our side. Please try the set again.</p>
+          {retryHref ? (
+            <Link href={retryHref} className="btn-primary mt-4"><RotateCcw className="h-4 w-4" aria-hidden="true" /> Try again</Link>
+          ) : null}
+        </div>
       </div>
     )
   }
 
   const rawScore = feedback.raw_score ?? 0
   const total = feedback.total ?? 0
-  const percentage = feedback.percentage ?? 0
+  const percentage = feedback.percentage ?? (total ? Math.round((rawScore / total) * 100) : 0)
+  const v = verdict(percentage)
+  const wrongCount = perQuestion.filter((q) => !q.correct).length
+  const rightCount = perQuestion.length - wrongCount
+  // Multi-answer questions carry more than one mark, so say "marks" when the
+  // score is not simply one per question.
+  const unit = total === perQuestion.length ? '' : ' marks'
 
   return (
     <>
-      {band != null ? (
-        <div className="mt-6 rounded-3xl bg-gradient-to-br from-emerald-600 to-emerald-800 px-8 py-10 text-center text-white">
-          <div className="text-sm uppercase tracking-wide text-emerald-100">Estimated IELTS band</div>
-          <div className="mt-2 text-7xl font-bold">{band.toFixed(1)}</div>
-          <div className="mt-2 text-xs text-emerald-100">
-            {bandVariant === 'general' ? 'General Training' : 'Academic'} · estimated from a short set —
-            full-length mocks give a more reliable band.
+      {/* Score */}
+      <section className="card mt-6 overflow-hidden" aria-label="Your score">
+        <div className="flex flex-col items-center gap-6 p-6 text-center sm:flex-row sm:p-8 sm:text-left">
+          <ScoreRing score={rawScore} total={total} pct={percentage} />
+          <div className="min-w-0 flex-1">
+            <h2 className="font-display text-2xl font-bold text-ink-900 sm:text-3xl">{v.title}</h2>
+            <p className="mt-1 text-[16px] text-ink-600">
+              You got <strong className="text-ink-900">{rawScore} of {total}{unit}</strong> right. {v.line}
+            </p>
+            {timeTakenSeconds != null ? (
+              <p className="mt-3 inline-flex items-center gap-1.5 text-sm text-ink-500">
+                <Clock className="h-4 w-4" aria-hidden="true" />
+                {timedOut ? `Time ran out (${formatClock(timeTakenSeconds)})` : `Finished in ${formatClock(timeTakenSeconds)}`}
+              </p>
+            ) : null}
           </div>
-          {timeTakenSeconds != null ? (
-            <div className="mt-3 text-sm text-emerald-50">
-              {timedOut
-                ? `⏰ Ran out of time (${formatClock(timeTakenSeconds)})`
-                : `Completed in ${formatClock(timeTakenSeconds)}`}
+          {band != null ? (
+            <div className="w-full shrink-0 rounded-2xl bg-ink-900 px-6 py-5 text-center text-white sm:w-auto">
+              <p className="text-xs font-semibold uppercase tracking-wider text-sun-300">Estimated band</p>
+              <p className="mt-1 font-display text-5xl font-bold">{Number(band).toFixed(1)}</p>
+              <p className="mt-1 text-xs text-ink-200">{bandVariant === 'general' ? 'General Training' : 'Academic'}</p>
             </div>
           ) : null}
         </div>
-      ) : null}
-      <div className="mt-6 rounded-3xl bg-gradient-to-br from-blue-600 to-blue-800 px-8 py-10 text-center text-white">
-        <div className="text-sm uppercase tracking-wide text-blue-200">{title}</div>
-        <div className="mt-2 text-7xl font-bold">
-          {rawScore}
-          <span className="text-3xl font-medium text-blue-200"> / {total}</span>
+        <div className="flex items-start gap-2 border-t border-ink-100 bg-ink-50/60 px-6 py-3 text-sm text-ink-500 sm:px-8">
+          <Info className="mt-0.5 h-4 w-4 shrink-0" aria-hidden="true" />
+          {band != null
+            ? 'The band is an estimate from a short set, using the published IELTS score tables. A full-length test gives a more reliable band.'
+            : 'This practice set shows your raw score. Band scores are estimated only on the timed mock exams.'}
         </div>
-        <div className="mt-2 text-xs text-blue-200">{percentage}% correct</div>
-      </div>
-
-      <section className="mt-8 space-y-3">
-        <h2 className="text-xl font-bold text-gray-800">Answer review</h2>
-        {perQuestion.map((q) => (
-          <div
-            key={q.question_id ?? q.position}
-            className={`rounded-2xl border p-5 ${
-              q.correct ? 'border-green-200 bg-green-50' : 'border-red-200 bg-red-50'
-            }`}
-          >
-            <div className="flex items-start justify-between gap-3">
-              <p className="text-sm font-medium text-gray-800">
-                {q.position}. {q.prompt}
-              </p>
-              <span
-                className={`shrink-0 text-sm font-semibold ${
-                  q.correct ? 'text-green-600' : 'text-red-600'
-                }`}
-              >
-                {q.correct ? '✓' : '✗'} {q.marks}/{q.max_marks}
-              </span>
-            </div>
-            <dl className="mt-3 grid grid-cols-1 gap-1 text-sm sm:grid-cols-2">
-              <div>
-                <dt className="text-xs uppercase tracking-wide text-gray-400">Your answer</dt>
-                <dd className="text-gray-800">{formatAnswer(q.your_answer)}</dd>
-              </div>
-              <div>
-                <dt className="text-xs uppercase tracking-wide text-gray-400">Correct answer</dt>
-                <dd className="text-gray-800">{formatAnswer(q.correct_answer)}</dd>
-              </div>
-            </dl>
-            {q.explanation && (
-              <div className="mt-3 rounded-xl bg-blue-50 px-4 py-3 text-sm text-gray-700">
-                {q.explanation.rationale && (
-                  <p><span className="font-semibold text-blue-700">Why: </span>{q.explanation.rationale}</p>
-                )}
-                {q.explanation.evidence && (
-                  <p className="mt-1 text-gray-600"><span className="font-medium">In the text: </span>{q.explanation.evidence}</p>
-                )}
-                {q.explanation.distractors && (
-                  <ul className="mt-1 space-y-0.5 text-gray-600">
-                    {Object.entries(q.explanation.distractors).map(([opt, note]) => (
-                      <li key={opt}><span className="font-medium">{opt}: </span>{note}</li>
-                    ))}
-                  </ul>
-                )}
-              </div>
-            )}
-          </div>
-        ))}
       </section>
 
-      <div className="mt-10 flex flex-col gap-3 sm:flex-row">
-        <Link
-          href={dashboardHref}
-          className="rounded-xl bg-blue-600 px-6 py-3 text-center font-semibold text-white transition-colors hover:bg-blue-700"
-        >
-          Back to dashboard
-        </Link>
-        {pathHref ? (
-          <Link
-            href={pathHref}
-            className="rounded-xl border border-gray-200 px-6 py-3 text-center font-semibold text-gray-600 transition-colors hover:bg-gray-50"
-          >
-            Back to Reading path
-          </Link>
-        ) : null}
+      {/* Actions */}
+      <div className="mt-5 flex flex-col gap-2 sm:flex-row sm:flex-wrap">
         {nextHref ? (
-          <Link
-            href={nextHref}
-            className="rounded-xl bg-blue-600 px-6 py-3 text-center font-semibold text-white transition-colors hover:bg-blue-700"
-          >
-            {nextLabel || 'Next module'} →
+          <Link href={nextHref} className="btn-primary btn-lg">
+            Next lesson{nextLabel ? `: ${nextLabel}` : ''} <ArrowRight className="h-5 w-5" aria-hidden="true" />
           </Link>
         ) : null}
         {retryHref ? (
-          <Link
-            href={retryHref}
-            className="rounded-xl border border-gray-200 px-6 py-3 text-center font-semibold text-gray-600 transition-colors hover:bg-gray-50"
-          >
-            Try again
+          <Link href={retryHref} className={nextHref ? 'btn-secondary btn-lg' : 'btn-primary btn-lg'}>
+            <RotateCcw className="h-4 w-4" aria-hidden="true" /> Try again
           </Link>
         ) : null}
-        {backHref ? (
-          <Link
-            href={backHref}
-            className="rounded-xl border border-gray-200 px-6 py-3 text-center font-semibold text-gray-600 transition-colors hover:bg-gray-50"
-          >
-            Back to set
-          </Link>
+        {pathHref ? (
+          <Link href={pathHref} className="btn-secondary btn-lg">{pathLabel}</Link>
         ) : null}
+        <Link href={homeHref} className="btn-secondary btn-lg">Back to IELTS</Link>
       </div>
 
-      {band == null ? (
-        <p className="mt-8 text-xs text-gray-400">
-          Raw score for this set. A full band score is estimated only across a complete mock test.
-        </p>
-      ) : null}
+      {/* Review */}
+      <section className="mt-10" aria-labelledby="review-title">
+        <div className="flex flex-wrap items-baseline justify-between gap-2">
+          <h2 id="review-title" className="h-section">Check each answer</h2>
+          <p className="text-sm text-ink-500">
+            {rightCount} of {perQuestion.length} questions right · {wrongCount} to review
+          </p>
+        </div>
+        <ol className="mt-4 space-y-3">
+          {perQuestion.map((q) => {
+            const labels = optionLabels[q.question_id] ?? null
+            const yours = formatAnswer(q.your_answer, labels)
+            const correct = formatAnswer(q.correct_answer, labels)
+            const ex = q.explanation
+            return (
+              <li
+                key={q.question_id ?? q.position}
+                className={`card overflow-hidden border-l-4 ${q.correct ? '!border-l-emerald-500' : '!border-l-rose-400'}`}
+              >
+                <div className="p-5">
+                  <div className="flex gap-3">
+                    {q.correct
+                      ? <CheckCircle2 className="mt-0.5 h-5 w-5 shrink-0 text-emerald-600" aria-label="Correct" />
+                      : <XCircle className="mt-0.5 h-5 w-5 shrink-0 text-rose-500" aria-label="Wrong" />}
+                    <div className="min-w-0 flex-1">
+                      <p className="text-[16px] font-semibold leading-snug text-ink-900">
+                        {q.position}. {q.prompt}
+                        {q.max_marks > 1 ? (
+                          <span className="ml-2 whitespace-nowrap text-sm font-medium text-ink-400">
+                            {q.marks} of {q.max_marks} marks
+                          </span>
+                        ) : null}
+                      </p>
+                      <dl className="mt-3 grid gap-2 text-[15px] sm:grid-cols-2">
+                        <div>
+                          <dt className="text-xs font-semibold uppercase tracking-wider text-ink-400">Your answer</dt>
+                          <dd className={q.correct ? 'font-medium text-emerald-700' : 'text-rose-700'}>
+                            {yours ?? <span className="italic text-ink-400">No answer</span>}
+                          </dd>
+                        </div>
+                        {!q.correct ? (
+                          <div>
+                            <dt className="text-xs font-semibold uppercase tracking-wider text-ink-400">Correct answer</dt>
+                            <dd className="font-medium text-emerald-700">{correct ?? '—'}</dd>
+                          </div>
+                        ) : null}
+                      </dl>
+                    </div>
+                  </div>
+                </div>
+                {ex && (ex.rationale || ex.evidence || ex.distractors) ? (
+                  <div className="space-y-2 border-t border-ink-100 bg-ink-50/60 px-5 py-4 text-[15px] leading-relaxed text-ink-700">
+                    {ex.rationale ? (
+                      <p><span className="font-semibold text-ink-900">Why: </span>{ex.rationale}</p>
+                    ) : null}
+                    {ex.evidence ? (
+                      <p className="flex gap-2 text-ink-600">
+                        <Quote className="mt-1 h-4 w-4 shrink-0 text-teal-600" aria-hidden="true" />
+                        <span><span className="font-semibold text-ink-800">In the text: </span>{ex.evidence}</span>
+                      </p>
+                    ) : null}
+                    {ex.distractors && typeof ex.distractors === 'object' ? (
+                      <ul className="space-y-1 text-ink-600">
+                        {Object.entries(ex.distractors).map(([opt, note]) => (
+                          <li key={opt}>
+                            <span className="font-semibold text-ink-800">{labels?.[opt] ?? opt}: </span>{String(note)}
+                          </li>
+                        ))}
+                      </ul>
+                    ) : null}
+                  </div>
+                ) : null}
+              </li>
+            )
+          })}
+        </ol>
+      </section>
     </>
   )
 }

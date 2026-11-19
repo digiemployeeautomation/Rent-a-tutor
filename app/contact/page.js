@@ -1,9 +1,21 @@
 'use client'
 import { useState } from 'react'
-import Link from 'next/link'
+import { CheckCircle2, Handshake, Loader2, Mail, School, Send } from 'lucide-react'
+import SiteFooter from '@/components/marketing/SiteFooter'
+
+// Must stay a subset of the subjects accepted by /api/contact.
+const SUBJECTS = ['General enquiry', 'Partnership', 'Technical problem', 'Content report', 'Other']
+
+const TOPICS = [
+  { icon: School, title: 'Schools and parents', body: 'Ask how lessons could support your students or your child.' },
+  { icon: Handshake, title: 'Partnerships', body: 'Talk to us about working together or bringing your content.' },
+  { icon: Mail, title: 'Help with the app', body: 'Tell us what went wrong and on which page.' },
+]
+
+const EMPTY = { name: '', email: '', subject: 'General enquiry', message: '' }
 
 export default function ContactPage() {
-  const [form, setForm]       = useState({ name: '', email: '', subject: 'General enquiry', message: '' })
+  const [form, setForm]       = useState(EMPTY)
   const [sent, setSent]       = useState(false)
   const [loading, setLoading] = useState(false)
   const [error, setError]     = useState('')
@@ -24,7 +36,7 @@ export default function ContactPage() {
         body:    JSON.stringify(form),
       })
 
-      const data = await res.json()
+      const data = await res.json().catch(() => ({}))
 
       if (!res.ok) {
         setError(data.error ?? 'Something went wrong. Please try again.')
@@ -40,117 +52,92 @@ export default function ContactPage() {
   }
 
   return (
-    <div style={{ minHeight: '100vh', backgroundColor: 'var(--color-page-bg)' }}>
-      <div className="px-6 py-12 text-center" style={{ backgroundColor: 'var(--color-primary)' }}>
-        <h1 className="font-serif text-4xl mb-3" style={{ color: 'var(--color-surface-mid)' }}>
-          Contact us
-        </h1>
-        <p className="text-sm opacity-80" style={{ color: 'var(--color-surface-mid)' }}>
-          Questions, feedback, or partnership enquiries — we read everything.
-        </p>
-      </div>
-
-      <div className="max-w-4xl mx-auto px-6 py-12 grid grid-cols-1 lg:grid-cols-3 gap-10">
-
-        {/* Info */}
-        <div className="space-y-6">
-          <div>
-            <h2 className="font-serif text-lg mb-3" style={{ color: 'var(--color-primary)' }}>Get in touch</h2>
-            <p className="text-sm text-gray-600 leading-relaxed">
-              We usually reply within one business day. For urgent issues with payments or account access, please include your registered email address.
-            </p>
-          </div>
-
-          <div className="space-y-3">
-            {[
-              { label: 'Email',     value: 'hello@rentatutor.co.zm'  },
-              { label: 'WhatsApp',  value: '+260 97X XXX XXX'        },
-              { label: 'Hours',     value: 'Mon–Fri, 8am–6pm CAT'    },
-            ].map(c => (
-              <div key={c.label}>
-                <div className="text-xs font-medium text-gray-500 mb-0.5">{c.label}</div>
-                <div className="text-sm text-gray-700">{c.value}</div>
-              </div>
-            ))}
-          </div>
-
-          <div className="rounded-xl p-4" style={{ backgroundColor: 'var(--color-surface)' }}>
-            <div className="text-xs font-medium mb-2" style={{ color: 'var(--color-primary)' }}>Common topics</div>
-            <ul className="space-y-1.5 text-xs text-gray-600">
-              <li>• Payment not received or incorrect</li>
-              <li>• Video not loading after purchase</li>
-              <li>• Tutor application status</li>
-              <li>• Reporting inappropriate content</li>
-              <li>• Withdrawal and payout issues</li>
-            </ul>
-          </div>
+    <div className="bg-paper">
+      <section className="bg-ink-900 text-white">
+        <div className="container-app py-12 sm:py-16">
+          <p className="text-xs font-semibold uppercase tracking-[0.14em] text-sun-400">Contact</p>
+          <h1 className="mt-3 font-display text-4xl font-bold tracking-tight text-white sm:text-5xl">Talk to us</h1>
+          <p className="mt-4 max-w-xl text-lg leading-relaxed text-ink-200">
+            Questions, feedback or partnership ideas — send a message and we will reply by email.
+          </p>
         </div>
+      </section>
 
-        {/* Form */}
-        <div className="lg:col-span-2">
+      <div className="container-app grid gap-8 py-10 sm:py-14 lg:grid-cols-[1fr_1.6fr] lg:gap-12">
+        <aside className="space-y-3">
+          {TOPICS.map(({ icon: Icon, title, body }) => (
+            <div key={title} className="flex gap-4 rounded-2xl border border-ink-100 bg-white p-4">
+              <span className="icon-tile bg-blue-50 text-blue-600"><Icon className="h-5 w-5" aria-hidden="true" /></span>
+              <div>
+                <h2 className="font-display text-base font-semibold text-ink-900">{title}</h2>
+                <p className="mt-0.5 text-sm leading-relaxed text-ink-500">{body}</p>
+              </div>
+            </div>
+          ))}
+        </aside>
+
+        <div>
           {sent ? (
-            <div className="bg-white border border-gray-200 rounded-2xl p-10 text-center">
-              <div className="text-4xl mb-4">✉️</div>
-              <h2 className="font-serif text-xl mb-2" style={{ color: 'var(--color-primary)' }}>
-                Message sent!
-              </h2>
-              <p className="text-sm text-gray-500 mb-6">
-                We'll reply to <strong>{form.email}</strong> within one business day.
+            <div className="card p-8 text-center sm:p-10" role="status">
+              <span className="icon-tile mx-auto h-14 w-14 rounded-2xl bg-emerald-50 text-emerald-600">
+                <CheckCircle2 className="h-7 w-7" aria-hidden="true" />
+              </span>
+              <h2 className="h-page mt-5">Message sent</h2>
+              <p className="mt-2 text-[15px] text-ink-500">
+                Thank you. We will reply to <span className="font-semibold text-ink-900 break-all">{form.email}</span>.
               </p>
               <button
-                onClick={() => { setSent(false); setForm({ name: '', email: '', subject: 'General enquiry', message: '' }) }}
-                className="text-sm px-5 py-2.5 rounded-lg"
-                style={{ backgroundColor: 'var(--color-btn-bg)', color: 'var(--color-btn-text)' }}>
+                type="button"
+                onClick={() => { setSent(false); setForm(EMPTY) }}
+                className="btn-secondary mt-6"
+              >
                 Send another message
               </button>
             </div>
           ) : (
-            <form onSubmit={handleSubmit} className="bg-white border border-gray-200 rounded-2xl p-8 space-y-5">
-
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+            <form onSubmit={handleSubmit} className="card space-y-5 p-5 sm:p-8">
+              <div className="grid gap-5 sm:grid-cols-2">
                 <div>
-                  <label className="block text-sm text-gray-600 mb-1.5">Your name</label>
-                  <input type="text" name="name" required value={form.name} onChange={handleChange}
-                    placeholder="Full name"
-                    className="w-full border border-gray-300 rounded-lg px-4 py-2.5 text-sm outline-none focus:border-gray-400" />
+                  <label htmlFor="name" className="label">Your name</label>
+                  <input id="name" type="text" name="name" autoComplete="name" required value={form.name} onChange={handleChange}
+                    placeholder="Full name" className="field" />
                 </div>
                 <div>
-                  <label className="block text-sm text-gray-600 mb-1.5">Email address</label>
-                  <input type="email" name="email" required value={form.email} onChange={handleChange}
-                    placeholder="you@example.com"
-                    className="w-full border border-gray-300 rounded-lg px-4 py-2.5 text-sm outline-none focus:border-gray-400" />
+                  <label htmlFor="email" className="label">Email address</label>
+                  <input id="email" type="email" name="email" autoComplete="email" required value={form.email} onChange={handleChange}
+                    placeholder="you@example.com" className="field" />
                 </div>
               </div>
 
               <div>
-                <label className="block text-sm text-gray-600 mb-1.5">Subject</label>
-                <select name="subject" value={form.subject} onChange={handleChange}
-                  className="w-full border border-gray-300 rounded-lg px-4 py-2.5 text-sm outline-none focus:border-gray-400 bg-white">
-                  {['General enquiry','Payment issue','Tutor application','Technical problem','Content report','Partnership','Other']
-                    .map(s => <option key={s}>{s}</option>)}
+                <label htmlFor="subject" className="label">What is it about?</label>
+                <select id="subject" name="subject" value={form.subject} onChange={handleChange} className="field">
+                  {SUBJECTS.map(s => <option key={s}>{s}</option>)}
                 </select>
               </div>
 
               <div>
-                <label className="block text-sm text-gray-600 mb-1.5">Message</label>
-                <textarea name="message" required rows={5} value={form.message} onChange={handleChange}
-                  placeholder="Describe your issue or question in as much detail as possible..."
-                  className="w-full border border-gray-300 rounded-lg px-4 py-2.5 text-sm outline-none focus:border-gray-400 resize-none" />
+                <label htmlFor="message" className="label">Message</label>
+                <textarea id="message" name="message" required rows={6} value={form.message} onChange={handleChange}
+                  placeholder="How can we help?"
+                  className="field resize-y" />
               </div>
 
-              {error && (
-                <div className="bg-red-50 text-red-700 text-sm px-4 py-3 rounded-lg">{error}</div>
-              )}
+              {error ? (
+                <div role="alert" className="rounded-xl border border-rose-200 bg-rose-50 px-4 py-3 text-sm text-rose-700">{error}</div>
+              ) : null}
 
-              <button type="submit" disabled={loading}
-                className="w-full py-2.5 rounded-lg text-sm font-medium disabled:opacity-60"
-                style={{ backgroundColor: 'var(--color-btn-bg)', color: 'var(--color-btn-text)' }}>
-                {loading ? 'Sending...' : 'Send message →'}
+              <button type="submit" disabled={loading} className="btn-primary btn-lg w-full sm:w-auto">
+                {loading
+                  ? <><Loader2 className="h-5 w-5 animate-spin" aria-hidden="true" /> Sending…</>
+                  : <><Send className="h-5 w-5" aria-hidden="true" /> Send message</>}
               </button>
             </form>
           )}
         </div>
       </div>
+
+      <SiteFooter />
     </div>
   )
 }

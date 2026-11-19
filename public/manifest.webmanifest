@@ -1,0 +1,24 @@
+{
+  "name": "Rent a Tutor",
+  "short_name": "Rent a Tutor",
+  "description": "High school and IELTS lessons, taught step by step. Saved lessons work offline.",
+  "id": "/",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#F6F7FB",
+  "theme_color": "#0B1730",
+  "lang": "en",
+  "categories": ["education"],
+  "icons": [
+    { "src": "/icons/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "/icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "/icons/icon-maskable-192.png", "sizes": "192x192", "type": "image/png", "purpose": "maskable" },
+    { "src": "/icons/icon-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ],
+  "shortcuts": [
+    { "name": "Downloads", "short_name": "Downloads", "url": "/downloads", "description": "Lessons saved on this device" },
+    { "name": "High School", "short_name": "High School", "url": "/learn/high-school" }
+  ]
+}

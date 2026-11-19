@@ -2,17 +2,22 @@
 //
 // Server component that loads a Listening set, signs its audio URL (private
 // bucket → short-lived signed URL via the service-role client), and renders
-// the AudioPlayer above the shared QuestionSetRunner. Auth-gated; answer keys
-// are never selected here (client-readable columns only).
+// the AudioPlayer beside the shared QuestionSetRunner. Auth-gated; answer keys
+// are never selected here (client-readable columns only). A missing or
+// unsignable audio file shows a friendly notice; the questions still work.
+import Link from 'next/link'
 import { redirect } from 'next/navigation'
+import { ArrowLeft, Headphones, ListChecks, Zap } from 'lucide-react'
 import {
   createServerComponentClientFor,
   createServiceRoleClient,
 } from '@/lib/supabaseServer'
 import { signedAudioUrl, PRACTICE_AUDIO_BUCKET } from '@/lib/storage/audio'
-import { subSkillLabel } from '@/lib/ielts/sections'
 import QuestionSetRunner from '@/components/practice/QuestionSetRunner'
 import AudioPlayer from '@/components/practice/AudioPlayer'
+import SetHeader from '@/components/ielts/SetHeader'
+
+export const dynamic = 'force-dynamic'
 
 export default async function ListeningPracticePage({ params }) {
   const supabase = createServerComponentClientFor()
@@ -26,16 +31,17 @@ export default async function ListeningPracticePage({ params }) {
     .from('practice_items')
     .select('id, type, sub_skill, variant, payload, status')
     .eq('id', params.itemId)
-    .single()
+    .maybeSingle()
 
   if (error || !item || item.status !== 'published' || item.type !== 'listening_set') {
     return (
-      <main className="mx-auto max-w-3xl px-4 py-12">
-        <h1 className="text-2xl font-bold text-gray-800">Practice set not found</h1>
-        <p className="mt-2 text-gray-500">
-          This listening set does not exist or is not available right now.
-        </p>
-      </main>
+      <div className="container-read py-12">
+        <h1 className="h-page">Practice set not found</h1>
+        <p className="lead mt-2">This listening set does not exist or is not available right now.</p>
+        <Link href="/practice" className="btn-primary mt-6">
+          <ArrowLeft className="h-4 w-4" aria-hidden="true" /> Back to IELTS
+        </Link>
+      </div>
     )
   }
 
@@ -45,10 +51,11 @@ export default async function ListeningPracticePage({ params }) {
     .eq('practice_item_id', item.id)
     .order('position', { ascending: true })
 
+  const qs = questions ?? []
   const payload = item.payload ?? {}
 
   // Sign the audio URL with the service role (private bucket). Guarded so a
-  // missing audio_path does not crash the page (real TTS arrives in Wave 3).
+  // missing file does not crash the page.
   let audioSrc = null
   if (payload.audio_path) {
     try {
@@ -62,33 +69,33 @@ export default async function ListeningPracticePage({ params }) {
     }
   }
 
-  return (
-    <main className="mx-auto max-w-3xl px-4 py-10">
-      <div className="mb-6 flex items-center gap-2 text-xs uppercase tracking-wider text-gray-400">
-        <span>{subSkillLabel(item.sub_skill)}</span>
-        <span>•</span>
-        <span>{variantLabel(item.variant)}</span>
-      </div>
+  const chips = [
+    payload.section ? { label: `Part ${payload.section}`, icon: Headphones, tone: 'chip-teal' } : null,
+    { label: `${qs.length} question${qs.length === 1 ? '' : 's'}`, icon: ListChecks },
+    { label: 'Marked instantly', icon: Zap, tone: 'chip-green' },
+  ]
 
-      <h1 className="text-3xl font-bold text-gray-800">{payload.title || 'Listening set'}</h1>
+  return (
+    <div className="container-app py-6 sm:py-8">
+      <SetHeader
+        eyebrow="IELTS Listening"
+        title={payload.title || 'Listening set'}
+        chips={chips}
+      >
+        <p className="mt-3 max-w-2xl text-[15px] text-ink-500">
+          Play the recording and answer the questions as you listen. When you finish, press “Check answers”.
+        </p>
+      </SetHeader>
 
       <div className="mt-6">
-        <AudioPlayer src={audioSrc} />
-      </div>
-
-      <div className="mt-10">
         <QuestionSetRunner
-          item={item}
-          questions={questions ?? []}
+          item={{ ...item, payload: { ...payload, transcript: undefined } }}
+          questions={qs}
           resultBase={`/practice/listening/${item.id}/result`}
+          asideTitle="Recording"
+          aside={<AudioPlayer src={audioSrc} title={payload.title ? `Recording: ${payload.title}` : undefined} />}
         />
       </div>
-    </main>
+    </div>
   )
-}
-
-function variantLabel(v) {
-  if (v === 'academic') return 'Academic'
-  if (v === 'general') return 'General Training'
-  return 'Academic & General'
 }

@@ -4,36 +4,45 @@
 // Primitive: pick exactly one option. Covers MCQ-single, True/False/Not
 // Given, Yes/No/Not Given, and all matching types. `options` is resolved by
 // the caller (item payload options, or the registry's fixedOptions).
+// `compact` lays short fixed options (TRUE / FALSE / NOT GIVEN) out in a row.
 //
-// Contract: { question, options: [{value,label}|string], value, onChange }
+// Contract: { question, options: [{value,label}|string], value, onChange, compact }
+import QuestionPrompt from '@/components/practice/questions/QuestionPrompt'
 
-export default function SingleSelect({ question, options = [], value, onChange }) {
+export default function SingleSelect({ question, options = [], value, onChange, compact = false }) {
   const opts = options.map((o) => (typeof o === 'string' ? { value: o, label: o } : o))
   return (
-    <fieldset className="space-y-2">
-      <legend className="text-sm font-medium text-gray-800">
-        {question.position}. {question.prompt}
+    <fieldset>
+      <legend className="w-full">
+        <QuestionPrompt question={question} answered={value != null && value !== ''} />
       </legend>
-      {opts.map((opt) => (
-        <label
-          key={opt.value}
-          className={`flex cursor-pointer items-center gap-2 rounded-lg border px-3 py-2 text-sm transition-colors ${
-            value === opt.value
-              ? 'border-blue-500 bg-blue-50 text-gray-900'
-              : 'border-gray-200 text-gray-700 hover:bg-gray-50'
-          }`}
-        >
-          <input
-            type="radio"
-            name={`q-${question.id}`}
-            value={opt.value}
-            checked={value === opt.value}
-            onChange={() => onChange(opt.value)}
-            className="h-4 w-4"
-          />
-          <span>{opt.label}</span>
-        </label>
-      ))}
+      <div className={`mt-3 grid gap-2 ${compact ? 'grid-cols-3' : ''}`}>
+        {opts.map((opt) => {
+          const checked = value === opt.value
+          return (
+            <label
+              key={opt.value}
+              className={`flex min-h-[48px] cursor-pointer items-center gap-3 rounded-xl border-2 px-3.5 py-2.5 text-[15px] leading-snug transition-colors focus-within:ring-2 focus-within:ring-blue-200 ${
+                compact ? 'justify-center px-2 text-center text-sm font-semibold' : ''
+              } ${
+                checked
+                  ? 'border-blue-600 bg-blue-50 text-ink-900'
+                  : 'border-ink-100 bg-white text-ink-700 hover:border-blue-300 hover:bg-blue-50/40'
+              }`}
+            >
+              <input
+                type="radio"
+                name={`q-${question.id}`}
+                value={opt.value}
+                checked={checked}
+                onChange={() => onChange(opt.value)}
+                className={compact ? 'sr-only' : 'h-5 w-5 shrink-0 accent-blue-600'}
+              />
+              <span>{opt.label}</span>
+            </label>
+          )
+        })}
+      </div>
     </fieldset>
   )
 }

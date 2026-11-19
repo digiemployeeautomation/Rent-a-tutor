@@ -5,8 +5,11 @@
 // component (deterministic per-question review).
 import Link from 'next/link'
 import { redirect } from 'next/navigation'
+import { ArrowLeft } from 'lucide-react'
 import { createServerComponentClientFor } from '@/lib/supabaseServer'
 import SetResult from '@/components/practice/SetResult'
+import SetHeader from '@/components/ielts/SetHeader'
+import { optionLabelsFor } from '@/components/ielts/option-labels'
 import { nextModule, moduleForDrill } from '@/lib/ielts/reading-modules'
 
 // Per-user, per-submission — never cacheable. Forcing dynamic prevents a
@@ -21,12 +24,12 @@ export default async function ReadingResultPage({ params }) {
     redirect(`/auth/login?next=/practice/reading/${params.itemId}/result/${params.submissionId}`)
   }
 
-  const [{ data: submission }, { data: grade }] = await Promise.all([
+  const [{ data: submission }, { data: grade }, { data: item }, { data: questions }, { data: modules }] = await Promise.all([
     supabase
       .from('submissions')
       .select('id, user_id, practice_item_id, payload, status, submitted_at')
       .eq('id', params.submissionId)
-      .single(),
+      .maybeSingle(),
     supabase
       .from('grades')
       .select('*')
@@ -34,54 +37,63 @@ export default async function ReadingResultPage({ params }) {
       .order('created_at', { ascending: false })
       .limit(1)
       .maybeSingle(),
+    supabase
+      .from('practice_items')
+      .select('id, payload')
+      .eq('id', params.itemId)
+      .maybeSingle(),
+    supabase
+      .from('practice_questions')
+      .select('id, options')
+      .eq('practice_item_id', params.itemId),
+    supabase
+      .from('skill_lessons')
+      .select('slug, title, drill_item_id, position')
+      .eq('section', 'reading')
+      .eq('status', 'published')
+      .order('position', { ascending: true }),
   ])
 
-  if (!submission || submission.user_id !== user.id) {
+  if (!submission || submission.user_id !== user.id || submission.practice_item_id !== params.itemId) {
     return (
-      <main className="mx-auto max-w-3xl px-4 py-12">
-        <h1 className="text-2xl font-bold text-gray-800">Result not found</h1>
-        <p className="mt-2 text-gray-500">
-          This submission does not exist or is not available right now.
-        </p>
-      </main>
+      <div className="container-read py-12">
+        <h1 className="h-page">Result not found</h1>
+        <p className="lead mt-2">This result does not exist or is not available right now.</p>
+        <Link href="/practice" className="btn-primary mt-6">
+          <ArrowLeft className="h-4 w-4" aria-hidden="true" /> Back to IELTS
+        </Link>
+      </div>
     )
   }
 
-  const backHref = `/practice/reading/${params.itemId}`
-
-  const { data: modules } = await supabase
-    .from('skill_lessons')
-    .select('slug, title, drill_item_id, position')
-    .eq('section', 'reading')
-    .eq('status', 'published')
-    .order('position', { ascending: true })
-
+  const retryHref = `/practice/reading/${params.itemId}`
   const mods = modules ?? []
   const isDrill = !!moduleForDrill(mods, params.itemId)
   const next = isDrill ? nextModule(mods, params.itemId) : null
-  const pathHref = isDrill ? '/learn/reading' : undefined
-  const nextHref = next ? `/learn/reading/${next.slug}` : undefined
-  const nextLabel = next ? next.title : undefined
+  const title = item?.payload?.title || 'Reading set'
+  const isMock = item?.payload?.is_mock === true
 
   return (
-    <main className="mx-auto max-w-3xl px-4 py-10">
-      <Link href={backHref} className="text-xs text-gray-400 hover:text-gray-600">
-        ← Back to set
-      </Link>
-      <h1 className="mt-4 text-3xl font-bold text-gray-800">Reading results</h1>
+    <div className="container-read py-6 sm:py-8">
+      <SetHeader
+        backHref={isDrill ? '/learn/reading' : '/practice'}
+        backLabel={isDrill ? 'Reading path' : 'IELTS'}
+        eyebrow={isMock ? 'IELTS Reading · Mock exam result' : 'IELTS Reading · Your result'}
+        title={title}
+      />
 
       <SetResult
         grade={grade}
-        retryHref={backHref}
-        pathHref={pathHref}
-        nextHref={nextHref}
-        nextLabel={nextLabel}
-        title="Your raw score"
+        retryHref={retryHref}
+        pathHref={isDrill ? '/learn/reading' : undefined}
+        nextHref={next ? `/learn/reading/${next.slug}` : undefined}
+        nextLabel={next ? next.title : undefined}
         band={grade?.band_overall ?? null}
         bandVariant={grade?.feedback?.band_variant ?? null}
-        timeTakenSeconds={submission?.payload?.time_taken_seconds ?? null}
-        timedOut={submission?.payload?.timed_out ?? false}
+        timeTakenSeconds={submission.payload?.time_taken_seconds ?? null}
+        timedOut={submission.payload?.timed_out ?? false}
+        optionLabels={optionLabelsFor(questions)}
       />
-    </main>
+    </div>
   )
 }

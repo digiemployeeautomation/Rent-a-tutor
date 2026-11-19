@@ -1,25 +1,54 @@
 'use client'
 
+// IELTS goal questionnaire — one question per step. Submits the same answer
+// object as before ({ variant, target_band, test_date, current_band_self,
+// weakest_section, hours_per_week, first_language }) via onSubmit.
 import { useState } from 'react'
-
-const STEPS = ['variant', 'target', 'self', 'commitment', 'review']
+import { ArrowLeft, ArrowRight, Check, Loader2 } from 'lucide-react'
 
 const VARIANT_OPTIONS = [
-  { value: 'academic', title: 'Academic',         desc: 'For university admission abroad.' },
-  { value: 'general',  title: 'General Training', desc: 'For work, migration, or visa.' },
+  { value: 'academic', title: 'Academic', desc: 'For studying at a university or college abroad.' },
+  { value: 'general', title: 'General Training', desc: 'For work, migration or a visa.' },
 ]
 
 const SECTION_OPTIONS = [
   { value: 'listening', label: 'Listening' },
-  { value: 'reading',   label: 'Reading'   },
-  { value: 'writing',   label: 'Writing'   },
-  { value: 'speaking',  label: 'Speaking'  },
+  { value: 'reading', label: 'Reading' },
+  { value: 'writing', label: 'Writing' },
+  { value: 'speaking', label: 'Speaking' },
 ]
 
 const BAND_OPTIONS = [4.0, 4.5, 5.0, 5.5, 6.0, 6.5, 7.0, 7.5, 8.0, 8.5, 9.0]
+const HOUR_OPTIONS = [2, 5, 10, 15]
+
+const STEPS = [
+  { key: 'variant', title: 'Which IELTS are you preparing for?', hint: 'Listening and Speaking are the same in both. Reading and Writing are different.' },
+  { key: 'target', title: 'What band score do you need?', hint: 'Pick your overall target. You can change it later.' },
+  { key: 'date', title: 'When is your test?', hint: 'If you have not booked it yet, skip this step.', optional: true },
+  { key: 'current', title: 'What is your level today?', hint: 'Your best guess is fine. Choose "Not sure" if you have never taken IELTS.', optional: true },
+  { key: 'weakest', title: 'Which part feels hardest?', hint: 'We will point you to practice for it first.', optional: true },
+  { key: 'hours', title: 'How many hours a week can you study?', hint: 'Be honest — a little every week works better than a lot once.' },
+  { key: 'language', title: 'What is your first language?', hint: 'This helps us spot mistakes that are common for speakers of your language.', optional: true },
+  { key: 'review', title: 'Check your answers', hint: 'You can change any of these later.' },
+]
+
+function Choice({ selected, onClick, children, className = '' }) {
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      aria-pressed={selected}
+      className={`relative rounded-2xl border-2 text-left transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 active:scale-[0.99] ${
+        selected ? 'border-blue-600 bg-blue-50 text-blue-800' : 'border-ink-100 bg-white text-ink-800 hover:border-ink-200 hover:bg-ink-50'
+      } ${className}`}
+    >
+      {children}
+    </button>
+  )
+}
 
 export default function IELTSQuestionnaire({ onSubmit }) {
-  const [step, setStep] = useState(STEPS[0])
+  const [index, setIndex] = useState(0)
   const [answers, setAnswers] = useState({
     variant: null,
     target_band: null,
@@ -32,18 +61,29 @@ export default function IELTSQuestionnaire({ onSubmit }) {
   const [saving, setSaving] = useState(false)
   const [error, setError] = useState(null)
 
+  const step = STEPS[index]
+  const isLast = index === STEPS.length - 1
+  const progress = Math.round(((index + 1) / STEPS.length) * 100)
+
   function update(key, value) {
     setAnswers((prev) => ({ ...prev, [key]: value }))
   }
 
-  function nextStep() {
-    const idx = STEPS.indexOf(step)
-    if (idx < STEPS.length - 1) setStep(STEPS[idx + 1])
+  function canContinue() {
+    if (step.key === 'variant') return !!answers.variant
+    if (step.key === 'target') return !!answers.target_band
+    if (step.key === 'hours') return !!answers.hours_per_week
+    return true
   }
 
-  function prevStep() {
-    const idx = STEPS.indexOf(step)
-    if (idx > 0) setStep(STEPS[idx - 1])
+  function next() {
+    if (!canContinue()) return
+    setIndex((i) => Math.min(i + 1, STEPS.length - 1))
+  }
+
+  function back() {
+    setError(null)
+    setIndex((i) => Math.max(i - 1, 0))
   }
 
   async function handleSubmit() {
@@ -62,296 +102,184 @@ export default function IELTSQuestionnaire({ onSubmit }) {
     }
   }
 
-  const currentIdx = STEPS.indexOf(step)
+  const stepHasAnswer = {
+    date: !!answers.test_date,
+    current: answers.current_band_self != null,
+    weakest: !!answers.weakest_section,
+    language: !!answers.first_language.trim(),
+  }[step.key]
 
   return (
-    <div className="space-y-8">
-      <StepDots current={currentIdx} total={STEPS.length} />
+    <div className="animate-fade-in">
+      {/* Progress */}
+      <div>
+        <div className="mb-2 flex items-center justify-between text-xs font-semibold text-ink-400">
+          <span>Step {index + 1} of {STEPS.length}</span>
+          {step.optional ? <span className="chip">Optional</span> : null}
+        </div>
+        <div className="progress-track" role="progressbar" aria-valuemin={1} aria-valuemax={STEPS.length} aria-valuenow={index + 1} aria-label="Questionnaire progress">
+          <div className="progress-fill" style={{ width: `${progress}%` }} />
+        </div>
+      </div>
 
-      {step === 'variant'    && <VariantStep    value={answers.variant}    onChange={(v) => update('variant', v)}    onNext={nextStep} />}
-      {step === 'target'     && <TargetStep     answers={answers}          onChange={update}                          onNext={nextStep} onBack={prevStep} />}
-      {step === 'self'       && <SelfStep       answers={answers}          onChange={update}                          onNext={nextStep} onBack={prevStep} />}
-      {step === 'commitment' && <CommitmentStep answers={answers}          onChange={update}                          onNext={nextStep} onBack={prevStep} />}
-      {step === 'review'     && <ReviewStep     answers={answers}          onBack={prevStep} onSubmit={handleSubmit} saving={saving} error={error} />}
-    </div>
-  )
-}
+      <div key={step.key} className="mt-8 animate-fade-in-up">
+        <h1 className="h-page">{step.title}</h1>
+        <p className="mt-2 text-[15px] leading-relaxed text-ink-500">{step.hint}</p>
 
-function StepDots({ current, total }) {
-  return (
-    <div className="flex items-center justify-center gap-2">
-      {Array.from({ length: total }).map((_, i) => {
-        const isCurrent = i === current
-        const isDone = i < current
-        return (
-          <div
-            key={i}
-            className={`rounded-full transition-all ${
-              isCurrent ? 'w-3 h-3 bg-blue-600'
-              : isDone   ? 'w-3 h-3 bg-blue-400'
-                         : 'w-2.5 h-2.5 bg-gray-300'
-            }`}
-          />
-        )
-      })}
-    </div>
-  )
-}
-
-function VariantStep({ value, onChange, onNext }) {
-  return (
-    <div className="space-y-6">
-      <header className="text-center">
-        <h2 className="text-2xl font-bold text-gray-800">Which IELTS are you preparing for?</h2>
-        <p className="mt-2 text-gray-600">Listening and Speaking are the same for both. Reading and Writing differ.</p>
-      </header>
-      <div className="space-y-3">
-        {VARIANT_OPTIONS.map((opt) => (
-          <button
-            key={opt.value}
-            type="button"
-            onClick={() => onChange(opt.value)}
-            className={`flex w-full items-start gap-4 rounded-2xl border-2 px-5 py-4 text-left transition-colors focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-offset-2 ${
-              value === opt.value ? 'border-blue-600 bg-blue-50' : 'border-blue-200 bg-white hover:border-blue-400'
-            }`}
-          >
-            <div>
-              <div className="font-semibold text-gray-800">{opt.title}</div>
-              <div className="mt-1 text-sm text-gray-500">{opt.desc}</div>
+        <div className="mt-6">
+          {step.key === 'variant' && (
+            <div className="space-y-3">
+              {VARIANT_OPTIONS.map((opt) => (
+                <Choice key={opt.value} selected={answers.variant === opt.value} onClick={() => update('variant', opt.value)} className="flex w-full items-center gap-4 px-5 py-4">
+                  <span className="flex-1">
+                    <span className="block text-base font-semibold">{opt.title}</span>
+                    <span className="mt-0.5 block text-sm text-ink-500">{opt.desc}</span>
+                  </span>
+                  <Tick on={answers.variant === opt.value} />
+                </Choice>
+              ))}
             </div>
-          </button>
-        ))}
-      </div>
-      <NextButton disabled={!value} onClick={onNext} />
-    </div>
-  )
-}
+          )}
 
-function TargetStep({ answers, onChange, onNext, onBack }) {
-  return (
-    <div className="space-y-6">
-      <header className="text-center">
-        <h2 className="text-2xl font-bold text-gray-800">What band are you aiming for?</h2>
-        <p className="mt-2 text-gray-600">Pick your overall target. You can add per-section targets later.</p>
-      </header>
-      <div className="grid grid-cols-4 gap-2 sm:grid-cols-6">
-        {BAND_OPTIONS.map((b) => (
-          <button
-            key={b}
-            type="button"
-            onClick={() => onChange('target_band', b)}
-            className={`rounded-xl border-2 py-3 text-center font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-offset-2 ${
-              answers.target_band === b ? 'border-blue-600 bg-blue-600 text-white' : 'border-blue-200 bg-white text-gray-700 hover:border-blue-400'
-            }`}
-          >
-            {b.toFixed(1)}
-          </button>
-        ))}
-      </div>
-      <div className="space-y-2">
-        <label className="text-sm font-medium text-gray-700">When is your test? (optional)</label>
-        <input
-          type="date"
-          value={answers.test_date || ''}
-          onChange={(e) => onChange('test_date', e.target.value)}
-          className="w-full rounded-xl border border-gray-200 px-4 py-3 text-gray-700 focus:border-blue-400 focus:outline-none focus:ring-2 focus:ring-blue-200"
-        />
-      </div>
-      <NavButtons onBack={onBack} onNext={onNext} nextDisabled={!answers.target_band} />
-    </div>
-  )
-}
+          {step.key === 'target' && (
+            <BandGrid value={answers.target_band} onChange={(b) => update('target_band', b)} bands={BAND_OPTIONS} />
+          )}
 
-function SelfStep({ answers, onChange, onNext, onBack }) {
-  return (
-    <div className="space-y-6">
-      <header className="text-center">
-        <h2 className="text-2xl font-bold text-gray-800">Where do you stand today?</h2>
-        <p className="mt-2 text-gray-600">If you have never taken IELTS, leave this blank — we will figure it out.</p>
-      </header>
-      <div className="space-y-2">
-        <label className="text-sm font-medium text-gray-700">Approximate current band</label>
-        <div className="grid grid-cols-4 gap-2 sm:grid-cols-6">
-          <button
-            type="button"
-            onClick={() => onChange('current_band_self', null)}
-            className={`rounded-xl border-2 py-3 text-center text-sm font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-offset-2 ${
-              answers.current_band_self == null ? 'border-blue-600 bg-blue-50 text-blue-700' : 'border-gray-200 bg-white text-gray-500 hover:border-blue-300'
-            }`}
-          >
-            Not sure
-          </button>
-          {BAND_OPTIONS.slice(0, 9).map((b) => (
-            <button
-              key={b}
-              type="button"
-              onClick={() => onChange('current_band_self', b)}
-              className={`rounded-xl border-2 py-3 text-center font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-offset-2 ${
-                answers.current_band_self === b ? 'border-blue-600 bg-blue-600 text-white' : 'border-blue-200 bg-white text-gray-700 hover:border-blue-400'
-              }`}
-            >
-              {b.toFixed(1)}
-            </button>
-          ))}
+          {step.key === 'date' && (
+            <div>
+              <label htmlFor="test-date" className="label">Test date</label>
+              <input
+                id="test-date"
+                type="date"
+                value={answers.test_date || ''}
+                onChange={(e) => update('test_date', e.target.value)}
+                className="field min-h-[52px]"
+              />
+            </div>
+          )}
+
+          {step.key === 'current' && (
+            <div className="grid grid-cols-3 gap-2.5 sm:grid-cols-5">
+              <Choice selected={answers.current_band_self == null} onClick={() => update('current_band_self', null)} className="col-span-3 flex min-h-[52px] items-center justify-center px-3 text-sm font-semibold sm:col-span-5">
+                Not sure
+              </Choice>
+              {BAND_OPTIONS.slice(0, 9).map((b) => (
+                <Choice key={b} selected={answers.current_band_self === b} onClick={() => update('current_band_self', b)} className="flex min-h-[52px] items-center justify-center font-display text-lg font-bold">
+                  {b.toFixed(1)}
+                </Choice>
+              ))}
+            </div>
+          )}
+
+          {step.key === 'weakest' && (
+            <div className="grid grid-cols-2 gap-3">
+              {SECTION_OPTIONS.map((s) => (
+                <Choice key={s.value} selected={answers.weakest_section === s.value} onClick={() => update('weakest_section', answers.weakest_section === s.value ? null : s.value)} className="flex min-h-[64px] items-center justify-between px-4 text-base font-semibold">
+                  {s.label}
+                  <Tick on={answers.weakest_section === s.value} />
+                </Choice>
+              ))}
+            </div>
+          )}
+
+          {step.key === 'hours' && (
+            <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
+              {HOUR_OPTIONS.map((h) => (
+                <Choice key={h} selected={answers.hours_per_week === h} onClick={() => update('hours_per_week', h)} className="flex min-h-[72px] flex-col items-center justify-center">
+                  <span className="font-display text-2xl font-bold">{h}</span>
+                  <span className="text-xs font-medium text-ink-500">hours a week</span>
+                </Choice>
+              ))}
+            </div>
+          )}
+
+          {step.key === 'language' && (
+            <div>
+              <label htmlFor="first-language" className="label">First language</label>
+              <input
+                id="first-language"
+                type="text"
+                value={answers.first_language}
+                onChange={(e) => update('first_language', e.target.value)}
+                onKeyDown={(e) => { if (e.key === 'Enter') next() }}
+                placeholder="e.g. Bemba, Nyanja, Tonga"
+                className="field min-h-[52px]"
+                autoComplete="off"
+              />
+            </div>
+          )}
+
+          {step.key === 'review' && (
+            <dl className="card divide-y divide-ink-100">
+              <ReviewRow label="IELTS type" value={answers.variant === 'general' ? 'General Training' : 'Academic'} onEdit={() => setIndex(0)} />
+              <ReviewRow label="Target band" value={answers.target_band?.toFixed(1) ?? '—'} onEdit={() => setIndex(1)} />
+              <ReviewRow label="Test date" value={answers.test_date || 'Not booked'} onEdit={() => setIndex(2)} />
+              <ReviewRow label="Level today" value={answers.current_band_self != null ? answers.current_band_self.toFixed(1) : 'Not sure'} onEdit={() => setIndex(3)} />
+              <ReviewRow label="Hardest part" value={answers.weakest_section ? capitalize(answers.weakest_section) : '—'} onEdit={() => setIndex(4)} />
+              <ReviewRow label="Study time" value={answers.hours_per_week ? `${answers.hours_per_week} hours a week` : '—'} onEdit={() => setIndex(5)} />
+              <ReviewRow label="First language" value={answers.first_language?.trim() || '—'} onEdit={() => setIndex(6)} />
+            </dl>
+          )}
         </div>
+
+        {error ? (
+          <p role="alert" className="mt-5 rounded-xl border border-rose-200 bg-rose-50 px-4 py-3 text-sm text-rose-700">{error}</p>
+        ) : null}
       </div>
 
-      <div className="space-y-2">
-        <label className="text-sm font-medium text-gray-700">Which section feels weakest?</label>
-        <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
-          {SECTION_OPTIONS.map((s) => (
-            <button
-              key={s.value}
-              type="button"
-              onClick={() => onChange('weakest_section', s.value)}
-              className={`rounded-full border px-4 py-2 text-sm font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-offset-2 ${
-                answers.weakest_section === s.value
-                  ? 'border-blue-600 bg-blue-600 text-white'
-                  : 'border-gray-200 bg-gray-100 text-gray-600 hover:border-gray-300 hover:bg-gray-200'
-              }`}
-            >
-              {s.label}
-            </button>
-          ))}
-        </div>
-      </div>
-
-      <NavButtons onBack={onBack} onNext={onNext} nextDisabled={false} />
-    </div>
-  )
-}
-
-function CommitmentStep({ answers, onChange, onNext, onBack }) {
-  return (
-    <div className="space-y-6">
-      <header className="text-center">
-        <h2 className="text-2xl font-bold text-gray-800">How much time can you put in?</h2>
-        <p className="mt-2 text-gray-600">We will tune your study plan to match.</p>
-      </header>
-      <div className="space-y-2">
-        <label className="text-sm font-medium text-gray-700">Hours per week</label>
-        <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
-          {[2, 5, 10, 15].map((h) => (
-            <button
-              key={h}
-              type="button"
-              onClick={() => onChange('hours_per_week', h)}
-              className={`rounded-xl border-2 py-4 text-center font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-offset-2 ${
-                answers.hours_per_week === h ? 'border-blue-600 bg-blue-600 text-white' : 'border-blue-200 bg-white text-gray-700 hover:border-blue-400'
-              }`}
-            >
-              {h}h
-            </button>
-          ))}
-        </div>
-      </div>
-
-      <div className="space-y-2">
-        <label className="text-sm font-medium text-gray-700">First language (optional)</label>
-        <input
-          type="text"
-          value={answers.first_language}
-          onChange={(e) => onChange('first_language', e.target.value)}
-          placeholder="e.g. Bemba, Swahili, French"
-          className="w-full rounded-xl border border-gray-200 px-4 py-3 text-gray-700 focus:border-blue-400 focus:outline-none focus:ring-2 focus:ring-blue-200"
-        />
-        <p className="text-xs text-gray-400">We use this to spot common errors specific to speakers of your language.</p>
-      </div>
-
-      <NavButtons onBack={onBack} onNext={onNext} nextDisabled={!answers.hours_per_week} />
-    </div>
-  )
-}
-
-function ReviewStep({ answers, onBack, onSubmit, saving, error }) {
-  const variantLabel = answers.variant === 'academic' ? 'Academic' : 'General Training'
-  return (
-    <div className="space-y-6">
-      <header className="text-center">
-        <h2 className="text-2xl font-bold text-gray-800">Looks good?</h2>
-        <p className="mt-2 text-gray-600">We will use this to recommend your first practice items.</p>
-      </header>
-
-      <dl className="space-y-2 rounded-2xl bg-gray-50 p-5">
-        <ReviewRow label="IELTS variant"    value={variantLabel} />
-        <ReviewRow label="Target band"      value={answers.target_band?.toFixed(1) ?? '—'} />
-        <ReviewRow label="Test date"        value={answers.test_date || 'Not booked'} />
-        <ReviewRow label="Current band"     value={answers.current_band_self != null ? answers.current_band_self.toFixed(1) : 'Not sure'} />
-        <ReviewRow label="Weakest section"  value={answers.weakest_section ? capitalize(answers.weakest_section) : '—'} />
-        <ReviewRow label="Hours per week"   value={answers.hours_per_week ? `${answers.hours_per_week}h` : '—'} />
-        <ReviewRow label="First language"   value={answers.first_language?.trim() || '—'} />
-      </dl>
-
-      {error && (
-        <p className="rounded-lg bg-red-50 px-4 py-3 text-sm text-red-600">{error}</p>
-      )}
-
-      <div className="flex flex-col gap-3">
-        <button
-          type="button"
-          onClick={onSubmit}
-          disabled={saving}
-          className="w-full rounded-xl bg-blue-600 px-6 py-3 font-semibold text-white transition-opacity hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-offset-2 disabled:opacity-60"
-        >
-          {saving ? 'Saving…' : 'Start preparing'}
-        </button>
-        <button
-          type="button"
-          onClick={onBack}
-          disabled={saving}
-          className="w-full rounded-xl border border-gray-200 px-6 py-3 font-semibold text-gray-600 transition-colors hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-gray-300 focus:ring-offset-2 disabled:opacity-60"
-        >
-          Back
-        </button>
+      {/* Back / Next */}
+      <div className="mt-10 flex items-center gap-3">
+        {index > 0 ? (
+          <button type="button" onClick={back} disabled={saving} className="btn-secondary btn-lg px-5">
+            <ArrowLeft className="h-5 w-5" aria-hidden="true" /> Back
+          </button>
+        ) : null}
+        {isLast ? (
+          <button type="button" onClick={handleSubmit} disabled={saving} className="btn-primary btn-lg flex-1 sm:flex-none">
+            {saving ? <><Loader2 className="h-5 w-5 animate-spin" aria-hidden="true" /> Saving…</> : <>Save my goal <Check className="h-5 w-5" aria-hidden="true" /></>}
+          </button>
+        ) : (
+          <button type="button" onClick={next} disabled={!canContinue()} className="btn-primary btn-lg flex-1 sm:flex-none">
+            {step.optional && !stepHasAnswer ? 'Skip this step' : 'Next'} <ArrowRight className="h-5 w-5" aria-hidden="true" />
+          </button>
+        )}
       </div>
     </div>
   )
 }
 
-function ReviewRow({ label, value }) {
+function BandGrid({ value, onChange, bands }) {
   return (
-    <div className="flex items-center justify-between border-b border-gray-200 py-2 last:border-b-0">
-      <dt className="text-sm text-gray-500">{label}</dt>
-      <dd className="text-sm font-medium text-gray-800">{value}</dd>
+    <div className="grid grid-cols-3 gap-2.5 sm:grid-cols-4">
+      {bands.map((b) => (
+        <Choice key={b} selected={value === b} onClick={() => onChange(b)} className="flex min-h-[56px] items-center justify-center font-display text-lg font-bold">
+          {b.toFixed(1)}
+        </Choice>
+      ))}
+    </div>
+  )
+}
+
+function Tick({ on }) {
+  return (
+    <span className={`flex h-6 w-6 shrink-0 items-center justify-center rounded-full border-2 transition-colors ${on ? 'border-blue-600 bg-blue-600 text-white' : 'border-ink-200 bg-white'}`} aria-hidden="true">
+      {on ? <Check className="h-3.5 w-3.5" /> : null}
+    </span>
+  )
+}
+
+function ReviewRow({ label, value, onEdit }) {
+  return (
+    <div className="flex min-h-[56px] items-center gap-3 py-2 pl-4 pr-2 sm:pl-5">
+      <dt className="w-28 shrink-0 text-sm text-ink-500 sm:w-36">{label}</dt>
+      <dd className="flex min-w-0 flex-1 items-center gap-2">
+        <span className="min-w-0 flex-1 truncate text-sm font-semibold text-ink-900">{value}</span>
+        <button type="button" onClick={onEdit} className="btn-ghost btn-sm min-h-[44px] shrink-0 text-blue-700" aria-label={`Change ${label.toLowerCase()}`}>Change</button>
+      </dd>
     </div>
   )
 }
 
 function capitalize(s) {
   return s.charAt(0).toUpperCase() + s.slice(1)
-}
-
-function NextButton({ disabled, onClick }) {
-  return (
-    <button
-      type="button"
-      onClick={onClick}
-      disabled={disabled}
-      className="w-full rounded-xl bg-blue-600 px-6 py-3 font-semibold text-white transition-opacity hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-offset-2 disabled:opacity-60"
-    >
-      Continue
-    </button>
-  )
-}
-
-function NavButtons({ onBack, onNext, nextDisabled }) {
-  return (
-    <div className="flex flex-col gap-3 sm:flex-row-reverse">
-      <button
-        type="button"
-        onClick={onNext}
-        disabled={nextDisabled}
-        className="w-full rounded-xl bg-blue-600 px-6 py-3 font-semibold text-white transition-opacity hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-offset-2 disabled:opacity-60 sm:w-auto"
-      >
-        Continue
-      </button>
-      <button
-        type="button"
-        onClick={onBack}
-        className="w-full rounded-xl border border-gray-200 px-6 py-3 font-semibold text-gray-600 transition-colors hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-gray-300 focus:ring-offset-2 sm:w-auto"
-      >
-        Back
-      </button>
-    </div>
-  )
 }

@@ -2,6 +2,7 @@
 'use client'
 import { useEffect } from 'react'
 import Link from 'next/link'
+import { RotateCcw, TriangleAlert } from 'lucide-react'
 
 export default function GlobalError({ error, reset }) {
   useEffect(() => {
@@ -9,40 +10,20 @@ export default function GlobalError({ error, reset }) {
   }, [error])
 
   return (
-    <div className="min-h-screen flex items-center justify-center px-4"
-      style={{ backgroundColor: 'var(--color-page-bg)' }}>
-      <div className="w-full max-w-md text-center">
-
-        <Link href="/" className="block font-serif text-2xl mb-10"
-          style={{ color: 'var(--color-primary)' }}>
-          Rent a <span style={{ color: 'var(--color-accent)' }} className="italic">Tutor</span>
-        </Link>
-
-        <div className="w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-6 text-4xl"
-          style={{ backgroundColor: 'var(--color-surface)' }}>
-          ⚠
-        </div>
-
-        <h1 className="font-serif text-2xl mb-3" style={{ color: 'var(--color-primary)' }}>
-          Something went wrong
-        </h1>
-
-        <p className="text-sm text-gray-500 leading-relaxed mb-8">
-          An unexpected error occurred. Please try again — if the problem persists,
-          contact us at <span className="underline">hello@rentatutor.co.zm</span>.
+    <div className="flex min-h-[70vh] items-center justify-center bg-paper px-4 py-16">
+      <div className="w-full max-w-md text-center animate-fade-in-up" role="alert">
+        <span className="icon-tile mx-auto h-16 w-16 rounded-2xl bg-sun-100 text-sun-600">
+          <TriangleAlert className="h-8 w-8" aria-hidden="true" />
+        </span>
+        <h1 className="h-page mt-6">Something went wrong</h1>
+        <p className="mt-3 text-[15px] leading-relaxed text-ink-500">
+          This page did not load properly. Please try again. If you are offline, your saved lessons are still in Downloads.
         </p>
-
-        <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
-          <button
-            onClick={reset}
-            className="text-sm px-6 py-2.5 rounded-lg font-medium"
-            style={{ backgroundColor: 'var(--color-btn-bg)', color: 'var(--color-btn-text)' }}>
-            Try again
+        <div className="mt-8 flex flex-col justify-center gap-3 sm:flex-row">
+          <button type="button" onClick={reset} className="btn-primary">
+            <RotateCcw className="h-4 w-4" aria-hidden="true" /> Try again
           </button>
-          <Link href="/"
-            className="text-sm px-6 py-2.5 rounded-lg border border-gray-200 text-gray-500 hover:bg-gray-50">
-            Back to home
-          </Link>
+          <Link href="/" className="btn-secondary">Back to home</Link>
         </div>
       </div>
     </div>

@@ -1,11 +1,23 @@
 'use client'
-import { useState } from 'react'
+import { useState, Suspense } from 'react'
 import Link from 'next/link'
+import { Loader2 } from 'lucide-react'
 import { supabase } from '@/lib/supabase'
-import { useRouter } from 'next/navigation'
+import { useRouter, useSearchParams } from 'next/navigation'
+import AuthShell, { FormError } from '@/components/marketing/AuthShell'
 
-export default function RegisterPage() {
+// Only send new students on to their own learning pages.
+function safeNext(path) {
+  if (!path) return null
+  if (path.startsWith('/dashboard/student') || path.startsWith('/learn') || path.startsWith('/practice')) return path
+  return null
+}
+
+function RegisterForm() {
   const router = useRouter()
+  const searchParams = useSearchParams()
+  const next = safeNext(searchParams.get('redirectTo') || searchParams.get('next'))
+
   const [fullName, setFullName] = useState('')
   const [email, setEmail]       = useState('')
   const [password, setPassword] = useState('')
@@ -19,7 +31,7 @@ export default function RegisterPage() {
 
     const name = fullName.trim()
 
-    const { error: signUpError } = await supabase.auth.signUp({
+    const { data, error: signUpError } = await supabase.auth.signUp({
       email,
       password,
       options: {
@@ -33,84 +45,93 @@ export default function RegisterPage() {
       return
     }
 
-    // Auth-only user. Profile is built in /onboarding.
-    router.push('/onboarding')
+    // With email confirmation on, Supabase returns no session yet.
+    if (data?.session) {
+      router.replace(next || '/dashboard/student')
+      router.refresh()
+    } else {
+      router.replace(`/auth/pending?email=${encodeURIComponent(email)}`)
+    }
   }
 
+  const loginHref = next ? `/auth/login?redirectTo=${encodeURIComponent(next)}` : '/auth/login'
+
   return (
-    <div className="min-h-screen bg-gray-50 flex items-center justify-center px-4">
-      <div className="w-full max-w-sm">
+    <AuthShell
+      title="Create your free account"
+      subtitle="Save your progress across High School lessons and IELTS practice."
+      footer={
+        <p className="text-center text-sm text-ink-500">
+          Just want to look around?{' '}
+          <Link href="/demo" className="font-semibold text-blue-700 hover:underline">Try the demo — no sign-up</Link>
+        </p>
+      }
+    >
+      <FormError>{error}</FormError>
 
-        <Link href="/" className="block text-center font-serif text-2xl text-blue-600 mb-8">
-          Rent<span className="text-pink-400 italic">a</span>Tutor
-        </Link>
-
-        <div className="bg-white border border-gray-200 rounded-2xl p-8">
-          <h1 className="font-serif text-xl mb-1">Create your account</h1>
-          <p className="text-sm text-gray-500 mb-6">Free placement diagnostic, no credit card.</p>
-
-          {error && (
-            <div className="bg-red-50 text-red-700 text-sm px-4 py-3 rounded-lg mb-4">
-              {error}
-            </div>
-          )}
-
-          <form onSubmit={handleRegister} className="space-y-4">
-
-            <div>
-              <label className="block text-sm text-gray-600 mb-1">Full name</label>
-              <input
-                type="text"
-                required
-                value={fullName}
-                onChange={e => setFullName(e.target.value)}
-                className="w-full border border-gray-300 rounded-lg px-4 py-2.5 text-sm outline-none focus:border-blue-400"
-                placeholder="Your full name"
-              />
-            </div>
-
-            <div>
-              <label className="block text-sm text-gray-600 mb-1">Email address</label>
-              <input
-                type="email"
-                required
-                value={email}
-                onChange={e => setEmail(e.target.value)}
-                className="w-full border border-gray-300 rounded-lg px-4 py-2.5 text-sm outline-none focus:border-blue-400"
-                placeholder="you@example.com"
-              />
-            </div>
-
-            <div>
-              <label className="block text-sm text-gray-600 mb-1">Password</label>
-              <input
-                type="password"
-                required
-                minLength={6}
-                value={password}
-                onChange={e => setPassword(e.target.value)}
-                className="w-full border border-gray-300 rounded-lg px-4 py-2.5 text-sm outline-none focus:border-blue-400"
-                placeholder="At least 6 characters"
-              />
-            </div>
-
-            <button
-              type="submit"
-              disabled={loading}
-              className="w-full bg-blue-600 text-white py-2.5 rounded-lg text-sm font-medium hover:bg-blue-700 disabled:opacity-60"
-            >
-              {loading ? 'Creating account...' : 'Create account'}
-            </button>
-          </form>
-
-          <p className="text-center text-sm text-gray-500 mt-5">
-            Already have an account?{' '}
-            <Link href="/auth/login" className="text-blue-500 hover:underline">
-              Sign in
-            </Link>
-          </p>
+      <form onSubmit={handleRegister} className="mt-6 space-y-4">
+        <div>
+          <label htmlFor="fullName" className="label">Full name</label>
+          <input
+            id="fullName"
+            type="text"
+            autoComplete="name"
+            required
+            value={fullName}
+            onChange={e => setFullName(e.target.value)}
+            className="field"
+            placeholder="Your full name"
+          />
         </div>
-      </div>
-    </div>
+
+        <div>
+          <label htmlFor="email" className="label">Email address</label>
+          <input
+            id="email"
+            type="email"
+            autoComplete="email"
+            required
+            value={email}
+            onChange={e => setEmail(e.target.value)}
+            className="field"
+            placeholder="you@example.com"
+          />
+        </div>
+
+        <div>
+          <label htmlFor="password" className="label">Password</label>
+          <input
+            id="password"
+            type="password"
+            autoComplete="new-password"
+            required
+            minLength={6}
+            value={password}
+            onChange={e => setPassword(e.target.value)}
+            className="field"
+            placeholder="At least 6 characters"
+            aria-describedby="password-hint"
+          />
+          <p id="password-hint" className="muted mt-1.5">Use 6 or more characters.</p>
+        </div>
+
+        <button type="submit" disabled={loading} className="btn-primary btn-lg w-full">
+          {loading ? <><Loader2 className="h-5 w-5 animate-spin" aria-hidden="true" /> Creating account…</> : 'Create account'}
+        </button>
+      </form>
+
+      <p className="mt-6 text-center text-sm text-ink-500">
+        Already have an account?{' '}
+        <Link href={loginHref} className="font-semibold text-blue-700 hover:underline">Log in</Link>
+      </p>
+    </AuthShell>
+  )
+}
+
+export default function RegisterPage() {
+  return (
+    <Suspense fallback={<div className="min-h-screen bg-paper" />}>
+      <RegisterForm />
+    </Suspense>
   )
 }

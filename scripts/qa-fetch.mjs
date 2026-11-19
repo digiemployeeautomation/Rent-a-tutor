@@ -26,7 +26,9 @@ const name = `sb-${ref}-auth-token`
 const parts = raw.length <= 3180 ? [[name, raw]] : raw.match(/.{1,3180}/g).map((v, i) => [`${name}.${i}`, v])
 const cookie = parts.map(([k, v]) => `${k}=${encodeURIComponent(v)}`).join('; ')
 
-const args = process.argv.slice(2)
+// Git Bash rewrites a leading "/" into a Windows path; undo that. Paths may also be given without the leading slash.
+const norm = (p) => (p.startsWith('--') || p.startsWith('{') ? p : '/' + p.replace(/^[A-Za-z]:[\/].*?[\/]Git[\/]?/, '').replace(/^\/+/, ''))
+const args = process.argv.slice(2).map(norm)
 if (args[0] === '--cookie') { console.log(cookie); process.exit(0) }
 
 if (args[0] === '--post') {

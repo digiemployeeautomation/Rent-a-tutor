@@ -5,8 +5,11 @@
 // component (deterministic per-question review).
 import Link from 'next/link'
 import { redirect } from 'next/navigation'
+import { ArrowLeft } from 'lucide-react'
 import { createServerComponentClientFor } from '@/lib/supabaseServer'
 import SetResult from '@/components/practice/SetResult'
+import SetHeader from '@/components/ielts/SetHeader'
+import { optionLabelsFor } from '@/components/ielts/option-labels'
 
 // Per-user, per-submission — never cacheable. Forcing dynamic prevents a
 // stale "grading in progress" view if a user lands before the grade commits.
@@ -20,12 +23,12 @@ export default async function ListeningResultPage({ params }) {
     redirect(`/auth/login?next=/practice/listening/${params.itemId}/result/${params.submissionId}`)
   }
 
-  const [{ data: submission }, { data: grade }] = await Promise.all([
+  const [{ data: submission }, { data: grade }, { data: item }, { data: questions }] = await Promise.all([
     supabase
       .from('submissions')
       .select('id, user_id, practice_item_id, payload, status, submitted_at')
       .eq('id', params.submissionId)
-      .single(),
+      .maybeSingle(),
     supabase
       .from('grades')
       .select('*')
@@ -33,33 +36,60 @@ export default async function ListeningResultPage({ params }) {
       .order('created_at', { ascending: false })
       .limit(1)
       .maybeSingle(),
+    supabase
+      .from('practice_items')
+      .select('id, payload')
+      .eq('id', params.itemId)
+      .maybeSingle(),
+    supabase
+      .from('practice_questions')
+      .select('id, options')
+      .eq('practice_item_id', params.itemId),
   ])
 
-  if (!submission || submission.user_id !== user.id) {
+  if (!submission || submission.user_id !== user.id || submission.practice_item_id !== params.itemId) {
     return (
-      <main className="mx-auto max-w-3xl px-4 py-12">
-        <h1 className="text-2xl font-bold text-gray-800">Result not found</h1>
-        <p className="mt-2 text-gray-500">
-          This submission does not exist or is not available right now.
-        </p>
-      </main>
+      <div className="container-read py-12">
+        <h1 className="h-page">Result not found</h1>
+        <p className="lead mt-2">This result does not exist or is not available right now.</p>
+        <Link href="/practice" className="btn-primary mt-6">
+          <ArrowLeft className="h-4 w-4" aria-hidden="true" /> Back to IELTS
+        </Link>
+      </div>
     )
   }
 
-  const backHref = `/practice/listening/${params.itemId}`
-
   return (
-    <main className="mx-auto max-w-3xl px-4 py-10">
-      <Link href={backHref} className="text-xs text-gray-400 hover:text-gray-600">
-        ← Back to set
-      </Link>
-      <h1 className="mt-4 text-3xl font-bold text-gray-800">Listening results</h1>
+    <div className="container-read py-6 sm:py-8">
+      <SetHeader
+        eyebrow="IELTS Listening · Your result"
+        title={item?.payload?.title || 'Listening set'}
+      />
 
       <SetResult
         grade={grade}
-        retryHref={backHref}
-        title="Your raw score"
+        retryHref={`/practice/listening/${params.itemId}`}
+        band={grade?.band_overall ?? null}
+        optionLabels={optionLabelsFor(questions)}
       />
-    </main>
+
+      {Array.isArray(item?.payload?.transcript) && item.payload.transcript.length > 0 ? (
+        <details className="card mt-6 overflow-hidden">
+          <summary className="flex min-h-[56px] cursor-pointer items-center justify-between gap-3 px-5 py-4 text-[15px] font-semibold text-ink-900 sm:px-6">
+            Read what was said (transcript)
+            <span className="text-sm font-medium text-teal-700">Show / hide</span>
+          </summary>
+          <div className="space-y-3 border-t border-ink-100 px-5 py-5 sm:px-6">
+            <p className="text-sm text-ink-400">Check the answers you missed against the recording. Reading along while you listen again is good practice.</p>
+            {item.payload.transcript.map((turn, i) => (
+              <p key={i} className="text-[15px] leading-relaxed text-ink-700">
+                <span className="mr-2 text-xs font-bold uppercase tracking-wider text-teal-700">{turn.speaker}</span>
+                {turn.text}
+              </p>
+            ))}
+          </div>
+        </details>
+      ) : null}
+    </div>
   )
 }

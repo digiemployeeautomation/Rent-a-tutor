@@ -6,6 +6,7 @@
 // disabled so the student cannot over-select.
 //
 // Contract: { question, options, value: string[], max, onChange }
+import QuestionPrompt from '@/components/practice/questions/QuestionPrompt'
 
 export default function MultiSelect({ question, options = [], value = [], max, onChange }) {
   const opts = options.map((o) => (typeof o === 'string' ? { value: o, label: o } : o))
@@ -21,36 +22,41 @@ export default function MultiSelect({ question, options = [], value = [], max, o
   }
 
   return (
-    <fieldset className="space-y-2">
-      <legend className="text-sm font-medium text-gray-800">
-        {question.position}. {question.prompt}
-        {max != null ? <span className="ml-1 text-xs text-gray-400">(choose {max})</span> : null}
+    <fieldset>
+      <legend className="w-full">
+        <QuestionPrompt
+          question={question}
+          answered={selected.length > 0}
+          hint={max != null ? `(choose ${max} · ${selected.length} chosen)` : null}
+        />
       </legend>
-      {opts.map((opt) => {
-        const checked = selected.includes(opt.value)
-        const disabled = !checked && max != null && selected.length >= max
-        return (
-          <label
-            key={opt.value}
-            className={`flex items-center gap-2 rounded-lg border px-3 py-2 text-sm transition-colors ${
-              checked
-                ? 'border-blue-500 bg-blue-50 text-gray-900'
-                : disabled
-                ? 'cursor-not-allowed border-gray-100 text-gray-300'
-                : 'cursor-pointer border-gray-200 text-gray-700 hover:bg-gray-50'
-            }`}
-          >
-            <input
-              type="checkbox"
-              checked={checked}
-              disabled={disabled}
-              onChange={() => toggle(opt.value)}
-              className="h-4 w-4"
-            />
-            <span>{opt.label}</span>
-          </label>
-        )
-      })}
+      <div className="mt-3 grid gap-2">
+        {opts.map((opt) => {
+          const checked = selected.includes(opt.value)
+          const disabled = !checked && max != null && selected.length >= max
+          return (
+            <label
+              key={opt.value}
+              className={`flex min-h-[48px] items-center gap-3 rounded-xl border-2 px-3.5 py-2.5 text-[15px] leading-snug transition-colors focus-within:ring-2 focus-within:ring-blue-200 ${
+                checked
+                  ? 'cursor-pointer border-blue-600 bg-blue-50 text-ink-900'
+                  : disabled
+                  ? 'cursor-not-allowed border-ink-100 bg-ink-50/50 text-ink-300'
+                  : 'cursor-pointer border-ink-100 bg-white text-ink-700 hover:border-blue-300 hover:bg-blue-50/40'
+              }`}
+            >
+              <input
+                type="checkbox"
+                checked={checked}
+                disabled={disabled}
+                onChange={() => toggle(opt.value)}
+                className="h-5 w-5 shrink-0 accent-blue-600"
+              />
+              <span>{opt.label}</span>
+            </label>
+          )
+        })}
+      </div>
     </fieldset>
   )
 }

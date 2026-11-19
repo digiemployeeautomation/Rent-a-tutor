@@ -4,7 +4,7 @@ import { verifyCsrf } from '@/lib/csrf'
 import { rateLimit } from '@/lib/rate-limit'
 
 const SUBJECTS = [
-  'General enquiry', 'Payment issue', 'Tutor application',
+  'General enquiry', 'Tutor application',
   'Technical problem', 'Content report', 'Partnership', 'Other',
 ]
 

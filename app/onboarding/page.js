@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
+import { Loader2 } from 'lucide-react'
 import { supabase } from '@/lib/supabase'
 import IELTSQuestionnaire from '@/components/onboarding/IELTSQuestionnaire'
 
@@ -15,7 +16,7 @@ export default function OnboardingPage() {
       const { data: { user } } = await supabase.auth.getUser()
       if (cancelled) return
       if (!user) {
-        router.replace('/auth/signin?next=/onboarding')
+        router.replace('/auth/login?redirectTo=/onboarding')
         return
       }
       setChecking(false)
@@ -42,11 +43,14 @@ export default function OnboardingPage() {
 
     const body = await res.json()
     router.push(body.redirect || '/dashboard/student')
+    router.refresh()
   }
 
   if (checking) {
     return (
-      <div className="flex justify-center py-20 text-gray-400">Loading…</div>
+      <div className="flex items-center justify-center gap-2 py-24 text-sm text-ink-400" role="status">
+        <Loader2 className="h-5 w-5 animate-spin" aria-hidden="true" /> Loading…
+      </div>
     )
   }
 

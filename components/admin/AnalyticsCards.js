@@ -12,24 +12,6 @@ function UsersIcon() {
   )
 }
 
-function CheckCircleIcon() {
-  return (
-    <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
-        d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-    </svg>
-  )
-}
-
-function CurrencyIcon() {
-  return (
-    <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
-        d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-    </svg>
-  )
-}
-
 function ChartIcon() {
   return (
     <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -69,26 +51,7 @@ export default function AnalyticsCards() {
           .from('student_profiles')
           .select('*', { count: 'exact', head: true })
 
-        // 2. Active subscriptions
-        const { count: activeSubs } = await supabase
-          .from('subscriptions')
-          .select('*', { count: 'exact', head: true })
-          .eq('status', 'active')
-
-        // 3. Revenue this month
-        const now = new Date()
-        const monthStart = new Date(now.getFullYear(), now.getMonth(), 1).toISOString()
-        const { data: revenueRows } = await supabase
-          .from('subscriptions')
-          .select('price_paid')
-          .gte('created_at', monthStart)
-
-        const revenueThisMonth = (revenueRows ?? []).reduce(
-          (sum, row) => sum + (Number(row.price_paid) || 0),
-          0
-        )
-
-        // 4. Avg quiz score
+        // 2. Avg quiz score
         const { data: quizRows } = await supabase
           .from('quiz_attempts')
           .select('score, max_score')
@@ -107,13 +70,11 @@ export default function AnalyticsCards() {
 
         setData({
           totalStudents: totalStudents ?? 0,
-          activeSubs: activeSubs ?? 0,
-          revenueThisMonth,
           avgScore,
         })
       } catch (err) {
         console.error('AnalyticsCards fetch error:', err)
-        setData({ totalStudents: 0, activeSubs: 0, revenueThisMonth: 0, avgScore: 0 })
+        setData({ totalStudents: 0, avgScore: 0 })
       } finally {
         setLoading(false)
       }
@@ -130,20 +91,6 @@ export default function AnalyticsCards() {
       color: 'bg-forest-50 text-forest-600',
     },
     {
-      label: 'Active Subscriptions',
-      value: loading ? null : data?.activeSubs.toLocaleString(),
-      icon: <CheckCircleIcon />,
-      color: 'bg-sage-100 text-sage-600',
-    },
-    {
-      label: 'Revenue This Month',
-      value: loading
-        ? null
-        : `$${data?.revenueThisMonth.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`,
-      icon: <CurrencyIcon />,
-      color: 'bg-gold-100 text-gold-500',
-    },
-    {
       label: 'Avg Quiz Score',
       value: loading ? null : `${data?.avgScore.toFixed(1)}%`,
       icon: <ChartIcon />,
@@ -152,7 +99,7 @@ export default function AnalyticsCards() {
   ]
 
   return (
-    <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
       {cards.map(card => (
         <StatCard
           key={card.label}

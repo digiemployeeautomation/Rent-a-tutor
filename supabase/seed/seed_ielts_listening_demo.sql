@@ -3,10 +3,15 @@
 -- questions including a multi_select (mcq_multi, choose TWO) and two
 -- text_fill completions (note_completion / table_completion).
 --
--- payload.audio_path is a placeholder — real TTS audio is produced in
--- Wave 3, and the file must exist in the private `practice-audio`
--- bucket for the signed URL to resolve. Until then the AudioPlayer
--- degrades gracefully to an "audio not available" state.
+-- Audio: payload.audio_path points at a real recording in the private
+-- `practice-audio` bucket (served via a service-role signed URL). The
+-- source MP3 and its script live in the repo at
+-- content/audio/listening-section-1.{mp3,md}; this seed does NOT upload
+-- the file, so after a fresh project re-upload it to
+-- practice-audio/demo/listening-section-1.mp3 (contentType audio/mpeg).
+-- payload.transcript (array of { speaker, text }) and
+-- payload.duration_seconds match that recording; keep them in sync with
+-- content/audio/listening-section-1.md if the audio is regenerated.
 --
 -- Idempotent: a fixed item UUID lets the questions FK it directly, and
 -- the DELETE on that id (ON DELETE CASCADE) clears prior questions.
@@ -37,7 +42,114 @@ INSERT INTO practice_items (
     'demo_key', 'demo-listening-community-centre',
     'title', 'Community centre enrolment',
     'audio_path', 'demo/listening-section-1.mp3',
-    'section', 1
+    'section', 1,
+    'duration_seconds', 150,
+    'transcript', '[
+      {
+        "speaker": "Narrator",
+        "text": "You will hear a conversation between a woman who wants to join a community centre and a receptionist. First you have some time to look at questions 1 to 6."
+      },
+      {
+        "speaker": "Narrator",
+        "text": "Now listen carefully and answer questions 1 to 6."
+      },
+      {
+        "speaker": "Receptionist",
+        "text": "Good morning, Riverside Community Centre. How can I help you?"
+      },
+      {
+        "speaker": "Caller",
+        "text": "Hello. I''m thinking of joining the centre, and I''d like to ask about the pottery class. Is it still on Wednesday evenings?"
+      },
+      {
+        "speaker": "Receptionist",
+        "text": "It used to be on Wednesdays, but it moved last term. A lot of people asked for a weekend class, so now it''s on Saturday mornings, from ten until twelve."
+      },
+      {
+        "speaker": "Caller",
+        "text": "Saturday mornings. That''s actually better for me. And there''s nothing on Monday?"
+      },
+      {
+        "speaker": "Receptionist",
+        "text": "No, Monday is our painting group. Pottery is only on Saturdays now."
+      },
+      {
+        "speaker": "Caller",
+        "text": "Lovely. So what do I need to bring to my first session?"
+      },
+      {
+        "speaker": "Receptionist",
+        "text": "Two things. First, proof of address. A recent bank statement or a utility bill is fine. And second, the membership form, filled in and signed."
+      },
+      {
+        "speaker": "Caller",
+        "text": "Do I need a passport photo as well?"
+      },
+      {
+        "speaker": "Receptionist",
+        "text": "No, you don''t need a photo any more. We take your picture here when we print your card."
+      },
+      {
+        "speaker": "Caller",
+        "text": "And is there a deposit to pay?"
+      },
+      {
+        "speaker": "Receptionist",
+        "text": "No, there''s no deposit. And you don''t need a medical certificate either. That''s only for the swimming club."
+      },
+      {
+        "speaker": "Caller",
+        "text": "Great. How much is the membership fee?"
+      },
+      {
+        "speaker": "Receptionist",
+        "text": "It''s twelve pounds a month for students. Are you a student?"
+      },
+      {
+        "speaker": "Caller",
+        "text": "No, I''m not, I''m afraid."
+      },
+      {
+        "speaker": "Receptionist",
+        "text": "Then it''s fifteen pounds per month for adult members."
+      },
+      {
+        "speaker": "Caller",
+        "text": "Fifteen pounds a month. That''s reasonable. Is the centre open every day?"
+      },
+      {
+        "speaker": "Receptionist",
+        "text": "Almost. We''re open seven days a week, but we close on the first Monday of every month, for cleaning and repairs."
+      },
+      {
+        "speaker": "Caller",
+        "text": "The first Monday. I''ll remember that. I''m also interested in yoga. Where is that class held?"
+      },
+      {
+        "speaker": "Receptionist",
+        "text": "Yoga used to be in the Main Hall, but it was too noisy in there, so the class has moved to the Garden Hall, at the back of the building."
+      },
+      {
+        "speaker": "Caller",
+        "text": "The Garden Hall. And finally, when can I come in to enrol? I work during the week."
+      },
+      {
+        "speaker": "Receptionist",
+        "text": "That''s no problem. The enrolment desk is open at weekends as well, on Saturdays and Sundays, from nine until one."
+      },
+      {
+        "speaker": "Caller",
+        "text": "Perfect. I''ll come in on Saturday, then. Thank you very much."
+      },
+      {
+        "speaker": "Receptionist",
+        "text": "You''re welcome. Goodbye."
+      },
+      {
+        "speaker": "Narrator",
+        "text": "That is the end of the conversation."
+      }
+    ]'::jsonb
   ),
   'published',
   'seed-v1',

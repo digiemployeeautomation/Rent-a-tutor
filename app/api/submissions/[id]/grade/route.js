@@ -9,7 +9,9 @@ import { createServerClient, createServiceRoleClient } from '@/lib/supabaseServe
 import { getGrader, errorGradedBy } from '@/lib/grading'
 
 function isStubMode() {
-  return (process.env.USE_STUB_GRADER ?? '').toLowerCase() === 'true'
+  // Demo mode when explicitly requested OR when no AI key is configured, so a
+  // missing key degrades to clearly-labelled sample feedback instead of an error.
+  return (process.env.USE_STUB_GRADER ?? '').toLowerCase() === 'true' || !process.env.AI_GATEWAY_API_KEY
 }
 
 export async function POST(_request, { params }) {

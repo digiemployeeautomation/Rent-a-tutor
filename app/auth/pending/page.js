@@ -1,66 +1,50 @@
+// Shown after sign-up when the account still needs its email confirmed.
 import Link from 'next/link'
+import { MailCheck } from 'lucide-react'
+import AuthShell from '@/components/marketing/AuthShell'
 
-export default function PendingPage() {
+export const metadata = { title: 'Check your email' }
+
+const STEPS = [
+  'Open the email we just sent you.',
+  'Tap the link inside to confirm your account.',
+  'Come back and log in to start learning.',
+]
+
+export default function PendingPage({ searchParams }) {
+  const email = typeof searchParams?.email === 'string' ? searchParams.email : ''
+
   return (
-    <div className="min-h-screen flex items-center justify-center px-4"
-      style={{ backgroundColor: 'var(--color-page-bg)' }}>
-      <div className="w-full max-w-md text-center">
-
-        <Link href="/" className="block font-serif text-2xl mb-10"
-          style={{ color: 'var(--color-primary)' }}>
-          Rent a <span style={{ color: 'var(--color-accent)' }} className="italic">Tutor</span>
-        </Link>
-
-        <div className="w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-6 text-4xl"
-          style={{ backgroundColor: 'var(--color-surface)' }}>
-          🕐
-        </div>
-
-        <h1 className="font-serif text-2xl mb-3" style={{ color: 'var(--color-primary)' }}>
-          Verification in progress
-        </h1>
-
-        <p className="text-sm text-gray-500 leading-relaxed mb-2">
-          We've received your documents and are reviewing your application.
+    <AuthShell
+      footer={
+        <p className="text-center text-sm text-ink-500">
+          No email after a few minutes? Check your spam folder, or{' '}
+          <Link href="/auth/register" className="font-semibold text-blue-700 hover:underline">sign up again</Link>.
         </p>
-        <p className="text-sm text-gray-500 leading-relaxed mb-8">
-          You'll receive an email once your account has been approved, usually within 1–2 business days.
-        </p>
+      }
+    >
+      <span className="icon-tile h-14 w-14 rounded-2xl bg-blue-50 text-blue-600">
+        <MailCheck className="h-7 w-7" aria-hidden="true" />
+      </span>
+      <h1 className="h-page mt-5">Check your email</h1>
+      <p className="mt-2 text-[15px] leading-relaxed text-ink-500">
+        Your account is almost ready. We sent a confirmation link to{' '}
+        {email ? <span className="font-semibold text-ink-900 break-all">{email}</span> : 'your email address'}.
+      </p>
 
-        <div className="rounded-2xl p-6 text-left mb-8" style={{ backgroundColor: 'var(--color-surface)' }}>
-          <div className="space-y-4">
-            {[
-              { n: '1', text: 'Documents submitted ✓',         done: true  },
-              { n: '2', text: 'Identity verification review',  done: false },
-              { n: '3', text: 'Account approved',              done: false },
-              { n: '4', text: 'Start uploading lessons',       done: false },
-            ].map(s => (
-              <div key={s.n} className="flex items-center gap-3">
-                <div className="w-7 h-7 rounded-full flex items-center justify-center text-xs font-medium flex-shrink-0"
-                  style={{
-                    backgroundColor: s.done ? 'var(--color-primary)' : 'transparent',
-                    color: s.done ? 'var(--color-nav-text)' : 'var(--color-primary)',
-                    border: s.done ? 'none' : '1.5px solid var(--color-primary)',
-                  }}>
-                  {s.done ? '✓' : s.n}
-                </div>
-                <span className={`text-sm ${s.done ? 'text-gray-800 font-medium' : 'text-gray-400'}`}>
-                  {s.text}
-                </span>
-              </div>
-            ))}
-          </div>
-        </div>
+      <ol className="mt-6 space-y-3">
+        {STEPS.map((s, i) => (
+          <li key={s} className="flex items-center gap-3 text-[15px] text-ink-700">
+            <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-blue-600 text-xs font-bold text-white">{i + 1}</span>
+            {s}
+          </li>
+        ))}
+      </ol>
 
-        <p className="text-xs text-gray-400 mb-5">
-          Questions? Email us at <span className="underline">hello@rentatutor.co.zm</span>
-        </p>
-
-        <Link href="/"
-          className="text-sm px-6 py-2.5 rounded-lg border border-gray-200 text-gray-500 hover:bg-gray-50 inline-block">
-          Back to home
-        </Link>
+      <div className="mt-7 grid gap-3 sm:grid-cols-2">
+        <Link href="/auth/login" className="btn-primary">Go to log in</Link>
+        <Link href="/learn/high-school" className="btn-secondary">Browse lessons</Link>
       </div>
-    </div>
+    </AuthShell>
   )
 }
